@@ -6,9 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Overtrue\LaravelFavorite\Traits\Favoriter;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -16,6 +19,8 @@ class User extends Authenticatable
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
+    use HasRoles;
+    use Favoriter;
     use TwoFactorAuthenticatable;
 
     /**
@@ -58,4 +63,38 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    protected static function boot(): void
+    {
+        parent::boot();
+        static::created(function ($user) {
+            $user->referral_id = Str::uuid();
+            $user->save();
+        });
+    }
+
+    public function channels()
+    {
+        return $this->hasMany(Channel::class);
+    }
+
+    public function patterns()
+    {
+        return $this->hasMany(Pattern::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function entityInfo()
+    {
+        return $this->hasOne(EntityInfo::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

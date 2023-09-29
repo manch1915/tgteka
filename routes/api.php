@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::apiResource('channels', \App\Http\Controllers\ChannelController::class);
+Route::apiResource('entity_infos', \App\Http\Controllers\EntityInfoController::class);
+Route::apiResource('reviews', \App\Http\Controllers\ReviewController::class);
+Route::apiResource('orders',);
+

@@ -52,7 +52,7 @@ class ChatWebSocketServer implements MessageComponentInterface
         }
     }
 
-    public function onError(ConnectionInterface $conn, Exception $e): void
+    public function onError(ConnectionInterface $conn, \Exception $e): void
     {
         echo "An error has occurred: {$e->getMessage()}\n";
         $conn->close();

@@ -64,14 +64,7 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    protected static function boot(): void
-    {
-        parent::boot();
-        static::created(function ($user) {
-            $user->referral_id = Str::uuid();
-            $user->save();
-        });
-    }
+
 
     public function channels()
     {

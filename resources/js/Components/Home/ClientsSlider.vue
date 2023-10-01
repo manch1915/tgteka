@@ -1,11 +1,15 @@
 <script setup>
-import {register} from 'swiper/element/bundle';
-import {reactive, ref} from "vue";
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Navigation} from 'swiper/modules';
+import 'swiper/css';
+import {ref} from "vue";
 
-register();
+let activeIndex = ref(0);
+const onSlideChange = (swiper) => {
+    activeIndex.value = swiper.realIndex + 1;
+};
 
-
-
+const modules = [Navigation]
 </script>
 
 <template>
@@ -15,18 +19,18 @@ register();
                 <div class="arrow arrow_left">
                     <img src="/images/arrow.svg" alt="arrow">
                 </div>
-                <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">/3</div>
+                <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">{{activeIndex}}/3</div>
                 <div class="arrow arrow_right">
                     <img src="/images/arrow.svg" alt="arrow">
                 </div>
             </div>
         </div>
         <div class="w-full">
-            <swiper-container :navigation="{
+            <swiper :navigation="{
                   prevEl: '.arrow_left',
                   nextEl: '.arrow_right',
-                }"  loop="true">
-                <swiper-slide class="blocks grid grid-cols-2 gap-4">
+                }" @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
+                <swiper-slide class="!grid !grid-cols-2 !gap-4">
                     <div class="block">
                         <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
                             отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
@@ -80,7 +84,7 @@ register();
                         </div>
                     </div>
                 </swiper-slide>
-                <swiper-slide class="blocks grid grid-cols-2 gap-4">
+                <swiper-slide class="!grid !grid-cols-2 !gap-4">
                     <div class="block">
                         <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
                             отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
@@ -134,7 +138,7 @@ register();
                         </div>
                     </div>
                 </swiper-slide>
-                <swiper-slide class="blocks grid grid-cols-2 gap-4">
+                <swiper-slide class="!grid !grid-cols-2 !gap-4">
                     <div class="block">
                         <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
                             отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
@@ -188,7 +192,7 @@ register();
                         </div>
                     </div>
                 </swiper-slide>
-            </swiper-container>
+            </swiper>
         </div>
     </div>
 </template>

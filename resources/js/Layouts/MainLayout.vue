@@ -3,6 +3,6 @@
 import Header from "@/Components/Header.vue";
 </script>
 <template>
-  <Header/>
-  <slot/>
+    <Header/>
+    <slot/>
 </template>

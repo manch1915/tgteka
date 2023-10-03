@@ -10,6 +10,8 @@ import ChannelCard from "@/Components/Home/ChannelCard.vue";
 import IntegrationBlock from "@/Components/Home/Blocks/IntegrationBlock.vue";
 import ClientsBlock from "@/Components/Home/Blocks/ClientsBlock.vue";
 import ClientsSlider from "@/Components/Home/ClientsSlider.vue";
+import Footer from "@/Components/Home/Footer.vue";
+import ComparisonCard from "@/Components/Home/ComparisonCard.vue";
 
 const headers = ["Регистрируйте аккаунт", "Выберите подходящие каналы в каталоге", "Пополните баланс удобным способом:", "Создайте размещение с картинкой и ссылкой:", "Владелец канала публикует пост и присылает ссылку на проверку:", "Вы можете скачать отчет по итогу размещения:"]
 const texts = ["Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc ",
@@ -18,6 +20,30 @@ const texts = ["Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultr
     "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc",
     "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc",
     "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc"];
+
+const compareItems = [
+        {
+            header: 'Самостоятельное размещение напрямую',
+            listText: ['Найти каталог Телеграм-каналов через Google','Проверить каналы на живых подписчиков',
+                'Написать каждому админу, чтобы узнать стоимость интеграции',
+                'Оплатить размещение каждому админу',
+                'Написать посты для интеграции',
+                'Отправить пост каждому админу',
+                'Контролировать выход поста в каждом канале'],
+            hasButton: false,
+            showSaveTimeMoney: false
+        },
+        {
+            header: 'Автоматическое размещение с TGteka.ru',
+            listText: ['Зарегистрируйтесь на платформе', 'Выберите подходящие каналы из каталога в один \n' +
+            '      клик или купите размещение под ключ',
+            'Создайте интеграцию' ,
+            'Запустите нативную интеграцию' ,
+            'Получите оповещение о каждом размещении'],
+            hasButton: true,
+            showSaveTimeMoney: true
+        }
+];
 </script>
 
 <template>
@@ -47,16 +73,16 @@ const texts = ["Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultr
             </template>
         </InterestChannelsBlock>
         <IntegrationBlock>
-<!--            <template v-slot:comparePairs>-->
-<!--                <ComparisonCard v-for=" (item, i) in compareItems" :item="item" :key="i" />-->
-<!--            </template>-->
+            <template v-slot:comparePairs>
+                <ComparisonCard v-for=" (item, i) in compareItems" :item="item" :key="i" />
+            </template>
         </IntegrationBlock>
         <ClientsBlock>
             <template v-slot:slider>
                 <clients-slider/>
             </template>
         </ClientsBlock>
-
+        <Footer/>
     </MainLayout>
 </template>
 

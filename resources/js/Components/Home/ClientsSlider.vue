@@ -1,20 +1,42 @@
 <script setup>
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Navigation} from 'swiper/modules';
+import {Swiper, SwiperSlide} from 'swiper/vue';
+import {Navigation, Pagination} from 'swiper/modules';
 import 'swiper/css';
-import {ref} from "vue";
+import 'swiper/css/pagination';
+import {ref, watch} from "vue";
+import ReviewCard from "@/Components/Home/ReviewCard.vue";
 
-let activeIndex = ref(0);
+let activeIndex = ref(1);
 const onSlideChange = (swiper) => {
     activeIndex.value = swiper.realIndex + 1;
 };
+let mySwiper = ref();
 
-const modules = [Navigation]
+// Swiper slide data
+
+let bullets = ref('');
+
+const renderBullet = (index, className) => {
+    return `<div class="${className}" @click="goToSlide(${index})"></div>`;
+};
+
+
+const goToSlide = (index) => {
+    if (mySwiper.value) {
+        mySwiper.value.swiper.slideTo(index);
+    }
+};
+
+watch(activeIndex, (newVal) => {
+
+    bullets = '<div class="pagination_el"></div>'.repeat(newVal);
+}, { immediate: true });
+const modules = [Navigation, Pagination]
 </script>
 
 <template>
     <div class="main">
-        <div class="interactive">
+        <div class="interactive pb-4">
             <div class="buttons flex items-center ">
                 <div class="arrow arrow_left">
                     <img src="/images/arrow.svg" alt="arrow">
@@ -26,174 +48,19 @@ const modules = [Navigation]
             </div>
         </div>
         <div class="w-full">
-            <swiper :navigation="{
-                  prevEl: '.arrow_left',
-                  nextEl: '.arrow_right',
-                }" @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
+            <swiper :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right'}" :pagination= "{el: '.pagination', clickable: true, renderBullet: renderBullet, bulletClass: 'pagination_el', bulletActiveClass: 'pagination_el-active' }"  @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
                 <swiper-slide class="!grid !grid-cols-2 !gap-4">
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
+                    <ReviewCard v-for="i in 4"/>
                 </swiper-slide>
                 <swiper-slide class="!grid !grid-cols-2 !gap-4">
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
+                    <ReviewCard v-for="i in 4"/>
                 </swiper-slide>
                 <swiper-slide class="!grid !grid-cols-2 !gap-4">
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
-                    <div class="block">
-                        <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст
-                            отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
-                        </div>
-                        <div
-                            class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
-                            Анжелика Трофимова
-                        </div>
-                        <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
-                            мая 2021
-                        </div>
-                    </div>
+                    <ReviewCard v-for="i in 4"/>
                 </swiper-slide>
             </swiper>
         </div>
+        <div class="pagination flex items-center content-center justify-center gap-6 pt-4"></div>
     </div>
 </template>
 
@@ -212,7 +79,7 @@ const modules = [Navigation]
             content: '“';
             position: absolute;
             color: var(--White, #EAE0FF);
-            font-family: Montserrat;
+            font-family: Montserrat,serif;
             font-size: 40px;
             font-style: normal;
             font-weight: 900;
@@ -225,7 +92,7 @@ const modules = [Navigation]
         &:after {
             content: '”';
             position: absolute;
-            font-family: Montserrat;
+            font-family: Montserrat,serif;
             font-size: 40px;
             font-style: normal;
             font-weight: 900;
@@ -237,7 +104,7 @@ const modules = [Navigation]
 
 .interactive {
     width: 100%;
-    padding-bottom: 20px;
+    padding-bottom: 50px;
 
     .buttons {
         float: right;
@@ -260,4 +127,7 @@ const modules = [Navigation]
         }
     }
 }
+
+
+
 </style>

@@ -12,3 +12,16 @@ body {
     background: #070B28;
     font-family: 'Open Sans', sans-serif !important;
 }
+.pagination_el{
+    width: 40px;
+    height: 4px;
+    border-radius: 65px;
+    background: #EAE0FF;
+}
+.pagination_el-active{
+    width: 40px;
+    height: 4px;
+    border-radius: 65px;
+    border: 1px solid #EAE0FF;
+    background:transparent;
+}

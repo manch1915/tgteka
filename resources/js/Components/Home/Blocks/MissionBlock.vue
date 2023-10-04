@@ -12,12 +12,11 @@
                         Объединить рекламодателей и владельцев Telegram-каналов на выгодных <br/>для обеих сторон условиях.
 
                     </span>
-
                     <span class="text-slate-600 text-3xl font-bold font-['Open Sans'] leading-10">
                         Мы даём им простой инструмент для взаимовыгодного <br> <i class="hacker-icon -mb-2"></i>сотрудничества и открываем новые возможности для роста.
                     </span>
                 </div>
-                <div class="cards flex gap-6 py-6">
+                <div class="cards flex gap-6 pt-24">
                     <slot name="cards">
 
                     </slot>

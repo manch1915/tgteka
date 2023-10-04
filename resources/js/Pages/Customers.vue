@@ -10,8 +10,8 @@ import ChannelCard from "@/Components/Home/ChannelCard.vue";
 import IntegrationBlock from "@/Components/Home/Blocks/IntegrationBlock.vue";
 import ClientsBlock from "@/Components/Home/Blocks/ClientsBlock.vue";
 import ClientsSlider from "@/Components/Home/ClientsSlider.vue";
-import Footer from "@/Components/Home/Footer.vue";
 import ComparisonCard from "@/Components/Home/ComparisonCard.vue";
+import IntegrationBackground from "@/Components/Home/Blocks/IntegrationBackground.vue";
 
 const headers = ["Регистрируйте аккаунт", "Выберите подходящие каналы в каталоге", "Пополните баланс удобным способом:", "Создайте размещение с картинкой и ссылкой:", "Владелец канала публикует пост и присылает ссылку на проверку:", "Вы можете скачать отчет по итогу размещения:"]
 const texts = ["Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc ",
@@ -95,6 +95,7 @@ const compareItems = [
                 <ChannelCard v-for="i in 6" :key="i"/>
             </template>
         </InterestChannelsBlock>
+        <IntegrationBackground/>
         <IntegrationBlock>
             <template v-slot:comparePairs>
                 <ComparisonCard v-for=" (item, i) in compareItems" :item="item" :key="i"/>
@@ -105,7 +106,6 @@ const compareItems = [
                 <clients-slider/>
             </template>
         </ClientsBlock>
-        <Footer/>
     </MainLayout>
 </template>
 

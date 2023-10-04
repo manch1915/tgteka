@@ -17,7 +17,10 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Customers');
-});
+})->name('customers');
+Route::get('/owners', function () {
+    return Inertia::render('Owners');
+})->name('owners');
 
 Route::middleware([
     'auth:sanctum',

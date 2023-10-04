@@ -10,7 +10,9 @@
         </div>
       </div>
         <div class="pt-32">
-      <slot name="slider"></slot>
+      <slot name="slider">
+
+      </slot>
         </div>
       <div class="review pt-12 flex justify-center">
         <div class="px-6 py-4 bg-purple-600 rounded-full justify-center items-center gap-2.5 inline-flex">

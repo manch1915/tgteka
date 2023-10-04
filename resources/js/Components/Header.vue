@@ -1,5 +1,5 @@
 <script setup>
-
+import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
@@ -9,10 +9,10 @@
         <img src="/images/logo.svg" alt="Application logo">
       </div>
       <nav class="navigation">
-        <ul class="flex gap-6">
-          <li class="text-paleblue font-bold">Заказчикам</li>
-          <li class="text-paleblue font-bold">Владельцу канала</li>
-          <li class="text-paleblue font-bold flex gap-1">Сервисы <i class="arrow-circle-down"></i></li>
+        <ul class="flex">
+            <Link :href="route('customers')"><li class="text-paleblue font-bold py-1 px-4 cursor-pointer">Заказчикам</li></Link>
+            <Link :href="route('owners')"><li class="text-paleblue font-bold py-1 px-4 cursor-pointer">Владельцу канала</li></Link>
+          <li class="text-paleblue font-bold py-1 px-4 cursor-pointer flex gap-1">Сервисы <i class="arrow-circle-down"></i></li>
         </ul>
       </nav>
 
@@ -32,5 +32,20 @@
         height: 24px;
         width: 24px;
         content: url("/images/arrow-circle-down.svg");
+    }
+    .navigation{
+        ul{
+            li{
+                border-radius: 100px;
+                border: 1px solid transparent;
+                transition: all 0.5s;
+                &:hover{
+                    border-radius: 100px;
+                    border: 1px solid rgba(255, 255, 255, 0.10);
+                    background: #171961;
+                    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+                }
+            }
+        }
     }
 </style>

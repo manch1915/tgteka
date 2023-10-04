@@ -1,10 +1,9 @@
 <script setup>
+
 </script>
 
 <template>
-  <div>
-    <img src="/images/integr-background.svg" alt="">
-  </div>
+
   <div class="integration">
     <div class="container mx-auto">
       <div class="integration__header text-center my-32"><span

@@ -1,3 +1,6 @@
+<script setup>
+</script>
+
 <template>
   <div>
     <img src="/images/integr-background.svg" alt="">
@@ -15,11 +18,7 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: 'IntegrationBlock'
-}
-</script>
+
 <style scoped lang="scss">
 
 .integration__header {

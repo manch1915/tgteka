@@ -1,7 +1,13 @@
 <template>
   <div class="card">
     <div class="handbook__card">
-
+        <div class="content flex flex-col justify-between gap-4">
+            <div class="flex justify-end">
+                <img src="/images/virtual-reality-vr.svg" alt="">
+            </div>
+            <div class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-relaxed">Преимущество 1</div>
+            <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-relaxed">Расскажите, что отличает ваши услуги от услуг в других компаниях</div>
+        </div>
     </div>
     <div class="handbook__card__second">
 
@@ -23,10 +29,14 @@
     position: relative;
     width: 240px;
     height: 320px;
-    padding: 20px;
-    border-radius: 0px 74.358px 74.358px 74.358px;
+    padding: 35px;
+    border-radius: 0 75px 75px 75px;
     border: 2px solid rgba(255, 255, 255, 0.2);
-    background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.40) 0%, rgba(81, 63, 255, 0.00) 100%);
+  background: linear-gradient(
+          to right bottom,
+          rgba(255,255,255, .4) -100%,
+          rgba(81, 63, 255, 0) 100%
+  );
     backdrop-filter: blur(15px);
     z-index: 1;
   }
@@ -38,7 +48,11 @@
     height: 320px;
     border-radius: 0px 59.486px 59.486px 59.486px;
     border: 2.603px solid #8163C0;
-    background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.40) 0%, rgba(255, 255, 255, 0.00) 100%);
+    background: linear-gradient(
+              to right bottom,
+              rgba(255,255,255, 1) -200%,
+              rgba(255, 255, 255, 0) 100%
+    );
     backdrop-filter: blur(15px);
     transform: skewY(8deg);
     transform-origin: left top 0px;

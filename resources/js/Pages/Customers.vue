@@ -22,27 +22,50 @@ const texts = ["Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultr
     "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc"];
 
 const compareItems = [
-        {
-            header: 'Самостоятельное размещение напрямую',
-            listText: ['Найти каталог Телеграм-каналов через Google','Проверить каналы на живых подписчиков',
-                'Написать каждому админу, чтобы узнать стоимость интеграции',
-                'Оплатить размещение каждому админу',
-                'Написать посты для интеграции',
-                'Отправить пост каждому админу',
-                'Контролировать выход поста в каждом канале'],
-            hasButton: false,
-            showSaveTimeMoney: false
-        },
-        {
-            header: 'Автоматическое размещение с TGteka.ru',
-            listText: ['Зарегистрируйтесь на платформе', 'Выберите подходящие каналы из каталога в один \n' +
-            '      клик или купите размещение под ключ',
-            'Создайте интеграцию' ,
-            'Запустите нативную интеграцию' ,
-            'Получите оповещение о каждом размещении'],
-            hasButton: true,
-            showSaveTimeMoney: true
-        }
+    {
+        header: 'Самостоятельное размещение напрямую',
+        listText: ['Найти каталог Телеграм-каналов через Google', 'Проверить каналы на живых подписчиков',
+            'Написать каждому админу, чтобы узнать стоимость интеграции',
+            'Оплатить размещение каждому админу',
+            'Написать посты для интеграции',
+            'Отправить пост каждому админу',
+            'Контролировать выход поста в каждом канале'],
+        icons: [
+            {
+                class: 'blue',
+                text: 'ручной процесс',
+            },
+            {
+                class: 'blue',
+                text: 'нет гарантий'
+            }
+        ],
+        hasButton: false,
+        showSaveTimeMoney: false
+    },
+    {
+        header: 'Автоматическое размещение с TGteka.ru',
+        listText:
+        [
+            'Зарегистрируйтесь на платформе',
+            'Выберите подходящие каналы из каталога в один клик или купите размещение под ключ',
+            'Создайте интеграцию',
+            'Запустите нативную интеграцию',
+            'Получите оповещение о каждом размещении'
+        ],
+        icons: [
+            {
+                class: 'white',
+                text: 'автоматический процесс',
+            },
+            {
+                class: 'white',
+                text: 'есть гарантии'
+            }
+        ],
+        hasButton: true,
+        showSaveTimeMoney: true
+    }
 ];
 </script>
 
@@ -74,7 +97,7 @@ const compareItems = [
         </InterestChannelsBlock>
         <IntegrationBlock>
             <template v-slot:comparePairs>
-                <ComparisonCard v-for=" (item, i) in compareItems" :item="item" :key="i" />
+                <ComparisonCard v-for=" (item, i) in compareItems" :item="item" :key="i"/>
             </template>
         </IntegrationBlock>
         <ClientsBlock>

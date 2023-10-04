@@ -70,7 +70,6 @@
   background-position-y: 50%;
   background-size: cover;
   padding-top: 400px;
-
 }
 
 .consultation {

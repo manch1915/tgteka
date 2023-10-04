@@ -22,6 +22,7 @@
 <style scoped lang="scss">
 .main {
   display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
   padding: 235px 0 0 0;

@@ -8,9 +8,9 @@
       </div>
       <div class="interestChannels__categories">
         <div class="flex justify-between">
-          <div class="w-96 h-36 flex flex-col gap-6">
-            <div class="w-96 text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">
-              Все каналы в нашем каталоге отсортированы по категориям, вот некоторые из них
+          <div class="flex flex-col gap-6">
+            <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">
+              Все каналы в нашем каталоге отсортированы <br> по категориям, вот некоторые из них
             </div>
             <div>
               <div class="interestChannels__categories-button">
@@ -54,13 +54,39 @@ export default {
 <style scoped lang="scss">
 
 .interestChannels {
-  background: url("/images/interestChannelsBackground.svg") no-repeat center;
-  background-position-y: 40%;
-  background-size: cover;
-  padding-top: 400px;
+    background: url("/images/interestChannelsBackground.svg") no-repeat center;
+    background-position-y: 40%;
+    background-size: cover;
+    padding-top: 400px;
 
+    .interestChannels__categories-button {
+        display: flex;
+        padding: 16px 25px;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        border-radius: 100px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: #171961;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    }
+
+    .interestChannels__header {
+        position: relative;
+        width: 100%;
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: -20%;
+            bottom: 50%;
+            transform: translateY(50%);
+            width: 100%;
+            height: 500%;
+            background: url("/images/plane.svg") no-repeat center;
+        }
+    }
 }
-
 .gotocatalog {
   display: inline-flex;
   padding: 16px 25px;

@@ -10,13 +10,9 @@ const props = defineProps({
 <template>
     <div class="samo">
         <div class="icons flex gap-4">
-<!--            TODO icons style-->
-            <div class="px-6 py-4 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight bg-blue-950 rounded-full shadow-inner border border-white border-opacity-10 justify-center items-center gap-2.5 inline-flex">
-                ручной процесс
-            </div>
-            <div class="icons_el">
-                <div class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">
-                    нет гарантий
+            <div v-for="i in props.item.icons" :class="'icons_el icons_el-' + i.class" >
+                <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">
+                    {{i.text}}
                 </div>
             </div>
         </div>
@@ -51,11 +47,30 @@ const props = defineProps({
     border-radius: 2.1875rem 0 2.1875rem 2.1875rem; /* rounded-tr-3xl rounded-bl-3xl rounded-br-3xl */
     border: 1px solid #3b82f6; /* border border-blue-950 */
     backdrop-filter: blur(10px); /* backdrop-blur-sm */
-    gap: 1.5rem; /* gap-6 */
+    gap: 1.5rem;
     ul {
         li {
             list-style: circle;
         }
+    }
+}
+.icons {
+    .icons_el {
+        padding: 8px 12px;
+        border-radius: 100px;
+    }
+    .icons_el-white {
+        div{
+            color: #070C29 !important;
+        }
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: var(--White, #EAE0FF);
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    }
+    .icons_el-blue {
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: #171961;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
     }
 }
 </style>

@@ -12,7 +12,7 @@
         <ul class="flex gap-6">
           <li class="text-paleblue font-bold">Заказчикам</li>
           <li class="text-paleblue font-bold">Владельцу канала</li>
-          <li class="text-paleblue font-bold">Сервисы</li>
+          <li class="text-paleblue font-bold flex gap-1">Сервисы <i class="arrow-circle-down"></i></li>
         </ul>
       </nav>
 
@@ -24,9 +24,13 @@
   </div>
 </template>
 
-
 <style lang="scss" scoped>
     .header{
       border-bottom: 1px solid rgba(234, 224, 255, 0.3);
+    }
+    .arrow-circle-down{
+        height: 24px;
+        width: 24px;
+        content: url("/images/arrow-circle-down.svg");
     }
 </style>

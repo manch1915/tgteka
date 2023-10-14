@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,13 +14,16 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::group(['middleware' => 'guest'], function (){
+    Route::get('/', function () {
+        return Inertia::render('Customers');
+    })->name('customers');
+    Route::get('/owners', function () {
+        return Inertia::render('Owners');
+    })->name('owners');
+});
 
-Route::get('/', function () {
-    return Inertia::render('Customers');
-})->name('customers');
-Route::get('/owners', function () {
-    return Inertia::render('Owners');
-})->name('owners');
+Route::post('/register', [RegisterController::class, 'store'])->name('api-register');
 
 Route::middleware([
     'auth:sanctum',

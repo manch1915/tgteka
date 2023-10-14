@@ -7,6 +7,10 @@ import HowItWorksBlock from "@/Components/Home/Blocks/HowItWorksBlock.vue";
 import IntegrationBackground from "@/Components/Home/Blocks/IntegrationBackground.vue";
 import ClientsBlock from "@/Components/Home/Blocks/ClientsBlock.vue";
 import ClientsSlider from "@/Components/Home/ClientsSlider.vue";
+import ClientsHeader from "@/Components/Home/ClientsHeader.vue";
+import Faq from "@/Components/Home/Faq.vue";
+import TechnicalIssues from "@/Components/Home/Blocks/TechnicalIssues.vue";
+import SloganBlock from "@/Components/Home/Blocks/SloganBlock.vue";
 
 const headers = ["Добавляете канал в каталог", "Получаете заказы и размещаете посты", "Получаете оплату"]
 const texts = ["В среднем модерация занимает 24 часа ", "Оповещения о новых размещениях приходят на E-mail и в Telegram-бота",
@@ -15,6 +19,10 @@ const texts = ["В среднем модерация занимает 24 час�
 
 <template>
     <MainLayout>
+        <SloganBlock
+            header="Постоянный поток заказов на размещения в Telegram-канале или боте"
+            paragraph="Свыше 70 000 заказчиков готовы платить за вашу Telegram-аудиторию"
+        />
         <MissionBlock>
             <template v-slot:cards>
                 <book-card v-for="i in 3" :key="i"/>
@@ -36,10 +44,17 @@ const texts = ["В среднем модерация занимает 24 час�
             <IntegrationBackground/>
         </div>
         <ClientsBlock>
+            <template v-slot:clients-header>
+                <ClientsHeader/>
+            </template>
             <template v-slot:slider>
                 <clients-slider/>
             </template>
+            <template v-slot:clients-footer>
+                <faq/>
+            </template>
         </ClientsBlock>
+        <TechnicalIssues/>
     </MainLayout>
 </template>
 

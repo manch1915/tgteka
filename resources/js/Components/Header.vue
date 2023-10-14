@@ -1,8 +1,40 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import { useModalStore } from '@/stores/authModal.js'
+import { openModal} from "jenesius-vue-modal";
+import Login from "@/Components/Auth/Login.vue";
+import Register from "@/Components/Auth/Register.vue";
+import {watch} from "vue";
+
+const modals = {
+    register: Register,
+    login: Login
+};
+
+const modalStore = useModalStore()
+const closeModal = () => {
+    modalStore.closeCurrentModal(); // Close the current modal
+}
+const openRegister = () => {
+    closeModal();
+    modalStore.setModalToOpen('register');
+}
+
+const openAuth = () => {
+    closeModal();
+    modalStore.setModalToOpen('login');
+}
+
+watch(() => modalStore.modalShouldOpen, (newModalName) => {
+    if (newModalName) {
+        closeModal() // Close any opened modal
+        openModal(modals[newModalName]) // Open new modal
+    }
+})
 </script>
 
 <template>
+
   <div class="header">
     <div class="container mx-auto flex justify-between items-center p-6 nav-menu">
       <div class="logo">
@@ -18,7 +50,11 @@ import { Link } from '@inertiajs/vue3';
 
       <ul class="flex items-center gap-1 text-paleblue font-bold">
         <li><img src="/images/house-user.svg" alt="home"></li>
-        <li>Регистрация / Войти</li>
+        <li>
+            <span class="hover:text-violet-300 cursor-pointer" @click.prevent="openRegister">Регистрация</span>
+             /
+            <span class="hover:text-violet-300 cursor-pointer" @click.prevent="openAuth">Войти</span>
+        </li>
       </ul>
     </div>
   </div>

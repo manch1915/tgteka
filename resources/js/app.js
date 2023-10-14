@@ -5,8 +5,17 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+import { config } from 'jenesius-vue-modal'
+import {createPinia} from "pinia";
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+config({
+    scrollLock: false,
+    animation: 'modal-list',
+    backgroundClose: true,
+    escClose: true,
+})
+
+const appName = import.meta.env.VITE_APP_NAME || 'Tgteka';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -14,6 +23,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(createPinia())
             .use(ZiggyVue)
             .mount(el);
     },

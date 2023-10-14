@@ -12,6 +12,8 @@ import ClientsBlock from "@/Components/Home/Blocks/ClientsBlock.vue";
 import ClientsSlider from "@/Components/Home/ClientsSlider.vue";
 import ComparisonCard from "@/Components/Home/ComparisonCard.vue";
 import IntegrationBackground from "@/Components/Home/Blocks/IntegrationBackground.vue";
+import ClientsHeader from "@/Components/Home/ClientsHeader.vue";
+import Feedback from "@/Components/Home/Feedback.vue";
 
 const headers = ["Регистрируйте аккаунт", "Выберите подходящие каналы в каталоге", "Пополните баланс удобным способом:", "Создайте размещение с картинкой и ссылкой:", "Владелец канала публикует пост и присылает ссылку на проверку:", "Вы можете скачать отчет по итогу размещения:"]
 const texts = ["Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc ",
@@ -71,7 +73,10 @@ const compareItems = [
 
 <template>
     <MainLayout>
-        <SloganBlock/>
+        <SloganBlock
+            header="Нативные размещения в Телеграм: проверенные вручную каналы и боты"
+            paragraph="Нативные размещения в Телеграм: проверенные вручную каналы и боты"
+        />
         <MissionBlock>
             <template v-slot:cards>
                 <book-card v-for="i in 3" :key="i"/>
@@ -102,8 +107,14 @@ const compareItems = [
             </template>
         </IntegrationBlock>
         <ClientsBlock>
+            <template v-slot:clients-header>
+                <ClientsHeader/>
+            </template>
             <template v-slot:slider>
                 <clients-slider/>
+            </template>
+            <template v-slot:clients-footer>
+                <feedback/>
             </template>
         </ClientsBlock>
     </MainLayout>

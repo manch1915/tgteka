@@ -1,11 +1,39 @@
 <template>
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+    <div class="auth max-w-lg w-full flex flex-col sm:justify-center items-center p-12 px-16">
         <div>
-            <slot name="logo" />
+            <div class="text-center text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10"><slot name="logo" /></div>
         </div>
 
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-            <slot />
+        <div class="w-full">
+            <slot/>
         </div>
     </div>
 </template>
+
+<style scoped lang="scss">
+.auth{
+    position: relative;
+    border-radius: 0 40px 40px 40px;
+    background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.00) 100%);
+    backdrop-filter: blur(21px);
+    z-index: 2;
+
+    &::after{
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 0 40px 40px 40px;
+        background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.00) 100%);
+        backdrop-filter: blur(21px);
+        transform: rotate(10deg);
+        z-index: -1;
+    }
+}
+</style>
+<script setup>
+</script>

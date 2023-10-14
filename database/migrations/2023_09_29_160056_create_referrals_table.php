@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('referrals', function (Blueprint $table) {
-            $table->uuid();
+            $table->uuid('id')->primary();
             $table->timestamps();
         });
     }

@@ -61,6 +61,12 @@ const modules = [Navigation, Pagination]
             </swiper>
         </div>
         <div class="pagination flex items-center content-center justify-center gap-6 pt-4"></div>
+        <div class="review pt-12 flex justify-center">
+            <div class="px-6 py-4 bg-purple-600 rounded-full justify-center items-center gap-2.5 inline-flex">
+                <div class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Добавить отзыв
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 

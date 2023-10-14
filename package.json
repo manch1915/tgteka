@@ -22,6 +22,8 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
+        "jenesius-vue-modal": "^1.9.2",
+        "pinia": "^2.1.6",
         "swiper": "^10.3.1"
     }
 }

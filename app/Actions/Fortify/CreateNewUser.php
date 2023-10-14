@@ -3,8 +3,11 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
 
@@ -17,18 +20,30 @@ class CreateNewUser implements CreatesNewUsers
      *
      * @param  array<string, string>  $input
      */
-    public function create(array $input): User
+    public function create(array $input): array
     {
-        Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => $this->passwordRules(),
-        ])->validate();
 
-        return User::create([
-            'name' => $input['name'],
+        // Generate a random password
+        $password = Str::random(10);
+
+        // Create the user
+        $user = User::create([
             'email' => $input['email'],
-            'password' => Hash::make($input['password']),
+            'mobile_number' => $input['mobile_number'],
+            'password' => Hash::make($password),
         ]);
+
+        // Send the email with the password
+        Mail::raw("Here is your password: {$password}", function ($message) use ($user) {
+            $message->to($user->email);
+            $message->subject('Welcome to our app');
+        });
+        Auth::guard('web')->login($user);
+        $token = $user->createToken('appToken');
+
+        return [
+            'user' => $user,
+            'token' => $token->plainTextToken
+        ];
     }
 }

@@ -17,7 +17,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('login'), {
+    form.post(route('api-login'), {
         onFinish: () => form.reset('password'),
     });
 };

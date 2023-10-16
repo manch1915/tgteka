@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -24,6 +25,7 @@ Route::group(['middleware' => 'guest'], function (){
 });
 
 Route::post('/register', [RegisterController::class, 'store'])->name('api-register');
+Route::post('/login', [LoginController::class, 'login'])->name('api-login');
 
 Route::middleware([
     'auth:sanctum',
@@ -31,6 +33,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Dashboard/ChannelsCatalog');
     })->name('dashboard');
 });

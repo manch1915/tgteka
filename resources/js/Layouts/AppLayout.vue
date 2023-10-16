@@ -1,5 +1,6 @@
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3';
+import {Head, Link, router} from '@inertiajs/vue3';
+import Header from "@/Components/Dashboard/Header.vue";
 
 defineProps({
     title: String,
@@ -13,10 +14,11 @@ const logout = () => {
 
 <template>
     <div>
-        <Head :title="title" />
-
-      <slot></slot>
-
+        <Head :title="title"/>
+        <Header/>
+        <div class="container mx-auto">
+            <slot/>
+        </div>
 
     </div>
 </template>

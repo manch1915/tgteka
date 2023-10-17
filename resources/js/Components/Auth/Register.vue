@@ -27,8 +27,6 @@ const submit = async () => {
         .catch(error => {
           state.errors = error.response.data.errors || {}
         })
-
-
 };
 </script>
 

@@ -1,5 +1,5 @@
 <script setup>
-
+import {Link} from '@inertiajs/vue3'
 </script>
 
 <template>
@@ -34,7 +34,9 @@
                             <img src="/images/notification.svg" alt="">
                         </div>
                         <div class="border-r-[1px] px-5">
+                          <Link :href="route('personal-data')">
                             <img src="/images/person.svg" alt="">
+                          </Link>
                         </div>
                     </div>
                 </nav>
@@ -47,7 +49,7 @@
             <ul class="flex gap-x-5 justify-center">
                 <li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои шаблоны</li>
                 <li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои размещения</li>
-                <li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Каталог каналов</li>
+                <Link :href="route('dashboard')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Каталог каналов</li></Link>
                 <li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои каналы</li>
                 <li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Заявки на размещение</li>
             </ul>
@@ -72,5 +74,17 @@ header {
     li:hover{
         filter: drop-shadow(0 0 5px rgb(237 233 254));
     }
+}
+.interactive{
+  div{
+    img{
+      cursor: pointer;
+      transition: all .5s;
+      &:hover{
+        filter: drop-shadow(0 0 5px #8729FF);
+        -webkit-filter: drop-shadow(0 0 5px #8729FF);
+      }
+    }
+  }
 }
 </style>

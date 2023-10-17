@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -15,45 +12,10 @@ use Illuminate\Auth\Events\Lockout;
 
 class LoginController extends Controller
 {
-    /**
-     * Get the guard to be used during authentication.
-     *
-     * @return StatefulGuard
-     */
-    protected function guard(): StatefulGuard
-    {
-        return Auth::guard();
-    }
-
     // Create a new controller instance.
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-    }
-
-    // Handle a login request to the application.
-    public function login(LoginRequest $request)
-    {
-        if (RateLimiter::tooManyAttempts($this->throttleKey($request), $maxAttempts = 5, $decayMinutes = 1)) {
-            event(new Lockout($request));
-
-            $this->fireLockoutResponse($request);
-        }
-
-        $credentials = $request->only('email', 'password');
-
-        if ($this->guard()->attempt($credentials)) {
-            RateLimiter::clear($this->throttleKey($request));
-
-            return $this->sendLoginResponse($request);
-        }
-
-        // If the login attempt was unsuccessful, increment the number of attempts
-        RateLimiter::hit($this->throttleKey($request), $decayMinutes);
-
-        throw ValidationException::withMessages([
-            'email' => [trans('auth.failed')],
-        ]);
     }
 
     protected function throttleKey(Request $request)
@@ -70,21 +32,49 @@ class LoginController extends Controller
         ])->status(429);
     }
 
-    protected function sendLoginResponse(Request $request)
+    // Handle a login request to the application.
+    public function login(Request $request)
+    {
+        $this->validateLoginAttempts($request);
+
+        if (Auth::attempt($request->only('email', 'password'))) {
+            RateLimiter::clear($this->throttleKey($request));
+
+            return $this->handleSuccessfulLogin($request);
+        }
+
+        return $this->handleFailedLogin($request);
+    }
+
+    protected function validateLoginAttempts($request)
+    {
+        if (RateLimiter::tooManyAttempts($this->throttleKey($request), 3)) {
+            event(new Lockout($request));
+            $this->fireLockoutResponse($request);
+        }
+    }
+
+    protected function handleSuccessfulLogin($request)
     {
         $request->session()->regenerate();
+        return redirect()->intended('dashboard');
+    }
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+    protected function handleFailedLogin($request)
+    {
+        // If the login attempt was unsuccessful, increment the number of attempts
+        RateLimiter::hit($this->throttleKey($request), 1);
+
+        throw ValidationException::withMessages([
+            'email' => [trans('auth.failed')],
+        ]);
     }
 
     public function logout(Request $request)
     {
-        $this->guard()->logout();
-
+        Auth::logout();
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
-
         return redirect('/');
     }
 }

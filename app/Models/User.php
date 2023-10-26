@@ -127,8 +127,6 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-
-
     public function channels()
     {
         return $this->hasMany(Channel::class);

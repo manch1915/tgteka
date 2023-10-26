@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ChannelController;
 use App\Http\Controllers\Profile\PersonalDataController;
 use App\Http\Controllers\Profile\TotalBalanceController;
+use App\Http\Controllers\PatternController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -30,9 +32,12 @@ Route::post('/register', [RegisterController::class, 'store'])->name('api-regist
 Route::post('/login', [LoginController::class, 'login'])->name('api-login');
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/dashboard', function () {
+
+    Route::get('/channels-catalog', function () {
         return Inertia::render('Dashboard/ChannelsCatalog');
-    })->name('dashboard');
+    })->name('channels-catalog');
+
+    Route::get('/patterns', [PatternController::class, 'index'])->name('patterns');
 
     Route::group(['prefix' => 'profile'], function () {
         Route::get('personal-data', [PersonalDataController::class, 'index'])->name('personal-data');
@@ -40,4 +45,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('total-balance', [TotalBalanceController::class, 'index'])->name('total-balance');
     });
 
+    Route::get('adding-channel',[ChannelController::class, 'index'])->name('adding-channel');
+    Route::get('adding-pattern',[PatternController::class, 'show'])->name('adding-pattern');
+    Route::patch('adding-pattern/{pattern}',[PatternController::class, 'update'])->name('pattern.update');
 });

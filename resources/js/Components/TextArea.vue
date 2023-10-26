@@ -19,12 +19,14 @@ defineExpose({focus: () => input.value.focus()});
 </script>
 
 <template>
-    <input
+    <textarea
         ref="input"
-        class="auth focus:border-transparent focus:ring-0 rounded-3xl"
+        rows="8"
+        class="auth focus:border-transparent focus:ring-0 rounded-3xl resize-none overflow-y-hidden"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
     >
+    </textarea>
 </template>
 <style scoped lang="scss">
 .auth {

@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePatternRequest;
+use App\Http\Requests\UpdatePatternRequest;
 use App\Models\Pattern;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PatternController extends Controller
 {
-    public function index(): JsonResponse
+    public function index()
     {
-        $patterns = Pattern::all();
-
-        return response()->json($patterns);
+        return inertia('Dashboard/Templates');
     }
 
     public function store(StorePatternRequest $request): JsonResponse
@@ -22,14 +24,29 @@ class PatternController extends Controller
         return response()->json($pattern, 201);
     }
 
-    public function show(Pattern $pattern): JsonResponse
+    public function show(User $user)
     {
-        return response()->json($pattern);
+        $pattern = Pattern::create(
+            ['user_id' => auth()->id(),'status' => 'pending']
+        );
+
+        $patternCount = auth()->user()->patterns->count();
+        return inertia('Dashboard/AddingTemplate', ['patternCount' => $patternCount, 'patternId' => $pattern->id]);
     }
 
-    public function update(StorePatternRequest $request, Pattern $pattern): JsonResponse
+    public function update(UpdatePatternRequest $request, Pattern $pattern): JsonResponse
     {
-        $pattern->update($request->validated());
+        $validated = $request->validated();
+
+        if($request->hasFile('media')) {
+            $file = $request->file('media');
+            $filename = $file->getClientOriginalName();
+            $path = Storage::putFileAs('images', $file, $filename);
+            $url = Storage::url($path);
+            $validated['media'] = $url;
+        }
+
+        $pattern->update($validated);
 
         return response()->json($pattern);
     }

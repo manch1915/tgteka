@@ -19,12 +19,14 @@ defineExpose({focus: () => input.value.focus()});
 </script>
 
 <template>
-    <input
+    <select
         ref="input"
         class="auth focus:border-transparent focus:ring-0 rounded-3xl"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
     >
+        <option value="" selected><slot/></option>
+    </select>
 </template>
 <style scoped lang="scss">
 .auth {

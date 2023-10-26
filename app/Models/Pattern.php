@@ -35,6 +35,8 @@ class Pattern extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id','status', 'body', 'media','orders_count'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -8,16 +8,10 @@ use Illuminate\Http\Request;
 
 class ChannelController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return JsonResponse
-     */
+
     public function index()
     {
-        $channels = Channel::all();
-
-        return response()->json($channels);
+        return inertia('Dashboard/AddingChannel');
     }
 
     /**

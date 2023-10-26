@@ -22,8 +22,10 @@
         "vue": "^3.2.31"
     },
     "dependencies": {
+        "@vueup/vue-quill": "^1.2.0",
         "jenesius-vue-modal": "^1.9.2",
         "pinia": "^2.1.6",
+        "quill-emoji": "^0.2.0",
         "swiper": "^10.3.1"
     }
 }

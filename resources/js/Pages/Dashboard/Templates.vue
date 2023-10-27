@@ -1,56 +1,61 @@
-<script>
-import { ref } from 'vue'
+<script setup>
+import { ref, reactive, onBeforeMount, onBeforeUnmount } from 'vue';
 import { Link } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import axios from "axios";
 
-export default {
-    components: {
-        AppLayout,
-        Link
-    },
-    props: {
-        patterns: Array
-    },
-    directives: {
-        clickOutside: {
-            beforeMount: (el, binding) => {
-                el.clickOutsideEvent = event => {
-                    // Check if clicked element is not the context menu or its descendants
-                    if (el !== event.target && !el.contains(event.target)) {
-                        binding.value(event);
-                    }
-                };
-                document.body.addEventListener('click', el.clickOutsideEvent);
-            },
-            unmounted: (el) => {
-                document.body.removeEventListener('click', el.clickOutsideEvent);
-            },
-        }
-    },
-    setup() {
-        const isContextMenuOpen = ref(false)
-        const contextMenuId = ref(null)
+const isContextMenuOpen = ref(false);
+const contextMenuId = ref(null);
 
-        const changeContext = (id) => {
-            contextMenuId.value = id
-            isContextMenuOpen.value = true
-        };
+const props = defineProps({
+    patterns: Array,
+});
 
-        const handleFocusOut = event => {
-            console.log(123)
-            if (!event.target.matches(".context, .context *")) {
-                isContextMenuOpen.value = false;
-            }
-        }
+const state = reactive({
+    patterns: ref(props.patterns)
+});
 
-        return {
-            isContextMenuOpen,
-            contextMenuId,
-            changeContext,
-            handleFocusOut
-        }
+const handleOutsideClick = (event) => {
+    if (!event.target.matches(".context, .context *")) {
+        isContextMenuOpen.value = false;
     }
-}
+};
+
+onBeforeMount(() => {
+    window.addEventListener('click', handleOutsideClick);
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('click', handleOutsideClick);
+});
+const changeContext = (id) => {
+    contextMenuId.value = id;
+    isContextMenuOpen.value = true;
+};
+
+const handleFocusOut = (event) => {
+    if (!event.target.matches(".context, .context *")) {
+        isContextMenuOpen.value = false;
+    }
+};
+
+const renamePattern = async (patternTitleToRename) => {
+    await axios.patch(`/pattern/${patternTitleToRename}/rename`, { title: patternTitleToRename });
+};
+
+const duplicatePattern = async (patternIdToDuplicate) => {
+    const { data } = await axios.post(`/pattern/${patternIdToDuplicate}/duplicate`);
+    console.log(data);
+    state.patterns.push(data);
+};
+
+const deletePattern = async (patternIdToDelete) => {
+    await axios.delete(`/pattern/${patternIdToDelete}`);
+    const indexToDelete = state.patterns.findIndex((pattern) => pattern.id === patternIdToDelete);
+    if (indexToDelete !== -1) {
+        state.patterns.splice(indexToDelete, 1);
+    }
+};
 </script>
 
 <template>
@@ -59,6 +64,7 @@ export default {
             <div class="text-center">
                 <div class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>
             </div>
+            <transition-group name="fade" tag="div" mode="in-out">
             <template v-for="pattern in patterns" :key="pattern.id">
                 <div class="relative">
                     <div class="mb-5 data_container flex items-center justify-between origin-top-left rounded-tr-3xl rounded-bl-3xl rounded-br-3xl border border-color backdrop-blur-2xl px-4 py-3">
@@ -80,17 +86,18 @@ export default {
                         </div>
                     </div>
                     <Transition>
-                    <div v-click-outside="handleFocusOut" v-show="isContextMenuOpen && contextMenuId === pattern.id" class="absolute context z-10">
+                    <div v-show="isContextMenuOpen && contextMenuId === pattern.id" class="absolute context z-10">
                         <ul>
                             <li class="flex items-center gap-x-1 py-1"><img src="/images/document-text.svg" alt="ocument-text">Редактировать</li>
                             <li class="flex items-center gap-x-1 py-1"><img src="/images/edit-2.svg" alt="edit">Переименовать</li>
-                            <li class="flex items-center gap-x-1 py-1"><img src="/images/group-menu.svg" alt="group-menu">Дублировать</li>
-                            <li class="flex items-center gap-x-1 py-1"><img src="/images/trash.svg" alt="trash">Удалить</li>
+                            <li @click.prevent="duplicatePattern(pattern.id)" class="flex items-center gap-x-1 py-1"><img src="/images/group-menu.svg" alt="group-menu">Дублировать</li>
+                            <li @click.prevent="deletePattern(pattern.id)" class="flex items-center gap-x-1 py-1"><img src="/images/trash.svg" alt="trash">Удалить</li>
                         </ul>
                     </div>
                     </Transition>
                 </div>
             </template>
+            </transition-group>
             <div class="flex flex-col gap-y-10 mt-32">
                 <template v-if="patterns && patterns.length === 0">
                     <div class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Шаблонов нет</div>
@@ -148,6 +155,13 @@ export default {
 
 .v-enter-from,
 .v-leave-to {
+    opacity: 0;
+}
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.5s;
+}
+
+.fade-enter, .fade-leave-to {
     opacity: 0;
 }
 </style>

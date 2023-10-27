@@ -70,7 +70,7 @@ class PatternController extends Controller
     {
         $newPattern = $pattern->replicate();
         $newPattern->save();
-
+        $newPattern->localized_created_at = \App\Services\DateLocalizationService::localize($newPattern->created_at);
         return response()->json($newPattern);
     }
 

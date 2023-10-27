@@ -48,4 +48,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('adding-channel',[ChannelController::class, 'index'])->name('adding-channel');
     Route::get('adding-pattern',[PatternController::class, 'show'])->name('adding-pattern');
     Route::patch('adding-pattern/{pattern}',[PatternController::class, 'update'])->name('pattern.update');
+    Route::patch('/pattern/{pattern}/rename', [PatternController::class, 'rename'])->name('pattern.rename');
+    Route::post('/pattern/{pattern}/duplicate', [PatternController::class, 'duplicate'])->name('pattern.duplicate');
+    Route::post('/pattern/{pattern}/destroy', [PatternController::class, 'destroy'])->name('pattern.destroy');
 });

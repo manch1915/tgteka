@@ -10,7 +10,7 @@ class UpdatePatternRequest extends FormRequest
     {
         return [
             'media' => ['file', 'nullable'],
-            'body' => ['string'],
+            'body' => ['string', 'nullable'],
         ];
     }
 

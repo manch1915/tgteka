@@ -88,7 +88,8 @@ watch([content, uploadedImageUrl], patchPattern, { immediate: true, deep: true }
             <div class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>
         </div>
             <div class="mt-16 mb-12">
-                <div class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-10">Создание поста № {{patternCount + 1}} (название)</div>
+                <div class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-10">Создание поста №
+                    {{ patternCount }} (название)</div>
             </div>
             <div class="blok p-8 rounded-tr-3xl rounded-bl-3xl rounded-br-3xl border-2 border-white backdrop-blur-3xl">
                 <h2 class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed mb-5">Ваш пост</h2>

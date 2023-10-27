@@ -7,6 +7,7 @@ use App\Http\Requests\UpdatePatternRequest;
 use App\Models\Pattern;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +15,13 @@ class PatternController extends Controller
 {
     public function index()
     {
-        return inertia('Dashboard/Templates');
+        $patterns = auth()->user()->patterns;
+
+        foreach ($patterns as $pattern) {
+            $pattern->localized_created_at = \App\Services\DateLocalizationService::localize($pattern->created_at);
+        }
+
+        return inertia('Dashboard/Templates', ['patterns' => $patterns]);
     }
 
     public function store(StorePatternRequest $request): JsonResponse
@@ -49,6 +56,22 @@ class PatternController extends Controller
         $pattern->update($validated);
 
         return response()->json($pattern);
+    }
+
+    public function rename(Pattern $pattern, Request $request): JsonResponse
+    {
+        $pattern->title = $request->title;
+        $pattern->save();
+
+        return response()->json($pattern);
+    }
+
+    public function duplicate(Pattern $pattern): JsonResponse
+    {
+        $newPattern = $pattern->replicate();
+        $newPattern->save();
+
+        return response()->json($newPattern);
     }
 
     public function destroy(Pattern $pattern): JsonResponse

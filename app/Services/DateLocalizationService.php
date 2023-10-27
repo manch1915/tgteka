@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class DateLocalizationService
 {
     public static function localize(Carbon $date): string
     {
+
         $monthNames = [
             "Jan" => "января",
             "Feb" => "февраля",

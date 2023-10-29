@@ -5,10 +5,10 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import "quill-emoji/dist/quill-emoji.css";
 import { ref, watch} from "vue";
 
-
 const props = defineProps({
-    patternCount: Number,
-    patternId: Number
+    patternContent: [String, null],
+    patternId: Number,
+    patternMedia: [String, null]
 })
 
 const options = {
@@ -22,12 +22,15 @@ const options = {
     }
 }
 
-const content = ref('')
 let editorMethods = ref(null);
 let htmlContent = ref('');
-let onEditorReady = (methods) => {
+const quillInstance = ref(null);
+let onEditorReady = (methods, quill) => {
     editorMethods.value = methods; // store editor methods
+    quillInstance.value = quill;  // store the Quill instance
 };
+
+const content = ref(props.patternContent || '');
 
 watch(content, () => {
     if(editorMethods.value) {
@@ -35,6 +38,20 @@ watch(content, () => {
     }
 }, { immediate: true, deep: true });
 
+const htmlToDelta = (html) => {
+    const div = document.createElement('div');
+    div.setAttribute('id', 'htmlToDelta');
+    div.innerHTML = `<div id="quillEditor" style="display:none">${html}</div>`;
+    document.body.appendChild(div);
+    const quill = new Quill('#quillEditor', {
+        theme: 'snow',
+    });
+    const delta = quill.getContents();
+    document.getElementById('htmlToDelta').remove();
+    return delta;
+}
+
+content.value = htmlToDelta(content.value);
 const handleFileUpload = (event) => {
     file.value = event.target.files[0];
 
@@ -48,14 +65,16 @@ const handleFileUpload = (event) => {
     };
     reader.readAsDataURL(file.value);
 };
+
 const file = ref(null)
-const uploadedImageUrl = ref('/images/photo.png');
+const uploadedImageUrl = ref(props.patternMedia || '/images/photo.png');
 
 let config = {
     headers: {
         'Content-Type': 'multipart/form-data'
     }
 }
+
 const patchPattern = async () => {
     let formData = new FormData();
     formData.append('_method', 'PATCH');
@@ -65,7 +84,6 @@ const patchPattern = async () => {
     if (file.value) {
         formData.append('media', file.value);
     }
-    console.log(formData)
     try {
         if (props.patternId) {
             const response = await axios.post(route('pattern.update', props.patternId), formData, config);
@@ -76,22 +94,28 @@ const patchPattern = async () => {
     }
 };
 
-watch([content, uploadedImageUrl], patchPattern, { immediate: true, deep: true });
+let typingTimer;
+
+watch([content, uploadedImageUrl], () => {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(patchPattern, 500);
+}, { immediate: true, deep: true });
+
 </script>
 
 <template>
     <AppLayout>
         <div class="mt-28">
-        <div class="text-center">
-            <div class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>
-        </div>
+            <div class="text-center">
+                <div class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>
+            </div>
             <div class="mt-16 mb-12">
                 <div class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-10">Создание поста №
-                    {{ patternCount }} (название)</div>
+                     (название)</div>
             </div>
             <div class="blok p-8 rounded-tr-3xl rounded-bl-3xl rounded-br-3xl border-2 border-white backdrop-blur-3xl">
                 <h2 class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed mb-5">Ваш пост</h2>
-                <QuillEditor @ready="onEditorReady" placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.  Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." v-model:content="content" :options="options" theme="snow" class="text-violet-100" />
+                <QuillEditor @ready="(methods, quill) => onEditorReady(methods, quill)" v-model:content="content" :options="options" theme="snow" class="text-violet-100"  placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.  Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
                 <div class="flex justify-between items-center py-6">
                     <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Шаблон сохраняется автоматически</div>
                     <div class="text-purple-600 text-sm font-normal font-['Poppins'] leading-tight">Очистить всё</div>
@@ -107,7 +131,7 @@ watch([content, uploadedImageUrl], patchPattern, { immediate: true, deep: true }
                                 Загрузить файл
                             </label>
                         </div>
-                        </div>
+                    </div>
                     <div class="grid grid-cols-5 gap-2 justify-end justify-items-end">
                         <div v-for="n in 10" class="w-24 h-24 bg-zinc-300 rounded-lg"></div>
                     </div>

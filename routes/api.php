@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisterController as RegisterController;
+use App\Http\Controllers\PatternController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

@@ -24,6 +24,7 @@
     "dependencies": {
         "@vueup/vue-quill": "^1.2.0",
         "jenesius-vue-modal": "^1.9.2",
+        "laravel-vue-pagination": "^4.1.1",
         "pinia": "^2.1.6",
         "quill-emoji": "^0.2.0",
         "swiper": "^10.3.1"

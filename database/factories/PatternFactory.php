@@ -13,10 +13,11 @@ class PatternFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => 1,
             'media' => $this->faker->imageUrl(),
-            'body' => $this->faker->text(100),
-            'status' => $this->faker->randomElement(['pending', 'accepted', 'declined'])
+            'body' => '<p>fake factory</p>>',
+            'status' => $this->faker->randomElement(['pending', 'accepted', 'declined']),
+            'created_at' => $this->faker->dateTimeThisYear()
         ];
     }
 }

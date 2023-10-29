@@ -15,15 +15,19 @@ class PatternController extends Controller
 {
     public function index()
     {
-        $patterns = auth()->user()->patterns;
+        return inertia('Dashboard/Templates');
+    }
+
+    public function patternsGet()
+    {
+        $patterns = auth()->user()->patterns()->orderBy('created_at', 'desc')->paginate(10);
 
         foreach ($patterns as $pattern) {
             $pattern->localized_created_at = \App\Services\DateLocalizationService::localize($pattern->created_at);
         }
 
-        return inertia('Dashboard/Templates', ['patterns' => $patterns]);
+        return response()->json($patterns);
     }
-
     public function store(StorePatternRequest $request): JsonResponse
     {
         $pattern = Pattern::create($request->validated());
@@ -48,7 +52,7 @@ class PatternController extends Controller
         if($request->hasFile('media')) {
             $file = $request->file('media');
             $filename = $file->getClientOriginalName();
-            $path = Storage::putFileAs('images', $file, $filename);
+            $path = Storage::putFileAs('public/images', $file, $filename);
             $url = Storage::url($path);
             $validated['media'] = $url;
         }
@@ -72,6 +76,18 @@ class PatternController extends Controller
         $newPattern->save();
         $newPattern->localized_created_at = \App\Services\DateLocalizationService::localize($newPattern->created_at);
         return response()->json($newPattern);
+    }
+
+    public function edit(Pattern $pattern)
+    {
+        $patternContent = $pattern->body;
+        $patternMedia = asset($pattern->media);
+
+        return inertia('Dashboard/EditTemplate', [
+            'patternId' => $pattern->id,
+            'patternContent' => $patternContent,
+            'patternMedia' => $patternMedia,
+        ]);
     }
 
     public function destroy(Pattern $pattern): JsonResponse

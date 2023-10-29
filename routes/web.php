@@ -9,16 +9,6 @@ use App\Http\Controllers\PatternController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', function () {
         return Inertia::render('Customers');
@@ -31,7 +21,11 @@ Route::group(['middleware' => 'guest'], function () {
 Route::post('/register', [RegisterController::class, 'store'])->name('api-register');
 Route::post('/login', [LoginController::class, 'login'])->name('api-login');
 
+Route::get('/terms-of-service', [\App\Http\Controllers\AgreementController::class, 'index'])->name('terms-of-service');
+
 Route::middleware(['auth:sanctum'])->group(function () {
+
+    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::get('/channels-catalog', function () {
         return Inertia::render('Dashboard/ChannelsCatalog');

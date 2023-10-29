@@ -31,7 +31,6 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($password),
         ]);
 
-        // Send the email with the password
         Mail::raw("Here is your password: {$password}", function ($message) use ($user) {
             $message->to($user->email);
             $message->subject('Welcome to our app');

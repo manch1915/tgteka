@@ -3,7 +3,8 @@ import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import InputError from '@/Components/InputError.vue';
 import { useModalStore } from '@/stores/authModal.js'
 import TextInput from '@/Components/TextInput.vue';
-import {reactive, toRefs} from "vue";
+import {reactive} from "vue";
+import {Link} from "@inertiajs/vue3";
 
 const modalStore = useModalStore()
 
@@ -73,7 +74,16 @@ const submit = async () => {
                     Зарегистрироваться
                 </button>
             </div>
-            <div class="px-2"><span class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Нажимая на кнопку “Зарегистрироваться”, Вы соглашаетесь </span><span class="text-violet-100 text-sm font-normal font-['Open Sans'] underline leading-tight">Правилами</span><span class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"> и </span><span class="text-violet-100 text-sm font-normal font-['Open Sans'] underline leading-tight">Пользовательским соглашением Сервиса</span></div>
+            <div class="px-2">
+                  <span class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
+                    Нажимая на кнопку “Зарегистрироваться”, Вы соглашаетесь
+                      <Link :href="route('terms-of-service')">
+                    <span class="underline">Правилами</span>
+                    и
+                    <span class="underline">Пользовательским соглашением Сервиса</span>
+                      </Link>
+                  </span>
+            </div>
             <hr class="border border-violet-100 border-opacity-40">
             <div class="w-full flex justify-center gap-3">
                 <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Уже есть аккаунт? </div>

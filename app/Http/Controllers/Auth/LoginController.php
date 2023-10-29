@@ -12,7 +12,7 @@ use Illuminate\Auth\Events\Lockout;
 
 class LoginController extends Controller
 {
-    // Create a new controller instance.
+
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
@@ -32,7 +32,6 @@ class LoginController extends Controller
         ])->status(429);
     }
 
-    // Handle a login request to the application.
     public function login(Request $request)
     {
         $this->validateLoginAttempts($request);
@@ -63,18 +62,18 @@ class LoginController extends Controller
     protected function handleFailedLogin($request)
     {
         // If the login attempt was unsuccessful, increment the number of attempts
-        RateLimiter::hit($this->throttleKey($request), 1);
+        RateLimiter::hit($this->throttleKey($request), 5 * 60);
 
         throw ValidationException::withMessages([
             'email' => [trans('auth.failed')],
         ]);
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        Auth::guard('web')->logout();
+//        $request->session()->invalidate();
+//        $request->session()->regenerateToken();
         return redirect('/');
     }
 }

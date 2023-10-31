@@ -1,6 +1,7 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import SortButton from "@/Components/Dashboard/SortButton.vue";
+import {closeModal} from "jenesius-vue-modal";
 
 const sortData = [
   'Рейтинг',
@@ -10,6 +11,7 @@ const sortData = [
   'Цена',
   'CPМ'
 ]
+closeModal()
 </script>
 
 <template>

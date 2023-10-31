@@ -77,10 +77,12 @@ const submit = async () => {
             <div class="px-2">
                   <span class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
                     Нажимая на кнопку “Зарегистрироваться”, Вы соглашаетесь
-                      <Link :href="route('terms-of-service')">
+                      <Link :href="route('rules')">
                     <span class="underline">Правилами</span>
+                      </Link>
                     и
-                    <span class="underline">Пользовательским соглашением Сервиса</span>
+                      <Link :href="route('terms-of-service')">
+                        <span class="underline">Пользовательским соглашением Сервиса</span>
                       </Link>
                   </span>
             </div>

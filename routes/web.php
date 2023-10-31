@@ -22,6 +22,7 @@ Route::post('/register', [RegisterController::class, 'store'])->name('api-regist
 Route::post('/login', [LoginController::class, 'login'])->name('api-login');
 
 Route::get('/terms-of-service', [\App\Http\Controllers\AgreementController::class, 'index'])->name('terms-of-service');
+Route::get('/rules', [\App\Http\Controllers\AgreementController::class, 'rules'])->name('rules');
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
@@ -33,6 +34,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('/patterns', [PatternController::class, 'index'])->name('patterns');
     Route::get('/patternsGet', [PatternController::class, 'patternsGet'])->name('patterns.get');
+
+
+    Route::get('/support', [\App\Http\Controllers\SupportController::class, 'index'])->name('support');
 
     Route::group(['prefix' => 'profile'], function () {
         Route::get('personal-data', [PersonalDataController::class, 'index'])->name('personal-data');

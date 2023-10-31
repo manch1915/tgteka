@@ -4,6 +4,8 @@ namespace App\Http;
 
 use App\Http\Factories\MessageFactory;
 use App\Http\Repositories\ChatRepository;
+use App\Models\Moderator;
+use Illuminate\Support\Facades\Log;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 use SplObjectStorage;
@@ -33,12 +35,7 @@ class ChatWebSocketServer implements MessageComponentInterface
     public function onMessage(ConnectionInterface $from, $msg): void
     {
         $data = json_decode($msg, true);
-
-        match ($data['type'] ?? null) {
-            'init' => $this->handleInitMessage($data, $from),
-            'chat' => $this->handleChatMessage($data),
-            'get_messages' => $this->handleGetMessages($data),
-        };
+        $this->handleChatMessage($data);
     }
 
     public function onClose(ConnectionInterface $conn): void
@@ -58,44 +55,33 @@ class ChatWebSocketServer implements MessageComponentInterface
         $conn->close();
     }
 
-    private function sendMessage(int $senderId, int $recipientId, string $message): void
+    private function sendMessage(int $senderId, $recipientId, string $message, string $type): void
     {
-        if (!isset($this->userConnections[$recipientId])) {
-            return;
-        }
-
         $messageObject = $this->messageFactory->createChatMessage($senderId, $message);
-        $this->userConnections[$recipientId]->send(json_encode($messageObject));
-        $this->chatRepository->save($senderId, $recipientId, $message);
-    }
+        if($type == 'support'){
+            $moderators = Moderator::all();
+            foreach($moderators as $moderator){
+                // Send message to each moderator
+                Log::info($moderator);
+                if (isset($this->userConnections[$moderator['user_id']])) {
+                    $this->userConnections[$moderator['user_id']]->send(json_encode($messageObject));
+                }
+            }
+            $this->chatRepository->save($senderId, null, $message, $type);
+        } else {
+            if (!isset($this->userConnections[$recipientId])) {
+                return;
+            }
 
-    private function sendMessagesToUser(int $userId, array $messages): void
-    {
-        if (!isset($this->userConnections[$userId])) {
-            return;
+            $this->userConnections[$recipientId]->send(json_encode($messageObject));
         }
-
-        foreach ($messages as $message) {
-            $messageObject = $this->messageFactory->createChatMessage($message['sender_id'], $message['message']);
-            $this->userConnections[$userId]->send(json_encode($messageObject));
-        }
-    }
-
-    private function handleInitMessage(array $data, ConnectionInterface $from): void
-    {
-        $this->userConnections[$data['user_id']] = $from;
-        echo "User (ID: {$data['user_id']}) connected!\n";
+        $this->chatRepository->save($senderId, $recipientId, $message, $type);
     }
 
     private function handleChatMessage(array $data): void
     {
-        $this->sendMessage($data['sender_id'], $data['recipient_id'], $data['message']);
-    }
-
-    private function handleGetMessages(array $data): void
-    {
-        $messages = $this->chatRepository->getMessagesForUser($data['user_id']);
-        $this->sendMessagesToUser($data['user_id'], $messages);
+        $recipientId = $data['type'] == 'support' ? null : $data['recipient_id'];
+        $this->sendMessage($data['sender_id'], $recipientId, $data['message'], $data['type']);
     }
 
     private function findAndRemoveUserConnection(ConnectionInterface $conn): ?int

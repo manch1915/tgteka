@@ -6,12 +6,13 @@ use App\Models\Chat;
 
 class ChatRepository
 {
-    public function save(int $senderId, int $recipientId, string $message): void
+    public function save(int $senderId, int|null $recipientId, string $message, string $type): void
     {
         try {
             $chat = new Chat([
                 'sender_id' => $senderId,
                 'recipient_id' => $recipientId,
+                'type' => $type,
                 'message' => $message,
             ]);
 

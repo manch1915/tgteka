@@ -8,4 +8,9 @@ class AgreementController extends Controller
     {
         return inertia('Agreement');
     }
+
+    public function rules()
+    {
+        return inertia('Rules');
+    }
 }

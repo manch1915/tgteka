@@ -4,29 +4,28 @@ namespace App\Http\Repositories;
 
 use App\Models\Chat;
 
-class ChatRepository
+class PersonalChatRepository
 {
-    public function save(int $senderId, int|null $recipientId, string $message, string $type): void
+    public function save(int $senderId, int $recipientId, string $message): void
     {
         try {
             $chat = new Chat([
                 'sender_id' => $senderId,
                 'recipient_id' => $recipientId,
-                'type' => $type,
                 'message' => $message,
             ]);
 
             $chat->save();
         } catch (\Exception $e) {
-            echo "Error while saving chat message: " . $e->getMessage() . "\n";
+            echo "Error while saving personal chat message: " . $e->getMessage() . "\n";
         }
     }
 
     public function getMessagesForUser(int $userId): array
     {
-        return Chat::where('sender_id', $userId)
-            ->orWhere('recipient_id', $userId)
-            ->get()
-            ->toArray();
+        return Chat::where(function($query) use ($userId) {
+            $query->where('sender_id', $userId)
+                ->orWhere('recipient_id', $userId);
+        })->get()->toArray();
     }
 }

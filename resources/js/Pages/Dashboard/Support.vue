@@ -19,9 +19,9 @@ const createNewAppeal = () => {
         title: title.value,
         message: content.value,
         sender_id: userId.value,
+        ticket_id: 4,
         type: 'support'
     }));
-    console.log(userId.value)
 }
 
 socket.onmessage = function(event) {

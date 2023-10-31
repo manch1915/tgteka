@@ -3,8 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Http\ChatWebSocketServer;
-use App\Http\Repositories\ChatRepository;
 use App\Http\Factories\MessageFactory;
+use App\Http\Repositories\PersonalChatRepository;
+use App\Http\Repositories\SupportChatRepository;
 use Illuminate\Console\Command;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
@@ -16,13 +17,15 @@ class WebSocketServerCommand extends Command
     protected $signature = 'websocket:start';
     protected $description = 'Start the WebSocket Server';
 
-    private $chatRepository;
-    private $messageFactory;
+    protected PersonalChatRepository $personalChatRepository;
+    protected SupportChatRepository $supportChatRepository;
+    protected MessageFactory $messageFactory;
 
-    public function __construct(ChatRepository $chatRepository, MessageFactory $messageFactory)
+    public function __construct(PersonalChatRepository $personalChatRepository, SupportChatRepository $supportChatRepository ,MessageFactory $messageFactory)
     {
         parent::__construct();
-        $this->chatRepository = $chatRepository;
+        $this->personalChatRepository = $personalChatRepository;
+        $this->supportChatRepository = $supportChatRepository;
         $this->messageFactory = $messageFactory;
     }
 
@@ -36,7 +39,7 @@ class WebSocketServerCommand extends Command
         return IoServer::factory(
             new HttpServer(
                 new WsServer(
-                    new ChatWebSocketServer($this->chatRepository, $this->messageFactory)
+                    new ChatWebSocketServer($this->personalChatRepository, $this->supportChatRepository, $this->messageFactory)
                 )
             ),
             self::PORT

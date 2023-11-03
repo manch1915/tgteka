@@ -76,7 +76,12 @@ const patchPattern = async () => {
     }
 };
 
-watch([content, uploadedImageUrl], patchPattern, { immediate: true, deep: true });
+let typingTimer;
+
+watch([content, uploadedImageUrl], () => {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(patchPattern, 500);
+}, { immediate: true, deep: true });
 </script>
 
 <template>

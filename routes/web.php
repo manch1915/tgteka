@@ -35,8 +35,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/patterns', [PatternController::class, 'index'])->name('patterns');
     Route::get('/patternsGet', [PatternController::class, 'patternsGet'])->name('patterns.get');
 
-
-    Route::get('/support', [\App\Http\Controllers\SupportController::class, 'index'])->name('support');
+    Route::group(['prefix' => 'support'], function (){
+        Route::get('/', [\App\Http\Controllers\SupportController::class, 'index'])->name('support');
+        Route::post('/get-messages', [\App\Http\Controllers\SupportController::class, 'getMessagesByTicketId'])->name('get-messages-by-ticket-id');
+    });
 
     Route::group(['prefix' => 'profile'], function () {
         Route::get('personal-data', [PersonalDataController::class, 'index'])->name('personal-data');
@@ -51,4 +53,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('/pattern/{pattern}/rename', [PatternController::class, 'rename'])->name('pattern.rename');
     Route::post('/pattern/{pattern}/duplicate', [PatternController::class, 'duplicate'])->name('pattern.duplicate');
     Route::delete('/pattern/{pattern}', [PatternController::class, 'destroy'])->name('pattern.destroy');
+
 });

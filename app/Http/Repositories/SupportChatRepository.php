@@ -7,7 +7,7 @@ use App\Models\SupportTicket;
 
 class SupportChatRepository
 {
-    public function saveTicket(int $senderId, string $title, string $message): void
+    public function saveTicket(int $senderId, string $title, string $message): int
     {
         try {
             $createdTicket = SupportTicket::create([
@@ -20,10 +20,11 @@ class SupportChatRepository
                 'ticket_id' => $createdTicket->id,
                 'message' => $message,
             ]);
-
+            return $createdTicket->id;
         } catch (\Exception $e) {
             echo "Error while saving support ticket: " . $e->getMessage() . "\n";
         }
+        return 0;
     }
 
     public function saveMessage(int $senderId, int $ticketId, string $message): void
@@ -40,18 +41,4 @@ class SupportChatRepository
         }
     }
 
-    public function ticketExists(int $ticketId): bool
-    {
-        try {
-            return SupportTicket::where('id', $ticketId)->exists();
-        } catch (\Exception $e) {
-            echo "Error while checking if ticket exists: " . $e->getMessage() . "\n";
-            return false;
-        }
-    }
-
-    public function getMessagesForTicket(int $ticketId): array
-    {
-        return SupportMessage::where('ticket_id', $ticketId)->get()->toArray();
-    }
 }

@@ -63,7 +63,7 @@ onMounted(() => getPatterns())
 <template>
     <AppLayout>
         <div class="mt-28">
-            <div :class="patterns && patterns.length === 0 ? 'text-center mb-12' : 'text-left mb-12'">
+            <div :class="patterns.data && patterns.data.length === 0 ? 'text-center mb-12' : 'text-left mb-12'">
                 <div class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>
             </div>
             <div class="grid gap-x-12">
@@ -123,7 +123,7 @@ onMounted(() => getPatterns())
                     </TailwindPagination>
                     </div>
                 </div>
-                <template v-if="patterns && patterns.length !== 0"></template>
+                <template v-if="patterns.data && patterns.data.length !== 0">
                 <div class="relative h-full">
                     <div class="sticky top-0 create-pattern flex flex-col gap-y-4 items-center justify-center">
                         <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Создайте новый <br/>шаблон прямо сейчас</p>
@@ -134,20 +134,23 @@ onMounted(() => getPatterns())
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="flex flex-col items-center justify-center gap-y-10 mt-32">
-                <template v-if="patterns && patterns.length === 0">
-                    <div class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Шаблонов нет</div>
-                    <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                        Вы еще не создали ни одного шаблона
-                    </div>
-                    <div>
-                        <Link :href="route('adding-pattern')">
-                            <button class="text-violet-100 px-6 py-4 bg-purple-600 rounded-full">Создать шаблон</button>
-                        </Link>
-                    </div>
                 </template>
             </div>
+            <template v-if="patterns.data && patterns.data.length === 0">
+                <div class="flex">
+                    <div class="flex flex-col justify-center gap-y-10 mt-32">
+                            <div class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Шаблонов нет</div>
+                            <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                Вы еще не создали ни одного шаблона
+                            </div>
+                            <div>
+                                <Link :href="route('adding-pattern')">
+                                    <button class="text-violet-100 px-6 py-4 bg-purple-600 rounded-full">Создать шаблон</button>
+                                </Link>
+                            </div>
+                    </div>
+                </div>
+            </template>
         </div>
     </AppLayout>
 </template>

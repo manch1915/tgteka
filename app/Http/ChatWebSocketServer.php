@@ -72,7 +72,17 @@ class ChatWebSocketServer implements MessageComponentInterface
 
     private function sendSupportChatMessage(int $senderId, string $message, string $title, ?int $ticketId): void
     {
-        $messageObject = $this->messageFactory->createSupportChatMessage($senderId, $ticketId, $message);
+
+        $ticketBackId = $ticketId;
+        Log::info($ticketBackId);
+        if ($ticketBackId === null) {
+            Log::info('ticked saved');
+            $ticketBackId = $this->supportChatRepository->saveTicket($senderId, $title, $message);
+        } else {
+            $this->supportChatRepository->saveMessage($senderId, $ticketId, $message);
+        }
+
+        $messageObject = $this->messageFactory->createSupportChatMessage($senderId, $ticketBackId, $message);
 
         $moderators = Moderator::all();
         foreach($moderators as $moderator) {
@@ -82,11 +92,6 @@ class ChatWebSocketServer implements MessageComponentInterface
             }
         }
 
-        if ($ticketId === null || !$this->supportChatRepository->ticketExists($ticketId)) {
-            $this->supportChatRepository->saveTicket($senderId, $title, $message);
-        } else {
-            $this->supportChatRepository->saveMessage($senderId, $ticketId, $message);
-        }
     }
 
     private function sendPersonalChatMessage(int $senderId, int $recipientId, string $message): void

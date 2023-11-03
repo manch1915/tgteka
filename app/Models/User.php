@@ -151,4 +151,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Review::class);
     }
+
+    public function tickets()
+    {
+        return $this->hasMany(SupportTicket::class, 'sender_id');
+    }
+
 }

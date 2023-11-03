@@ -25,12 +25,12 @@ class PersonalDataRequest extends FormRequest
 
     private function generateTelegramUsernameRule($uniqueRule): array
     {
-        return ['regex:/^@(?:[a-z0-9\_]){1,}|^(https\:\/\/t\.me\/[a-z0-9\_]{1,})$/i', 'max:255', $uniqueRule];
+        return ['nullable','regex:/^@(?:[a-z0-9\_]){1,}|^(https\:\/\/t\.me\/[a-z0-9\_]{1,})$/i', 'max:255', $uniqueRule];
     }
 
     private function generateMobileNumberRule($uniqueRule): array
     {
-        return ['required', 'numeric', 'min:10', $uniqueRule];
+        return ['nullable', 'numeric', 'min:10', $uniqueRule];
     }
 
     public function authorize(): bool

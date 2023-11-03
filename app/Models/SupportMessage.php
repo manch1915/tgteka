@@ -10,4 +10,9 @@ class SupportMessage extends Model
     use HasFactory;
 
     protected $fillable = ['ticket_id', 'sender_id', 'message'];
+
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id');
+    }
 }

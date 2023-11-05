@@ -9,7 +9,7 @@
       <div class="integration__header text-center my-32"><span
           class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Как купить интеграцию в Телеграм с </span><span
           class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">TGteka.ru</span></div>
-      <div class="grid grid-cols-2 justify-center items-center justify-items-center">
+      <div class="grid sm:grid-cols-2 grid-cols-1 sm:gap-0 gap-y-8 justify-center items-center justify-items-center">
             <slot name="comparePairs">
 
             </slot>

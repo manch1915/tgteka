@@ -4,6 +4,7 @@ import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import { reactive, ref} from "vue";
 import TextInput from "@/Components/TextInput.vue";
 import {usePage} from "@inertiajs/vue3";
+import InputError from "@/Components/InputError.vue";
 
 const props = defineProps({
     created_at: String,
@@ -17,7 +18,11 @@ const form = reactive({
     mobile_number: ref(page.props.auth.user.mobile_number),
 });
 
-const errors = reactive({});
+const errors = reactive({
+    name: ref([]),
+    telegram_username: ref([]),
+    mobile_number: ref([])
+});
 
 const submit = async () => {
     await axios.patch(route('personal-data.store'), form)
@@ -25,7 +30,13 @@ const submit = async () => {
             console.log(res)
         })
         .catch(error => {
-            console.log(error)
+            if (error.response && error.response.status === 422) {
+                errors.name = error.response.data.errors.name;
+                errors.telegram_username = error.response.data.errors.telegram_username;
+                errors.mobile_number = error.response.data.errors.mobile_number;
+            } else {
+                console.log(error)
+            }
         })
 };
 
@@ -50,6 +61,7 @@ const submit = async () => {
                     autocomplete="username"
                     placeholder="Иванов Иван"
                 />
+                <InputError :message="errors.name[0]"/>
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Telegram-аккаунт</p>
                 <TextInput
                     id="name"
@@ -61,6 +73,7 @@ const submit = async () => {
                     autocomplete="username"
                     placeholder="@channel или https://t.me/dr_amina_pirmanova"
                 />
+                <InputError :message="errors.telegram_username[0]"/>
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Телефон</p>
                 <TextInput
                     id="name"
@@ -72,6 +85,7 @@ const submit = async () => {
                     autocomplete="username"
                     placeholder="+7 (___) ___-__-__"
                 />
+                <InputError :message="errors.mobile_number[0]"/>
             </div>
             <div></div>
             <button

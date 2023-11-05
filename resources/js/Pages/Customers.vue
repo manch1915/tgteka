@@ -14,6 +14,9 @@ import ComparisonCard from "@/Components/Home/ComparisonCard.vue";
 import IntegrationBackground from "@/Components/Home/Blocks/IntegrationBackground.vue";
 import ClientsHeader from "@/Components/Home/ClientsHeader.vue";
 import Feedback from "@/Components/Home/Feedback.vue";
+import Slider from "@/Components/Home/Slider.vue";
+import { SwiperSlide} from 'swiper/vue';
+import {ref} from "vue";
 
 const headers = ["Регистрируйте аккаунт", "Выберите подходящие каналы в каталоге", "Пополните баланс удобным способом:", "Создайте размещение с картинкой и ссылкой:", "Владелец канала публикует пост и присылает ссылку на проверку:", "Вы можете скачать отчет по итогу размещения:"]
 const texts = ["Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc ",
@@ -69,6 +72,8 @@ const compareItems = [
         showSaveTimeMoney: true
     }
 ];
+const windowWidth = ref(window.innerWidth)
+
 </script>
 
 <template>
@@ -79,7 +84,20 @@ const compareItems = [
         />
         <MissionBlock>
             <template v-slot:cards>
-                <book-card v-for="i in 3" :key="i"/>
+                <template v-if="windowWidth <= 640">
+                <slider :interactive="false">
+                    <template v-slot:slider>
+                        <template v-for="i in 3" :key="i">
+                        <swiper-slide class="py-20">
+                            <book-card class="flex justify-center"/>
+                        </swiper-slide>
+                        </template>
+                    </template>
+                </slider>
+                </template>
+                <template v-else>
+                    <book-card v-for="i in 3"/>
+                </template>
             </template>
         </MissionBlock>
 
@@ -97,7 +115,20 @@ const compareItems = [
         </HowItWorksBlock>
         <InterestChannelsBlock>
             <template v-slot:cards>
-                <ChannelCard v-for="i in 6" :key="i"/>
+                <template v-if="windowWidth <= 640">
+                    <slider :interactive="true" slides="6">
+                        <template v-slot:slider>
+                            <template v-for="i in 6" :key="i">
+                                <swiper-slide class="pb-20 px-4">
+                                    <ChannelCard/>
+                                </swiper-slide>
+                            </template>
+                        </template>
+                    </slider>
+                </template>
+                <template v-else>
+                    <ChannelCard v-for="i in 6" :key="i"/>
+                </template>
             </template>
         </InterestChannelsBlock>
         <IntegrationBackground/>

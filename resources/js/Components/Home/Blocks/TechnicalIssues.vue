@@ -3,22 +3,23 @@
 </script>
 
 <template>
-    <div class="issues flex flex-col items-center justify-center mt-40 pb-20">
-        <div class="text-center text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-violet-600 text-6xl font-bold font-['Open Sans'] ">
-            Требуется консультация по работе сервиса?
+    <div class="issues flex flex-col items-center justify-center mt-40 sm:pb-20 md:p-0 p-4 overflow-hidden">
+        <div class="text-center py-6 text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-violet-600 sm:text-6xl text-3xl font-bold font-['Open Sans'] ">
+            Возникли технические вопросы: <br>
+            проблемы с доступом или оплатой?
         </div>
-        <div class="issues__block p-16 mt-14">
+        <div class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">Заполните форму и мы с вами свяжемся</div>
+        <div class="issues__block sm:p-16 p-6 mt-14">
             <!--TODO gradient border-->
             <div class="form flex flex-col justify-center gap-y-2">
                 <input type="text" placeholder="Имя">
                 <input type="text" placeholder="+7(___) - ___ - __ - __">
-                <div class="form__checkbox">
+                <div class="form__checkbox flex items-center gap-x-1.5">
                     <!--TODO checkbox styling-->
                     <input type="checkbox" name="terms" class="accent-gray-700 checked:accent-white bg-black text-gray-300 rounded cursor-pointer">
-                    <label for="terms">
-                        <span class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
-                            Нажимая на кнопку «Отправить» я соглашаюсь  <br/>с </span>
-                        <span class="text-violet-100 text-sm font-normal font-['Open Sans'] underline leading-tight">
+                    <label class="terms text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
+                        Нажимая на кнопку «Отправить» я соглашаюсь с
+                        <span class="underline">
                             Правилами пользования Сервисом
                         </span>
                     </label>
@@ -37,6 +38,10 @@
     background-position-y: 0;
     background-size: cover;
     padding-top: 400px;
+    @media screen and (max-width: 640px) {
+        padding-top: 100px;
+
+    }
 }
 .issues__block{
     position: relative;

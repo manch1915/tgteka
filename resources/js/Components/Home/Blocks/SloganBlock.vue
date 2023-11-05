@@ -17,7 +17,7 @@ const props = defineProps({
     <div class="container mx-auto main__block  max-w-4xl">
       <div class="flex flex-col items-center justify-center gap-10">
         <div>
-          <div class="text-5xl font-bold text-paleblue text-center">{{props.header}}</div>
+          <div class="sm:text-5xl text-2xl font-bold text-paleblue text-center">{{props.header}}</div>
         </div>
         <p class="text-lg text-paleblue text-center">{{props.paragraph}}</p>
         <button class="main_button text-lg font-bold text-paleblue text-center">Купить размещение</button>
@@ -32,10 +32,10 @@ const props = defineProps({
   position: relative;
   justify-content: center;
   align-items: center;
-  padding: 235px 0 0 0;
   flex-direction: column;
   height: 100%;
   z-index: 2;
+
     .main__block{
         z-index: 9;
     }
@@ -67,36 +67,68 @@ const props = defineProps({
         height: 88px;
         top: 70%;
         left: 70%;
+
+        @media screen and (max-width: 640px) {
+            width: 30px;
+            height: 30px;
+        }
     }
     & .icon2 {
         width: 40px;
         height: 40px;
         top: 57%;
         left: 32%;
+
+        @media screen and (max-width: 640px) {
+            width: 20px;
+            height: 20px;
+        }
     }
     & .icon3 {
         width: 47px;
         height: 47px;
         top: 40%;
         left: 80%;
+
+        @media screen and (max-width: 640px) {
+            width: 23px;
+            height: 23px;
+        }
     }
     & .icon4 {
-        max-width: 420px; /* Or whatever size you want */
+        max-width: 420px;
         max-height: 195px;
         top: 22%;
         left: 60%;
+    /*TODO change icon*/
+        @media screen and (max-width: 640px) {
+            top: 22%;
+            left: 20%;
+            max-width: 420px;
+            max-height: 195px;
+        }
     }
     & .icon5 {
         width: 85px;
         height: 85px;
         top: 35%;
         left: 20%;
+
+        @media screen and (max-width: 640px) {
+            width: 30px;
+            height: 30px;
+        }
     }
     & .icon6 {
         width: 85px;
         height: 85px;
         top: 70%;
         left: 20%;
+
+        @media screen and (max-width: 640px) {
+            width: 30px;
+            height: 30px;
+        }
     }
   &::before {
     content: "";
@@ -108,11 +140,19 @@ const props = defineProps({
     background: url('/images/background.svg') no-repeat bottom center;
     filter: drop-shadow(0 0 15px #D67EE2);
     z-index: 0;
+
+      @media screen and (max-width: 640px) {
+          background: url('/images/background.svg') no-repeat bottom center;
+          background-size: 200%;
+      }
   }
 }
 
 .main-padding {
   padding: 235px 0;
+    @media screen and (max-width: 640px) {
+        padding: 100px 0 200px 0;
+    }
 }
 
 .main_button {

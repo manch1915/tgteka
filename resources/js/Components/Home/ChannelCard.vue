@@ -63,6 +63,9 @@
     backdrop-filter: blur(21px);
     box-sizing: border-box;
     overflow: hidden;
+    @media screen and (max-width: 640px) {
+        margin-top: 20px;
+    }
 }
 
 .body__buttons {

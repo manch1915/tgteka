@@ -22,6 +22,9 @@
     width: 100%;
     height: 500%;
     background: url("/images/plane.svg") no-repeat center;
+      @media screen and (max-width: 640px) {
+          display: none;
+      }
   }
 }
 

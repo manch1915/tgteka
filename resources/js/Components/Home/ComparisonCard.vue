@@ -43,11 +43,14 @@ const props = defineProps({
     display: flex;
     flex-direction: column;
     padding: 3rem 3rem 9rem;
-    position: relative; /* origin-top-left */
-    border-radius: 2.1875rem 0 2.1875rem 2.1875rem; /* rounded-tr-3xl rounded-bl-3xl rounded-br-3xl */
-    border: 1px solid #3b82f6; /* border border-blue-950 */
-    backdrop-filter: blur(10px); /* backdrop-blur-sm */
+    position: relative;
+    border-radius: 0 2rem  2rem 2rem;
+    border: 1px solid #3b82f6;
+    backdrop-filter: blur(10px);
     gap: 1.5rem;
+    @media screen and (max-width: 640px) {
+        max-width: 95%;
+    }
     ul {
         li {
             list-style: circle;

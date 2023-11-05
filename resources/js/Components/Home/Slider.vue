@@ -3,8 +3,15 @@ import {Swiper, SwiperSlide} from 'swiper/vue';
 import {Navigation, Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import {computed, ref, watch} from "vue";
-import ReviewCard from "@/Components/Home/ReviewCard.vue";
+import {ref, watch} from "vue";
+
+const props = defineProps({
+    interactive: Boolean,
+    slides: Number,
+    freemode: {
+        default: false
+    }
+})
 
 let activeIndex = ref(1);
 const onSlideChange = (swiper) => {
@@ -16,15 +23,6 @@ let mySwiper = ref();
 
 let bullets = ref('');
 
-const renderBullet = (index, className) => {
-    return `<div class="${className}" @click="goToSlide(${index})"></div>`;
-};
-
-let reviewCardsCountPerSlide = computed(() => {
-    const width  = window.innerWidth
-
-    return width <= 640 ? 1 : 4;
-});
 
 const pagination = ref({
     clickable: true,
@@ -32,52 +30,35 @@ const pagination = ref({
         return '<span class="' + className + '"></span>';
     },
 })
-
 const goToSlide = (index) => {
     if (mySwiper.value) {
         mySwiper.value.swiper.slideTo(index);
     }
 };
 
-watch(activeIndex, (newVal) => {
-
-    bullets = '<div class="pagination_el"></div>'.repeat(newVal);
-}, { immediate: true });
 const modules = [Navigation, Pagination]
 </script>
 
 <template>
-    <div class="main">
-        <div class="interactive pb-4">
+    <div class="main w-full">
+        <div v-show="interactive" class="interactive pb-4">
             <div class="buttons flex items-center ">
                 <div class="arrow arrow_left">
                     <img src="/images/arrow.svg" alt="arrow">
                 </div>
-                <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">{{activeIndex}}/3</div>
+                <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">{{activeIndex}}/{{slides}}</div>
                 <div class="arrow arrow_right">
                     <img src="/images/arrow.svg" alt="arrow">
                 </div>
             </div>
         </div>
         <div class="w-full">
-            <swiper :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right'}" :pagination="pagination"  @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
-                <swiper-slide class="sm:!grid sm:!grid-cols-2 sm:!gap-4 sm:p-0 p-2">
-                    <ReviewCard v-for="i in reviewCardsCountPerSlide"/>
-                </swiper-slide>
-                <swiper-slide class="sm:!grid sm:!grid-cols-2 sm:!gap-4 sm:p-0 p-2">
-                    <ReviewCard v-for="i in reviewCardsCountPerSlide"/>
-                </swiper-slide>
-                <swiper-slide class="sm:!grid sm:!grid-cols-2 sm:!gap-4 sm:p-0 p-2">
-                    <ReviewCard v-for="i in reviewCardsCountPerSlide"/>
-                </swiper-slide>
+            <swiper :free-mode="freemode" :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right'}" :pagination= "pagination"  @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
+                <slot name="slider"/>
             </swiper>
         </div>
-        <div class="pagination flex items-center content-center justify-center gap-6 pt-4"></div>
-        <div class="review pt-12 flex justify-center">
-            <div class="px-6 py-4 bg-purple-600 rounded-full justify-center items-center gap-2.5 inline-flex">
-                <div class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Добавить отзыв
-                </div>
-            </div>
+        <div class="pagination flex items-center content-center justify-center gap-6 pt-4" v-html="bullets">
+
         </div>
     </div>
 </template>
@@ -145,7 +126,5 @@ const modules = [Navigation, Pagination]
         }
     }
 }
-
-
 
 </style>

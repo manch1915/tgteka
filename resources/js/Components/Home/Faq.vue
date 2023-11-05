@@ -6,7 +6,7 @@ import FaqCard from "@/Components/Home/FaqCard.vue";
 <template>
     <div class="pt-44">
         <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10 text-center">Вопрос — Ответ</h1>
-        <div class="flex flex-col gap-4 pt-40">
+        <div class="flex flex-col gap-4 pt-40 px-3">
             <faq-card v-for="i in 4"/>
         </div>
     </div>

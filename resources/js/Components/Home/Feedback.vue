@@ -3,9 +3,10 @@
 
 <template>
   <div class="consultation flex flex-col items-center justify-center mt-40">
-    <div class="text-center text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-violet-600 text-6xl font-bold font-['Open Sans'] ">
+    <div class="text-center text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-violet-600 sm:text-6xl text-3xl font-bold font-['Open Sans'] ">
       Требуется консультация <br/>по работе сервиса?
     </div>
+      <div class="sm:p-0 p-2">
     <div class="consultation__block p-16 mt-14">
       <!--TODO gradient border-->
       <div class="form flex flex-col justify-center gap-y-4">
@@ -23,6 +24,7 @@
         </button>
       </div>
     </div>
+          </div>
   </div>
 </template>
 

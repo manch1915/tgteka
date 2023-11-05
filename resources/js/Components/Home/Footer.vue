@@ -155,10 +155,4 @@
 footer {
     background: linear-gradient(90deg, rgba(66, 38, 72, 1), rgba(109, 66, 199, 1), rgba(107, 41, 123, 1));
 }
-
-.glow_icon {
-    -webkit-filter: drop-shadow(3px 3px 2px rgba(255, 255, 255, 1));
-    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 1));
-}
-
 </style>

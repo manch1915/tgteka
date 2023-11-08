@@ -9,10 +9,10 @@
       <div class="sm:p-0 p-2">
     <div class="consultation__block p-16 mt-14">
       <!--TODO gradient border-->
-      <div class="form flex flex-col justify-center gap-y-4">
+      <div class="form flex flex-col text-violet-100 justify-center gap-y-4">
         <input type="text" placeholder="Имя">
         <input type="text" placeholder="+7(___) - ___ - __ - __">
-        <div class="form__checkbox">
+        <div class="form__checkbox ">
           <!--TODO checkbox styling-->
           <input type="checkbox" name="terms" class="accent-gray-700 checked:accent-white bg-black text-gray-300 rounded cursor-pointer">
           <label for="terms"><span

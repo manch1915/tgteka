@@ -25,8 +25,9 @@
   border: 1.5px solid #FFF;
   background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.00) 100%);
   backdrop-filter: blur(21px);
-
+  @media screen and (max-width: 640px) {
+      padding: 30px 20px !important;
+  }
 }
-
 
 </style>

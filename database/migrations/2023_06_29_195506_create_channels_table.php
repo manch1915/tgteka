@@ -16,8 +16,10 @@ class CreateChannelsTable extends Migration
             $table->string('telegram_username')->unique()->nullable();
             $table->string('avatar')->nullable();
             $table->string('topic');
+            $table->enum('type', ['chat', 'channel']);
             $table->string('language');
             $table->string('description', 300)->nullable();
+            //TODO booleansss
             $table->boolean('format_one')->default(false);
             $table->boolean('format_two')->default(false);
             $table->boolean('format_three')->default(false);

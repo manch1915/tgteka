@@ -1,9 +1,10 @@
 <script setup>
 import {Swiper, SwiperSlide} from 'swiper/vue';
-import {Navigation, Pagination} from 'swiper/modules';
+import {Autoplay, Navigation, Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import {ref, watch} from "vue";
+import 'swiper/css/autoplay';
+import {ref} from "vue";
 
 const props = defineProps({
     interactive: Boolean,
@@ -36,7 +37,7 @@ const goToSlide = (index) => {
     }
 };
 
-const modules = [Navigation, Pagination]
+const modules = [Navigation, Pagination, Autoplay]
 </script>
 
 <template>
@@ -53,7 +54,7 @@ const modules = [Navigation, Pagination]
             </div>
         </div>
         <div class="w-full">
-            <swiper :free-mode="freemode" :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right'}" :pagination= "pagination"  @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
+            <swiper :autoplay="{delay: 2000}" :free-mode="freemode" :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right'}" :pagination= "pagination"  @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
                 <slot name="slider"/>
             </swiper>
         </div>

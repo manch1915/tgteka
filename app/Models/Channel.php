@@ -72,6 +72,8 @@ class Channel extends Model
 {
     use HasFactory, Favoriteable;
 
+    protected $guarded = [];
+
     public function user()
     {
         return $this->belongsTo(User::class);

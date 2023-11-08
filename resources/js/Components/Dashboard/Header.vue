@@ -1,5 +1,7 @@
 <script setup>
 import {Link} from '@inertiajs/vue3'
+import {closeModal} from "jenesius-vue-modal";
+closeModal()
 </script>
 
 <template>
@@ -50,7 +52,7 @@ import {Link} from '@inertiajs/vue3'
                 <Link :href="route('patterns')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои шаблоны</li></Link>
                 <li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои размещения</li>
                 <Link :href="route('channels-catalog')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Каталог каналов</li></Link>
-                <li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои каналы</li>
+                <Link :href="route('channels')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои каналы</li></Link>
                 <li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Заявки на размещение</li>
             </ul>
         </div>

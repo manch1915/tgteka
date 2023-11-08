@@ -46,12 +46,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('total-balance', [TotalBalanceController::class, 'index'])->name('total-balance');
     });
 
-    Route::get('adding-channel',[ChannelController::class, 'index'])->name('adding-channel');
-    Route::get('adding-pattern',[PatternController::class, 'show'])->name('adding-pattern');
-    Route::get('edit-pattern/{pattern}',[PatternController::class, 'edit'])->name('edit-pattern');
-    Route::patch('adding-pattern/{pattern}',[PatternController::class, 'update'])->name('pattern.update');
-    Route::patch('/pattern/{pattern}/rename', [PatternController::class, 'rename'])->name('pattern.rename');
-    Route::post('/pattern/{pattern}/duplicate', [PatternController::class, 'duplicate'])->name('pattern.duplicate');
-    Route::delete('/pattern/{pattern}', [PatternController::class, 'destroy'])->name('pattern.destroy');
 
+    Route::prefix('pattern')->name('pattern.')->group(function () {
+        Route::get('adding', [PatternController::class, 'show'])->name('adding');
+        Route::get('edit/{pattern}', [PatternController::class, 'edit'])->name('edit');
+        Route::patch('adding/{pattern}', [PatternController::class, 'update'])->name('update');
+        Route::patch('{pattern}/rename', [PatternController::class, 'rename'])->name('rename');
+        Route::post('{pattern}/duplicate', [PatternController::class, 'duplicate'])->name('duplicate');
+        Route::delete('{pattern}', [PatternController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::get('channels', [\App\Http\Controllers\UserChannelController::class, 'index'])->name('channels');
+    Route::get('adding-channel', [\App\Http\Controllers\UserChannelController::class, 'show'])->name('adding-channel');
+    Route::post('adding-channel', [\App\Http\Controllers\UserChannelController::class, 'store'])->name('adding-channel.store');
 });

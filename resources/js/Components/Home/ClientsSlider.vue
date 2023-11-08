@@ -60,7 +60,7 @@ const modules = [Navigation, Pagination]
             </div>
         </div>
         <div class="w-full">
-            <swiper :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right'}" :pagination="pagination"  @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
+            <swiper :autoHeight="true"  :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right'}" :pagination="pagination"  @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
                 <swiper-slide class="sm:!grid sm:!grid-cols-2 sm:!gap-4 sm:p-0 p-2">
                     <ReviewCard v-for="i in reviewCardsCountPerSlide"/>
                 </swiper-slide>

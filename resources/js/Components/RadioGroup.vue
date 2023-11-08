@@ -1,5 +1,4 @@
 <template>
-    <div>
         <RadioButton
             v-for="(value, index) in values"
             :key="index"
@@ -7,7 +6,6 @@
             :modelValue="checkedValue"
             @clicked="radioButtonClicked"
         />
-    </div>
 </template>
 
 <script setup>

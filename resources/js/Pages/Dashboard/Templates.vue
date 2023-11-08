@@ -1,5 +1,5 @@
 <script setup>
-import {ref, reactive, onBeforeMount, onBeforeUnmount, onMounted} from 'vue';
+import {ref, onBeforeMount, onBeforeUnmount, onMounted} from 'vue';
 import {Link, router} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import axios from "axios";
@@ -8,7 +8,6 @@ import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vu
 
 const isContextMenuOpen = ref(false);
 const contextMenuId = ref(null);
-
 const patterns = ref([])
 
 const handleOutsideClick = (event) => {
@@ -96,8 +95,6 @@ onMounted(() => getPatterns())
                                     <li @click.prevent="navigateToEditPattern(pattern.id)" class="flex items-center gap-x-1 py-1">
                                         <img src="/images/document-text.svg" alt="ocument-text">Редактировать
                                     </li>
-                                    <li class="flex items-center gap-x-1 py-1"><img src="/images/edit-2.svg" alt="edit">Переименовать
-                                    </li>
                                     <li @click.prevent="duplicatePattern(pattern.id)"
                                         class="flex items-center gap-x-1 py-1"><img src="/images/group-menu.svg"
                                                                                     alt="group-menu">Дублировать
@@ -128,7 +125,7 @@ onMounted(() => getPatterns())
                     <div class="sticky top-0 create-pattern flex flex-col gap-y-4 items-center justify-center">
                         <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Создайте новый <br/>шаблон прямо сейчас</p>
                         <div>
-                            <Link :href="route('adding-pattern')">
+                            <Link :href="route('pattern.adding')">
                                 <button class="text-violet-100 px-6 py-4 bg-purple-600 rounded-full">Создать шаблон</button>
                             </Link>
                         </div>
@@ -144,7 +141,7 @@ onMounted(() => getPatterns())
                                 Вы еще не создали ни одного шаблона
                             </div>
                             <div>
-                                <Link :href="route('adding-pattern')">
+                                <Link :href="route('pattern.adding')">
                                     <button class="text-violet-100 px-6 py-4 bg-purple-600 rounded-full">Создать шаблон</button>
                                 </Link>
                             </div>

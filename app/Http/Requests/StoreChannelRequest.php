@@ -18,7 +18,7 @@ class StoreChannelRequest extends FormRequest
             'language'       => 'required|in:english,russian',
             'repeat_discount'=> 'nullable|in:10,20,30,50',
             'terms'          => 'accepted',
-            'format_one'     => 'required|integer|min:0',
+            'format_one'     => 'required|integer',
             'format_two'     => 'nullable|integer',
             'format_three'   => 'nullable|integer',
             'no_deletion'    => 'nullable|integer',

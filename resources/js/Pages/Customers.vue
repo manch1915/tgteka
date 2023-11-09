@@ -116,7 +116,7 @@ const windowWidth = ref(window.innerWidth)
         <InterestChannelsBlock>
             <template v-slot:cards>
                 <template v-if="windowWidth <= 640">
-                    <slider :interactive="true" slides="6">
+                    <slider :interactive="true" :slides="6">
                         <template v-slot:slider>
                             <template v-for="i in 6" :key="i">
                                 <swiper-slide class="pb-20 px-4">

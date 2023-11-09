@@ -1,5 +1,8 @@
 <script setup>
-
+const props = defineProps({
+    title: String,
+    description: String
+})
 </script>
 
 <template>
@@ -21,8 +24,8 @@
                     <div>
                     <p class="rate_catalog inline text-violet-100 text-sm font-normal font-['Open Sans']">#2477 в каталоге</p>
                     </div>
-                    <h1 class="text-white text-xl font-bold font-['Open Sans'] leading-relaxed">Доктор Амина</h1>
-                    <p class="text-white text-sm font-normal font-['Poppins'] leading-tight max-h-10">Авторитет и известность автора. Живая и активная аудитория...</p>
+                    <h1 class="text-white text-xl font-bold font-['Open Sans'] leading-relaxed">{{title}}</h1>
+                    <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Poppins'] break-all leading-tight">{{description}}</p>
                 </div>
             </div>
             <div class="grid-element flex flex-col items-center justify-center">
@@ -52,6 +55,7 @@
         border-radius: 0 40px 0 0;
         background: linear-gradient(to bottom, #131733, #343850);
         .grid-element{
+            min-width: 0;
             padding: 20px;
             &:not(:last-child) {
                 border-right: 1px solid #6522D9;

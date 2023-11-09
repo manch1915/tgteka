@@ -12,18 +12,17 @@ class CreateChannelsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('channel_url')->unique();
-            $table->string('channel_name');
+            $table->string('channel_name', 64);
             $table->string('telegram_username')->unique()->nullable();
             $table->string('avatar')->nullable();
-            $table->string('topic');
+            $table->string('topic', 100);
             $table->enum('type', ['chat', 'channel']);
             $table->string('language');
-            $table->string('description', 300)->nullable();
-            //TODO booleansss
-            $table->boolean('format_one')->default(false);
-            $table->boolean('format_two')->default(false);
-            $table->boolean('format_three')->default(false);
-            $table->boolean('no_deletion')->default(false);
+            $table->string('description', 2400)->nullable();
+            $table->bigInteger('format_one')->default(0);
+            $table->bigInteger('format_two')->default(0);
+            $table->bigInteger('format_three')->default(0);
+            $table->bigInteger('no_deletion')->default(0);
             $table->boolean('repost')->default(false);
             $table->integer('repeat_discount')->default(0); // Repeat discount percentage
             $table->float('score')->default(0);

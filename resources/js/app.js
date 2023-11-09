@@ -9,6 +9,7 @@ import { config } from 'jenesius-vue-modal'
 import {createPinia} from "pinia";
 import {Quill} from "@vueup/vue-quill";
 import Emoji from "quill-emoji";
+import {NLoadingBarProvider} from "naive-ui";
 
 config({
     scrollLock: false,
@@ -23,7 +24,20 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
-        return createApp({ render: () => h(App, props) })
+        const RootComponent = {
+            components: { App, NLoadingBarProvider },
+            render() {
+                return h(
+                    NLoadingBarProvider,
+                    {},
+                    {
+                        default: () =>
+                            h(App, props)
+                    }
+                );
+            },
+        };
+        return createApp(RootComponent)
             .use(plugin)
             .use(createPinia())
             .use(ZiggyVue)

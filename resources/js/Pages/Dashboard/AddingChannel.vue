@@ -2,7 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TextInput from '@/Components/TextInput.vue';
 import TextArea from '@/Components/TextArea.vue';
-import {NCheckbox, NSelect, NSwitch} from 'naive-ui';
+import {NCheckbox, NSelect, NSwitch, useLoadingBar} from 'naive-ui';
 import {
     switchThemeOverrides,
     checkboxThemeOverrides,
@@ -10,6 +10,7 @@ import {
     checkboxToRadioThemeOverrides,
 } from '@/themeOverrides.js';
 import {reactive, ref, toRefs, watch} from 'vue';
+import {router} from "@inertiajs/vue3";
 
 const discount_check = ref(false);
 const format_one_checkbox = ref(false);
@@ -48,14 +49,18 @@ const handleFileUpload = (event) => {
     };
     reader.readAsDataURL(form.avatar);
 };
-
+const loading = useLoadingBar()
 const uploadChannel = () => {
+    loading.start()
   axios.post(route('adding-channel.store'), form, {headers: {
           'Content-Type': 'multipart/form-data'
       }})
       .then(res => {
-          console.log(res)})
+          loading.finish()
+          router.visit(route('channels'))
+      })
       .catch(error => {
+          loading.error()
           console.log(error)
       })
 }

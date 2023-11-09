@@ -57,6 +57,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::get('channels', [\App\Http\Controllers\UserChannelController::class, 'index'])->name('channels');
+    Route::get('channelsGet', [\App\Http\Controllers\UserChannelController::class, 'channelsGet'])->name('channels.get');
     Route::get('adding-channel', [\App\Http\Controllers\UserChannelController::class, 'show'])->name('adding-channel');
     Route::post('adding-channel', [\App\Http\Controllers\UserChannelController::class, 'store'])->name('adding-channel.store');
 });

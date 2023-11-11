@@ -29,7 +29,7 @@ const changeContext = (id) => {
 };
 
 const navigateToEditPattern = (patternID) => {
-    router.visit(route('edit-pattern', patternID))
+    router.visit(route('pattern.edit', patternID))
 }
 
 const renamePattern = async (patternTitleToRename) => {

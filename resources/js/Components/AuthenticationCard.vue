@@ -1,5 +1,5 @@
 <template>
-    <div class="auth max-w-lg w-full flex flex-col sm:justify-center items-center p-12 px-16">
+    <div class="auth max-w-lg w-full flex flex-col sm:justify-center items-center p-12 sm:px-16 px-4">
         <div>
             <div class="text-center text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10"><slot name="logo" /></div>
         </div>

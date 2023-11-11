@@ -1,9 +1,11 @@
 <script setup>
-
+import {NCheckbox} from "naive-ui";
+import {checkboxThemeOverrides} from "@/themeOverrides.js";
+import {Link} from "@inertiajs/vue3"
 </script>
 
 <template>
-    <div class="issues flex flex-col items-center justify-center mt-40 sm:pb-20 md:p-0 p-4 overflow-hidden">
+    <div class="issues flex flex-col items-center justify-center mt-40 sm:pb-20 pb-36 p-4 overflow-hidden">
         <div class="text-center py-6 text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-violet-600 sm:text-6xl text-3xl font-bold font-['Open Sans'] ">
             Возникли технические вопросы: <br>
             проблемы с доступом или оплатой?
@@ -15,16 +17,15 @@
                 <input type="text" placeholder="Имя">
                 <input type="text" placeholder="+7(___) - ___ - __ - __">
                 <div class="form__checkbox flex items-center gap-x-1.5">
-                    <!--TODO checkbox styling-->
-                    <input type="checkbox" name="terms" class="accent-gray-700 checked:accent-white bg-black text-gray-300 rounded cursor-pointer">
+                    <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                     <label class="terms text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
                         Нажимая на кнопку «Отправить» я соглашаюсь с
-                        <span class="underline">
+                        <Link :href="route('rules')" class="underline">
                             Правилами пользования Сервисом
-                        </span>
+                        </Link>
                     </label>
                 </div>
-                <button class="px-3 py-2 bg-purple-600 rounded-full w-full gap-2.5 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                <button class="px-3 py-2 bg-purple-600 animation hover:bg-purple-800 rounded-full w-full gap-2.5 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                     Заказать обратный звонок
                 </button>
             </div>
@@ -40,7 +41,6 @@
     padding-top: 400px;
     @media screen and (max-width: 640px) {
         padding-top: 100px;
-
     }
 }
 .issues__block{
@@ -65,6 +65,17 @@
         background: url("/images/plane-consul.svg");
         width: 405px;
         height: 120px;
+    }
+    @media screen and (max-width: 640px) {
+        &:after{
+            content: '';
+            position: absolute;
+            right: -5%;
+            bottom: -35%;
+            background: url("/images/plane-consul.svg");
+            width: 405px;
+            height: 120px;
+        }
     }
 }
 </style>

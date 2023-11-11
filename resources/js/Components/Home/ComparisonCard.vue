@@ -21,7 +21,7 @@ const props = defineProps({
             <li v-for="(text, index) in props.item.listText" :key="index">{{ text }}</li>
         </ul>
         <div v-if="props.item.hasButton">
-            <button class="px-6 py-2 bg-purple-600 rounded-full text-violet-100 text-base font-bold leading-normal">
+            <button class="px-6 py-2 bg-purple-600 transition hover:bg-purple-800 rounded-full text-violet-100 text-base font-bold leading-normal">
                 Создать проект
             </button>
         </div>

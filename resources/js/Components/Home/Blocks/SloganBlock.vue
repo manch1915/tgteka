@@ -17,7 +17,7 @@ const props = defineProps({
     <div class="container mx-auto main__block  max-w-4xl">
       <div class="flex flex-col items-center justify-center gap-10">
         <div>
-          <div class="sm:text-5xl text-2xl font-bold text-paleblue text-center">{{props.header}}</div>
+          <div class="sm:text-5xl text-3xl sm:p-0 px-2 font-bold text-paleblue text-center">{{props.header}}</div>
         </div>
         <p class="text-lg text-paleblue text-center">{{props.paragraph}}</p>
         <button class="main_button text-lg font-bold text-paleblue text-center">Купить размещение</button>
@@ -38,6 +38,13 @@ const props = defineProps({
 
     .main__block{
         z-index: 9;
+       .main_button{
+           box-shadow: 0 0 0 0 #7375AE;
+           transition: all 0.5s ease;
+           &:hover{
+               box-shadow: 0 0 17px 0 #7375AE;
+           }
+       }
     }
     & .icon-container {
         position: absolute;

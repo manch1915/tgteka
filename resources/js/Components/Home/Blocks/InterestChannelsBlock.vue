@@ -33,11 +33,12 @@
           </slot>
         </div>
         <div class="text-center py-20 sm:block hidden">
-          <div class="gotocatalog">
-            <div class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Перейти в
-              полный каталог
+            <div class="gotocatalog transition-all">
+                <button class="transition-all text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                    Перейти в полный каталог
+                </button>
             </div>
-          </div>
+
         </div>
           <div class="block justify-between sm:hidden">
               <div class="flex flex-col gap-6">
@@ -119,16 +120,24 @@ const windowWidth = ref(window.innerWidth)
         }
     }
 }
+
 .gotocatalog {
-  display: inline-flex;
-  padding: 16px 25px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  border-radius: 100px;
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  background: #171961;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    border-radius: 100px;
+    display: inline-block;
+    button{
+        padding: 16px 25px;
+        border-radius: 100px;
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        background: #171961;
+        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    }
+    &:hover {
+        button{
+            box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.25) inset;
+        }
+        box-shadow: 0px 0px 17px 0px #7375AE;
+    }
 }
+
 
 </style>

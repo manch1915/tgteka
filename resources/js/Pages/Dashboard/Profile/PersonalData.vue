@@ -3,8 +3,9 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import { reactive, ref} from "vue";
 import TextInput from "@/Components/TextInput.vue";
-import {usePage} from "@inertiajs/vue3";
-import InputError from "@/Components/InputError.vue";
+import {router, usePage} from "@inertiajs/vue3";
+import axios from "axios";
+import {useLoadingBar} from "naive-ui";
 
 const props = defineProps({
     created_at: String,
@@ -23,22 +24,35 @@ const errors = reactive({
     telegram_username: ref([]),
     mobile_number: ref([])
 });
+const loading = useLoadingBar()
 
 const submit = async () => {
+    loading.start()
     await axios.patch(route('personal-data.store'), form)
-        .then(res => {
-            console.log(res)
+        .then(() => {
+            loading.finish()
+
+            errors.name = [];
+            errors.telegram_username = [];
+            errors.mobile_number = [];
         })
         .catch(error => {
-            if (error.response && error.response.status === 422) {
+            if (error.response && error.response.data && error.response.data.errors) {
                 errors.name = error.response.data.errors.name;
                 errors.telegram_username = error.response.data.errors.telegram_username;
                 errors.mobile_number = error.response.data.errors.mobile_number;
-            } else {
-                console.log(error)
             }
+            loading.error()
         })
 };
+const logout = () => {
+    loading.start()
+    axios.post(route('logout'))
+        .then(res => {
+            loading.finish()
+            router.visit(route('customers'))
+        })
+}
 
 </script>
 
@@ -61,7 +75,7 @@ const submit = async () => {
                     autocomplete="username"
                     placeholder="Иванов Иван"
                 />
-                <InputError :message="errors.name[0]"/>
+                <span class="text-red-500" v-if="errors.name">{{ errors.name[0] }}</span>
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Telegram-аккаунт</p>
                 <TextInput
                     id="name"
@@ -73,7 +87,7 @@ const submit = async () => {
                     autocomplete="username"
                     placeholder="@channel или https://t.me/dr_amina_pirmanova"
                 />
-                <InputError :message="errors.telegram_username[0]"/>
+                <span class="text-red-500" v-if="errors.telegram_username">{{ errors.telegram_username[0] }}</span>
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Телефон</p>
                 <TextInput
                     id="name"
@@ -85,13 +99,18 @@ const submit = async () => {
                     autocomplete="username"
                     placeholder="+7 (___) ___-__-__"
                 />
-                <InputError :message="errors.mobile_number[0]"/>
+                <span class="text-red-500" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</span>
             </div>
-            <div></div>
             <button
                 @click.prevent="submit"
                 class="mt-6 px-6 py-4 bg-purple-600 transition hover:bg-purple-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                 Сохранить данные
+            </button>
+            <br>
+            <button
+                @click.prevent="logout"
+                class="mt-6 px-6 py-4 bg-transparent transition hover:bg-red-800 border border-red-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                Выйти
             </button>
             <br/>
             <button class="mt-12 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">

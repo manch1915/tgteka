@@ -44,9 +44,9 @@
             </div>
         </div>
         <div class="order">
-            <div class="order_el pl-6 pr-11 py-1.5 bg-purple-600 rounded-tl-3xl rounded-br-3xl justify-start items-start gap-2.5 inline-flex">
-                <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Заказать размещение</div>
-            </div>
+            <button class="order_el pl-6 pr-11 py-1.5 bg-purple-600 transition hover:bg-purple-800 rounded-tl-3xl rounded-br-3xl text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">
+                Заказать размещение
+            </button>
         </div>
     </div>
 </template>

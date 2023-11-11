@@ -25,13 +25,13 @@ let reviewCardsCountPerSlide = computed(() => {
 
     return width <= 640 ? 1 : 4;
 });
-
-const pagination = ref({
+const pagination = {
+    el: '.pagination-mod',
     clickable: true,
     renderBullet: function (index, className) {
-        return '<span class="' + className + '"></span>';
+        return '<span class="!mt-1 ' + className + '"></span>';
     },
-})
+}
 
 const goToSlide = (index) => {
     if (mySwiper.value) {
@@ -60,7 +60,7 @@ const modules = [Navigation, Pagination]
             </div>
         </div>
         <div class="w-full">
-            <swiper :autoHeight="true"  :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right'}" :pagination="pagination"  @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
+            <swiper :autoHeight="true" :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right'}"  :pagination="pagination"  @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
                 <swiper-slide class="sm:!grid sm:!grid-cols-2 sm:!gap-4 sm:p-0 p-2">
                     <ReviewCard v-for="i in reviewCardsCountPerSlide"/>
                 </swiper-slide>
@@ -72,12 +72,11 @@ const modules = [Navigation, Pagination]
                 </swiper-slide>
             </swiper>
         </div>
-        <div class="pagination flex items-center content-center justify-center gap-6 pt-4"></div>
+        <div class="pagination-mod flex items-center content-center justify-center gap-6 mt-4"></div>
         <div class="review pt-12 flex justify-center">
-            <div class="px-6 py-4 bg-purple-600 rounded-full justify-center items-center gap-2.5 inline-flex">
-                <div class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Добавить отзыв
-                </div>
-            </div>
+            <button class="px-6 py-4 bg-purple-600 transition hover:bg-purple-800 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                Добавить отзыв
+            </button>
         </div>
     </div>
 </template>

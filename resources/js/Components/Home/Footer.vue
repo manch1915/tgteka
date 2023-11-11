@@ -1,5 +1,7 @@
 <script setup>
-
+const toUp = () => {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
 </script>
 
 <template>
@@ -142,8 +144,8 @@
                         </ul>
                     </div>
                 </div>
-                <div class="up sm:flex hidden flex-col items-center gap-1">
-                    <img class="rotate-180 w-20 glow_icon" src="/images/arrow-circle-down.svg" alt="arrow">
+                <div @click.prevent="toUp" class="up cursor-pointer sm:flex hidden flex-col items-center gap-1">
+                    <img class="transition w-20" src="/images/arrow-circle-down.svg" alt="arrow">
                     <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Наверх</div>
                 </div>
             </div>
@@ -165,5 +167,24 @@
 <style scoped lang="scss">
 footer {
     background: linear-gradient(90deg, rgba(66, 38, 72, 1), rgba(109, 66, 199, 1), rgba(107, 41, 123, 1));
+}
+.up{
+    &:hover{
+    img{
+        -webkit-filter: drop-shadow(3px 3px 2px rgba(255, 255, 255, 1));
+        filter: drop-shadow(0 0 2px rgba(255, 255, 255, 1));
+    }
+    }
+}
+.list{
+    ul{
+        li{
+            cursor: pointer;
+            transition: color 0.5s ease;
+            &:hover{
+                color: rgba(66, 38, 72, 1);
+            }
+        }
+    }
 }
 </style>

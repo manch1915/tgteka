@@ -26,7 +26,7 @@ Route::get('/rules', [\App\Http\Controllers\AgreementController::class, 'rules']
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
-    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::get('/channels-catalog', function () {
         return Inertia::render('Dashboard/ChannelsCatalog');

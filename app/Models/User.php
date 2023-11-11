@@ -95,6 +95,7 @@ class User extends Authenticatable
         'email',
         'password',
         'mobile_number',
+        'telegram_username',
     ];
 
     /**

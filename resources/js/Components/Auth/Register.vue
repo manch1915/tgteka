@@ -5,6 +5,8 @@ import { useModalStore } from '@/stores/authModal.js'
 import TextInput from '@/Components/TextInput.vue';
 import {reactive} from "vue";
 import {Link} from "@inertiajs/vue3";
+import {NCheckbox} from "naive-ui";
+import {checkboxThemeOverrides} from "@/themeOverrides.js";
 
 const modalStore = useModalStore()
 
@@ -64,13 +66,12 @@ const submit = async () => {
                 />
                 <InputError class="mt-2" :message="state.errors.mobile_number && state.errors.mobile_number[0]" />
             </div>
-            <div>
-<!--todo checkbox style -->
-                <input type="checkbox" name="rassilka" id="">
+            <div class="flex items-center gap-x-2">
+                <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                 <label for="rassilka" class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Я согласен получать Email-рассылку от Название компании</label>
             </div>
             <div class="w-full">
-                <button class="w-full text-center pr-6 py-3.5 bg-purple-600 text-white text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl">
+                <button class="w-full text-center pr-6 py-3.5 bg-purple-600 transition hover:bg-purple-800 text-white text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl">
                     Зарегистрироваться
                 </button>
             </div>

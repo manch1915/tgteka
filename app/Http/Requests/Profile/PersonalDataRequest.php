@@ -20,7 +20,7 @@ class PersonalDataRequest extends FormRequest
 
     private function generateNameRule($uniqueRule): array
     {
-        return ['nullable', 'string', 'min:2', 'max:25', $uniqueRule];
+        return ['nullable', 'alpha', 'min:2', 'max:25', $uniqueRule];
     }
 
     private function generateTelegramUsernameRule($uniqueRule): array

@@ -50,6 +50,7 @@ const handleFileUpload = (event) => {
     reader.readAsDataURL(form.avatar);
 };
 const loading = useLoadingBar()
+const errors = ref({})
 const uploadChannel = () => {
     loading.start()
   axios.post(route('adding-channel.store'), form, {headers: {
@@ -61,7 +62,10 @@ const uploadChannel = () => {
       })
       .catch(error => {
           loading.error()
-          console.log(error)
+          errors.value = {}
+          if (error.response && error.response.data && error.response.data.errors) {
+              errors.value = error.response.data.errors;
+          }
       })
 }
 
@@ -133,7 +137,7 @@ watch(state.type, (newRadio) => {
                         <input
                             type="file"
                             class="hidden"
-                            accept="image/*"
+                            accept="image/jpeg, image/png, image/jpg"
                             @change="handleFileUpload($event)" />
                         Загрузить фото канала/ чата
                     </label>
@@ -144,6 +148,7 @@ watch(state.type, (newRadio) => {
                     </p>
                 </div>
             </div>
+            <span class="text-red-500" v-if="errors.avatar">{{ errors.avatar[0] }}</span>
             <div class="flex flex-col gap-y-16">
                 <div class="w-full text-start flex flex-col gap-y-3">
                     <h2
@@ -159,6 +164,7 @@ watch(state.type, (newRadio) => {
                         autofocus
                         autocomplete="title"
                         placeholder="Иванов Иван" />
+                    <span class="text-red-500" v-if="errors.channel_name">{{ errors.channel_name[0] }}</span>
                 </div>
                 <div class="w-full text-start flex flex-col gap-y-3">
                     <h2
@@ -174,6 +180,7 @@ watch(state.type, (newRadio) => {
                         autofocus
                         autocomplete="description"
                         placeholder="Опишите особенности вашего канала, которые выделяют вас в каталоге. Не указывать личные контакты или ссылки на другие сайты." />
+                    <span class="text-red-500" v-if="errors.description">{{ errors.description[0] }}</span>
                 </div>
                 <div class="w-full text-start flex flex-col gap-y-3">
                     <h2
@@ -185,6 +192,7 @@ watch(state.type, (newRadio) => {
                         :theme-overrides="selectThemeOverrides"
                         v-model:value="form.topic"
                         :options="channelSubjects" />
+                    <span class="text-red-500" v-if="errors.topic">{{ errors.topic[0] }}</span>
                 </div>
                 <div class="w-full text-start flex flex-col gap-y-3">
                     <h2
@@ -200,6 +208,7 @@ watch(state.type, (newRadio) => {
                         autofocus
                         autocomplete="channel"
                         placeholder="@channel или https://t.me/dr_amina_pirmanova" />
+                    <span class="text-red-500" v-if="errors.channel_url">{{ errors.channel_url[0] }}</span>
                 </div>
                 <div class="w-full text-center justify-center flex flex-col gap-y-3">
                     <h2
@@ -227,6 +236,7 @@ watch(state.type, (newRadio) => {
                             Группу/ чат
                         </p>
                         </n-checkbox>
+                        <span class="text-red-500" v-if="errors.type">{{ errors.type[0] }}</span>
                     </div>
                 </div>
                 <div class="w-full text-start flex flex-col gap-y-3">
@@ -238,6 +248,7 @@ watch(state.type, (newRadio) => {
                         :theme-overrides="selectThemeOverrides"
                         v-model:value="form.language"
                         :options="languages" />
+                    <span class="text-red-500" v-if="errors.language">{{ errors.language[0] }}</span>
                 </div>
             </div>
         </div>
@@ -279,6 +290,7 @@ watch(state.type, (newRadio) => {
                         <div class="flex items-center gap-x-2 justify-end">
                             <input
                                 v-model="form.format_one"
+                                @input="format_one_checkbox = form.format_one.trim() !== ''"
                                 type="text"
                                 class="w-24 text-violet-100 bg-transparent border-t-0 border-l-0 border-r-0 border-b focus:border-violet-700 border-violet-700 focus:ring-0 ring-0" />
                             <p
@@ -310,6 +322,7 @@ watch(state.type, (newRadio) => {
                         <div class="flex items-center gap-x-2 justify-end">
                             <input
                                 v-model="form.format_two"
+                                @input="format_two_checkbox = form.format_two.trim() !== ''"
                                 type="text"
                                 class="w-24 text-violet-100 bg-transparent border-t-0 border-l-0 border-r-0 border-b focus:border-violet-700 border-violet-700 focus:ring-0 ring-0" />
                             <p
@@ -341,6 +354,7 @@ watch(state.type, (newRadio) => {
                         <div class="flex items-center gap-x-2 justify-end">
                             <input
                                 v-model="form.format_three"
+                                @input="format_three_checkbox = form.format_three.trim() !== ''"
                                 type="text"
                                 class="w-24 text-violet-100 bg-transparent border-t-0 border-l-0 border-r-0 border-b focus:border-violet-700 border-violet-700 focus:ring-0 ring-0" />
                             <p
@@ -372,6 +386,7 @@ watch(state.type, (newRadio) => {
                         <div class="flex items-center gap-x-2 justify-end">
                             <input
                                 v-model="form.no_deletion"
+                                @input="no_deletion_checkbox = form.no_deletion.trim() !== ''"
                                 type="text"
                                 class="w-24 text-violet-100 bg-transparent border-t-0 border-l-0 border-r-0 border-b focus:border-violet-700 border-violet-700 focus:ring-0 ring-0" />
                             <p
@@ -400,6 +415,7 @@ watch(state.type, (newRadio) => {
                             autofocus
                             autocomplete="subscribers_source"
                             placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
+                        <span class="text-red-500" v-if="errors.subscribers_source">{{ errors.subscribers_source[0] }}</span>
                     </div>
                 </div>
                 <div class="flex flex-col gap-y-8">
@@ -421,6 +437,7 @@ watch(state.type, (newRadio) => {
                         :theme-overrides="selectThemeOverrides"
                         v-model:value="form.repeat_discount"
                         :options="discountData" />
+                    <span class="text-red-500" v-if="errors.repeat_discount">{{ errors.repeat_discount[0] }}</span>
                 </div>
                 <div>
                     <div
@@ -428,7 +445,7 @@ watch(state.type, (newRadio) => {
                         <button @click.prevent="uploadChannel" class="px-6 py-3.5 bg-purple-600 rounded-3xl">
                             Добавить канал / чат
                         </button>
-                        <button class="px-6 py-3.5 rounded-3xl border border-violet-700">
+                        <button @click.prevent="router.visit(route('channels'))" class="px-6 py-3.5 rounded-3xl border border-violet-700">
                             Отменить
                         </button>
                     </div>
@@ -443,6 +460,7 @@ watch(state.type, (newRadio) => {
                                 <span class="underline">Правилами пользования Сервисом</span>
                             </div>
                         </n-checkbox>
+                        <span class="text-red-500" v-if="errors.terms">{{ errors.terms[0] }}</span>
                     </div>
                 </div>
             </div>

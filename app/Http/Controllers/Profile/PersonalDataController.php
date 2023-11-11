@@ -19,7 +19,9 @@ class PersonalDataController extends Controller
 
     public function update(PersonalDataRequest $request)
     {
-        auth()->user()->update($request->all());
+        $validated = $request->validated();
+
+        auth()->user()->update($validated);
         return response()->json($request);
     }
 }

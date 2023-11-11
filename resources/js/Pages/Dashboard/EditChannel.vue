@@ -9,8 +9,15 @@ import {
     selectThemeOverrides,
     checkboxToRadioThemeOverrides,
 } from '@/themeOverrides.js';
-import {reactive, ref, toRefs, watch} from 'vue';
+import {reactive, ref, toRefs, watch, watchEffect} from 'vue';
 import {router} from "@inertiajs/vue3";
+
+const props = defineProps({
+    channelId: [Number, null],
+    channel: Object,
+    channelAvatar: [String, null]
+})
+
 
 const discount_check = ref(false);
 const format_one_checkbox = ref(false);
@@ -34,8 +41,17 @@ const form = reactive({
     format_one: 0,
     format_two: 0,
     format_three: 0,
-    no_deletion: 0
+    no_deletion: 0,
+    '_method': 'patch'
 });
+
+watchEffect(() => {
+    if (props.channel) {
+        Object.assign(form, props.channel);
+        file.value =  props.channel.avatar
+    }
+});
+
 const handleFileUpload = (event) => {
     form.avatar = event.target.files[0];
 
@@ -49,15 +65,17 @@ const handleFileUpload = (event) => {
     };
     reader.readAsDataURL(form.avatar);
 };
+
 const loading = useLoadingBar()
 const uploadChannel = () => {
+    console.log(form)
     loading.start()
-  axios.post(route('adding-channel.store'), form, {headers: {
+  axios.post(route('channels.update', props.channel.id), form, {headers: {
           'Content-Type': 'multipart/form-data'
       }})
       .then(res => {
           loading.finish()
-          router.visit(route('channels'))
+          console.log(res)
       })
       .catch(error => {
           loading.error()
@@ -121,7 +139,7 @@ watch(state.type, (newRadio) => {
         <div class="max-w-2xl mx-auto text-center">
             <h1
                 class="py-24 text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">
-                Добавление канала / чата
+                Редактирование канала
             </h1>
             <div class="px-24 mb-16 flex gap-x-2.5 justify-center">
                 <div v-show="file" class="avatar">

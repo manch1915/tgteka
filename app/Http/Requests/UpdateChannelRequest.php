@@ -4,12 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreChannelRequest extends FormRequest
+class UpdateChannelRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
-            'avatar'             => 'nullable|file|max:10240',
+            'avatar'             => 'nullable|string|max:10240',
             'channel_name'       => 'required|max:200',
             'description'        => 'required|string',
             'subscribers_source' => 'required|string',

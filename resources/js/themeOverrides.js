@@ -21,6 +21,17 @@ export const checkboxToRadioThemeOverrides = {
     borderChecked: '1px solid rgba(234, 224, 255, 1)',
     borderFocus: '1px solid rgba(234, 224, 255, 1)'
 };
+export const nTabThemeOverrides = {
+    colorSegment: '#8729FF',
+    tabTextColorActiveSegment: '#8729FF',
+    barColor: '#8729FF',
+    tabTextColorBar: '#8729FF',
+    tabTextColorActiveBar: '#8729FF',
+    tabTextColorHoverBar: '#8729FF',
+    tabTextColorLine: '#EAE0FF',
+    tabTextColorActiveLine: '#8729FF',
+    tabTextColorHoverLine: '#8729FF',
+};
 
 export const selectThemeOverrides = {
     menuBoxShadow:

@@ -19,6 +19,7 @@ class CreateChannelsTable extends Migration
             $table->enum('type', ['chat', 'channel']);
             $table->string('language');
             $table->string('description', 2400)->nullable();
+            $table->string('subscribers_source', 2400)->nullable();
             $table->bigInteger('format_one')->default(0);
             $table->bigInteger('format_two')->default(0);
             $table->bigInteger('format_three')->default(0);

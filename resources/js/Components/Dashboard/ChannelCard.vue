@@ -1,48 +1,151 @@
 <script setup>
+import {router} from "@inertiajs/vue3";
+import {NTabPane, NTabs} from "naive-ui";
+import AboutChannel from "@/Components/Dashboard/ChannelTab/AboutChannel.vue";
+import {nTabThemeOverrides} from "@/themeOverrides.js";
+import {ref} from "vue";
+
 const props = defineProps({
     title: String,
-    description: String
+    description: String,
+    id: Number
 })
+
+const wrap = ref(false)
+
 </script>
 
 <template>
     <div class="channel_card">
-        <div class="grid">
-<!-- TODO badge from naive ui           -->
-            <div class="flex grid-element flex-col items-center justify-center gap-y-3">
-                <div class="white-point"></div>
-                <div class="flex rating text-white text-sm font-normal font-['Poppins'] leading-tight">
-                    <img src="/images/gavat.svg" alt="">
-                    <p>34.3</p>
-                </div>
-                <div class="avatar">
-                    <img src="/images/avatar.jpg" alt="avatar">
-                </div>
-            </div>
-            <div class="grid-element">
-                <div class="flex flex-col gap-y-2 justify-between">
-                    <div>
-                    <p class="rate_catalog inline text-violet-100 text-sm font-normal font-['Open Sans']">#2477 в каталоге</p>
+        <div class="channel_card-container">
+            <div class="grid">
+    <!-- TODO badge from naive ui           -->
+                <div class="flex grid-element flex-col items-center justify-center gap-y-3">
+                    <div class="white-point"></div>
+                    <div class="flex rating text-white text-sm font-normal font-['Poppins'] leading-tight">
+                        <img src="/images/gavat.svg" alt="">
+                        <p>34.3</p>
                     </div>
-                    <h1 class="text-white text-xl font-bold font-['Open Sans'] leading-relaxed">{{title}}</h1>
-                    <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Poppins'] break-all leading-tight">{{description}}</p>
+                    <div class="avatar">
+                        <img src="/images/avatar.jpg" alt="avatar">
+                    </div>
+                </div>
+                <div class="grid-element">
+                    <div class="flex flex-col gap-y-2 justify-between">
+                        <div>
+                        <p class="rate_catalog inline text-violet-100 text-sm font-normal font-['Open Sans']">#2477 в каталоге</p>
+                        </div>
+                        <h1 class="text-white text-xl font-bold font-['Open Sans'] leading-relaxed">{{title}}</h1>
+                        <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Poppins'] break-all leading-tight">{{description}}</p>
+                    </div>
+                </div>
+                <div class="grid-element flex flex-col items-center justify-center">
+                    <div class="flex w-full justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        <button class="watch flex items-center gap-x-1.5">Канал в каталоге <i class="block eye"></i></button>
+                        <button @click.prevent="router.visit(route('channels.edit', id))" class="edit">Редактировать канал</button>
+                        <button class="orders flex items-center gap-x-1.5">К заявкам <i class="block inkarrow"></i></button>
+                    </div>
                 </div>
             </div>
-            <div class="grid-element flex flex-col items-center justify-center">
-                <div class="flex w-full justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                    <button class="watch flex items-center gap-x-1.5">Канал в каталоге <i class="block eye"></i></button>
-                    <button class="edit">Редактировать канал</button>
-                    <button class="orders flex items-center gap-x-1.5">К заявкам <i class="block inkarrow"></i></button>
-                </div>
+          <transition name="expand">
+            <div v-show="wrap" class="wrap p-3">
+                <n-tabs :theme-overrides="nTabThemeOverrides" type="line" animated>
+                    <n-tab-pane name="oasis" tab="О канале">
+                      <template #tab>
+                        <div class="flex flex-col items-center card-container">
+                          <div class="card"></div>
+                          О канале
+                        </div>
+                      </template>
+                       <AboutChannel/>
+                    </n-tab-pane>
+                    <n-tab-pane name="the beatles" tab="Отзывы">
+                      <template #tab>
+                        <div class="flex flex-col items-center message-2-container">
+                          <div class="message-2"></div>
+                          Отзывы
+                        </div>
+                      </template>
+                        Hey Jude
+                    </n-tab-pane>
+                    <n-tab-pane name="jay chou" tab="Статистика">
+                        <template #tab>
+                            <div class="flex flex-col items-center noun-bar-container">
+                            <div class="noun-bar"></div>
+                            Статистика
+                            </div>
+                        </template>
+                        Qilixiang      
+                    </n-tab-pane>
+                </n-tabs>
             </div>
+          </transition>
         </div>
+
         <div class="flex justify-center py-6 unwrap">
-            <button class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal flex">Развернуть <i class="block arrow-down"></i></button>
+            <button @click.prevent="wrap = !wrap" class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal flex">Развернуть <i class="block arrow-down"></i></button>
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
+.expand-leave-active,
+.expand-enter-active {
+  transition: all 350ms ease;
+  overflow: hidden;
+}
+
+.expand-enter-to,
+.expand-leave-from {
+  height: 642px;
+}
+
+.expand-enter-from,
+.expand-leave-to {
+  height: 0;
+}
+  .message-2{
+  width: 24px;
+  height: 24px;
+  background-color: rgba(234, 224, 255, 1);
+  -webkit-mask: url(/images/message-2.svg) no-repeat center;
+  mask: url(/images/message-2.svg) no-repeat center;
+  transition: background-color 0.5s;
+
+}
+.message-2-container:hover{
+  .message-2{
+    background-color: rgba(135, 41, 255, 1);
+  }
+}
+.card{
+  width: 24px;
+  height: 24px;
+  background-color: rgba(234, 224, 255, 1);
+  -webkit-mask: url(/images/card.svg) no-repeat center;
+  mask: url(/images/card.svg) no-repeat center;
+  transition: background-color 0.5s;
+
+}
+.card-container:hover{
+  .card{
+    background-color: rgba(135, 41, 255, 1);
+  }
+}
+.noun-bar{
+  width: 24px;
+  height: 24px;
+  background-color: rgba(234, 224, 255, 1);
+  -webkit-mask: url(/images/noun-bar-charts.svg) no-repeat center;
+  mask: url(/images/noun-bar-charts.svg) no-repeat center;
+  transition: background-color 0.5s;
+
+}
+.noun-bar-container:hover{
+  .noun-bar{
+    background-color: rgba(135, 41, 255, 1);
+  }
+}
 .channel_card{
     border-radius: 0 40px 40px 40px;
     border: 1px solid #6522D9;
@@ -51,9 +154,12 @@ const props = defineProps({
 
         background: #301864;
     }
-    .grid{
+    .channel_card-container{
         border-radius: 0 40px 0 0;
         background: linear-gradient(to bottom, #131733, #343850);
+    }
+    .grid{
+
         .grid-element{
             min-width: 0;
             padding: 20px;
@@ -78,6 +184,9 @@ const props = defineProps({
             }
         }
     }
+}
+.wrap{
+    border-top: 1px solid #6522D9;
 }
 .watch,.edit {
     padding: 15px 25px;

@@ -19,7 +19,7 @@ onMounted(() => getPatterns())
 <template>
     <div class="flex flex-col gap-y-4 mt-8">
         <template v-if="channels" v-for="(channel, index) in channels.data" :key="index">
-            <ChannelCard :title="channel.channel_name" :description="channel.description"/>
+            <ChannelCard :id="channel.id" :title="channel.channel_name" :description="channel.description"/>
         </template>
     </div>
     <div class="flex justify-center">

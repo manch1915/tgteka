@@ -51,8 +51,7 @@ class PatternController extends Controller
 
         if($request->hasFile('media')) {
             $file = $request->file('media');
-            $filename = $file->getClientOriginalName();
-            $path = Storage::putFileAs('public/images', $file, $filename);
+            $path = $file->store('public/images');
             $url = Storage::url($path);
             $validated['media'] = $url;
         }

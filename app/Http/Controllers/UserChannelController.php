@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreChannelRequest;
+use App\Http\Requests\UpdateChannelRequest;
 use App\Models\Channel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -32,10 +33,9 @@ class UserChannelController extends Controller
     {
         $validated = $request->validated();
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $filename = $file->getClientOriginalName();
-            $path = Storage::putFileAs('public/images', $file, $filename);
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $path = $file->store('public/images');
             $url = Storage::url($path);
             $validated['avatar'] = $url;
         }
@@ -43,8 +43,36 @@ class UserChannelController extends Controller
         $validated['user_id'] = auth()->id();
 
         unset($validated['terms']);
-        $channel = Channel::create($validated);
+        Channel::create($validated);
 
-        return to_route('channels');
+        return response()->json('success');
+    }
+
+    public function update(UpdateChannelRequest $request, Channel $channel)
+    {
+        $validated = $request->validated();
+
+        if($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $path = $file->store('public/images');
+            $url = Storage::url($path);
+            $validated['avatar'] = $url;
+        }
+        unset($validated['terms']);
+        $channel->update($validated);
+
+        return response()->json($channel);
+    }
+
+    public function edit(Channel $channel)
+    {
+
+        $channelAvatar = asset($channel->avatar);
+
+        return inertia('Dashboard/EditChannel', [
+            'channelId' => $channel->id,
+            'channel' => $channel,
+            'channelAvatar' => $channelAvatar,
+        ]);
     }
 }

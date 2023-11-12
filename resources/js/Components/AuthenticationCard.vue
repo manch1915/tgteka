@@ -1,37 +1,49 @@
 <template>
-    <div class="auth max-w-lg w-full flex flex-col sm:justify-center items-center p-12 sm:px-16 px-4">
-        <div>
-            <div class="text-center text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10"><slot name="logo" /></div>
-        </div>
+    <div class="wrapper sm:w-[600px] w-[95%]">
+        <div class="auth w-full flex flex-col sm:justify-center items-center p-12 sm:px-16 px-4">
+            <div>
+                <div class="text-center text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10"><slot name="logo" /></div>
+            </div>
 
-        <div class="w-full">
-            <slot/>
+            <div class="w-full">
+                <slot/>
+            </div>
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
-.auth{
+.wrapper{
     position: relative;
-    border-radius: 0 40px 40px 40px;
-    background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.00) 100%);
-    backdrop-filter: blur(21px);
-    z-index: 2;
-
-    &::before{
-        content: '';
+    &::before {
+        content: "";
         position: absolute;
         left: 0;
         right: 0;
         top: 0;
         bottom: 0;
-        width: 100%;
-        height: 100%;
         border-radius: 0 40px 40px 40px;
-        background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.00) 100%);
+        background: radial-gradient(
+                278.82% 137.51% at 1.95% 3.59%,
+                rgba(255, 255, 255, 0.26) 0%,
+                rgba(255, 255, 255, 0) 100%
+        );
         backdrop-filter: blur(21px);
         transform: rotate(10deg);
         z-index: -1;
     }
 }
+.auth {
+    border-radius: 0 40px 40px 40px;
+    background: radial-gradient(
+            278.82% 137.51% at 1.95% 3.59%,
+            rgba(255, 255, 255, 0.26) 0%,
+            rgba(255, 255, 255, 0) 100%
+    );
+    backdrop-filter: blur(7px);
+    z-index: 2;
+}
+
 </style>
+<script setup>
+</script>

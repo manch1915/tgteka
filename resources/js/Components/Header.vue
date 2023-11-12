@@ -5,24 +5,22 @@ import {openModal} from "jenesius-vue-modal";
 import Login from "@/Components/Auth/Login.vue";
 import Register from "@/Components/Auth/Register.vue";
 import {ref, watch} from "vue";
+import PasswordRecovery from "@/Components/Auth/PasswordRecovery.vue";
 
 const modals = {
     register: Register,
-    login: Login
+    login: Login,
+    recovery: PasswordRecovery
 };
 
 const modalStore = useModalStore()
 const closeModal = () => {
     modalStore.closeCurrentModal(); // Close the current modal
 }
-const openRegister = () => {
-    closeModal();
-    modalStore.setModalToOpen('register');
-}
 
-const openAuth = () => {
+const openModalWithName = (value) => {
     closeModal();
-    modalStore.setModalToOpen('login');
+    modalStore.setModalToOpen(value);
 }
 
 watch(() => modalStore.modalShouldOpen, (newModalName) => {
@@ -67,9 +65,9 @@ const width = window.innerWidth
                 <ul class="flex items-center gap-1 text-paleblue font-bold">
                     <li><img src="/images/house-user.svg" alt="home"></li>
                     <li class="flex">
-                        <span class="hover:text-violet-300 cursor-pointer" @click.prevent="openRegister">Регистрация</span>
+                        <span class="hover:text-violet-300 cursor-pointer" @click.prevent="openModalWithName('register')">Регистрация</span>
                         /
-                        <span class="hover:text-violet-300 cursor-pointer" @click.prevent="openAuth">Войти</span>
+                        <span class="hover:text-violet-300 cursor-pointer" @click.prevent="openModalWithName('login')">Войти</span>
                     </li>
                 </ul>
             </div>

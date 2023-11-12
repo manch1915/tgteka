@@ -71,7 +71,6 @@ const logout = () => {
                     type="text"
                     class="w-1/2"
                     required
-                    autofocus
                     autocomplete="username"
                     placeholder="Иванов Иван"
                 />
@@ -83,7 +82,6 @@ const logout = () => {
                     type="text"
                     class="w-1/2"
                     required
-                    autofocus
                     autocomplete="username"
                     placeholder="@channel или https://t.me/dr_amina_pirmanova"
                 />
@@ -95,7 +93,6 @@ const logout = () => {
                     type="text"
                     class="w-1/2"
                     required
-                    autofocus
                     autocomplete="username"
                     placeholder="+7 (___) ___-__-__"
                 />

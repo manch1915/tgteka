@@ -18,7 +18,7 @@
     backdrop-filter: blur(21px);
     z-index: 2;
 
-    &::after{
+    &::before{
         content: '';
         position: absolute;
         left: 0;
@@ -35,5 +35,3 @@
     }
 }
 </style>
-<script setup>
-</script>

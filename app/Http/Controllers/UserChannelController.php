@@ -17,9 +17,13 @@ class UserChannelController extends Controller
         return inertia('Dashboard/Channels');
     }
 
-    public function channelsGet()
+    public function channelsGet(Request $request)
     {
-        $channels = auth()->user()->channels()->orderBy('created_at', 'desc')->paginate(10);
+        $search = $request->input('search');
+
+        $channels = auth()->user()->channels()->when($search, function ($query, $search) {
+            return $query->where('channel_name', 'like', '%'.$search.'%');
+        })->orderBy('created_at', 'desc')->paginate(10);
 
         return response()->json($channels);
     }

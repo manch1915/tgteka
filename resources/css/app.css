@@ -52,3 +52,14 @@ body {
     -webkit-filter: drop-shadow(3px 3px 2px rgba(255, 255, 255, 1));
     filter: drop-shadow(0 0 2px rgba(255, 255, 255, 1));
 }
+.n-slider-handle-indicator{
+    padding: 0 8px !important;
+}
+.n-slider-handle{
+    width: 7px !important;
+    height: 15px !important;
+    border-radius: 0 !important;
+}
+.n-slider .n-slider-handles .n-slider-handle-wrapper{
+    transform: translate(-106%, -50%);
+}

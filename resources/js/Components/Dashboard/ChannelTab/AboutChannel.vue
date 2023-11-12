@@ -23,7 +23,7 @@ import {NProgress} from "naive-ui";
                     status="success"
                     :percentage="20"
                     color="#8729FF"
-                    height="20px"
+                    :height=20
                 />
             </div>
             <div class="px-5 pb-5 border-b border-violet-100 border-opacity-40">

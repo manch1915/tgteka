@@ -3,6 +3,18 @@ export const switchThemeOverrides = {
     railColorActive: '#FFFFFF',
     buttonColor: 'rgba(135, 41, 255, 1)'
 };
+export const inputThemeOverrides = {
+    borderRadius: '30px',
+    placeholderColor: '#EAE0FF99',
+    color: '#0D143A',
+    textColor: '#FFFFFF',
+    colorFocus: '#0D143A',
+    border: '1px solid #6522D9',
+    borderHover: '1px solid #6522D9',
+    borderDisabled: '1px solid #6522D9',
+    borderFocus: '1px solid #6522D9',
+    caretColor: 'rgba(135, 41, 255, 1)',
+};
 
 export const checkboxThemeOverrides = {
     color: '#FFFFFF',
@@ -10,6 +22,25 @@ export const checkboxThemeOverrides = {
     checkMarkColor: 'rgba(13, 20, 58, 1)',
     borderChecked: '',
     borderFocus: ''
+};
+export const scrollbarThemeOverrides = {
+    color: '#FFFFFF',
+};
+
+export const sliderThemeOverrides = {
+    railColor: '#EAE0FF99',
+    railColorHover: '#EAE0FF77',
+    fillColor: 'rgba(135, 41, 255, 1)',
+    fillColorHover: 'rgba(135, 41, 255, 1)',
+    dotColor: 'rgba(135, 41, 255, 1)',
+    handleColor: 'rgba(135, 41, 255, 1)',
+    dotHeight: '1px',
+    dotWidth: '15px',
+    dotBorderRadius: '0px',
+    dotColorPopover: 'rgba(135, 41, 255, 1)',
+    indicatorColor: 'rgba(135, 41, 255, 1)',
+    dotColorModal: 'rgba(135, 41, 255, 1)',
+    indicatorBorderRadius: '5px'
 };
 
 export const checkboxToRadioThemeOverrides = {

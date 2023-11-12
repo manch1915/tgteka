@@ -18,8 +18,8 @@ Route::group(['middleware' => 'guest'], function () {
     })->name('owners');
 });
 
-Route::post('/register', [RegisterController::class, 'store'])->name('api-register');
-Route::post('/login', [LoginController::class, 'login'])->name('api-login');
+Route::post('/register', [RegisterController::class, 'store'])->name('register');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 Route::get('/terms-of-service', [\App\Http\Controllers\AgreementController::class, 'index'])->name('terms-of-service');
 Route::get('/rules', [\App\Http\Controllers\AgreementController::class, 'rules'])->name('rules');

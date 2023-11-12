@@ -35,12 +35,9 @@ class CreateNewUser implements CreatesNewUsers
             $message->to($user->email);
             $message->subject('Welcome to our app');
         });
-        Auth::guard('web')->login($user);
-        $token = $user->createToken('appToken');
 
         return [
-            'user' => $user,
-            'token' => $token->plainTextToken
+            'user' => $user
         ];
     }
 }

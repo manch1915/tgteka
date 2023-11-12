@@ -5,7 +5,7 @@ import { useModalStore } from '@/stores/authModal.js'
 import TextInput from '@/Components/TextInput.vue';
 import {reactive} from "vue";
 import {Link} from "@inertiajs/vue3";
-import {NCheckbox} from "naive-ui";
+import {NCheckbox, useLoadingBar} from "naive-ui";
 import {checkboxThemeOverrides} from "@/themeOverrides.js";
 
 const modalStore = useModalStore()
@@ -21,14 +21,16 @@ const state = reactive({
   },
   errors: {}
 });
-
+const loading = useLoadingBar()
 const submit = async () => {
-    await axios.post(route('api-register'), state.form)
+    loading.start()
+    await axios.post(route('register'), state.form)
         .then(res => {
-          localStorage.access_token = res.data.access_token
+            loading.finish()
         })
         .catch(error => {
-          state.errors = error.response.data.errors || {}
+            loading.error()
+            state.errors = error.response.data.errors || {}
         })
 };
 </script>

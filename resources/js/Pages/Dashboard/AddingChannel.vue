@@ -10,7 +10,7 @@ import {
     checkboxToRadioThemeOverrides,
 } from '@/themeOverrides.js';
 import {reactive, ref, toRefs, watch} from 'vue';
-import {router} from "@inertiajs/vue3";
+import {router, Link} from "@inertiajs/vue3";
 
 const discount_check = ref(false);
 const format_one_checkbox = ref(false);
@@ -412,7 +412,6 @@ watch(state.type, (newRadio) => {
                             type="textarea"
                             class="w-full py-3"
                             required
-                            autofocus
                             autocomplete="subscribers_source"
                             placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
                         <span class="text-red-500" v-if="errors.subscribers_source">{{ errors.subscribers_source[0] }}</span>
@@ -457,7 +456,7 @@ watch(state.type, (newRadio) => {
                             <div
                                 class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
                                 Ознакомлен с
-                                <span class="underline">Правилами пользования Сервисом</span>
+                                <Link :href="route('rules')" class="underline">Правилами пользования Сервисом</Link>
                             </div>
                         </n-checkbox>
                         <span class="text-red-500" v-if="errors.terms">{{ errors.terms[0] }}</span>

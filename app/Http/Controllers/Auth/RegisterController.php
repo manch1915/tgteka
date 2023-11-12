@@ -15,12 +15,11 @@ class RegisterController extends Controller
             'mobile_number' => ['required', 'numeric', 'min:10', 'unique:users'],
         ]);
 
-        $userWithToken = $creator->create($validatedData);
+        $creator->create($validatedData);
 
         return response()->json([
             'success' => true,
-            'message' => 'User Registered Successfully',
-            'access_token' => $userWithToken['token']
+            'message' => 'User Registered Successfully'
         ], 200);
     }
 }

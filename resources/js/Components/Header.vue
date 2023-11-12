@@ -103,7 +103,7 @@ const width = window.innerWidth
         </div>
         <div class="justify-start items-center gap-1 inline-flex mt-12">
             <div class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">Сервисы</div>
-            <img src="/images/arrow-circle-down.svg" alt="" srcset="">
+            <img class="w-9" src="/images/arrow-circle-down.svg" alt="" srcset="">
         </div>
         <div class="flex mt-4">
             <div class="nav-block rounded border p-8 border-violet-100 backdrop-blur-xl">

@@ -88,7 +88,7 @@ const width = window.innerWidth
                     <img class="w-8" src="/images/logo.svg" alt="Application logo">
                 </div>
             </div>
-            <div @click.prevent="openRegister">
+            <div @click.prevent="openModalWithName('register')">
                 <img class="w-10" src="/images/house-user.svg" alt="home">
             </div>
         </div>

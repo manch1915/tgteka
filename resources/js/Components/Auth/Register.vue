@@ -49,7 +49,6 @@ const submit = async () => {
                     type="email"
                     class="mt-1 block w-full"
                     required
-                    autofocus
                     autocomplete="username"
                     placeholder="Электронная почта"
                 />

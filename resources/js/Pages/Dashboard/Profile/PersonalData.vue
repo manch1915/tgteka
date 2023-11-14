@@ -5,7 +5,8 @@ import { reactive, ref} from "vue";
 import TextInput from "@/Components/TextInput.vue";
 import {router, usePage} from "@inertiajs/vue3";
 import axios from "axios";
-import {useLoadingBar} from "naive-ui";
+import {NSelect, useLoadingBar} from "naive-ui";
+import {selectThemeOverrides} from "@/themeOverrides.js";
 
 const props = defineProps({
     created_at: String,
@@ -25,6 +26,17 @@ const errors = reactive({
     mobile_number: ref([])
 });
 const loading = useLoadingBar()
+
+const languages = [
+    {
+        label: 'русский',
+        value: 'russian',
+    },
+    {
+        label: 'английский',
+        value: 'english',
+    },
+];
 
 const submit = async () => {
     loading.start()
@@ -96,6 +108,9 @@ const logout = () => {
                     autocomplete="username"
                     placeholder="+7 (___) ___-__-__"
                 />
+                <span class="text-red-500" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</span>
+                <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Язык уведомлений</p>
+                <n-select class="w-1/2" :theme-overrides="selectThemeOverrides" :options="languages" default-value="russian"/>
                 <span class="text-red-500" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</span>
             </div>
             <button

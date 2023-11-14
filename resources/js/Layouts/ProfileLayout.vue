@@ -18,11 +18,11 @@ const buttons = [
     },
     {
         title: 'Пополнение средств',
-        route: '#'
+        route: route('replenishment')
     },
     {
         title: 'Вывод средств',
-        route: '#'
+        route: route('withdraw')
     },
     {
         title: 'История транзакций',

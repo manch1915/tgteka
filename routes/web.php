@@ -44,6 +44,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('personal-data', [PersonalDataController::class, 'index'])->name('personal-data');
         Route::patch('personal-data', [PersonalDataController::class, 'update'])->name('personal-data.store');
         Route::get('total-balance', [TotalBalanceController::class, 'index'])->name('total-balance');
+        Route::get('replenishment', [\App\Http\Controllers\Profile\ReplenishmentController::class, 'index'])->name('replenishment');
+        Route::get('withdraw', [\App\Http\Controllers\Profile\WithdrawController::class, 'index'])->name('withdraw');
     });
 
 

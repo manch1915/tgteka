@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Open+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -62,4 +63,8 @@ body {
 }
 .n-slider .n-slider-handles .n-slider-handle-wrapper{
     transform: translate(-106%, -50%);
+}
+.segment .n-tabs-tab__label{
+    width: 100% !important;
+    padding-right: 10px;
 }

@@ -63,6 +63,19 @@ export const nTabThemeOverrides = {
     tabTextColorActiveLine: '#8729FF',
     tabTextColorHoverLine: '#8729FF',
 };
+export const nTabSegmentsThemeOverrides = {
+    colorSegment: 'transparent',
+    tabTextColorActiveSegment: 'transparent',
+    barColor: 'transparent',
+    tabTextColorBar: 'transparent',
+    tabTextColorActiveBar: 'transparent',
+    tabTextColorHoverBar: 'transparent',
+    tabTextColorLine: 'transparent',
+    tabTextColorActiveLine: 'transparent',
+    tabTextColorHoverLine: 'transparent',
+    tabColorSegment: 'transparent',
+    tabBorderRadius: '100px',
+};
 
 export const selectThemeOverrides = {
     menuBoxShadow:
@@ -81,6 +94,10 @@ export const selectThemeOverrides = {
             boxShadowActive: '',
             boxShadowFocus: '',
             textColor: 'rgba(234, 224, 255, 1)',
+            heightTiny: '42px',
+            heightSmall: '42px',
+            heightMedium: '42px',
+            heightLarge: '42px',
         },
         InternalSelectMenu: {
             color: 'rgba(13, 20, 58, 1)',

@@ -166,7 +166,11 @@ const toUp = () => {
 
 <style scoped lang="scss">
 footer {
-    background: linear-gradient(90deg, rgba(66, 38, 72, 1), rgba(109, 66, 199, 1), rgba(107, 41, 123, 1));
+    background: url("/images/background-footer.svg") center no-repeat;
+    overflow: auto;
+    background-position-y: -10%;
+    margin-top: -20px;
+    background-size: cover;
 }
 .up{
     &:hover{

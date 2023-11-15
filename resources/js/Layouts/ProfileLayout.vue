@@ -34,11 +34,11 @@ const buttons = [
     },
     {
         title: 'Настройка уведомлений',
-        route: '#'
+        route: route('notifications-setting')
     },
     {
         title: 'Изменение пароля',
-        route: '#'
+        route: route('change-password')
     }
 ]
 </script>

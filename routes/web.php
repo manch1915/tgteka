@@ -46,6 +46,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('total-balance', [TotalBalanceController::class, 'index'])->name('total-balance');
         Route::get('replenishment', [\App\Http\Controllers\Profile\ReplenishmentController::class, 'index'])->name('replenishment');
         Route::get('withdraw', [\App\Http\Controllers\Profile\WithdrawController::class, 'index'])->name('withdraw');
+        Route::get('notifications-setting', [\App\Http\Controllers\Profile\NotificationsSettingController::class, 'index'])->name('notifications-setting');
+
+        Route::get('change-password', [\App\Http\Controllers\Profile\ChangePasswordController::class, 'index'])->name('change-password');
+        Route::patch('change-password', [\App\Http\Controllers\Profile\ChangePasswordController::class, 'update'])->name('change-password.update');
+
     });
 
 

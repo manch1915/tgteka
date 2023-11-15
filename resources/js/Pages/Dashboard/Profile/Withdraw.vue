@@ -248,7 +248,6 @@ const read = ref(false)
                         <button class="w-2/4 py-2 bg-purple-600 rounded-full text-white text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
                         <p class="mt-8 text-violet-100 text-lg font-normal font-['Open Sans'] underline">Посмотреть историю транзакций</p>
                     </n-tab-pane>
-
                 </n-tabs>
             </div>
         </ProfileLayout>

@@ -3,6 +3,7 @@ import {Head} from '@inertiajs/vue3';
 import Header from "@/Components/Dashboard/Header.vue";
 import {container} from "jenesius-vue-modal";
 import Footer from "@/Components/Home/Footer.vue";
+import MobileNav from "@/Components/Dashboard/MobileNav.vue";
 defineProps({
     title: String,
 });
@@ -19,6 +20,7 @@ const width = window.innerWidth
 
             </div>
         </div>
+        <MobileNav/>
         <Footer/>
         <container/>
     </div>

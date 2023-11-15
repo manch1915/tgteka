@@ -34,27 +34,33 @@ const placeholder = ['от', 'до']
 
 <template>
     <AppLayout>
-        <div class="text-center py-20">
+        <div class="py-20 text-center">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Каталог Telegram-каналов</h1>
+            <p class="sm:hidden text-center block total pt-4 text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal">Всего каналов 63 448</p>
         </div>
-        <div class="catalog grid">
-            <div class="filter pr-10">
-                <div class="pb-[24px] flex justify-between items-center">
-                    <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Фильтр</h1>
-                    <img src="/images/setting.svg" alt="">
+        <div class="grid catalog">
+            <div class="w-full pr-0 filter sm:pr-10">
+                <div class="sm:block flex justify-between gap-x-12">
+                    <div class="flex items-center justify-start pb-[24px] gap-x-2.5 sm:justify-between sm:gap-x-0">
+                        <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Фильтр</h1>
+                        <img src="/images/setting.svg" alt="setting">
+                    </div>
+                    <div class="inline w-full sm:hidden">
+                        <n-select :theme-overrides="selectThemeOverrides"/>
+                    </div>
                 </div>
                 <div class="pb-6">
                     <SearchBar @search="" class="py-2"/>
-                    <div class="flex gap-x-2 items-center">
+                    <div class="flex items-center gap-x-2">
                         <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                         <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Искать также в описании</p>
                     </div>
                 </div>
-                <div class="py-[23px]">
+                <div class="hidden py-[23px] sm:block">
                     <h2 class="pb-3 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Тематики</h2>
                     <n-select :theme-overrides="selectThemeOverrides" placeholder="Все тематики"/>
                 </div>
-                <button @click.prevent="additionalFilter = !additionalFilter" class="px-6 py-3.5 w-full bg-purple-600 transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Дополнительный фильтр</button>
+                <button @click.prevent="additionalFilter = !additionalFilter" class="hidden sm:block px-6 py-3.5 w-full bg-purple-600 transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Дополнительный фильтр</button>
                 <transition>
                 <div v-show="additionalFilter" class="additional_filter">
                     <div class="py-2">
@@ -89,7 +95,7 @@ const placeholder = ['от', 'до']
                             :theme-overrides="inputThemeOverrides"
                         />
                     </div>
-                    <div class="py-2 border-t border-b border-violet-100 border-opacity-40 flex gap-x-3">
+                    <div class="flex gap-x-3 border-t border-b border-violet-100 border-opacity-40 py-2">
                         <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                         <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Верифицированный</p>
                         <img src="/images/Icon.svg" alt="">
@@ -102,8 +108,8 @@ const placeholder = ['от', 'до']
                 </transition>
             </div>
             <div class="channels">
-                <div class="total text-right text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal">Всего каналов 63 448</div>
-                <div class="filter_buttons flex gap-x-3">
+                <div class="hidden sm:block total text-right text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal">Всего каналов 63 448</div>
+                <div class="hidden gap-x-3 filter_buttons sm:flex">
                     <SortButton v-for="title in sortData" :title="title"/>
                 </div>
             </div>
@@ -119,10 +125,20 @@ const placeholder = ['от', 'до']
 }
 .catalog{
     grid-template-columns: 3fr 9fr;
+    @media screen and (max-width: 640px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
     .filter{
+        @media screen and (max-width: 640px) {
+            padding: 0 15px;
+        }
         min-width: 0;
     }
     .channels{
+        @media screen and (max-width: 640px) {
+            padding: 0 15px;
+        }
         min-width: 0;
     }
 }

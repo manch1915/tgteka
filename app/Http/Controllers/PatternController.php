@@ -80,12 +80,14 @@ class PatternController extends Controller
     public function edit(Pattern $pattern)
     {
         $patternContent = $pattern->body;
+        $patternName = $pattern->title;
         $patternMedia = asset($pattern->media);
 
         return inertia('Dashboard/EditTemplate', [
             'patternId' => $pattern->id,
             'patternContent' => $patternContent,
             'patternMedia' => $patternMedia,
+            'patternName' => $patternName,
         ]);
     }
 

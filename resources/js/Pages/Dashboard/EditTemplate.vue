@@ -8,7 +8,8 @@ import { ref, watch} from "vue";
 const props = defineProps({
     patternContent: [String, null],
     patternId: Number,
-    patternMedia: [String, null]
+    patternMedia: [String, null],
+    patternName: [String, null]
 })
 
 const options = {
@@ -105,23 +106,22 @@ watch([content, uploadedImageUrl], () => {
 
 <template>
     <AppLayout>
-        <div class="mt-28">
+        <div class="mt-8 sm:mt-28">
             <div class="text-center">
-                <div class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>
+                <div class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>
             </div>
-            <div class="mt-16 mb-12">
-                <div class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-10">Создание поста №
-                     (название)</div>
+            <div class="mt-4 mb-12 sm:mt-16">
+                <div class="text-violet-100 sm:text-2xl text-xl sm:text-left text-center ms:px-0 px-4 font-bold font-['Open Sans'] sm:leading-10 leading-7">Редактирование поста № {{ patternId }} {{patternName}}</div>
             </div>
-            <div class="blok p-8 rounded-tr-3xl rounded-bl-3xl rounded-br-3xl border-2 border-white backdrop-blur-3xl">
+            <div class="rounded-tr-3xl rounded-br-3xl rounded-bl-3xl border-2 border-white p-8 backdrop-blur-3xl blok">
                 <h2 class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed mb-5">Ваш пост</h2>
                 <QuillEditor @ready="(methods, quill) => onEditorReady(methods, quill)" v-model:content="content" :options="options" theme="snow" class="text-violet-100"  placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.  Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
-                <div class="flex justify-between items-center py-6">
+                <div class="flex items-center justify-between py-6">
                     <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Шаблон сохраняется автоматически</div>
                     <div class="text-purple-600 text-sm font-normal font-['Poppins'] leading-tight">Очистить всё</div>
                 </div>
                 <hr>
-                <div class="mediafiles grid grid-cols-2 mt-5">
+                <div class="mt-5 grid sm:grid-cols-2 grid-cols-1 mediafiles">
                     <div class="flex flex-col gap-y-8">
                         <div class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Медиафайлы</div>
                         <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Прикрепите файл</div>
@@ -132,17 +132,19 @@ watch([content, uploadedImageUrl], () => {
                             </label>
                         </div>
                     </div>
-                    <div class="grid grid-cols-5 gap-2 justify-end justify-items-end">
-                        <div v-for="n in 10" class="w-24 h-24 bg-zinc-300 rounded-lg"></div>
+                    <div class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2">
+                        <div v-for="n in 10" class="sm:h-24 sm:w-24 h-12 w-12 rounded-lg bg-zinc-300"></div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="mt-24 text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Предпросмотр поста</div>
-        <div class="before w-96 mt-6">
-            <div class="before_container">
-                <img :src="uploadedImageUrl" class="object-cover" alt="" />
-                <div class="pt-2 text-violet-100 text-base font-normal font-['Inter'] leading-tight" v-html="htmlContent"></div>
+        <div class="sm:p-0 px-4">
+            <div class="mt-6 sm:w-1/4 w-full before">
+                <div class="before_container">
+                    <img :src="uploadedImageUrl" class="object-cover" alt="" />
+                    <div class="pt-2 text-violet-100 text-base font-normal font-['Inter'] leading-tight" v-html="htmlContent"></div>
+                </div>
             </div>
         </div>
     </AppLayout>
@@ -157,6 +159,9 @@ watch([content, uploadedImageUrl], () => {
     border-radius: 0 0 20px 20px;
     border: 1px solid #EAE0FF;
     padding-bottom: 100px;
+    @media screen and (max-width: 640px){
+        padding-bottom: 30rem;
+    }
 }
 .ql-editor.ql-blank::before{
     color: #EAE0FF;

@@ -61,12 +61,12 @@ onMounted(() => getPatterns())
 
 <template>
     <AppLayout>
-        <div class="mt-28">
+        <div class="sm:mt-28 mt-10">
             <div :class="patterns.data && patterns.data.length === 0 ? 'text-center mb-12' : 'text-left mb-12'">
-                <div class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>
+                <h1 class="sm:text-left text-center text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</h1>
             </div>
             <div class="grid gap-x-12">
-                <div>
+                <div class="sm:px-0 px-2">
                     <transition-group name="fade" tag="div" mode="in-out">
                     <template v-if="patterns" v-for="(pattern, index) in patterns.data" :key="index">
                     <div class="relative">
@@ -121,28 +121,33 @@ onMounted(() => getPatterns())
                     </div>
                 </div>
                 <template v-if="patterns.data && patterns.data.length !== 0">
-                <div class="relative h-full">
-                    <div class="sticky top-0 create-pattern flex flex-col gap-y-4 items-center justify-center">
-                        <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Создайте новый <br/>шаблон прямо сейчас</p>
-                        <div>
-                            <Link :href="route('pattern.adding')">
-                                <button class="text-violet-100 px-6 py-4 bg-purple-600 rounded-full">Создать шаблон</button>
-                            </Link>
+                    <div class="relative h-full sm:block flex justify-center">
+                        <div class="sticky top-0 inline-block">
+                            <div class="wrapper">
+                                <div class="top-0 create-pattern flex flex-col gap-y-4 items-center justify-center">
+                                    <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">
+                                        Создайте новый <br/>шаблон прямо сейчас</p>
+                                    <div>
+                                        <Link :href="route('pattern.adding')">
+                                            <button class="text-violet-100 px-6 py-4 bg-purple-600 rounded-full">Создать шаблон</button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
                 </template>
             </div>
             <template v-if="patterns.data && patterns.data.length === 0">
-                <div class="flex">
-                    <div class="flex flex-col justify-center gap-y-10 mt-32">
-                            <div class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Шаблонов нет</div>
+                <div class="flex sm:justify-start justify-center">
+                    <div class="flex flex-col justify-center gap-y-10 sm:mt-32 mt-10">
+                            <div class="sm:text-start text-center text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Шаблонов нет</div>
                             <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
                                 Вы еще не создали ни одного шаблона
                             </div>
                             <div>
                                 <Link :href="route('pattern.adding')">
-                                    <button class="text-violet-100 px-6 py-4 bg-purple-600 rounded-full">Создать шаблон</button>
+                                    <button class="text-violet-100 sm:w-auto w-full px-6 py-4 bg-purple-600 rounded-full">Создать шаблон</button>
                                 </Link>
                             </div>
                     </div>
@@ -169,7 +174,9 @@ onMounted(() => getPatterns())
     padding: 10px;
     right: -8%;
     top: 50%;
-
+    @media screen and (max-width: 640px){
+        right: 0;
+    }
     ul {
         li {
             color: #EAE0FF;
@@ -203,6 +210,9 @@ onMounted(() => getPatterns())
 }
 .grid{
     grid-template-columns: 9fr 3fr;
+    @media screen and (max-width: 640px){
+        grid-template-columns: 1fr;
+    }
 }
 .create-pattern{
     width: 280px;
@@ -220,5 +230,26 @@ onMounted(() => getPatterns())
 }
 .border-color {
     border-color: rgb(23 37 84);
+}
+.wrapper{
+    position: relative;
+    &::before {
+        content: "";
+        position: absolute;
+        left: 24px;
+        right: 0;
+        top: 0;
+        bottom: -25px;
+        border-radius: 0 40px 40px 40px;
+        background: radial-gradient(
+            278.82% 137.51% at 1.95% 3.59%,
+            rgba(255, 255, 255, 0.26) 0%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        backdrop-filter: blur(21px);
+        transform: rotate(10deg);
+        z-index: -1;
+    }
+
 }
 </style>

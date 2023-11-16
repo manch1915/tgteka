@@ -7,7 +7,8 @@ const profileButton = useProfileButtons();
 const profileButtonTitle = ref(profileButton.activeButton);
 const props = defineProps({
     title: String,
-    routeHref: String
+    routeHref: String,
+    icon: String
 });
 
 watch(
@@ -20,25 +21,29 @@ watch(
 
 <template>
     <Link :href="routeHref">
-    <button
-        @click="profileButton.setActiveButton(title)"
-        :class="[
-            'text-left',
-            'transition',
-            profileButtonTitle === title ? 'background' : ''
-        ]"
-    >
-        {{ title }}
-    </button>
+        <div @click="profileButton.setActiveButton(title)" class="button flex justify-between items-center" :class="profileButtonTitle === title ? 'background' : ''">
+            <div class="flex gap-x-2.5 items-center">
+                <img :src="icon" alt="">
+                <button
+                    :class="[
+                    'text-left',
+                    'transition',
+                ]"
+                >
+                    {{ title }}
+                </button>
+            </div>
+            <img src="/images/arrow-down.svg" alt="arrow" class="rotate-[-90deg]">
+        </div>
     </Link>
 </template>
 
 <style scoped lang="scss">
-button {
+.button {
     width: 100%;
     border-radius: 4px;
     padding: 10px;
-    color: var(--White, #EAE0FF);
+    color: #EAE0FF;
     font-family: Open Sans,serif;
     font-size: 18px;
     font-weight: 700;
@@ -49,6 +54,17 @@ button {
     }
     &.background {
         background: #6522D9;
+    }
+    @media screen and (max-width: 640px){
+        color: #EAE0FF;
+        font-family: Open Sans,sans-serif;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 130%;
+        &.background {
+            background: rgba(234, 224, 255, 0.2);
+        }
     }
 }
 </style>

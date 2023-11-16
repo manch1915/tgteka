@@ -9,7 +9,9 @@ import {Link} from "@inertiajs/vue3";
             <Link :href="route('personal-data')">
                 <img src="/images/person.svg" alt="">
             </Link>
-            <img src="/images/pattern.svg" alt="">
+            <Link :href="route('adding-channel')">
+                <img src="/images/pattern.svg" alt="">
+            </Link>
             <img src="/images/bell.svg" alt="">
             <img src="/images/messenger.svg" alt="">
         </main>
@@ -26,12 +28,15 @@ import {Link} from "@inertiajs/vue3";
 
     will-change:transform;
     transform: translateZ(0);
+    display:none;
 
-    display:flex;
 
     height: 65px;
 
     background: #1C1D6D;
+    @media screen and (max-width: 640px) {
+        display:flex;
+    }
     main{
         border-radius: 100px;
         border: 1px solid rgba(255, 255, 255, 0.10);

@@ -9,7 +9,10 @@ import {NCheckbox, NInput} from "naive-ui";
 <template>
     <AppLayout>
         <ProfileLayout>
-            <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Настройка уведомлений</h1>
+            <div class="text-center sm:text-left">
+                <p class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">Настройка уведомлений</p>
+            </div>
+            <div class="px-4 sm:px-0">
             <div class="notification_wrapper">
                 <div class="notification">
                     <div class="flex items-center gap-x-2.5">
@@ -24,9 +27,9 @@ import {NCheckbox, NInput} from "naive-ui";
                     </div>
                     <div class="py-6">
                         <div>
-                            <n-input class="py-1.5 my-1 !w-2/4" placeholder="@channel или https://t.me/dr_amina_pirmanova" :theme-overrides="inputThemeOverrides"/>
+                            <n-input class="py-1.5 my-1 sm:!w-2/4" placeholder="@channel или https://t.me/dr_amina_pirmanova" :theme-overrides="inputThemeOverrides"/>
                         </div>
-                        <button class="!w-2/4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal bg-purple-600 rounded-3xl py-2">Подключить бот</button>
+                        <button class="sm:!w-2/4 w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal bg-purple-600 rounded-3xl py-2">Подключить бот</button>
                     </div>
                     <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Также прочитайте</p>
                     <div class="flex items-center gap-x-2.5">
@@ -52,26 +55,27 @@ import {NCheckbox, NInput} from "naive-ui";
                     </div>
                     <p class="pb-6 pt-2 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">На почту e****@admin.com</p>
                     <div>
-                        <div class="flex items-baseline gap-x-2.5 py-1">
+                        <div class="flex items-baseline py-1 gap-x-2.5">
                             <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                             <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Промо рассылки</p>
                         </div>
-                        <div class="flex items-baseline gap-x-2.5 py-1">
+                        <div class="flex items-baseline py-1 gap-x-2.5">
                             <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                             <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Системные сообщения</p>
                         </div>
-                        <div class="flex items-baseline gap-x-2.5 py-1">
+                        <div class="flex items-baseline py-1 gap-x-2.5">
                             <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                             <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Отключить уведомления о проектах</p>
                         </div>
                     </div>
                     <p class="py-6 text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">Если вы не получили тестовый Email, проверьте папку Спам, и нажмите на кнопку «Не спам»</p>
                     <h1 class="py-6 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Дополнительные Email адреса</h1>
-                    <div class="flex w-3/4 gap-x-2.5">
-                        <n-input class="py-1.5 my-1 !w-3/4" placeholder="Электронная почта" :theme-overrides="inputThemeOverrides"/>
+                    <div class="flex flex-col gap-x-2.5 sm:w-3/4 sm:flex-row">
+                        <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Электронная почта" :theme-overrides="inputThemeOverrides"/>
                         <button class="bg-purple-600 rounded-full px-6 py-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Добавить</button>
                     </div>
                 </div>
+            </div>
             </div>
         </ProfileLayout>
     </AppLayout>

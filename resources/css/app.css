@@ -68,3 +68,9 @@ body {
     width: 100% !important;
     padding-right: 10px;
 }
+@media screen and (max-width: 640px){
+    .n-tabs-rail{
+        display: flex;
+        flex-direction: column;
+    }
+}

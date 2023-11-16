@@ -1,18 +1,20 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
-import { reactive, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import TextInput from "@/Components/TextInput.vue";
 import {router, usePage} from "@inertiajs/vue3";
 import axios from "axios";
-import {NSelect, useLoadingBar} from "naive-ui";
-import {selectThemeOverrides} from "@/themeOverrides.js";
+import {NInput, NSelect, useLoadingBar} from "naive-ui";
+import {inputThemeOverrides, selectThemeOverrides} from "@/themeOverrides.js";
 
 const props = defineProps({
     created_at: String,
 })
 
 const page = usePage()
+
+const user = computed(() => page.props.auth.user)
 
 const form = reactive({
     name: ref(page.props.auth.user.name),
@@ -71,48 +73,27 @@ const logout = () => {
 <template>
     <AppLayout>
         <ProfileLayout>
-            <div class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Профиль</div>
-            <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">дата регистрации:
+            <div class="text-center sm:text-left">
+                <p class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Личные данные</p>
+            </div>
+            <div class="sm:px-0 px-4 pt-4 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">дата регистрации:
                 {{ created_at }}
             </div>
-            <div class="mt-12 flex flex-col gap-y-6">
+            <div class="mt-12 flex flex-col gap-y-6 px-4 sm:px-0">
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Имя</p>
-                <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="w-1/2"
-                    required
-                    autocomplete="username"
-                    placeholder="Иванов Иван"
-                />
+                <n-input v-model:value="form.name" class="py-1.5 my-1 sm:!w-1/2" placeholder="Иванов Иван" :theme-overrides="inputThemeOverrides"/>
                 <span class="text-red-500" v-if="errors.name">{{ errors.name[0] }}</span>
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Telegram-аккаунт</p>
-                <TextInput
-                    id="name"
-                    v-model="form.telegram_username"
-                    type="text"
-                    class="w-1/2"
-                    required
-                    autocomplete="username"
-                    placeholder="@channel или https://t.me/dr_amina_pirmanova"
-                />
+                <n-input v-model:value="form.telegram_username" class="py-1.5 my-1 sm:!w-1/2" placeholder="@channel или https://t.me/dr_amina_pirmanova" :theme-overrides="inputThemeOverrides"/>
                 <span class="text-red-500" v-if="errors.telegram_username">{{ errors.telegram_username[0] }}</span>
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Телефон</p>
-                <TextInput
-                    id="name"
-                    v-model="form.mobile_number"
-                    type="text"
-                    class="w-1/2"
-                    required
-                    autocomplete="username"
-                    placeholder="+7 (___) ___-__-__"
-                />
+                <n-input v-model:value="form.mobile_number" class="py-1.5 my-1 sm:!w-1/2" placeholder="+7 (___) ___-__-__" :theme-overrides="inputThemeOverrides"/>
                 <span class="text-red-500" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</span>
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Язык уведомлений</p>
-                <n-select class="w-1/2" :theme-overrides="selectThemeOverrides" :options="languages" default-value="russian"/>
+                <n-select class="sm:w-1/2" :theme-overrides="selectThemeOverrides" :options="languages" default-value="russian"/>
                 <span class="text-red-500" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</span>
             </div>
+            <div class="px-4 sm:px-0">
             <button
                 @click.prevent="submit"
                 class="mt-6 px-6 py-4 bg-purple-600 transition hover:bg-purple-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
@@ -128,6 +109,7 @@ const logout = () => {
             <button class="mt-12 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">
                 Удалить профиль
             </button>
+            </div>
         </ProfileLayout>
     </AppLayout>
 </template>

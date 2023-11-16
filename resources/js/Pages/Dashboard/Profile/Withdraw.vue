@@ -14,14 +14,16 @@ const read = ref(false)
 <template>
     <AppLayout>
         <ProfileLayout>
-            <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Вывод средств</h1>
-            <div class="mt-8 w-3/4 segment">
+            <div class="text-center sm:text-left">
+                <p class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">Вывод средств</p>
+            </div>
+            <div class="mt-8 segment sm:w-3/4">
                 <n-tabs :animated="true" :theme-overrides="nTabSegmentsThemeOverrides" type="segment">
                     <n-tab-pane name="self-employed">
                         <template #tab>
                             <button @click.prevent="activeButton = 'self-employed'" :class="['tab-button', 'transition', 'text-violet-100', 'text-lg', 'font-bold', 'font-[\'Open Sans\']', 'leading-normal', activeButton === 'self-employed' ? 'active' : '']">Самозанятые</button>
                         </template>
-                        <div>
+                        <div class="px-4 sm:px-0">
                             <div class="py-2">
                                 <h2 class=" text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Обратите внимание, что сменилось приложение для автоматического формирования чеков.</h2>
                                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">При оформлении новой заявки на вывод средств вам будет предложена пошаговая инструкция для подключения приложенияПри возникновении затруднений рекомендуем ознакомиться с подробным гайдом по ссылке:Как вывести деньги, если вы «Самозанятый»</p>
@@ -40,11 +42,11 @@ const read = ref(false)
                             </div>
                             <div>
                                 <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Вывод на банковскую карту для самозанятых</h1>
-                                <div class="mt-6 w-3/4">
-                                    <n-input class="py-1.5 my-1 !w-3/4" placeholder="ИНН" :theme-overrides="inputThemeOverrides"/>
-                                    <n-input class="py-1.5 my-1 !w-3/4" placeholder="ФИО" :theme-overrides="inputThemeOverrides"/>
-                                    <n-input class="py-1.5 my-1 !w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
-                                    <n-input class="py-1.5 my-1 !w-3/4" placeholder="Действующий на основании" :theme-overrides="inputThemeOverrides"/>
+                                <div class="mt-6 sm:w-3/4">
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="ИНН" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="ФИО" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Действующий на основании" :theme-overrides="inputThemeOverrides"/>
                                 </div>
                             </div>
                             <div class="my-4">
@@ -54,10 +56,10 @@ const read = ref(false)
                                 </div>
                                 <div class="flex items-baseline py-2 gap-x-2.5">
                                     <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
-                                    <p class="w-2/4 text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Достоверность данных подтверждаю, с условиями Оферты ознакомлен и принимаю их. Сформировать и подписать акт приемки-передачи оказанных услуг за расчетный период</p>
+                                    <p class="sm:w-2/4 text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Достоверность данных подтверждаю, с условиями Оферты ознакомлен и принимаю их. Сформировать и подписать акт приемки-передачи оказанных услуг за расчетный период</p>
                                 </div>
                             </div>
-                            <button class="block w-2/4 my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
+                            <button class="block sm:w-2/4 w-full my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
                             <button class="block mt-20 text-violet-100 text-lg font-normal font-['Open Sans'] underline">Посмотреть историю транзакций</button>
                         </div>
                     </n-tab-pane>
@@ -65,7 +67,7 @@ const read = ref(false)
                         <template #tab>
                             <button @click.prevent="activeButton = 'natural'" :class="['tab-button', 'transition', 'text-violet-100', 'text-lg', 'font-bold', 'font-[\'Open Sans\']', 'leading-normal', activeButton === 'natural' ? 'active' : '']">Физическое лицо</button>
                         </template>
-                        <div>
+                        <div class="px-4 sm:px-0">
                             <div class="dashed">
                                 <div class="flex items-start gap-x-2.5">
                                     <img src="/images/information.svg" alt="information">
@@ -94,7 +96,7 @@ const read = ref(false)
                                 </div>
                             </div>
                             <div class="payment_types">
-                                <div class="grid grid-cols-3 gap-4 payment_types-cards">
+                                <div class="grid grid-cols-2 gap-4 payment_types-cards sm:grid-cols-3">
                                     <div @click.prevent="activeTab = 'bank-card'" class="payment_types-card-wrapper">
                                         <div class="flex h-full flex-col items-center justify-center payment_types-card">
                                             <img src="/images/card-white.svg" alt="card-white">
@@ -115,15 +117,15 @@ const read = ref(false)
                                     </div>
                                 </div>
                             </div>
-                            <div v-show="activeTab === 'bank-card'" class="mt-5 w-3/4 bank-card">
+                            <div v-show="activeTab === 'bank-card'" class="mt-5 bank-card sm:w-3/4">
                                 <div class="flex py-4 gap-x-2.5">
                                     <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
                                     <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
                                 </div>
-                                <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Вывод на банковскую карту</h1>
+                                <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Вывод на банковскую карту</h1>
                                 <div class="py-8">
-                                    <n-input class="py-1.5 my-1 !w-3/4" placeholder="420XXXXXXXXХХ000" :theme-overrides="inputThemeOverrides"/>
-                                    <n-input class="py-1.5 my-1 !w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="420XXXXXXXXХХ000" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
                                 </div>
                                 <div class="my-4">
                                     <div class="flex items-center gap-x-2.5">
@@ -135,18 +137,18 @@ const read = ref(false)
                                         <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Максимальная сумма одной заявки на вывод составляет 35000 р.</p>
                                     </div>
                                 </div>
-                                <button class="w-3/4 my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
+                                <button class="sm:w-3/4 w-full my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
                                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">При необходимости вы можете создать несколько заявок или выбрать альтернативный <br/>способ вывода средств.</p>
                             </div>
-                            <div v-show="activeTab === 'webmoney'" class="mt-5 w-3/4 wallets">
+                            <div v-show="activeTab === 'webmoney'" class="mt-5 wallets sm:w-3/4">
                                 <div class="flex py-4 gap-x-2.5">
                                     <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
                                     <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
                                 </div>
-                                <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Вывод на WebMoney</h1>
+                                <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Вывод на WebMoney</h1>
                                 <div class="py-8">
-                                    <n-input class="py-1.5 my-1 !w-3/4" placeholder="420XXXXXXXXХХ000" :theme-overrides="inputThemeOverrides"/>
-                                    <n-input class="py-1.5 my-1 !w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="420XXXXXXXXХХ000" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
                                 </div>
                                 <div class="my-4">
                                     <div class="flex items-center gap-x-2.5">
@@ -158,18 +160,18 @@ const read = ref(false)
                                         <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Максимальная сумма одной заявки на вывод составляет 35000 р.</p>
                                     </div>
                                 </div>
-                                <button class="w-3/4 my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
+                                <button class="sm:w-3/4 w-full my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
                                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">При необходимости вы можете создать несколько заявок или выбрать альтернативный <br/>способ вывода средств.</p>
                             </div>
-                            <div v-show="activeTab === 'qiwi'" class="mt-5 w-3/4 qr">
+                            <div v-show="activeTab === 'qiwi'" class="mt-5 qr sm:w-3/4">
                                 <div class="flex py-4 gap-x-2.5">
                                     <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
                                     <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
                                 </div>
-                                <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Вывод на Qiwi</h1>
+                                <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Вывод на Qiwi</h1>
                                 <div class="py-8">
-                                    <n-input class="py-1.5 my-1 !w-3/4" placeholder="+7 (___) ___-__-__" :theme-overrides="inputThemeOverrides"/>
-                                    <n-input class="py-1.5 my-1 !w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="+7 (___) ___-__-__" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
                                 </div>
                                 <div class="my-4">
                                     <div class="flex items-center gap-x-2.5">
@@ -181,7 +183,7 @@ const read = ref(false)
                                         <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Максимальная сумма одной заявки на вывод составляет 35000 р.</p>
                                     </div>
                                 </div>
-                                <button class="w-3/4 my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
+                                <button class="sm:w-3/4 w-full my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
                                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">При необходимости вы можете создать несколько заявок или выбрать альтернативный <br/>способ вывода средств.</p>
                             </div>
                             <button class="mt-20 text-violet-100 text-lg font-normal font-['Open Sans'] underline">Посмотреть историю транзакций</button>
@@ -191,7 +193,7 @@ const read = ref(false)
                         <template #tab>
                             <button @click.prevent="activeButton = 'org'" :class="['tab-button', 'transition', 'text-violet-100', 'text-lg', 'font-bold', 'font-[\'Open Sans\']', 'leading-normal', activeButton === 'org' ? 'active' : '']">Юридическое лицо или ИП</button>
                         </template>
-                        <div class="org pb-12">
+                        <div class="px-4 pb-12 org sm:px-0">
                             <div>
                                 <div class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Как вывести деньги на юридическое лицо или ИП?</div>
                                 <div class="text-violet-100 py-2 text-base font-normal font-['Open Sans'] leading-tight">Оставьте заявку на вывод средств в данном разделе, заполнив все поля с реквизитами.</div>
@@ -204,49 +206,51 @@ const read = ref(false)
                             </div>
                             <div class="mt-12">
                                 <h1 class="pb-12">Создание заявки на вывод средств на расчетный счет</h1>
-                                <div class="w-2/4">
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="Сумма, рублей"/>
+                                <div class="sm:w-2/4">
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="Сумма, рублей"/>
                                 </div>
                             </div>
-                            <div class="w-2/4 mt-12">
+                            <div class="mt-12 sm:w-2/4">
                                 <h1 class="pb-12">Данные получателя:</h1>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="Наименование ЮЛ"/>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="Юридический адрес"/>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="Физический адрес"/>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="ИНН"/>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="КПП"/>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="Подписант (Должность и ФИО)"/>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="Действующий на основании"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="Наименование ЮЛ"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="Юридический адрес"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="Физический адрес"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="ИНН"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="КПП"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="Подписант (Должность и ФИО)"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="Действующий на основании"/>
                             </div>
-                            <div class="w-2/4 mt-12">
+                            <div class="mt-12 sm:w-2/4">
                                 <h1 class="pb-12">Реквизиты банковского счёта:</h1>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="Расчётный счёт"/>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="Банк"/>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="Кор. счёт"/>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="БИК"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="Расчётный счёт"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="Банк"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="Кор. счёт"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="БИК"/>
                             </div>
-                            <div class="w-2/4 mt-12">
+                            <div class="mt-12 sm:w-2/4">
                                 <h1 class="pb-12">Контактная информация:</h1>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="Контактный телефон"/>
-                                <n-input class="py-1.5 my-1" :theme-overrides="inputThemeOverrides" placeholder="Электронная почта"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="Контактный телефон"/>
+                                <n-input class="my-1 py-1.5" :theme-overrides="inputThemeOverrides" placeholder="Электронная почта"/>
                                 <div class="flex items-center gap-x-2.5">
                                     <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                                     <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Применение НДС</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex justify-between items-center py-8">
-                            <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Сумма к оплате:</h1>
-                            <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">0 руб.</h1>
-                        </div>
-                        <div class="attention">
-                            <div class="flex items-start gap-x-2.5">
-                                <div class="rounded-full bg-white" style="width: 20px; height: 20px"></div>
-                                <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Комиссия системы за вывод составляет 0%  Минимальная сумма вывода составляет 10000 р.</p>
+                        <div class="px-4 sm:px-0">
+                            <div class="flex items-center justify-between py-8">
+                                <h1 class="text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Сумма к оплате:</h1>
+                                <h1 class="text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">0 руб.</h1>
                             </div>
+                            <div class="attention">
+                                <div class="flex items-start gap-x-2.5">
+                                    <div class="rounded-full bg-white" style="width: 20px; height: 20px"></div>
+                                    <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Комиссия системы за вывод составляет 0%  Минимальная сумма вывода составляет 10000 р.</p>
+                                </div>
+                            </div>
+                            <button class="sm:w-2/4 w-full py-2 bg-purple-600 rounded-full text-white text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
                         </div>
-                        <button class="w-2/4 py-2 bg-purple-600 rounded-full text-white text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
-                        <p class="mt-8 text-violet-100 text-lg font-normal font-['Open Sans'] underline">Посмотреть историю транзакций</p>
+                            <p class="mt-8 text-violet-100 text-lg font-normal font-['Open Sans'] underline">Посмотреть историю транзакций</p>
                     </n-tab-pane>
                 </n-tabs>
             </div>
@@ -286,6 +290,15 @@ const read = ref(false)
         font-style: normal;
         font-weight: 700;
         line-height: 130%; /* 39px */
+        @media screen and (max-width: 640px){
+            color: var(--White, #EAE0FF);
+            text-align: center;
+            font-family: Open Sans;
+            font-size: 22px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 130%; /* 28.6px */
+        }
     }
 }
 .attention{

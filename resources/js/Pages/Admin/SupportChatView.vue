@@ -3,7 +3,7 @@ import {
   mdiAccountMultiple
 } from "@mdi/js";
 import SectionMain from "@/Components/Admin/SectionMain.vue";
-import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
+import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/Components/Admin/SectionTitleLineWithButton.vue";
 import TableSupportChats from "@/Components/Admin/TableSupportChats.vue";
 

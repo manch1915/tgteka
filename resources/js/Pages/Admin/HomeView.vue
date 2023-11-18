@@ -18,7 +18,7 @@ import NotificationBar from "@/Components/Admin/NotificationBar.vue";
 import BaseButton from "@/Components/Admin/BaseButton.vue";
 import CardBoxTransaction from "@/Components/Admin/CardBoxTransaction.vue";
 import CardBoxClient from "@/Components/Admin/CardBoxClient.vue";
-import LayoutAuthenticated from "@/layouts/LayoutAuthenticated.vue";
+import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/Components/Admin/SectionTitleLineWithButton.vue";
 
 const chartData = ref(null);

@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use App\Models\User;
 use Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -23,7 +24,7 @@ class CreateNewUser implements CreatesNewUsers
 
         // Generate a random password
         $password = Str::random(10);
-
+        Log::info($input['email'] . '  password =>' . $password,);
         // Create the user
         $user = User::create([
             'email' => $input['email'],

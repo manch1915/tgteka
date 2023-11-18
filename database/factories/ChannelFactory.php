@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\Channel;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Faker\Generator as Faker;
+use Illuminate\Support\Carbon;
 
 class ChannelFactory extends Factory
 {
@@ -15,21 +15,25 @@ class ChannelFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'channel_url' => $this->faker->url,
-            'channel_name' => $this->faker->company,
-            'telegram_username' => $this->faker->userName,
+            'channel_url' => $this->faker->unique()->url(),
+            'channel_name' => $this->faker->words(3, true),
+            'telegram_username' => $this->faker->optional()->userName(),
             'avatar' => $this->faker->imageUrl(),
-            'topic' => $this->faker->word,
-            'language' => $this->faker->languageCode,
-            'description' => $this->faker->text(300),
-            'format_one' => $this->faker->boolean,
-            'format_two' => $this->faker->boolean,
-            'format_three' => $this->faker->boolean,
-            'no_deletion' => $this->faker->boolean,
-            'repost' => $this->faker->boolean,
-            'repeat_discount' => $this->faker->randomElement([0, 10, 20, 30, 50]),
-            'score' => $this->faker->randomFloat(NULL, 0, 1),
-            'rating' => $this->faker->randomFloat(NULL, 0, 5),
+            'topic' => $this->faker->words(5, true),
+            'type' => $this->faker->randomElement(['chat', 'channel']),
+            'language' => $this->faker->languageCode(),
+            'description' => $this->faker->optional()->realText(500),
+            'subscribers_source' => $this->faker->optional()->realText(400),
+            'format_one' => $this->faker->randomNumber(4),
+            'format_two' => $this->faker->randomNumber(4),
+            'format_three' => $this->faker->randomNumber(4),
+            'no_deletion' => $this->faker->randomNumber(4),
+            'repost' => $this->faker->boolean(),
+            'repeat_discount' => $this->faker->numberBetween(0, 100), // Assuming it's a percentage
+            'score' => $this->faker->randomFloat(1, 0, 5), // Assuming score is between 0 and 5
+            'rating' => $this->faker->randomFloat(1, 0, 5), // Assuming rating is between 0 and 5
+            'likes_count' => $this->faker->numberBetween(0, 1000000),
+            'views_count' => $this->faker->numberBetween(0, 10000000),
             'status' => $this->faker->randomElement(['pending', 'accepted', 'declined']),
         ];
     }

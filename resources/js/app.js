@@ -10,6 +10,8 @@ import {createPinia} from "pinia";
 import {Quill} from "@vueup/vue-quill";
 import Emoji from "quill-emoji";
 import {NLoadingBarProvider} from "naive-ui";
+import {darkModeKey, styleKey} from "@/config.js";
+import {useStyleStore} from "@/stores/style.js";
 
 config({
     scrollLock: false,
@@ -17,7 +19,7 @@ config({
     backgroundClose: true,
     escClose: true,
 })
-
+const pinia = createPinia();
 const appName = import.meta.env.VITE_APP_NAME || 'Tgteka';
 Quill.register("modules/emoji", Emoji);
 createInertiaApp({
@@ -39,7 +41,7 @@ createInertiaApp({
         };
         return createApp(RootComponent)
             .use(plugin)
-            .use(createPinia())
+            .use(pinia)
             .use(ZiggyVue)
             .mount(el)
     },
@@ -47,3 +49,17 @@ createInertiaApp({
         color: '#4B5563',
     },
 });
+
+const styleStore = useStyleStore(pinia);
+
+/* App style */
+styleStore.setStyle(localStorage[styleKey] ?? "basic");
+
+/* Dark mode */
+if (
+    (!localStorage[darkModeKey] &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches) ||
+    localStorage[darkModeKey] === "1"
+) {
+    styleStore.setDarkMode(true);
+}

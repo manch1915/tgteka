@@ -1,11 +1,10 @@
 <?php
 
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\ChannelController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\PatternController;
 use App\Http\Controllers\Profile\PersonalDataController;
 use App\Http\Controllers\Profile\TotalBalanceController;
-use App\Http\Controllers\PatternController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -69,4 +68,24 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('channels/{channel}', [\App\Http\Controllers\UserChannelController::class, 'update'])->name('channels.update');
     Route::get('adding-channel', [\App\Http\Controllers\UserChannelController::class, 'show'])->name('adding-channel');
     Route::post('adding-channel', [\App\Http\Controllers\UserChannelController::class, 'store'])->name('adding-channel.store');
+});
+Route::middleware(['role:Admin'])->group(function () {
+    Route::prefix('admin')->name('admin.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\Controller::class, 'index'])->name('admin');
+
+        Route::get('channels', function (){
+            return inertia('Admin/TablesView');
+        })->name('channels');
+        Route::get('support', function (){
+            return inertia('Admin/SupportChatView');
+        })->name('support');
+
+        Route::prefix('api')->name('api.')->group(function () {
+            Route::apiResource('channels', \App\Http\Controllers\Admin\ChannelController::class);
+        });
+        Route::prefix('api')->name('api.')->group(function () {
+            Route::apiResource('support', \App\Http\Controllers\Admin\SupportController::class);
+        });
+
+    });
 });

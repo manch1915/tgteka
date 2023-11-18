@@ -14,7 +14,7 @@ class SupportTicketFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->title,
+            'title' => $this->faker->firstNameMale,
             'sender_id' => User::factory(),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()

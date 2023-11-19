@@ -12,6 +12,7 @@ import NavBarItemPlain from "@/Components/Admin/NavBarItemPlain.vue";
 import AsideMenu from "@/Components/Admin/AsideMenu.vue";
 import {usePage} from "@inertiajs/vue3";
 import { router } from '@inertiajs/vue3'
+import {container} from "jenesius-vue-modal";
 
 const page = usePage()
 const user = computed(() => page.props.auth.user)
@@ -99,4 +100,5 @@ const menuClick = (event, item) => {
       <slot />
     </div>
   </div>
+  <container/>
 </template>

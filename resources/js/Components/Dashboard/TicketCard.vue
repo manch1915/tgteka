@@ -7,7 +7,7 @@ const props = defineProps({
 
 <template>
     <div class="card-border">
-        <div class="card flex justify-between px-8 py-6 cursor-pointer">
+        <div class="card flex sm:flex-row flex-col-reverse justify-between px-8 py-6 cursor-pointer">
             <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">{{ title }}</p>
             <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">{{ created_at }}</p>
         </div>

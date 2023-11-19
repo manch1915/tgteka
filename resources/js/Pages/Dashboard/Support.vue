@@ -23,10 +23,12 @@ const page = usePage()
 
 const userId = computed(() => page.props.auth.user.id)
 
-const socket = new WebSocket('ws://localhost:8080');
+const socket = new WebSocket(`ws://localhost:8080?userid=${userId.value}`);
 const title = ref('');
 const content = ref('');
-
+socket.onmessage = function(event) {
+    console.log(`[message] Данные получены с сервера: ${event.data}`);
+};
 const createNewAppeal = () => {
     socket.send(JSON.stringify({
         title: title.value,
@@ -39,10 +41,6 @@ const createNewAppeal = () => {
     openModal(ModalAlert)
 }
 
-socket.onmessage = function(event) {
-    console.log(`[message] Данные получены с сервера: ${event.data}`);
-};
-
 socket.onclose = function(event) {
     if (event.wasClean) {
         console.log(`[close] Соединение закрыто чисто, код=${event.code} причина=${event.reason}`);
@@ -52,17 +50,17 @@ socket.onclose = function(event) {
 };
 
 socket.onerror = function(error) {
-    console.log(`[error]`);
+    console.log(error);
 };
 </script>
 
 <template>
     <AppLayout>
-        <div class="grid mt-12">
-            <div class="p-6">
+        <div class="mt-12 grid support_grid">
+            <div class="sm:p-6">
                 <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Обратная связь</h1>
                 <p class="mt-12 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Заполните форму обратной связи, если у вас возникли вопросы или проблемы</p>
-                <div class="flex flex-col gap-y-6 mt-12">
+                <div class="mt-12 flex flex-col gap-y-6">
                     <TextInput
                         placeholder="Тема обращения"
                         v-model="title"
@@ -78,8 +76,8 @@ socket.onerror = function(error) {
                     Отправить
                 </button>
             </div>
-            <div class="p-4 flex h-full w-full bg-violet-950 bg-opacity-30 rounded-3xl">
-                <div v-if="!tickets" class="h-full w-full flex flex-col items-center justify-center">
+            <div class="flex h-full w-full rounded-3xl bg-opacity-30 p-4 bg-violet-950">
+                <div v-if="!tickets" class="flex h-full w-full flex-col items-center justify-center">
                     <div class="flex flex-col items-center justify-center gap-y-10">
                         <p class="text-center text-violet-100 text-2xl font-normal font-['Open Sans'] leading-tight">Обращений ещё нет</p>
                         <img src="/images/ic.svg" alt="ic">
@@ -88,16 +86,16 @@ socket.onerror = function(error) {
                 <div class="w-full p-6" v-else>
                     <p class="text-violet-100 text-right text-base font-normal font-['Open Sans'] leading-tight">{{ticketsCount}} обращений</p>
 
-                    <div class="flex flex-col h-full gap-y-4 mt-6">
+                    <div class="mt-6 flex h-full flex-col gap-y-4">
                         <TicketCard v-for="ticket in tickets" :key="ticket.id" :title="ticket.title" :created_at="ticket.created_at" @click.prevent="openMessengerModal(ticket.id)"/>
                     </div>
                 </div>
             </div>
         </div>
         <hr class="mt-40">
-        <div class="contacts mt-40 px-12">
+        <div class="mt-40 px-12 contacts">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Контакты</h1>
-            <div class="grid grid-cols-2 justify-start items-center mt-20">
+            <div class="mt-20 grid grid-cols-2 items-center justify-start">
                 <div class="flex flex-col gap-y-2">
                     <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Позвонить:</h1>
                     <p class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">Отдел продаж</p>
@@ -116,8 +114,11 @@ socket.onerror = function(error) {
 </template>
 
 <style scoped lang="scss">
-.grid {
+.support_grid {
     grid-template-columns: 4fr 6fr;
+    @media screen and (max-width: 640px){
+        grid-template-columns: 1fr;
+    }
 }
 
 </style>

@@ -139,13 +139,13 @@ const checked = (isChecked, client) => {
             class="w-24 h-24 mx-auto lg:w-6 lg:h-6"
           />
         </td>
-        <td data-label="Name">
+        <td data-label="Название">
           {{ channel.channel_name }}
         </td>
-        <td data-label="Company">
+        <td data-label="Описание">
             {{ truncateDescription(channel.description, 20) }}
         </td>
-        <td data-label="topic">
+        <td data-label="Тематика">
           {{ channel.topic }}
         </td>
         <td class="before:hidden lg:w-1 whitespace-nowrap">

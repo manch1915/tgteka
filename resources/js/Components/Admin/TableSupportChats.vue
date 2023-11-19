@@ -7,7 +7,9 @@ import TableCheckboxCell from "@/Components/Admin/TableCheckboxCell.vue";
 import BaseLevel from "@/Components/Admin/BaseLevel.vue";
 import BaseButtons from "@/Components/Admin/BaseButtons.vue";
 import BaseButton from "@/Components/Admin/BaseButton.vue";
-import UserAvatar from "@/Components/Admin/UserAvatar.vue";
+import {openModal} from "jenesius-vue-modal";
+import Messanger from "@/Components/Dashboard/Messanger.vue";
+import {usePage} from "@inertiajs/vue3";
 
 defineProps({
   checkable: Boolean,
@@ -79,13 +81,15 @@ const checked = (isChecked, client) => {
     );
   }
 };
+const page = usePage()
+const userId = computed(() => page.props.auth.user.id)
+const socket = new WebSocket(`ws://localhost:8080?userid=${userId.value}`);
+const openMessengerModal = (ticketId) =>{
+    openModal(Messanger, {tickets: ticketId, socket:socket, userId: userId.value})
+}
 </script>
 
 <template>
-  <CardBoxModal v-model="isModalActive" title="Sample modal">
-    <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-    <p>This is sample modal</p>
-  </CardBoxModal>
 
   <CardBoxModal
     v-model="isModalDangerActive"
@@ -134,7 +138,7 @@ const checked = (isChecked, client) => {
               color="info"
               :icon="mdiEye"
               small
-              @click="isModalActive = true"
+              @click="openMessengerModal(chat.id)"
             />
             <BaseButton
               color="danger"

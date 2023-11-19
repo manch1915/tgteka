@@ -20,7 +20,6 @@ const getMessages =  async () => {
 }
 
 onMounted(()=> getMessages())
-
 const sendMessage = () => {
   props.socket.send(JSON.stringify({
       title: '',
@@ -39,6 +38,17 @@ const sendMessage = () => {
   })
     message.value = ''
 }
+props.socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+
+    messages.value.push({
+        message: data.message,
+        sender: {
+            profile_photo_url: 'https://ui-avatars.com/api/?name=A&color=7F9CF5&background=EBF4FF'
+        },
+        created_at: new Date().toISOString()
+    });
+};
 </script>
 
 <template>
@@ -49,8 +59,8 @@ const sendMessage = () => {
                 <div class="float-right cursor-pointer" @click.prevent="closeModal()">
                     <img src="/images/Icon-close.svg" alt="">
                 </div>
-                <div class="flex flex-col justify-center items-center gap-y-6">
-                    <h1 class="text-center text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Название обращения</h1>
+                <div class="flex flex-col justify-center sm:items-center items-start gap-y-6">
+                    <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Название обращения</h1>
                     <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">от 16.08.23</p>
                 </div>
             </div>
@@ -88,10 +98,18 @@ main{
     border-radius: 30px 30px 0 0;
     background: rgba(7, 12, 41, 1);
     height: 80vh;
+
+    @media screen and (max-width: 640px){
+        padding: 10px;
+        height: 70vh;
+    }
     .header{}
     .overflowing{
         overflow-y: auto;
         height: calc(100% - 35px);
+        @media screen and (max-width: 640px){
+            height: calc(100% - 75px);
+        }
     }
 }
 

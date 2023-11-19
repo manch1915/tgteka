@@ -33,11 +33,18 @@ class ChatWebSocketServer implements MessageComponentInterface
         $this->clients->attach($conn);
         $clientId = spl_object_hash($conn);
         echo "New connection! ({$clientId})\n";
+
+        parse_str($conn->httpRequest->getUri()->getQuery(), $queryArray);
+        $userId = $queryArray['userid'] ?? null;
+        if ($userId !== null) {
+            $this->userConnections[$userId] = $conn;
+        }
     }
 
     public function onMessage(ConnectionInterface $from, $msg): void
     {
         $data = json_decode($msg, true);
+        Log::info($data);
         if(json_last_error() !== JSON_ERROR_NONE) {
             Log::error("JSON decode error: " . json_last_error_msg());
         } else {
@@ -74,7 +81,6 @@ class ChatWebSocketServer implements MessageComponentInterface
     {
 
         $ticketBackId = $ticketId;
-        Log::info($ticketBackId);
         if ($ticketBackId === null) {
             Log::info('ticked saved');
             $ticketBackId = $this->supportChatRepository->saveTicket($senderId, $title, $message);
@@ -86,8 +92,8 @@ class ChatWebSocketServer implements MessageComponentInterface
 
         $moderators = Moderator::all();
         foreach($moderators as $moderator) {
-            // Send message to each moderator
             if (isset($this->userConnections[$moderator['user_id']])) {
+                echo 'message sent';
                 $this->userConnections[$moderator['user_id']]->send(json_encode($messageObject));
             }
         }

@@ -35,6 +35,11 @@ const props = defineProps({
     padding: 12px;
     width: 40%;
     position: relative;
+
+    @media screen and (max-width: 640px){
+        width: 100%;
+
+    }
     &:before {
         content: "";
         width: 0px;

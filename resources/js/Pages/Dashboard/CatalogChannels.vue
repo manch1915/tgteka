@@ -11,6 +11,7 @@ import {
     sliderThemeOverrides
 } from "@/themeOverrides.js";
 import {ref} from "vue";
+import CatalogChannels from "@/Components/Dashboard/CatalogChannels.vue";
 
 const sortData = [
     'Рейтинг',
@@ -112,6 +113,7 @@ const placeholder = ['от', 'до']
                 <div class="hidden gap-x-3 filter_buttons sm:flex">
                     <SortButton v-for="title in sortData" :title="title"/>
                 </div>
+                <CatalogChannels/>
             </div>
         </div>
     </AppLayout>

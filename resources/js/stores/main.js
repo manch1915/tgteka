@@ -15,6 +15,42 @@ export const useMainStore = defineStore("main", {
     channels: [],
     supportChats: [],
     history: [],
+    format:  [
+          {
+              label: '1/24',
+              value: 1
+          },
+          {
+              label: '2/48',
+              value: 2,
+          },
+          {
+              label: '3/72',
+              value: 3,
+          },
+          {
+              label: '3/без удаления',
+              value: 4,
+          }
+      ],
+      count:  [
+          {
+              label: '1',
+              value: 1,
+          },
+          {
+              label: '2',
+              value: 2,
+          },
+          {
+              label: '3',
+              value: 3,
+          },
+          {
+              label: '4',
+              value: 4,
+          }
+      ]
   }),
   actions: {
     setUser(payload) {

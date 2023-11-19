@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleAndPermissionSeeder::class,
             UserSeeder::class,
-            SupportTicketsWithMessagesSeeder::class
         ]);
     }
 }

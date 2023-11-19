@@ -19,7 +19,7 @@ const wrap = ref(false)
     <div class="channel_card">
         <div class="channel_card-container">
             <div class="grid">
-    <!-- TODO badge from naive ui           -->
+                <!-- TODO badge from naive ui           -->
                 <div class="flex grid-element flex-col items-center justify-center gap-y-3">
                     <div :class="{'bg-yellow-400 point': channel.status === 'pending', 'bg-green-400 point': channel.status === 'accepted', 'bg-red-400 point': channel.status === 'declined'}"></div>
                     <div class="flex rating text-white text-sm font-normal font-['Poppins'] leading-tight">

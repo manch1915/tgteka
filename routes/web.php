@@ -27,9 +27,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    Route::get('/channels-catalog', function () {
-        return Inertia::render('Dashboard/ChannelsCatalog');
-    })->name('channels-catalog');
+    Route::prefix('catalog')->name('catalog.')->group(function () {
+        Route::resource('channels', \App\Http\Controllers\ChannelController::class);
+    });
+
 
     Route::get('/patterns', [PatternController::class, 'index'])->name('patterns');
     Route::get('/patternsGet', [PatternController::class, 'patternsGet'])->name('patterns.get');

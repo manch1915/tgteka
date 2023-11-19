@@ -56,7 +56,7 @@ class LoginController extends Controller
     protected function handleSuccessfulLogin($request)
     {
         $request->session()->regenerate();
-        return redirect()->route('channels-catalog');
+        return redirect()->route('catalog.channels.index');
     }
 
     protected function handleFailedLogin($request)

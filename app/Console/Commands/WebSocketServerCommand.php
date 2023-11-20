@@ -13,7 +13,7 @@ use Ratchet\WebSocket\WsServer;
 
 class WebSocketServerCommand extends Command
 {
-    private const PORT = 8080;
+    private const PORT = 1915;
     protected $signature = 'websocket:start';
     protected $description = 'Start the WebSocket Server';
 

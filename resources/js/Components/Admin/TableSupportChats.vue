@@ -83,7 +83,7 @@ const checked = (isChecked, client) => {
 };
 const page = usePage()
 const userId = computed(() => page.props.auth.user.id)
-const socket = new WebSocket(`ws://localhost:8080?userid=${userId.value}`);
+const socket = new WebSocket(`ws://localhost:1915?userid=${userId.value}`);
 const openMessengerModal = (ticketId) =>{
     openModal(Messanger, {tickets: ticketId, socket:socket, userId: userId.value})
 }

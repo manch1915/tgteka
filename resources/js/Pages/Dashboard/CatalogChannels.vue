@@ -1,45 +1,53 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import SortButton from "@/Components/Dashboard/SortButton.vue";
-import {closeModal} from "jenesius-vue-modal";
-import SearchBar from "@/Components/Dashboard/SearchBar.vue";
-import {NCheckbox, NInput, NSelect, NSlider} from "naive-ui";
+import AppLayout from '@/Layouts/AppLayout.vue'
+import SortButton from '@/Components/Dashboard/SortButton.vue'
+import { closeModal } from 'jenesius-vue-modal'
+import SearchBar from '@/Components/Dashboard/SearchBar.vue'
+import {
+    NCheckbox,
+    NInput,
+    NSelect,
+    NSlider
+} from 'naive-ui'
 import {
     checkboxThemeOverrides,
     inputThemeOverrides,
     selectThemeOverrides,
     sliderThemeOverrides
-} from "@/themeOverrides.js";
-import {ref,provide} from "vue";
-import CatalogChannels from "@/Components/Dashboard/CatalogChannels.vue";
+} from '@/themeOverrides.js'
+import { ref, provide, computed } from 'vue'
+import CatalogChannels from '@/Components/Dashboard/CatalogChannels.vue'
+import { useMainStore } from '@/stores/main.js'
 
-const sortData = [
-    'Рейтинг',
-    'ER',
-    'Просмотры',
-    'Подписчики',
-    'Цена',
-    'CPМ'
-]
+const SORT_DATA = ['Рейтинг', 'ER', 'Просмотры', 'Подписчики', 'Цена', 'CPМ']
+
 closeModal()
 
-const formatTooltip = value => {
-    return `${value}+`
-}
-const formatTooltipProcent = value => {
-    return `> ${value}%`
-}
+const store = useMainStore()
+store.fetchTopics()
+
+const channelSubjects = computed(() =>
+    store.topics.map((topic) => ({
+        label: topic.title,
+        value: topic.id
+    }))
+)
+
+const formatTooltip = (value) => `${value}+`
+const formatTooltipPercent = (value) => `> ${value}%`
 const additionalFilter = ref(false)
 const placeholder = ['от', 'до']
 
-let timeout;
-const searchData = ref('');
-function searchHandler(value) {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => { searchData.value = value; }, 500); // 500ms delay
+let timeout
+const searchData = ref('')
+const searchHandler = (value) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+        searchData.value = value
+    }, 500) // 500ms delay
 }
 
-provide('searchData', searchData);
+provide('searchData', searchData)
 </script>
 
 <template>
@@ -68,7 +76,7 @@ provide('searchData', searchData);
                 </div>
                 <div class="hidden py-[23px] sm:block">
                     <h2 class="pb-3 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Тематики</h2>
-                    <n-select :theme-overrides="selectThemeOverrides" placeholder="Все тематики"/>
+                    <n-select :options="channelSubjects" :theme-overrides="selectThemeOverrides" placeholder="Все тематики"/>
                 </div>
                 <button @click.prevent="additionalFilter = !additionalFilter" class="hidden sm:block px-6 py-3.5 w-full bg-purple-600 transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Дополнительный фильтр</button>
                 <transition>
@@ -79,11 +87,11 @@ provide('searchData', searchData);
                     </div>
                     <div class="py-2">
                         <h2 class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Мужская аудитория</h2>
-                        <n-slider :theme-overrides="sliderThemeOverrides" :max="90" :format-tooltip="formatTooltipProcent" :show-tooltip="additionalFilter"/>
+                        <n-slider :theme-overrides="sliderThemeOverrides" :max="90" :format-tooltip="formatTooltipPercent" :show-tooltip="additionalFilter"/>
                     </div>
                     <div class="py-2">
                         <h2 class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Женская аудитория</h2>
-                        <n-slider :theme-overrides="sliderThemeOverrides" :max="90" :format-tooltip="formatTooltipProcent" :show-tooltip="additionalFilter"/>
+                        <n-slider :theme-overrides="sliderThemeOverrides" :max="90" :format-tooltip="formatTooltipPercent" :show-tooltip="additionalFilter"/>
                     </div>
                     <div class="py-2">
                         <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Подписчиков</h2>
@@ -120,7 +128,7 @@ provide('searchData', searchData);
             <div class="channels">
                 <div class="hidden sm:block total text-right text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal">Всего каналов 63 448</div>
                 <div class="hidden gap-x-3 filter_buttons sm:flex">
-                    <SortButton v-for="title in sortData" :title="title"/>
+                    <SortButton v-for="title in SORT_DATA" :title="title"/>
                 </div>
                 <CatalogChannels/>
             </div>

@@ -9,8 +9,9 @@ import {
     selectThemeOverrides,
     checkboxToRadioThemeOverrides,
 } from '@/themeOverrides.js';
-import {reactive, ref, toRefs, watch, watchEffect} from 'vue';
+import {computed, reactive, ref, toRefs, watch, watchEffect} from 'vue';
 import {Link, router} from "@inertiajs/vue3";
+import {useMainStore} from "@/stores/main.js";
 
 const props = defineProps({
     channelId: [Number, null],
@@ -31,7 +32,7 @@ const form = reactive({
     avatar: null,
     channel_name: '',
     description: '',
-    topic: '',
+    topic_id: null,
     type: '',
     channel_url: '',
     language: '',
@@ -48,7 +49,7 @@ const form = reactive({
 watchEffect(() => {
     if (props.channel) {
         Object.assign(form, props.channel);
-        file.value =  props.channel.avatar
+        file.value =  props.channelAvatar
     }
 });
 
@@ -96,16 +97,15 @@ const languages = [
         value: 'english',
     },
 ];
-const channelSubjects = [
-    {
-        label: 'gameing',
-        value: 'gameing',
-    },
-    {
-        label: 'tech',
-        value: 'tech',
-    },
-];
+const store = useMainStore();
+store.fetchTopics();
+
+const channelSubjects = computed(() =>
+    store.topics.map(topic => ({
+        label: topic.title,
+        value: topic.id,
+    }))
+);
 const discountData = [
     {
         label: '10%',
@@ -147,7 +147,7 @@ watch(state.type, (newRadio) => {
                 <div v-show="file" class="avatar">
                     <img :src="file" alt="" />
                 </div>
-                <div class="flex w-full flex-col items-center">
+                <div class="flex flex-1 w-full flex-col items-center">
                     <label
                         class="cursor-pointer w-full px-6 py-3.5 bg-purple-600 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal custom-file-upload">
                         <input

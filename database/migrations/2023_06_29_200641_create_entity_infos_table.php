@@ -39,6 +39,6 @@ class CreateEntityInfosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('entity_info');
+        Schema::dropIfExists('entity_infos');
     }
 }

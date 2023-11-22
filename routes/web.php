@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\PatternController;
 use App\Http\Controllers\Profile\PersonalDataController;
 use App\Http\Controllers\Profile\TotalBalanceController;
+use App\Http\Controllers\UserChannelController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -52,6 +53,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::get('change-password', [\App\Http\Controllers\Profile\ChangePasswordController::class, 'index'])->name('change-password');
         Route::patch('change-password', [\App\Http\Controllers\Profile\ChangePasswordController::class, 'update'])->name('change-password.update');
+        Route::post('generate-password', [\App\Http\Controllers\Profile\ChangePasswordController::class, 'generate'])->name('change-password.generate');
 
     });
 
@@ -65,12 +67,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('{pattern}', [PatternController::class, 'destroy'])->name('destroy');
     });
 
-    Route::get('channels', [\App\Http\Controllers\UserChannelController::class, 'index'])->name('channels');
-    Route::get('channelsGet', [\App\Http\Controllers\UserChannelController::class, 'channelsGet'])->name('channels.get');
-    Route::get('channels/{channel}', [\App\Http\Controllers\UserChannelController::class, 'edit'])->name('channels.edit');
-    Route::patch('channels/{channel}', [\App\Http\Controllers\UserChannelController::class, 'update'])->name('channels.update');
-    Route::get('adding-channel', [\App\Http\Controllers\UserChannelController::class, 'show'])->name('adding-channel');
-    Route::post('adding-channel', [\App\Http\Controllers\UserChannelController::class, 'store'])->name('adding-channel.store');
+    Route::get('channels', [UserChannelController::class, 'index'])->name('channels');
+    Route::get('channelsGet', [UserChannelController::class, 'channelsGet'])->name('channels.get');
+    Route::get('channels/{channel}', [UserChannelController::class, 'edit'])->name('channels.edit');
+    Route::patch('channels/{channel}', [UserChannelController::class, 'update'])->name('channels.update');
+    Route::get('adding-channel', [UserChannelController::class, 'show'])->name('adding-channel');
+    Route::post('adding-channel', [UserChannelController::class, 'store'])->name('adding-channel.store');
 });
 Route::middleware(['role:Admin'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
@@ -79,16 +81,22 @@ Route::middleware(['role:Admin'])->group(function () {
         Route::get('channels', function (){
             return inertia('Admin/TablesView');
         })->name('channels');
+
         Route::get('support', function (){
             return inertia('Admin/SupportChatView');
         })->name('support');
 
+        Route::get('topics', function (){
+            return inertia('Admin/TopicsView');
+        })->name('topics');
+
         Route::prefix('api')->name('api.')->group(function () {
             Route::apiResource('channels', \App\Http\Controllers\Admin\ChannelController::class);
-        });
-        Route::prefix('api')->name('api.')->group(function () {
             Route::apiResource('support', \App\Http\Controllers\Admin\SupportController::class);
         });
-
     });
+});
+
+Route::prefix('admin/api')->name('admin.api.')->group(function () {
+    Route::apiResource('topics', \App\Http\Controllers\Admin\TopicController::class);
 });

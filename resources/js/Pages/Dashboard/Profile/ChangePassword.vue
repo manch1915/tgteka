@@ -33,6 +33,16 @@ const submit = async () => {
             loading.error()
         })
 };
+const generatePassword = async () => {
+    loading.start()
+    await axios.post(route('change-password.generate'))
+        .then((res) => {
+            loading.finish()
+        })
+        .catch(error => {
+            loading.error()
+        })
+};
 </script>
 
 <template>
@@ -54,7 +64,7 @@ const submit = async () => {
             <div class="mt-8 px-2 sm:px-0">
                 <h2 class="my-2 text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Также вы можете сгенерировать новый пароль</h2>
                 <p class="my-2 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Пароль будет выслан на указанную вами почту<br/>e****@admin.com</p>
-                <button class="my-2 border py-2 px-4 border-violet-700 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Сгенерировать</button>
+                <button @click.prevent="generatePassword" class="my-2 border py-2 px-4 border-violet-700 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Сгенерировать</button>
             </div>
         </ProfileLayout>
     </AppLayout>

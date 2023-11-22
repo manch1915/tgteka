@@ -15,6 +15,7 @@ export const useMainStore = defineStore("main", {
     channels: [],
     supportChats: [],
     history: [],
+    topics: [],
     format:  [
           {
               label: '1/24',
@@ -72,6 +73,10 @@ export const useMainStore = defineStore("main", {
     fetchSupportChats(){
         axios.get(route('admin.api.support.index'))
             .then(r => this.supportChats = r.data)
+    },
+    fetchTopics(){
+        axios.get(route('admin.api.topics.index'))
+            .then(r => this.topics = r.data)
     }
   },
 });

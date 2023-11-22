@@ -29,7 +29,14 @@ class UserChannelController extends Controller
 
         // Add avatar url to each channel object
         $channels->each(function ($channel) {
-            $channel->avatar_url = $channel->getMedia('avatars')->last()->getUrl();
+            $media = $channel->getMedia('avatars')->last();
+
+            if ($media) {
+                $channel->avatar_url = $media->getUrl();
+            } else {
+                $channel->avatar_url = 'https://avatars.dicebear.com/api/bottts/' . $channel->channel_name. '.svg';
+            }
+
             return $channel;
         });
 

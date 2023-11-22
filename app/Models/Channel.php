@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Overtrue\LaravelFavorite\Traits\Favoriteable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -89,5 +90,10 @@ class Channel extends Model implements HasMedia
     public function reviews()
     {
         return $this->hasMany(Review::class, 'channel_id');
+    }
+
+    public function topics(): HasMany
+    {
+        return $this->hasMany(Topic::class);
     }
 }

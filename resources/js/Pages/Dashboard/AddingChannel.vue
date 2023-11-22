@@ -9,8 +9,9 @@ import {
     selectThemeOverrides,
     checkboxToRadioThemeOverrides,
 } from '@/themeOverrides.js';
-import {reactive, ref, toRefs, watch} from 'vue';
+import {computed, reactive, ref, toRefs, watch} from 'vue';
 import {router, Link} from "@inertiajs/vue3";
+import {useMainStore} from "@/stores/main.js";
 
 const discount_check = ref(false);
 const format_one_checkbox = ref(false);
@@ -24,7 +25,7 @@ const form = reactive({
     avatar: null,
     channel_name: '',
     description: '',
-    topic: '',
+    topic_id: null,
     type: '',
     channel_url: '',
     language: '',
@@ -79,16 +80,15 @@ const languages = [
         value: 'english',
     },
 ];
-const channelSubjects = [
-    {
-        label: 'gameing',
-        value: 'gameing',
-    },
-    {
-        label: 'tech',
-        value: 'tech',
-    },
-];
+const store = useMainStore();
+store.fetchTopics();
+
+const channelSubjects = computed(() =>
+    store.topics.map(topic => ({
+        label: topic.title,
+        value: topic.id,
+    }))
+);
 const discountData = [
     {
         label: '10%',
@@ -186,9 +186,9 @@ watch(state.type, (newRadio) => {
                     <n-select
                         placeholder="выберите тему канала/чата"
                         :theme-overrides="selectThemeOverrides"
-                        v-model:value="form.topic"
+                        v-model:value="form.topic_id"
                         :options="channelSubjects" />
-                    <span class="text-red-500" v-if="errors.topic">{{ errors.topic[0] }}</span>
+                    <span class="text-red-500" v-if="errors.topic_id">{{ errors.topic_id[0] }}</span>
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2

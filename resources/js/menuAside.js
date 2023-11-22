@@ -3,7 +3,7 @@ import {
     mdiTable,
     mdiMessage,
     mdiMessageText,
-    mdiForum,
+    mdiForum, mdiCog, mdiTextLong,
 } from "@mdi/js";
 
 export default [
@@ -32,4 +32,15 @@ export default [
       },
     ],
   },
+{
+label: "Настройки",
+icon: mdiCog,
+menu: [
+  {
+    icon: mdiTextLong,
+    label: "тематики",
+    route: 'admin.topics',
+  },
+],
+},
 ];

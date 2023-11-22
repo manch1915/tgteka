@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class ChangePasswordController extends Controller
 {
@@ -23,6 +25,22 @@ class ChangePasswordController extends Controller
         $validated['password'] = Hash::make($validated['password']);
 
         auth()->user()->update($validated);
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    }
+
+    public function generate(Request $request)
+    {
+        $password = Str::random(10);
+        auth()->user()->update(['password' => Hash::make($password)]);
+        $user = auth()->user();
+        Mail::raw("Here is your new generated: {$password}", function ($message) use ($user) {
+            $message->to($user->email);
+            $message->subject('Welcome to our app');
+        });
+
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

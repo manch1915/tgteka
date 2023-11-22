@@ -9,15 +9,15 @@ class UpdateChannelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'avatar'             => 'nullable|string|max:10240',
+            'avatar'             => 'nullable|file|mimes:jpg,jpeg,png|max:10240',
             'channel_name'       => 'required|max:200',
             'description'        => 'required|string',
             'subscribers_source' => 'required|string',
-            'topic'              => 'required',
+            'topic_id'           => 'required',
             'type'               => 'required|in:channel,chat',
             'channel_url'        => 'required',
             'language'           => 'required|in:english,russian',
-            'repeat_discount'    => 'nullable|in:10,20,30,50',
+            'repeat_discount'    => 'nullable|in:0,10,20,30,50',
             'terms'              => 'accepted',
             'format_one'         => 'required|integer',
             'format_two'         => 'nullable|integer',

@@ -105,7 +105,7 @@ const addChannelToFavorites = async (channel) => {
                 <div class="flex sm:w-1/2 w-full">
                     <div class="flex flex-col items-center justify-center gap-y-3 grid-element">
                         <div class="avatar">
-                            <img src="/images/avatar.jpg" alt="avatar">
+                            <img :src="channel.avatar_url ? channel.avatar_url : '/images/avatar.jpg'" alt="avatar">
                         </div>
                     </div>
                     <div class="grid-element">

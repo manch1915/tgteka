@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Overtrue\LaravelFavorite\Traits\Favoriteable;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 /**
  * App\Models\Channel
@@ -68,9 +70,9 @@ use Overtrue\LaravelFavorite\Traits\Favoriteable;
  * @method static \Illuminate\Database\Eloquent\Builder|Channel whereViewsCount($value)
  * @mixin \Eloquent
  */
-class Channel extends Model
+class Channel extends Model implements HasMedia
 {
-    use HasFactory, Favoriteable;
+    use HasFactory, Favoriteable, InteractsWithMedia;
 
     protected $guarded = [];
 

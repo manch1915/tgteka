@@ -24,6 +24,11 @@ class ChannelController extends Controller
                 return $query->where('channel_name', 'like', '%' . $search . '%');
             })->orderBy('created_at', 'desc')->paginate(10);
 
+        $channels->each(function ($channel) {
+            $channel->avatar_url = $channel->getMedia('avatars')->last()->getUrl();
+            return $channel;
+        });
+
         return response()->json($channels);
     }
 

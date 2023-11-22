@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->text('title')->nullable();
-            $table->text('media')->nullable();
             $table->text('body')->nullable();
             $table->enum('status', ['pending', 'accepted', 'declined'])->default('pending');
             $table->timestamps();

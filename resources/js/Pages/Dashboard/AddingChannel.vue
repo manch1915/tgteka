@@ -130,7 +130,7 @@ watch(state.type, (newRadio) => {
                 <div v-show="file" class="avatar">
                     <img :src="file" alt="" />
                 </div>
-                <div class="flex w-full flex-col items-center">
+                <div class="flex flex-1 w-full flex-col items-center">
                     <label class="cursor-pointer w-full px-6 py-3.5 bg-purple-600 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal custom-file-upload">
                         <input
                             type="file"

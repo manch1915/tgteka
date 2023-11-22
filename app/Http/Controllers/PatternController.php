@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class PatternController extends Controller
 {
@@ -45,15 +47,22 @@ class PatternController extends Controller
         return inertia('Dashboard/AddingTemplate', ['patternCount' => $patternCount, 'patternId' => $pattern->id]);
     }
 
+    /**
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function update(UpdatePatternRequest $request, Pattern $pattern): JsonResponse
     {
         $validated = $request->validated();
 
         if($request->hasFile('media')) {
             $file = $request->file('media');
-            $path = $file->store('public/images');
-            $url = Storage::url($path);
-            $validated['media'] = $url;
+
+            $pattern
+                ->addMedia($file)
+                ->toMediaCollection('images');
+
+            unset($validated['media']);
         }
 
         $pattern->update($validated);
@@ -69,10 +78,22 @@ class PatternController extends Controller
         return response()->json($pattern);
     }
 
+    /**
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function duplicate(Pattern $pattern): JsonResponse
     {
         $newPattern = $pattern->replicate();
         $newPattern->save();
+
+        // Handle media duplication
+        foreach ($pattern->getMedia('images') as $media) {
+            $newPattern
+                ->addMedia($media->getPath())
+                ->toMediaCollection('images');
+        }
+
         $newPattern->localized_created_at = \App\Services\DateLocalizationService::localize($newPattern->created_at);
         return response()->json($newPattern);
     }
@@ -81,7 +102,7 @@ class PatternController extends Controller
     {
         $patternContent = $pattern->body;
         $patternName = $pattern->title;
-        $patternMedia = asset($pattern->media);
+        $patternMedia = $pattern->getMedia('images')->last()->getUrl();
 
         return inertia('Dashboard/EditTemplate', [
             'patternId' => $pattern->id,

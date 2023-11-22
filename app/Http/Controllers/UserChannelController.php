@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class UserChannelController extends Controller
 {
@@ -25,6 +27,12 @@ class UserChannelController extends Controller
             return $query->where('channel_name', 'like', '%'.$search.'%');
         })->orderBy('created_at', 'desc')->paginate(10);
 
+        // Add avatar url to each channel object
+        $channels->each(function ($channel) {
+            $channel->avatar_url = $channel->getMedia('avatars')->last()->getUrl();
+            return $channel;
+        });
+
         return response()->json($channels);
     }
 
@@ -33,35 +41,40 @@ class UserChannelController extends Controller
         return inertia('Dashboard/AddingChannel');
     }
 
+    /**
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function store(StoreChannelRequest $request)
     {
         $validated = $request->validated();
-
-        if ($request->hasFile('avatar')) {
-            $file = $request->file('avatar');
-            $path = $file->store('public/images');
-            $url = Storage::url($path);
-            $validated['avatar'] = $url;
-        }
-
         $validated['user_id'] = auth()->id();
 
-        unset($validated['terms']);
-        Channel::create($validated);
+        unset($validated['avatar'], $validated['terms']);
+        $channel = Channel::create($validated);
+
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+            $channel->addMedia($avatar)->toMediaCollection('avatars');
+        }
 
         return response()->json('success');
     }
 
+    /**
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function update(UpdateChannelRequest $request, Channel $channel)
     {
         $validated = $request->validated();
 
         if($request->hasFile('avatar')) {
-            $file = $request->file('avatar');
-            $path = $file->store('public/images');
-            $url = Storage::url($path);
-            $validated['avatar'] = $url;
+            $avatar = $request->file('avatar');
+            $channel->addMedia($avatar)->toMediaCollection('avatars');
+            unset($validated['avatar']);
         }
+
         unset($validated['terms']);
         $channel->update($validated);
 
@@ -70,8 +83,9 @@ class UserChannelController extends Controller
 
     public function edit(Channel $channel)
     {
-
-        $channelAvatar = asset($channel->avatar);
+        $channelAvatar = $channel->getMedia('avatars')
+            ->last()
+            ->getUrl() ?? 'https://avatars.dicebear.com/api/bottts/' . $channel->channel_name. '.svg';
 
         return inertia('Dashboard/EditChannel', [
             'channelId' => $channel->id,

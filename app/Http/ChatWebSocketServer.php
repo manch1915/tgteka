@@ -6,6 +6,7 @@ use App\Http\Factories\MessageFactory;
 use App\Http\Repositories\PersonalChatRepository;
 use App\Http\Repositories\SupportChatRepository;
 use App\Models\Moderator;
+use App\Models\SupportTicket;
 use Illuminate\Support\Facades\Log;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
@@ -55,10 +56,15 @@ class ChatWebSocketServer implements MessageComponentInterface
     public function onClose(ConnectionInterface $conn): void
     {
         $this->clients->detach($conn);
-        $disconnectedUser = $this->findAndRemoveUserConnection($conn);
+
+        // Find the user associated with the connection and remove it.
+        $userId = array_search($conn, $this->userConnections);
+        if ($userId !== false) {
+            unset($this->userConnections[$userId]);
+        }
+
         $clientId = spl_object_hash($conn);
-        Log::info("Connection {$clientId} has disconnected");
-        // Consider adding some logic here if you want to handle when a user disconnects
+        Log::info("Connection {$userId} has disconnected");
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e): void
@@ -79,25 +85,31 @@ class ChatWebSocketServer implements MessageComponentInterface
 
     private function sendSupportChatMessage(int $senderId, string $message, string $title, ?int $ticketId): void
     {
-
         $ticketBackId = $ticketId;
         if ($ticketBackId === null) {
-            Log::info('ticked saved');
             $ticketBackId = $this->supportChatRepository->saveTicket($senderId, $title, $message);
         } else {
             $this->supportChatRepository->saveMessage($senderId, $ticketId, $message);
         }
 
+        // Get the SupportTicket model using the ticket id
+        $supportTicket = SupportTicket::find($ticketBackId);
+
         $messageObject = $this->messageFactory->createSupportChatMessage($senderId, $ticketBackId, $message);
 
-        $moderators = Moderator::all();
-        foreach($moderators as $moderator) {
-            if (isset($this->userConnections[$moderator['user_id']])) {
-                echo 'message sent';
-                $this->userConnections[$moderator['user_id']]->send(json_encode($messageObject));
+        $moderators = Moderator::all()->pluck('user_id')->toArray();
+
+        if (in_array($senderId, $moderators)) {
+            if (isset($this->userConnections[$supportTicket->sender_id])) {
+                $this->userConnections[$supportTicket->sender_id]->send(json_encode($messageObject));
+            }
+        } else {
+            foreach($moderators as $moderatorId) {
+                if (isset($this->userConnections[$moderatorId])) {
+                    $this->userConnections[$moderatorId]->send(json_encode($messageObject));
+                }
             }
         }
-
     }
 
     private function sendPersonalChatMessage(int $senderId, int $recipientId, string $message): void

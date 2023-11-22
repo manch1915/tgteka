@@ -9,7 +9,7 @@ import { config } from 'jenesius-vue-modal'
 import {createPinia} from "pinia";
 import {Quill} from "@vueup/vue-quill";
 import Emoji from "quill-emoji";
-import {NLoadingBarProvider} from "naive-ui";
+import {NLoadingBarProvider, NMessageProvider} from "naive-ui";
 import {darkModeKey, styleKey} from "@/config.js";
 import {useStyleStore} from "@/stores/style.js";
 
@@ -27,14 +27,21 @@ createInertiaApp({
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
         const RootComponent = {
-            components: { App, NLoadingBarProvider },
+            components: { App, NLoadingBarProvider, NMessageProvider },
             render() {
                 return h(
                     NLoadingBarProvider,
                     {},
                     {
                         default: () =>
-                            h(App, props)
+                            h(
+                                NMessageProvider,
+                                {},
+                                {
+                                    default: () =>
+                                        h(App, props)
+                                }
+                            )
                     }
                 );
             },

@@ -1,5 +1,4 @@
 <script setup>
-
 import {closeModal} from "jenesius-vue-modal";
 import MessageBox from "@/Components/Dashboard/MessageBox.vue";
 import {onMounted, ref} from "vue";
@@ -32,7 +31,7 @@ const sendMessage = () => {
   messages.value.push({
       message: message.value,
       sender: {
-          profile_photo_url: 'https://ui-avatars.com/api/?name=A&color=7F9CF5&background=EBF4FF'
+          profile_photo_url: `https://ui-avatars.com/api/?name=${props.userId}&color=7F9CF5&background=EBF4FF`
       },
       created_at:"+055809-07-05T06:33:20.000000Z"
   })
@@ -41,13 +40,15 @@ const sendMessage = () => {
 props.socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
 
-    messages.value.push({
-        message: data.message,
-        sender: {
-            profile_photo_url: 'https://ui-avatars.com/api/?name=A&color=7F9CF5&background=EBF4FF'
-        },
-        created_at: new Date().toISOString()
-    });
+    if(data.ticket_id === props.tickets) {
+        messages.value.push({
+            message: data.message,
+            sender: {
+                profile_photo_url: `https://ui-avatars.com/api/?name=${data.sender_id}&color=7F9CF5&background=EBF4FF`
+            },
+            created_at: new Date().toISOString()
+        });
+    }
 };
 </script>
 

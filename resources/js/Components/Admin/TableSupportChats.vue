@@ -19,11 +19,10 @@ const mainStore = useMainStore();
 mainStore.fetchSupportChats()
 const items = computed(() => mainStore.supportChats);
 
-const isModalActive = ref(false);
-
 const isModalDangerActive = ref(false);
 const chatId = ref(null);
 const deleteChat = () => {
+    console.log(chatId.value)
     axios.delete(route('admin.api.support.destroy', chatId.value))
         .then(r => console.log(r))
         .catch(e => console.log(e))
@@ -84,6 +83,9 @@ const checked = (isChecked, client) => {
 const page = usePage()
 const userId = computed(() => page.props.auth.user.id)
 const socket = new WebSocket(`ws://localhost:1915?userid=${userId.value}`);
+socket.onerror = function(error) {
+    console.log(error);
+};
 const openMessengerModal = (ticketId) =>{
     openModal(Messanger, {tickets: ticketId, socket:socket, userId: userId.value})
 }

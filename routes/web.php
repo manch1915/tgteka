@@ -29,6 +29,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::prefix('catalog')->name('catalog.')->group(function () {
         Route::resource('channels', \App\Http\Controllers\ChannelController::class);
+        Route::get('channels-get', [\App\Http\Controllers\ChannelController::class, 'channelsGet'])->name('channels.get');
+        Route::post('channel-add-to-favorite', [\App\Http\Controllers\ChannelController::class, 'favorite'])->name('channels.favorite');
     });
 
 

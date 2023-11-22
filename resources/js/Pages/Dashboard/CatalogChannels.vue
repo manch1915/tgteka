@@ -10,7 +10,7 @@ import {
     selectThemeOverrides,
     sliderThemeOverrides
 } from "@/themeOverrides.js";
-import {ref} from "vue";
+import {ref,provide} from "vue";
 import CatalogChannels from "@/Components/Dashboard/CatalogChannels.vue";
 
 const sortData = [
@@ -31,6 +31,15 @@ const formatTooltipProcent = value => {
 }
 const additionalFilter = ref(false)
 const placeholder = ['от', 'до']
+
+let timeout;
+const searchData = ref('');
+function searchHandler(value) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => { searchData.value = value; }, 500); // 500ms delay
+}
+
+provide('searchData', searchData);
 </script>
 
 <template>
@@ -51,7 +60,7 @@ const placeholder = ['от', 'до']
                     </div>
                 </div>
                 <div class="pb-6">
-                    <SearchBar @search="" class="py-2"/>
+                    <SearchBar @search="searchHandler" class="py-2"/>
                     <div class="flex items-center gap-x-2">
                         <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                         <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Искать также в описании</p>

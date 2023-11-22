@@ -1,32 +1,20 @@
 <script setup>
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
-import ChannelCard from "@/Components/Dashboard/ChannelCard.vue";
 import axios from "axios";
-import {onMounted, ref} from "vue";
-import SortButton from "@/Components/Dashboard/SortButton.vue";
-import SearchBar from "@/Components/Dashboard/SearchBar.vue";
+import {inject, ref, watch} from "vue";
 import {useLoadingBar} from "naive-ui"
 import CatalogChannelCard from "@/Components/Dashboard/CatalogChannelCard.vue";
 
 const channels = ref([])
 
-const sortData = [
-    'Рейтинг',
-    'ER',
-    'Просмотры',
-    'Подписчики',
-    'Цена',
-    'CPМ'
-]
-
 const loading = useLoadingBar()
-
+const searchData = inject('searchData');
 const getChannels = async (page = 1, search = '') => {
     loading.start()
-    let url = route('channels.get') + `?page=${page}`;
+    let url = route('catalog.channels.get') + `?page=${page}`;
 
-    if(search.length > 0){
-        url += `&search=${search}`;
+    if(searchData && searchData.value.length > 0){
+        url += `&search=${searchData.value}`;
     }
 
     await axios.get(url)
@@ -36,11 +24,9 @@ const getChannels = async (page = 1, search = '') => {
         })
 }
 
-const handleSearch = (search) => {
-    getChannels(1, search);
-}
-
-onMounted(() => getChannels())
+watch(searchData, (newValue) => {
+    getChannels(1, newValue);
+}, { immediate: true });
 </script>
 
 <template>

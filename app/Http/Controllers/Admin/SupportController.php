@@ -28,7 +28,10 @@ class SupportController extends Controller
     {
     }
 
-    public function destroy(SupportMessage $supportMessage)
+    public function destroy(SupportTicket $support)
     {
+        $support->delete();
+        return response()->json();
     }
+
 }

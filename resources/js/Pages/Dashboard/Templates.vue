@@ -50,7 +50,7 @@ const deletePattern = async (patternIdToDelete) => {
 };
 
 const getPatterns = async (page = 1) => {
-    const url = route('patterns.get') + `?page=${page}`
+    const url = route('user-patterns-paginated') + `?page=${page}`
     await axios.get(url)
         .then(response => {
             patterns.value = response.data

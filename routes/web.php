@@ -30,13 +30,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::prefix('catalog')->name('catalog.')->group(function () {
         Route::resource('channels', \App\Http\Controllers\ChannelController::class);
-        Route::get('channels-get', [\App\Http\Controllers\ChannelController::class, 'channelsGet'])->name('channels.get');
-        Route::post('channel-add-to-favorite', [\App\Http\Controllers\ChannelController::class, 'favorite'])->name('channels.favorite');
+        Route::get('channels-list', [\App\Http\Controllers\ChannelController::class, 'channelsGet'])->name('channels.list');
+        Route::post('favorite-channel', [\App\Http\Controllers\ChannelController::class, 'favorite'])->name('channels.favorite');
+        Route::post('order-posts', [\App\Http\Controllers\ChannelController::class, 'orderPosts'])->name('channels.orderPosts');
     });
 
+    Route::get('cart', function (){
+        return inertia('Dashboard/Cart');
+    });
 
     Route::get('/patterns', [PatternController::class, 'index'])->name('patterns');
-    Route::get('/patternsGet', [PatternController::class, 'patternsGet'])->name('patterns.get');
+    Route::get('/userPatternsPaginated', [PatternController::class, 'userPatternsPaginated'])->name('user-patterns-paginated');
+    Route::get('/userPatterns', [PatternController::class, 'userPatterns'])->name('user-patterns');
 
     Route::group(['prefix' => 'support'], function (){
         Route::get('/', [\App\Http\Controllers\SupportController::class, 'index'])->name('support');

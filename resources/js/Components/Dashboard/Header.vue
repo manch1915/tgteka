@@ -44,7 +44,7 @@ const toggleBurger = () => {
                     <div class="balance-elements px-6 py-1">
                         <div class="balance flex items-center gap-x-3">
                             <div class="sm:border-r-[1px] pr-2 flex">
-                                <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Общий баланс </p>
+                                <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Общий баланс&nbsp;</p>
                                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">0 ₽</p>
                             </div>
                             <div class="sm:border-r-[1px] pr-2 flex items-center gap-x-1">

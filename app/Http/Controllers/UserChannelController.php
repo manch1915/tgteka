@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreChannelRequest;
 use App\Http\Requests\UpdateChannelRequest;
 use App\Models\Channel;
+use App\Services\ChannelAvatarService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +20,7 @@ class UserChannelController extends Controller
         return inertia('Dashboard/Channels');
     }
 
-    public function channelsGet(Request $request)
+    public function channelsGet(Request $request, ChannelAvatarService $avatarService)
     {
         $search = $request->input('search');
 
@@ -27,16 +28,9 @@ class UserChannelController extends Controller
             return $query->where('channel_name', 'like', '%'.$search.'%');
         })->orderBy('created_at', 'desc')->paginate(10);
 
-        // Add avatar url to each channel object
-        $channels->each(function ($channel) {
-            $media = $channel->getMedia('avatars')->last();
 
-            if ($media) {
-                $channel->avatar_url = $media->getUrl();
-            } else {
-                $channel->avatar_url = 'https://avatars.dicebear.com/api/bottts/' . $channel->channel_name. '.svg';
-            }
-
+        $channels->each(function ($channel) use ($avatarService) {
+            $channel->avatar = $avatarService->getAvatarUrl($channel);
             return $channel;
         });
 
@@ -88,11 +82,9 @@ class UserChannelController extends Controller
         return response()->json($channel);
     }
 
-    public function edit(Channel $channel)
+    public function edit(Channel $channel, ChannelAvatarService $avatarService)
     {
-        $channelAvatar = $channel->getMedia('avatars')
-            ->last()
-            ->getUrl() ?? 'https://avatars.dicebear.com/api/bottts/' . $channel->channel_name. '.svg';
+        $channelAvatar = $avatarService->getAvatarUrl($channel);
 
         return inertia('Dashboard/EditChannel', [
             'channelId' => $channel->id,

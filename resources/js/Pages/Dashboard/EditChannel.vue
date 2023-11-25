@@ -77,6 +77,7 @@ const uploadChannel = () => {
       }})
       .then(res => {
           loading.finish()
+          router.visit(route('channels'))
       })
       .catch(error => {
           loading.error()

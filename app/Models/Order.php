@@ -37,6 +37,8 @@ class Order extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id', 'description', 'channel_id', 'status', 'pattern_id'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

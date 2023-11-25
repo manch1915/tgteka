@@ -27,7 +27,7 @@ const wrap = ref(false)
                         <p>34.3</p>
                     </div>
                     <div class="avatar">
-                        <img :src="channel.avatar_url ? channel.avatar_url : '/images/avatar.jpg'" alt="avatar">
+                        <img :src="channel.avatar" alt="avatar">
                     </div>
                 </div>
                 <div class="grid-element">

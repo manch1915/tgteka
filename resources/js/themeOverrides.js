@@ -23,6 +23,13 @@ export const checkboxThemeOverrides = {
     borderChecked: '',
     borderFocus: ''
 };
+
+export const tableThemeOverrides = {
+    tdColor: '#101741',
+    thColor: '#070B28',
+    thTextColor: '#EAE0FF',
+    tdTextColor: '#EAE0FF'
+};
 export const scrollbarThemeOverrides = {
     color: '#FFFFFF',
 };

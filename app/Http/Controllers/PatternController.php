@@ -20,7 +20,7 @@ class PatternController extends Controller
         return inertia('Dashboard/Templates');
     }
 
-    public function patternsGet()
+    public function userPatternsPaginated()
     {
         $patterns = auth()->user()->patterns()->orderBy('created_at', 'desc')->paginate(10);
 
@@ -30,6 +30,13 @@ class PatternController extends Controller
 
         return response()->json($patterns);
     }
+    public function userPatterns()
+    {
+        $patterns = auth()->user()->patterns()->orderBy('created_at', 'desc')->get();
+
+        return response()->json($patterns);
+    }
+
     public function store(StorePatternRequest $request): JsonResponse
     {
         $pattern = Pattern::create($request->validated());

@@ -11,7 +11,7 @@ const loading = useLoadingBar()
 const searchData = inject('searchData');
 const getChannels = async (page = 1, search = '') => {
     loading.start()
-    let url = route('catalog.channels.get') + `?page=${page}`;
+    let url = route('catalog.channels.list') + `?page=${page}`;
 
     if(searchData && searchData.value.length > 0){
         url += `&search=${searchData.value}`;

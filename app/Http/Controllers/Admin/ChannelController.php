@@ -11,7 +11,17 @@ class ChannelController extends Controller
     public function index()
     {
         $channels = Channel::all();
+        $channels->each(function ($channel) {
+            $media = $channel->getMedia('avatars')->last();
 
+            if ($media) {
+                $channel->avatar = $media->getUrl();
+            } else {
+                $channel->avatar = 'https://avatars.dicebear.com/api/bottts/' . $channel->channel_name. '.svg';
+            }
+
+            return $channel;
+        });
         [$channelsType, $chatsType] = $channels->partition(function ($channel) {
             return $channel->type == 'channel';
         });

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Channel;
+use App\Models\Order;
+use App\Services\ChannelAvatarService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +17,7 @@ class ChannelController extends Controller
         return inertia('Dashboard/CatalogChannels');
     }
 
-    public function channelsGet(Request $request)
+    public function channelsGet(Request $request, ChannelAvatarService $avatarService)
     {
         $search = $request->input('search');
 
@@ -24,8 +26,8 @@ class ChannelController extends Controller
                 return $query->where('channel_name', 'like', '%' . $search . '%');
             })->orderBy('created_at', 'desc')->paginate(10);
 
-        $channels->each(function ($channel) {
-            $channel->avatar_url = $channel->getMedia('avatars')->last()->getUrl();
+        $channels->each(function ($channel) use ($avatarService){
+            $channel->avatar = $avatarService->getAvatarUrl($channel);
             return $channel;
         });
 
@@ -70,8 +72,9 @@ class ChannelController extends Controller
     {
     }
 
-    public function show(Channel $channel)
+    public function show(Channel $channel, ChannelAvatarService $avatarService)
     {
+        $channel->avatar = $avatarService->getAvatarUrl($channel);
         return inertia('Dashboard/CatalogChannelShow', ['channel' => $channel]);
     }
 
@@ -83,7 +86,37 @@ class ChannelController extends Controller
     {
     }
 
-    public function destroy(Channel $channel)
+    public function orderPosts(Request $request)
     {
+        $sum = 0;
+        foreach ($request->channels['_value'] as $channel){
+            $sum += $channel['format'] * $channel['count'];
+        }
+
+        if (auth()->user()->balance < $sum){
+            return response()->json('U haven\'t money for this operation', 401);
+        }
+
+        $channelIds = array_map(function ($channel) {
+            return $channel['id'];
+        }, $request->channels['_value']);
+
+        $channels = Channel::findMany($channelIds);
+
+        if ($channels->contains(function ($channel) {
+            return $channel->user_id == auth()->id();
+        })) {
+            return response()->json('You cannot afford to post on your own channels', 401);
+        }
+
+        foreach ($channels as $channel){
+            Order::create([
+                'user_id' => auth()->id(),
+                'channel_id' => $channel->id,
+                'pattern_id' => $request->pattern_id,
+                'description' => $request->description
+            ]);
+        }
+        return response()->json($sum);
     }
 }

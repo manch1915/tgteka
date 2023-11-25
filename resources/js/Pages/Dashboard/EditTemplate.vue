@@ -4,6 +4,7 @@ import {Quill, QuillEditor} from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import "quill-emoji/dist/quill-emoji.css";
 import { ref, watch} from "vue";
+import TemplateLayout from "@/Layouts/TemplateLayout.vue";
 
 const props = defineProps({
     patternContent: [String, null],
@@ -51,7 +52,7 @@ const htmlToDelta = (html) => {
     document.getElementById('htmlToDelta').remove();
     return delta;
 }
-
+htmlContent.value = content.value
 content.value = htmlToDelta(content.value);
 const handleFileUpload = (event) => {
     file.value = event.target.files[0];
@@ -105,49 +106,41 @@ watch([content, uploadedImageUrl], () => {
 </script>
 
 <template>
-    <AppLayout>
-        <div class="mt-8 sm:mt-28">
-            <div class="text-center">
-                <div class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>
-            </div>
+    <TemplateLayout>
+        <template #title>
+            <div class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>
+        </template>
+        <template #subtitle>
             <div class="mt-4 mb-12 sm:mt-16">
                 <div class="text-violet-100 sm:text-2xl text-xl sm:text-left text-center ms:px-0 px-4 font-bold font-['Open Sans'] sm:leading-10 leading-7">Редактирование поста № {{ patternId }} {{patternName}}</div>
             </div>
-            <div class="rounded-tr-3xl rounded-br-3xl rounded-bl-3xl border-2 border-white p-8 backdrop-blur-3xl blok">
-                <h2 class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed mb-5">Ваш пост</h2>
-                <QuillEditor @ready="(methods, quill) => onEditorReady(methods, quill)" v-model:content="content" :options="options" theme="snow" class="text-violet-100"  placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.  Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
-                <div class="flex items-center justify-between py-6">
-                    <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Шаблон сохраняется автоматически</div>
-                    <div class="text-purple-600 text-sm font-normal font-['Poppins'] leading-tight">Очистить всё</div>
-                </div>
-                <hr>
-                <div class="mt-5 grid sm:grid-cols-2 grid-cols-1 mediafiles">
-                    <div class="flex flex-col gap-y-8">
-                        <div class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Медиафайлы</div>
-                        <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Прикрепите файл</div>
-                        <div>
-                            <label class="cursor-pointer px-6 py-2 bg-blue rounded-full shadow-inner border border-white border-opacity-10 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight custom-file-upload">
-                                <input type="file" class="hidden" accept="image/*" @change="handleFileUpload($event)" />
-                                Загрузить файл
-                            </label>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2">
-                        <div v-for="n in 10" class="sm:h-24 sm:w-24 h-12 w-12 rounded-lg bg-zinc-300"></div>
-                    </div>
+        </template>
+        <template #post-title>
+            Ваш пост
+        </template>
+        <template #editor>
+            <QuillEditor @ready="(methods, quill) => onEditorReady(methods, quill)" v-model:content="content" :options="options" theme="snow" class="text-violet-100"  placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.  Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
+        </template>
+        <template #file-upload>
+            <div class="flex flex-col gap-y-8">
+                <div class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Медиафайлы</div>
+                <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Прикрепите файл</div>
+                <div>
+                    <label class="cursor-pointer px-6 py-2 bg-blue rounded-full shadow-inner border border-white border-opacity-10 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight custom-file-upload">
+                        <input type="file" class="hidden" accept="image/*" @change="handleFileUpload($event)" />
+                        Загрузить файл
+                    </label>
                 </div>
             </div>
-        </div>
-        <div class="mt-24 text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Предпросмотр поста</div>
-        <div class="sm:p-0 px-4">
-            <div class="mt-6 sm:w-1/4 w-full before">
-                <div class="before_container">
-                    <img :src="uploadedImageUrl" class="object-cover" alt="" />
-                    <div class="pt-2 text-violet-100 text-base font-normal font-['Inter'] leading-tight" v-html="htmlContent"></div>
-                </div>
+            <div class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2">
+                <div v-for="n in 10" class="sm:h-24 sm:w-24 h-12 w-12 rounded-lg bg-zinc-300"></div>
             </div>
-        </div>
-    </AppLayout>
+        </template>
+        <template #post-preview>
+                <img :src="uploadedImageUrl" class="object-cover" alt="" />
+                <div class="break-words pt-2 text-violet-100 text-base font-normal font-['Inter'] leading-tight" v-html="htmlContent"></div>
+        </template>
+    </TemplateLayout>
 </template>
 
 <style lang="scss">

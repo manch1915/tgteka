@@ -13,6 +13,7 @@ export const useMainStore = defineStore("main", {
 
     /* Sample data (commonly used) */
     channels: [],
+    chats: [],
     supportChats: [],
     history: [],
     topics: [],
@@ -68,7 +69,10 @@ export const useMainStore = defineStore("main", {
 
     fetchChannels(){
         axios.get(route('admin.api.channels.index'))
-            .then(r => this.channels = r.data.channels)
+            .then(r => {
+                this.channels = r.data.channels
+                this.chats = r.data.chats
+            })
     },
     fetchSupportChats(){
         axios.get(route('admin.api.support.index'))

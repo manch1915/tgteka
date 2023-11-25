@@ -1,16 +1,23 @@
 <script setup>
 import { NSelect, useMessage } from "naive-ui";
 import {selectCatalogThemeOverrides} from "@/themeOverrides.js";
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiHeartOutline, mdiCartPlus, mdiHeart,mdiCartMinus} from "@mdi/js";
 import {Link} from "@inertiajs/vue3";
 
 const props = defineProps({
-    channel: Object
+    channel: Object,
+    countValue: {
+        default: 1,
+        required: false
+    },
+    formatValue: {
+        required: false
+    },
 });
 
-const countValue = ref(1)
+const countValue = ref(props.countValue);
 const cartUpdateKey = ref(0);
 const fav = ref(false)
 const wrap = ref(false)
@@ -24,30 +31,32 @@ const loadCart = () => {
     return JSON.parse(localStorage.getItem('cart')) || [];
 };
 
-const addCart = (cart, channel) => {
-    cart.push(channel);
+const addCart = (cart, channel, count, format) => {
+    const channelData = Object.assign({}, channel, {count: count, format: format});
+    cart.push(channelData);
     message.info('Channel ' + channel.channel_name + ' has been added to the cart.');
     saveCart(cart);
 }
-
+const emit = defineEmits(['cartChanged', 'cartUpdated'])
 const removeCart = (cart, index, channel) => {
     cart.splice(index, 1);
     message.info('Channel ' + channel.channel_name + ' has been removed from the cart.');
     saveCart(cart);
+    emit('cartChanged');
 }
 
 const toggleChannelInCart = (channel) => {
     const cart = loadCart();
     const index = cart.findIndex(ch => ch.id === channel.id);
 
-    if (index > -1) {
+    if (index > -1 && formatValue.value === cart[index].format && countValue.value === cart[index].count) {
         removeCart(cart, index, channel);
     } else {
-        addCart(cart, channel);
+        updateCart(cart, channel, countValue.value, formatValue.value);
     }
 
     cartUpdateKey.value++;
-}
+};
 
 const generateFormatArray = (channel) => [
     { label: '1/24', value: channel.format_one },
@@ -58,7 +67,7 @@ const generateFormatArray = (channel) => [
 
 const format = computed(() => generateFormatArray(props.channel));
 
-const formatValue = ref(format.value.find(item => item.value !== 0)?.value || null);
+const formatValue = props.formatValue ? ref(props.formatValue) : ref(format.value.find(item => item.value !== 0)?.value || null);
 
 const count = [
     { label: '1', value: 1 },
@@ -96,6 +105,31 @@ const addChannelToFavorites = async (channel) => {
         message.error('An error occurred: ', error)
     }
 }
+const updateCart = (cart, channel, count, format) => {
+    const channelIndex = cart.findIndex(ch => ch.id === channel.id);
+
+    if(channelIndex > -1){
+        cart[channelIndex] = Object.assign({}, channel, {count: count, format: format});
+        message.info('Channel ' + channel.channel_name + ' has been updated in the cart.');
+    }
+    else{
+        const channelData = Object.assign({}, channel, {count: count, format: format});
+        cart.push(channelData);
+        message.info('Channel ' + channel.channel_name + ' has been added to the cart.');
+    }
+
+    saveCart(cart);
+    emit('cartUpdated', cart); // Emit the updated cart data
+};
+watch(countValue, (newValue) => {
+    let cart = loadCart();
+    updateCart(cart, props.channel, newValue, formatValue.value);
+});
+
+watch(formatValue, (newValue) => {
+    let cart = loadCart();
+    updateCart(cart, props.channel, countValue.value, newValue);
+});
 </script>
 
 <template>
@@ -105,7 +139,7 @@ const addChannelToFavorites = async (channel) => {
                 <div class="flex sm:w-1/2 w-full">
                     <div class="flex flex-col items-center justify-center gap-y-3 grid-element">
                         <div class="avatar">
-                            <img :src="channel.avatar_url ? channel.avatar_url : '/images/avatar.jpg'" alt="avatar">
+                            <img :src="channel.avatar" alt="avatar">
                         </div>
                     </div>
                     <div class="grid-element">
@@ -141,11 +175,11 @@ const addChannelToFavorites = async (channel) => {
             <div class="flex flex-wrap sm:w-auto w-full items-center gap-x-4">
                 <div class="flex  flex-col items-start gap-y-1">
                     <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Формат</p>
-                    <n-select v-model:value="formatValue" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="format"/>
+                    <n-select v-model:value="formatValue" @update-value="emit('cartChanged');" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="format"/>
                 </div>
                 <div class="flex  flex-col items-start gap-y-1">
                     <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Количество</p>
-                    <n-select v-model:value="countValue" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="count"/>
+                    <n-select v-model:value="countValue" @update-value="emit('cartChanged');" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="count"/>
                 </div>
                 <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">{{ totalPrice }} ₽</h1>
             </div>

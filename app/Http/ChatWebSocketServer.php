@@ -7,6 +7,7 @@ use App\Http\Repositories\PersonalChatRepository;
 use App\Http\Repositories\SupportChatRepository;
 use App\Models\Moderator;
 use App\Models\SupportTicket;
+use App\Services\Censure;
 use Illuminate\Support\Facades\Log;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
@@ -85,6 +86,7 @@ class ChatWebSocketServer implements MessageComponentInterface
 
     private function sendSupportChatMessage(int $senderId, string $message, string $title, ?int $ticketId): void
     {
+        $message = Censure::replace($message);
         $ticketBackId = $ticketId;
         if ($ticketBackId === null) {
             $ticketBackId = $this->supportChatRepository->saveTicket($senderId, $title, $message);
@@ -114,6 +116,7 @@ class ChatWebSocketServer implements MessageComponentInterface
 
     private function sendPersonalChatMessage(int $senderId, int $recipientId, string $message): void
     {
+        $message = Censure::replace($message);
         $messageObject = $this->messageFactory->createPersonalChatMessage($senderId, $message);
 
         if (!isset($this->userConnections[$recipientId])) {

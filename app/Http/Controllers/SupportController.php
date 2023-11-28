@@ -10,6 +10,9 @@ class SupportController extends Controller
     public function index()
     {
         $tickets = auth()->user()->tickets;
+        foreach ($tickets as $ticket) {
+            $ticket->localized_date = \App\Services\DateLocalizationService::localize($ticket->created_at);
+        }
         $ticketsCount = auth()->user()->tickets()->count();
         return inertia('Dashboard/Support', ['tickets' => $tickets,'ticketsCount' => $ticketsCount]);
     }

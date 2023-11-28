@@ -72,7 +72,7 @@ socket.onerror = function(error) {
                     />
                 </div>
                 <p class="my-4 text-violet-100 text-opacity-40 text-base font-normal font-['Inter'] leading-tight">Формат изображения jpg, jpeg, png, <br/>не менее 140*140рх,не более 1600*1024рх</p>
-                <button @click.prevent="createNewAppeal" class="flex justify-center w-full py-4 bg-purple-600 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                <button @click.prevent="createNewAppeal" class="flex justify-center w-full py-4 bg-purple-600 transition hover:bg-purple-800 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                     Отправить
                 </button>
             </div>
@@ -87,7 +87,7 @@ socket.onerror = function(error) {
                     <p class="text-violet-100 text-right text-base font-normal font-['Open Sans'] leading-tight">{{ticketsCount}} обращений</p>
 
                     <div class="mt-6 flex h-full flex-col gap-y-4">
-                        <TicketCard v-for="ticket in tickets" :key="ticket.id" :title="ticket.title" :created_at="ticket.created_at" @click.prevent="openMessengerModal(ticket.id)"/>
+                        <TicketCard v-for="ticket in tickets" :key="ticket.id" :title="ticket.title" :created_at="ticket.localized_date" @click.prevent="openMessengerModal(ticket.id)"/>
                     </div>
                 </div>
             </div>

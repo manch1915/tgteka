@@ -16,10 +16,15 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get('/owners', function () {
         return Inertia::render('Owners');
     })->name('owners');
-});
 
-Route::post('/register', [RegisterController::class, 'store'])->name('register');
-Route::post('/login', [LoginController::class, 'login'])->name('login');
+    Route::post('/register', [RegisterController::class, 'store'])->name('register');
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
+    Route::post('/forgot-password', [LoginController::class, 'forgot'])->name('password.forgot');
+    Route::get('/reset-password/{token}', function (string $token) {
+        return inertia('PasswordRecover', ['token' => $token]);
+    })->name('password.reset');
+    Route::post('/reset-password', [LoginController::class, 'update'])->name('password.update');
+});
 
 Route::get('/terms-of-service', [\App\Http\Controllers\AgreementController::class, 'index'])->name('terms-of-service');
 Route::get('/rules', [\App\Http\Controllers\AgreementController::class, 'rules'])->name('rules');

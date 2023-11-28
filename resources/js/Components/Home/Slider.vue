@@ -8,7 +8,7 @@ import {ref} from "vue";
 
 const props = defineProps({
     interactive: Boolean,
-    slides: Number,
+    slides: Number | String,
     freemode: {
         default: false
     }

@@ -154,7 +154,7 @@ return [
         'birthday'                 => 'дата рождения',
         'body'                     => 'контент',
         'channel_name'             => 'название канала',
-        'channel_url'              => 'url канала',
+        'url'              => 'url канала',
         'city'                     => 'город',
         'content'                  => 'контент',
         'country'                  => 'страна',

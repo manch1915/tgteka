@@ -11,19 +11,18 @@ class CreateChannelsTable extends Migration
         Schema::create('channels', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->string('channel_url')->unique();
+            $table->string('url')->unique();
             $table->string('channel_name', 64);
-            $table->string('telegram_username')->unique()->nullable();
             $table->foreignId('topic_id')->constrained();
             $table->enum('type', ['chat', 'channel']);
             $table->string('language');
             $table->string('description', 2400)->nullable();
             $table->string('subscribers_source', 2400)->nullable();
-            $table->bigInteger('format_one')->default(0);
-            $table->bigInteger('format_two')->default(0);
-            $table->bigInteger('format_three')->default(0);
-            $table->bigInteger('no_deletion')->default(0);
-            $table->boolean('repost')->default(false);
+            $table->bigInteger('format_one_price')->default(0);
+            $table->bigInteger('format_two_price')->default(0);
+            $table->bigInteger('format_three_price')->default(0);
+            $table->bigInteger('no_deletion_price')->default(0);
+            $table->boolean('repost_price')->default(false);
             $table->integer('repeat_discount')->default(0); // Repeat discount percentage
             $table->float('score')->default(0);
             $table->float('rating')->default(0);

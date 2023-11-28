@@ -15,14 +15,14 @@ class StoreChannelRequest extends FormRequest
             'subscribers_source' => 'required|string',
             'topic_id'           => 'required',
             'type'               => 'required|in:channel,chat',
-            'channel_url'        => ['required', 'regex:/^@(?:[a-z0-9\_]+)$|^(https\:\/\/t\.me\/[a-zA-Z0-9\_\+\-]+)$/i'],
+            'url'        => ['required', 'regex:/^@(?:[a-z0-9\_]+)$|^(https\:\/\/t\.me\/[a-zA-Z0-9\_\+\-]+)$/i'],
             'language'           => 'required|in:english,russian',
             'repeat_discount'    => 'nullable|in:0,10,20,30,50',
             'terms'              => 'accepted',
-            'format_one'         => 'required|integer',
-            'format_two'         => 'nullable|integer',
-            'format_three'       => 'nullable|integer',
-            'no_deletion'        => 'nullable|integer',
+            'format_one_price'         => 'required|integer',
+            'format_two_price'         => 'nullable|integer',
+            'format_three_price'       => 'nullable|integer',
+            'no_deletion_price'        => 'nullable|integer',
         ];
     }
 

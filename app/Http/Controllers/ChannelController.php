@@ -4,20 +4,49 @@ namespace App\Http\Controllers;
 
 use App\Models\Channel;
 use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\OrderTransaction;
 use App\Services\ChannelAvatarService;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ChannelController extends Controller
 {
+    private OrderService $orderService;
+
+    public function __construct(OrderService $orderService) {
+        $this->orderService = $orderService;
+    }
+
     public function index()
     {
         return inertia('Dashboard/CatalogChannels');
     }
 
     public function channelsGet(Request $request, ChannelAvatarService $avatarService)
+    {
+        $channels = $this->fetchChannels($request, $avatarService);
+
+        return response()->json($channels);
+    }
+
+    public function favorite(Request $request)
+    {
+        return response()->json($this->toggleFavorite($request), ResponseAlias::HTTP_OK);
+    }
+
+    public function show(Channel $channel, ChannelAvatarService $avatarService)
+    {
+        return inertia('Dashboard/CatalogChannelShow', ['channel' => $this->getChannelWithAvatar($channel, $avatarService)]);
+    }
+
+    public function orderPosts(Request $request)
+    {
+        return response()->json($this->orderService->createOrder($request));
+    }
+
+    protected function fetchChannels(Request $request, ChannelAvatarService $avatarService)
     {
         $search = $request->input('search');
 
@@ -31,24 +60,22 @@ class ChannelController extends Controller
             return $channel;
         });
 
-        return response()->json($channels);
+        return $channels;
     }
 
-    public function favorite(Request $request)
+    protected function toggleFavorite(Request $request)
     {
         $channel_id = $request->input('channel_id');
-
         $channel = Channel::find($channel_id);
 
         if (!$channel) {
-            return response()->json([
+            return [
                 'status' => 'error',
                 'message' => 'No channel found with the given ID.'
-            ], ResponseAlias::HTTP_NOT_FOUND);
+            ];
         }
 
-
-        $user = Auth::user();
+        $user = auth()->user();
 
         if ($user->hasFavorited($channel)) {
             $user->unfavorite($channel);
@@ -58,65 +85,15 @@ class ChannelController extends Controller
             $message = 'Channel successfully added to favorites.';
         }
 
-        return response()->json([
+        return [
             'status' => 'success',
             'message' => $message,
-        ], ResponseAlias::HTTP_OK);
+        ];
     }
 
-    public function create()
-    {
-    }
-
-    public function store(Request $request)
-    {
-    }
-
-    public function show(Channel $channel, ChannelAvatarService $avatarService)
+    protected function getChannelWithAvatar(Channel $channel, ChannelAvatarService $avatarService)
     {
         $channel->avatar = $avatarService->getAvatarUrl($channel);
-        return inertia('Dashboard/CatalogChannelShow', ['channel' => $channel]);
-    }
-
-    public function edit(Channel $channel)
-    {
-    }
-
-    public function update(Request $request, Channel $channel)
-    {
-    }
-
-    public function orderPosts(Request $request)
-    {
-        $sum = 0;
-        foreach ($request->channels['_value'] as $channel){
-            $sum += $channel['format'] * $channel['count'];
-        }
-
-        if (auth()->user()->balance < $sum){
-            return response()->json('U haven\'t money for this operation', 401);
-        }
-
-        $channelIds = array_map(function ($channel) {
-            return $channel['id'];
-        }, $request->channels['_value']);
-
-        $channels = Channel::findMany($channelIds);
-
-        if ($channels->contains(function ($channel) {
-            return $channel->user_id == auth()->id();
-        })) {
-            return response()->json('You cannot afford to post on your own channels', 401);
-        }
-
-        foreach ($channels as $channel){
-            Order::create([
-                'user_id' => auth()->id(),
-                'channel_id' => $channel->id,
-                'pattern_id' => $request->pattern_id,
-                'description' => $request->description
-            ]);
-        }
-        return response()->json($sum);
+        return $channel;
     }
 }

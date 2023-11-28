@@ -2,9 +2,11 @@
 import AppLayout from '@/Layouts/AppLayout.vue'
 import CatalogChannelCard from "@/Components/Dashboard/CatalogChannelCard.vue";
 import {computed, onMounted, ref} from "vue";
-import {NInput, NSelect, NTable, useMessage} from "naive-ui";
+import {NInput, NSelect, NTable, useMessage, useLoadingBar} from "naive-ui";
 import {inputThemeOverrides, selectThemeOverrides, tableThemeOverrides} from "@/themeOverrides.js";
 import axios from "axios";
+import {useMainStore} from "@/stores/main.js";
+import {router} from "@inertiajs/vue3";
 
 const loadCart = () => {
     return JSON.parse(localStorage.getItem('cart')) || [];
@@ -14,21 +16,30 @@ const channels = ref(loadCart())
 const userPatterns = ref([])
 const userPattern = ref(null)
 const description = ref('')
-
+const store = useMainStore()
 
 const channelCount = computed(() => channels.value.length);
 const placementCount = computed(() => channels.value.reduce((total, channel) => total + channel.count, 0));
 const totalSum = computed(() => channels.value.reduce((sum, channel) => {
-    const pricePerUnit = channel.format ? channel.format : 0;
+    const pricePerUnit = channel[channel.format] ? channel[channel.format] : 0;
     return sum + pricePerUnit * channel.count;
 }, 0));
 const updateChannels = (updatedCart) => {
     channels.value = updatedCart;
 };
 
+const loading = useLoadingBar()
+
 const orderPosts = () => {
+    loading.start()
   axios.post(route('catalog.channels.orderPosts'), {channels, pattern_id: userPattern.value, description: description.value })
-      .then(r => console.log(r))
+      .then(response => {
+          store.subtractFromUserBalance(response.data)
+          localStorage.removeItem('cart')
+          loading.finish()
+          router.visit(route('catalog.channels.index'))
+      })
+      .catch(c => loading.error())
 }
 
 const message = useMessage()
@@ -38,7 +49,7 @@ onMounted(() => {
         .then(response => {
             const patterns = response.data;
             if (!patterns || patterns.length === 0) {
-                message.warning('у вас нет готовых шаблонов пожалуйста перейдите на страницу мои шаблоны и создайте шаблон')
+                message.error('у вас нет готовых шаблонов пожалуйста перейдите на страницу мои шаблоны и создайте шаблон')
             }else{
                 userPatterns.value.push(...patterns.map((pattern) => ({
                     label: pattern.title,

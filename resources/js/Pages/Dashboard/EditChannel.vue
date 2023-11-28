@@ -34,15 +34,15 @@ const form = reactive({
     description: '',
     topic_id: null,
     type: '',
-    channel_url: '',
+    url: '',
     language: '',
     subscribers_source: '',
     repeat_discount: null,
     terms: false,
-    format_one: 0,
-    format_two: 0,
-    format_three: 0,
-    no_deletion: 0,
+    format_one_price: 0,
+    format_two_price: 0,
+    format_three_price: 0,
+    no_deletion_price: 0,
     '_method': 'patch'
 });
 
@@ -215,14 +215,14 @@ watch(state.type, (newRadio) => {
                         Ссылка на канал/чат
                     </h2>
                     <text-input
-                        v-model="form.channel_url"
+                        v-model="form.url"
                         id="name"
                         type="text"
                         class="w-full py-3"
                         required
                         autocomplete="channel"
                         placeholder="@channel или https://t.me/dr_amina_pirmanova" />
-                    <span class="text-red-500" v-if="errors.channel_url">{{ errors.channel_url[0] }}</span>
+                    <span class="text-red-500" v-if="errors.url">{{ errors.url[0] }}</span>
                 </div>
                 <div class="flex w-full flex-col justify-center gap-y-3 text-center">
                     <h2
@@ -302,8 +302,8 @@ watch(state.type, (newRadio) => {
                         </div>
                         <div class="flex items-center justify-end gap-x-2">
                             <input
-                                v-model="form.format_one"
-                                @input="format_one_checkbox = form.format_one.trim() !== ''"
+                                v-model="form.format_one_price"
+                                @input="format_one_checkbox = form.format_one_price.trim() !== ''"
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
                             <p
@@ -333,8 +333,8 @@ watch(state.type, (newRadio) => {
                         </div>
                         <div class="flex items-center justify-end gap-x-2">
                             <input
-                                v-model="form.format_two"
-                                @input="format_two_checkbox = form.format_two.trim() !== ''"
+                                v-model="form.format_two_price"
+                                @input="format_two_checkbox = form.format_two_price.trim() !== ''"
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
                             <p
@@ -364,8 +364,8 @@ watch(state.type, (newRadio) => {
                         </div>
                         <div class="flex items-center justify-end gap-x-2">
                             <input
-                                v-model="form.format_three"
-                                @input="format_three_checkbox = form.format_three.trim() !== ''"
+                                v-model="form.format_three_price"
+                                @input="format_three_checkbox = form.format_three_price.trim() !== ''"
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
                             <p
@@ -395,8 +395,8 @@ watch(state.type, (newRadio) => {
                         </div>
                         <div class="flex items-center justify-end gap-x-2">
                             <input
-                                v-model="form.no_deletion"
-                                @input="no_deletion_checkbox = form.no_deletion.trim() !== ''"
+                                v-model="form.no_deletion_price"
+                                @input="no_deletion_checkbox = form.no_deletion_price.trim() !== ''"
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
                             <p

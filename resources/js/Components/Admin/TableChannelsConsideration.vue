@@ -106,13 +106,13 @@ const checked = (isChecked, client) => {
 
 <template>
   <CardBoxModal @confirm="channelAccept" button="success" has-cancel v-model="isModalActive" title="Просмотр канала">
-    <a class="text-blue-800" :href="modalChannel.channel_url">{{modalChannel.channel_name}}</a>
+    <a class="text-blue-800" :href="modalChannel.url">{{modalChannel.channel_name}}</a>
     <p>{{modalChannel.description}}</p>
     <p>{{modalChannel.subscribers_source}}</p>
-    <p>{{modalChannel.format_one}}</p>
-    <p>{{modalChannel.format_two}}</p>
-    <p>{{modalChannel.format_three}}</p>
-    <p>{{modalChannel.no_deletion}}</p>
+    <p>{{modalChannel.format_one_price}}</p>
+    <p>{{modalChannel.format_two_price}}</p>
+    <p>{{modalChannel.format_three_price}}</p>
+    <p>{{modalChannel.no_deletion_price}}</p>
     <p>{{modalChannel.language}}</p>
     <p>{{modalChannel.topic}}</p>
   </CardBoxModal>

@@ -44,13 +44,12 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function channel()
-    {
-        return $this->belongsTo(Channel::class);
-    }
-
     public function pattern()
     {
         return $this->belongsTo(Pattern::class);
+    }
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
     }
 }

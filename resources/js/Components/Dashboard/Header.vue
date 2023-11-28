@@ -1,10 +1,23 @@
 <script setup>
-import {Link, router} from '@inertiajs/vue3'
+import {Link, router, usePage} from '@inertiajs/vue3'
 import {closeModal} from "jenesius-vue-modal";
-import {ref} from "vue";
+import {ref, watchEffect} from "vue";
+import {useMainStore} from "@/stores/main.js";
+import AnimatedNumber from "@/Components/Dashboard/AnimatedNumber.vue";
+
 closeModal()
 
+const store = useMainStore()
+const page = usePage()
+
+watchEffect(() => {
+    if (page.props.auth.user && page.props.auth.user.balance !== store.userBalance) {
+        store.setUserBalance(page.props.auth.user.balance);
+    }
+});
+
 const burgerActive = ref(false)
+
 const toggleBurger = () => {
     burgerActive.value = !burgerActive.value
 
@@ -45,7 +58,7 @@ const toggleBurger = () => {
                         <div class="balance flex items-center gap-x-3">
                             <div class="sm:border-r-[1px] pr-2 flex">
                                 <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Общий баланс&nbsp;</p>
-                                <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">0 ₽</p>
+                                <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"> <animated-number :number="store.userBalance"/></p>
                             </div>
                             <div class="sm:border-r-[1px] pr-2 flex items-center gap-x-1">
                                 <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</p>

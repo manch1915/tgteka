@@ -35,7 +35,7 @@ const explain = ['','1 часа в топе / 24 часа в лент', '2 ча�
                                     <div class="w-6 h-6 bg-violet-100 rounded-full"></div>
                                     <div class="w-6 h-6 bg-violet-100 rounded-full"></div>
                                 </div>
-                                <a :href="channel.channel_url" class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">{{channel.channel_url}}</a>
+                                <a :href="channel.url" class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">{{channel.channel_url}}</a>
                             </div>
                         </div>
                         <div class="flex flex-col gap-y-4">

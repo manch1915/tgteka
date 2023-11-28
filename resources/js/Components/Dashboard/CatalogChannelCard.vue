@@ -1,53 +1,48 @@
 <script setup>
 import { NSelect, useMessage } from "naive-ui";
-import {selectCatalogThemeOverrides} from "@/themeOverrides.js";
-import {computed, ref, watch} from "vue";
+import { selectCatalogThemeOverrides } from "@/themeOverrides.js";
+import { computed, ref, defineProps, defineEmits, watch } from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import {mdiHeartOutline, mdiCartPlus, mdiHeart,mdiCartMinus} from "@mdi/js";
-import {Link} from "@inertiajs/vue3";
+import { mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartMinus } from "@mdi/js";
+import { Link } from "@inertiajs/vue3";
 
 const props = defineProps({
     channel: Object,
     countValue: {
         default: 1,
-        required: false
+        required: false,
     },
     formatValue: {
-        required: false
+        required: false,
     },
 });
 
 const countValue = ref(props.countValue);
 const cartUpdateKey = ref(0);
-const fav = ref(false)
-const wrap = ref(false)
-const message = useMessage()
+const fav = ref(false);
+const wrap = ref(false);
+const message = useMessage();
 
 const saveCart = (cart) => {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
 };
 
 const loadCart = () => {
-    return JSON.parse(localStorage.getItem('cart')) || [];
+    return JSON.parse(localStorage.getItem("cart")) || [];
 };
 
-const addCart = (cart, channel, count, format) => {
-    const channelData = Object.assign({}, channel, {count: count, format: format});
-    cart.push(channelData);
-    message.info('Channel ' + channel.channel_name + ' has been added to the cart.');
-    saveCart(cart);
-}
-const emit = defineEmits(['cartChanged', 'cartUpdated'])
+const emit = defineEmits(["cartChanged", "cartUpdated"]);
+
 const removeCart = (cart, index, channel) => {
     cart.splice(index, 1);
-    message.info('Channel ' + channel.channel_name + ' has been removed from the cart.');
+    message.info(`Канал ${channel.channel_name} был удален из корзины.`);
     saveCart(cart);
-    emit('cartChanged');
-}
+    emit("cartChanged");
+};
 
 const toggleChannelInCart = (channel) => {
     const cart = loadCart();
-    const index = cart.findIndex(ch => ch.id === channel.id);
+    const index = cart.findIndex((ch) => ch.id === channel.id);
 
     if (index > -1 && formatValue.value === cart[index].format && countValue.value === cart[index].count) {
         removeCart(cart, index, channel);
@@ -59,68 +54,60 @@ const toggleChannelInCart = (channel) => {
 };
 
 const generateFormatArray = (channel) => [
-    { label: '1/24', value: channel.format_one },
-    { label: '2/48', value: channel.format_two },
-    { label: '3/72', value: channel.format_three },
-    { label: '3/без удаления', value: channel.no_deletion },
-].filter(item => item.value !== 0);
+    { label: "1/24", value: "format_one_price" },
+    { label: "2/48", value: "format_two_price" },
+    { label: "3/72", value: "format_three_price" },
+    { label: "3/без удаления", value: "no_deletion_price" },
+].filter((item) => channel[item.value] !== 0);
 
 const format = computed(() => generateFormatArray(props.channel));
-
-const formatValue = props.formatValue ? ref(props.formatValue) : ref(format.value.find(item => item.value !== 0)?.value || null);
-
-const count = [
-    { label: '1', value: 1 },
-    { label: '2', value: 2 },
-    { label: '3', value: 3 },
-    { label: '4', value: 4 },
-];
+const formatValue = ref(format.value[0]?.value || null);
 
 const totalPrice = computed(() => {
-    const selectedFormat = format.value.find(item => item.value === formatValue.value);
-    const pricePerUnit = selectedFormat ? selectedFormat.value : 0;
+    const selectedFormat = format.value.find((item) => item.value === formatValue.value);
+    const pricePerUnit = selectedFormat ? props.channel[selectedFormat.value] : 0;
     return pricePerUnit * countValue.value;
 });
 
 const isInCart = (channel) => {
     const dummy = cartUpdateKey.value;
-
     const cart = loadCart();
-    return cart.findIndex(ch => ch.id === channel.id) > -1;
+    return cart.findIndex((ch) => ch.id === channel.id) > -1;
 };
 
 const addChannelToFavorites = async (channel) => {
     try {
-        const response = await axios.post(route('catalog.channels.favorite'), { channel_id: channel.id })
+        const response = await axios.post(route("catalog.channels.favorite"), { channel_id: channel.id });
 
-        if (response.data.status === 'success') {
-            const isFav = response.data.message.includes('added');
-            const operation = isFav ? 'добавлен в избранное' : 'удален из избранних';
-            message.info(`Channel ${channel.channel_name} ${operation}`);
+        if (response.data.status === "success") {
+            const isFav = response.data.message.includes("added");
+            const operation = isFav ? "добавлен в избранное" : "удален из избранних";
+            message.info(`Канал ${channel.channel_name} ${operation}`);
             fav.value = isFav;
         } else {
-            message.error('There was an issue adding the channel to favorites.')
+            message.error("Возникла проблема с добавлением канала в избранное.");
         }
     } catch (error) {
-        message.error('An error occurred: ', error)
+        message.error("Произошла ошибка: ", error);
     }
-}
-const updateCart = (cart, channel, count, format) => {
-    const channelIndex = cart.findIndex(ch => ch.id === channel.id);
+};
 
-    if(channelIndex > -1){
-        cart[channelIndex] = Object.assign({}, channel, {count: count, format: format});
-        message.info('Channel ' + channel.channel_name + ' has been updated in the cart.');
-    }
-    else{
-        const channelData = Object.assign({}, channel, {count: count, format: format});
+const updateCart = (cart, channel, count, format) => {
+    const channelIndex = cart.findIndex((ch) => ch.id === channel.id);
+
+    if (channelIndex > -1) {
+        cart[channelIndex] = Object.assign({}, channel, { count: count, format: format });
+        message.info(`Канал ${channel.channel_name} было обновлено в корзине.`);
+    } else {
+        const channelData = Object.assign({}, channel, { count: count, format: format });
         cart.push(channelData);
-        message.info('Channel ' + channel.channel_name + ' has been added to the cart.');
+        message.info(`Канал ${channel.channel_name} был добавлен в корзину.`);
     }
 
     saveCart(cart);
-    emit('cartUpdated', cart); // Emit the updated cart data
+    emit("cartUpdated", cart);
 };
+
 watch(countValue, (newValue) => {
     let cart = loadCart();
     updateCart(cart, props.channel, newValue, formatValue.value);

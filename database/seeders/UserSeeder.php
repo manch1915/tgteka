@@ -11,7 +11,7 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        $created_user = User::create(['email' => 'admin@gmail.com', 'name' => 'admin', 'password' => Hash::make('admin')]);
+        $created_user = User::create(['email' => 'admin@gmail.com', 'name' => 'admin', 'password' => Hash::make('admin'), 'balance' => 15000]);
         $created_user->assignRole('Admin');
         Moderator::create(['user_id' => $created_user['id']]);
     }

@@ -13,9 +13,11 @@ class OrderService
 {
     public function createOrder(Request $request): float|int|string
     {
-        $totalSum = $this->calculateTotalSum($request->channels['_value']);
-
+        $totalSum = $this->calculateTotalSum($request->channels);
+//        $repeatDiscount = $this->checkRepeatDiscount(auth()->id(), $request->channels);
         $user = auth()->user();
+
+//        $totalSum -= $repeatDiscount;
 
         if ($user->balance >= $totalSum) {
             $user->decrementBalance($totalSum);
@@ -25,11 +27,31 @@ class OrderService
 
         $order = $this->createOrderRecord($request);
 
-        $this->createOrderItems($request->channels['_value'], $order);
+        $this->createOrderItems($request->channels, $order);
 
         $this->createOrderTransaction($order, $totalSum);
 
         return $totalSum;
+    }
+
+    public function checkRepeatDiscount($userId, array $channels): float|int
+    {
+        $orderItems = OrderItem::with(['channel', 'order'])
+            ->whereHas('order', function ($query) use ($userId) {
+                $query->where('user_id', $userId)->where('status', 'accepted');
+            })
+            ->whereIn('channel_id', array_column($channels, 'id'))
+            ->get();
+
+        foreach ($orderItems as $orderItem) {
+            $channel = $orderItem->channel;
+            if ($channel && $channel->repeat_discount > 0) {
+                $discountPercentage = $channel->repeat_discount;
+                return $orderItem->price * ($discountPercentage / 100);
+            }
+        }
+
+        return 0;
     }
 
     private function calculateTotalSum(array $channels): float|int

@@ -32,14 +32,23 @@ const loading = useLoadingBar()
 
 const orderPosts = () => {
     loading.start()
-  axios.post(route('catalog.channels.orderPosts'), {channels, pattern_id: userPattern.value, description: description.value })
-      .then(response => {
-          store.subtractFromUserBalance(response.data)
-          localStorage.removeItem('cart')
-          loading.finish()
-          router.visit(route('catalog.channels.index'))
-      })
-      .catch(c => loading.error())
+    console.log('Channels', channels.value)
+    axios.post(route('catalog.channels.orderPosts'), {
+        channels: channels.value,
+        pattern_id: userPattern.value,
+        description: description.value
+    })
+        .then(response => {
+            console.log(response)
+            store.subtractFromUserBalance(response.data)
+            localStorage.removeItem('cart')
+            loading.finish()
+            router.visit(route('catalog.channels.index'))
+        })
+        .catch(c => {
+            loading.error()
+            message.error(c.response.data.error)
+        })
 }
 
 const message = useMessage()

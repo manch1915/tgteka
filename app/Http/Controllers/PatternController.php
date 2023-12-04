@@ -6,6 +6,7 @@ use App\Http\Requests\StorePatternRequest;
 use App\Http\Requests\UpdatePatternRequest;
 use App\Models\Pattern;
 use App\Models\User;
+use App\Services\AvatarService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,6 +16,14 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class PatternController extends Controller
 {
+
+    protected AvatarService $avatarService;
+
+    public function __construct(AvatarService $avatarService)
+    {
+        $this->avatarService = $avatarService;
+    }
+
     public function index()
     {
         return inertia('Dashboard/Templates');
@@ -60,27 +69,20 @@ class PatternController extends Controller
      */
     public function update(UpdatePatternRequest $request, Pattern $pattern): JsonResponse
     {
-        $validated = $request->validated();
-
-        if($request->hasFile('media')) {
-            $file = $request->file('media');
-
+        if ($request->hasFile('media')) {
             $pattern
-                ->addMedia($file)
+                ->addMedia($request->file('media'))
                 ->toMediaCollection('images');
-
-            unset($validated['media']);
         }
 
-        $pattern->update($validated);
+        $pattern->update($request->validated());
 
         return response()->json($pattern);
     }
 
     public function rename(Pattern $pattern, Request $request): JsonResponse
     {
-        $pattern->title = $request->title;
-        $pattern->save();
+        $pattern->update(['title' => $request->title]);
 
         return response()->json($pattern);
     }
@@ -94,28 +96,20 @@ class PatternController extends Controller
         $newPattern = $pattern->replicate();
         $newPattern->save();
 
-        // Handle media duplication
-        foreach ($pattern->getMedia('images') as $media) {
-            $newPattern
-                ->addMedia($media->getPath())
-                ->toMediaCollection('images');
-        }
+        $pattern->getMedia('images')->each(fn($media) => $newPattern->addMedia($media->getPath())->toMediaCollection('images'));
 
         $newPattern->localized_created_at = \App\Services\DateLocalizationService::localize($newPattern->created_at);
+
         return response()->json($newPattern);
     }
 
     public function edit(Pattern $pattern)
     {
-        $patternContent = $pattern->body;
-        $patternName = $pattern->title;
-        $patternMedia = $pattern->getMedia('images')->last()->getUrl();
-
         return inertia('Dashboard/EditTemplate', [
             'patternId' => $pattern->id,
-            'patternContent' => $patternContent,
-            'patternMedia' => $patternMedia,
-            'patternName' => $patternName,
+            'patternContent' => $pattern->body,
+            'patternMedia' => $this->avatarService->getAvatarUrlOfPattern($pattern),
+            'patternName' => $pattern->title,
         ]);
     }
 

@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import {router, useForm} from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -64,7 +64,7 @@ const submit = () => {
             <div class="pt-4 login-with">
                 <p class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Войти через</p>
                 <div class="icons flex gap-4 pt-4">
-                    <img class="hover:" src="/images/loginTelegram.svg" alt="">
+                    <a :href="route('telegram-redirect')"><img class="hover:cursor-pointer" src="/images/loginTelegram.svg" alt=""></a>
                     <img class="hover:" src="/images/loginVk.svg" alt="">
                 </div>
             </div>

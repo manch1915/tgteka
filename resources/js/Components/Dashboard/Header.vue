@@ -135,7 +135,7 @@ const toggleBurger = () => {
                 <li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои размещения</li>
                 <Link :href="route('catalog.channels.index')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Каталог каналов</li></Link>
                 <Link :href="route('channels')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои каналы</li></Link>
-                <li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Заявки на размещение</li>
+                <Link :href="route('order.index')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Заявки на размещение</li></Link>
             </ul>
         </div>
         </div>

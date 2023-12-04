@@ -3,6 +3,12 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import {checkboxThemeOverrides, inputThemeOverrides} from "@/themeOverrides.js";
 import {NCheckbox, NInput} from "naive-ui";
+import {router, usePage} from "@inertiajs/vue3";
+import {computed} from "vue";
+
+const page = usePage()
+
+const telegram_username = computed(() => page.props.auth.user.telegram_username)
 
 </script>
 
@@ -19,17 +25,9 @@ import {NCheckbox, NInput} from "naive-ui";
                         <h2 class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">В Telegram</h2>
                         <img src="/images/telegram-logo.svg" alt="telegram-logo">
                     </div>
-                    <p class="pb-6 pt-2 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Вы еще не подключили бот уведомлений. Получайте оперативные уведомления и управляйте заказами</p>
-                    <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                        <p class="py-1">1) Напишите юзернейм личного Telegram-аккаунта</p>
-                        <p class="py-1">2) Нажмите Подключить бот</p>
-                        <p class="py-1">3) В Telegam-бот нажмите Start внизу или напишите команду /start</p>
-                    </div>
+                    <p v-if="!telegram_username" class="pb-6 pt-2 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Вы еще не подключили бот уведомлений. Получайте оперативные уведомления и управляйте заказами</p>
                     <div class="py-6">
-                        <div>
-                            <n-input class="py-1.5 my-1 sm:!w-2/4" placeholder="@channel или https://t.me/dr_amina_pirmanova" :theme-overrides="inputThemeOverrides"/>
-                        </div>
-                        <button class="sm:!w-2/4 w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal bg-purple-600 rounded-3xl py-2">Подключить бот</button>
+                        <a :href="route('telegram-redirect')" class="sm:!w-2/4 block text-center w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal bg-purple-600 rounded-3xl py-2">Подключить бот</a>
                     </div>
                     <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Также прочитайте</p>
                     <div class="flex items-center gap-x-2.5">

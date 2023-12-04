@@ -1,7 +1,7 @@
 <script setup>
 import { NSelect, useMessage } from "naive-ui";
 import { selectCatalogThemeOverrides } from "@/themeOverrides.js";
-import { computed, ref, defineProps, defineEmits, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import { mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartMinus } from "@mdi/js";
 import { Link } from "@inertiajs/vue3";
@@ -63,6 +63,13 @@ const generateFormatArray = (channel) => [
 const format = computed(() => generateFormatArray(props.channel));
 const formatValue = ref(format.value[0]?.value || null);
 
+const count = [
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: 3 },
+    { label: '4', value: 4 },
+];
+
 const totalPrice = computed(() => {
     const selectedFormat = format.value.find((item) => item.value === formatValue.value);
     const pricePerUnit = selectedFormat ? props.channel[selectedFormat.value] : 0;
@@ -110,12 +117,16 @@ const updateCart = (cart, channel, count, format) => {
 
 watch(countValue, (newValue) => {
     let cart = loadCart();
-    updateCart(cart, props.channel, newValue, formatValue.value);
+    if (isInCart(props.channel)) {
+        updateCart(cart, props.channel, newValue, formatValue.value)
+    }
 });
 
 watch(formatValue, (newValue) => {
     let cart = loadCart();
-    updateCart(cart, props.channel, countValue.value, newValue);
+    if (isInCart(props.channel)) {
+        updateCart(cart, props.channel, countValue.value, newValue)
+    }
 });
 </script>
 
@@ -129,7 +140,7 @@ watch(formatValue, (newValue) => {
                             <img :src="channel.avatar" alt="avatar">
                         </div>
                     </div>
-                    <div class="grid-element">
+                    <div class="flex-1 grid-element">
                         <div class="flex flex-col justify-between gap-y-2">
                             <h1 class="text-white text-xl font-bold font-['Open Sans'] leading-relaxed">{{channel.channel_name}}</h1>
                             <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Poppins'] break-all leading-tight">{{channel.description}}</p>

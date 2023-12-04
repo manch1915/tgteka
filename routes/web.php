@@ -2,12 +2,14 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\TelegramController;
 use App\Http\Controllers\PatternController;
 use App\Http\Controllers\Profile\PersonalDataController;
 use App\Http\Controllers\Profile\TotalBalanceController;
 use App\Http\Controllers\UserChannelController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Laravel\Socialite\Facades\Socialite;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', function () {
@@ -24,6 +26,17 @@ Route::group(['middleware' => 'guest'], function () {
         return inertia('PasswordRecover', ['token' => $token]);
     })->name('password.reset');
     Route::post('/reset-password', [LoginController::class, 'update'])->name('password.update');
+});
+
+Route::group(['prefix' => 'auth'], function (){
+    Route::get('/telegram', [TelegramController::class, 'index'])->name('telegram-redirect');
+    Route::get('/telegram/callback', [TelegramController::class, 'callback']);
+    Route::get('/vk', function (){
+        return Socialite::driver('vk')->redirect();
+    });
+    Route::get('/vk/callback', function (){
+        $telegramUser = Socialite::driver('vk')->user();
+    });
 });
 
 Route::get('/terms-of-service', [\App\Http\Controllers\AgreementController::class, 'index'])->name('terms-of-service');
@@ -64,7 +77,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('change-password', [\App\Http\Controllers\Profile\ChangePasswordController::class, 'index'])->name('change-password');
         Route::patch('change-password', [\App\Http\Controllers\Profile\ChangePasswordController::class, 'update'])->name('change-password.update');
         Route::post('generate-password', [\App\Http\Controllers\Profile\ChangePasswordController::class, 'generate'])->name('change-password.generate');
-
     });
 
 
@@ -83,6 +95,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::patch('channels/{channel}', [UserChannelController::class, 'update'])->name('channels.update');
     Route::get('adding-channel', [UserChannelController::class, 'show'])->name('adding-channel');
     Route::post('adding-channel', [UserChannelController::class, 'store'])->name('adding-channel.store');
+
+    Route::prefix('orders')->name('order.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\OrderController::class, 'index'])->name('index');
+        Route::get('/get', [\App\Http\Controllers\OrderController::class, 'get'])->name('get');
+        Route::post('/send-pattern-by-bot', [\App\Http\Controllers\OrderController::class, 'sendPatternByBot'])->name('send-pattern-by-bot');
+    });
 });
 Route::middleware(['role:Admin'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {

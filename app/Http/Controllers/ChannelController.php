@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Channel;
-use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\OrderTransaction;
-use App\Services\ChannelAvatarService;
+use App\Services\AvatarService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
@@ -24,7 +21,7 @@ class ChannelController extends Controller
         return inertia('Dashboard/CatalogChannels');
     }
 
-    public function channelsGet(Request $request, ChannelAvatarService $avatarService)
+    public function channelsGet(Request $request, AvatarService $avatarService)
     {
         $channels = $this->fetchChannels($request, $avatarService);
 
@@ -36,17 +33,29 @@ class ChannelController extends Controller
         return response()->json($this->toggleFavorite($request), ResponseAlias::HTTP_OK);
     }
 
-    public function show(Channel $channel, ChannelAvatarService $avatarService)
+    public function show(Channel $channel, AvatarService $avatarService)
     {
         return inertia('Dashboard/CatalogChannelShow', ['channel' => $this->getChannelWithAvatar($channel, $avatarService)]);
     }
 
     public function orderPosts(Request $request)
     {
-        return response()->json($this->orderService->createOrder($request));
+        $validated = $request->validate([
+            'channels' => 'required',
+            'pattern_id' => 'required',
+            'description' => 'required',
+        ]);
+        $response = $this->orderService->createOrder($request);
+
+        if (is_string($response)) {
+            return response()->json(['error' => $response], 400);
+        }
+
+        return response()->json(['message' => 'Order placed successfully', 'totalSum' => $response], 200);
     }
 
-    protected function fetchChannels(Request $request, ChannelAvatarService $avatarService)
+
+    protected function fetchChannels(Request $request, AvatarService $avatarService)
     {
         $search = $request->input('search');
 
@@ -56,7 +65,7 @@ class ChannelController extends Controller
             })->orderBy('created_at', 'desc')->paginate(10);
 
         $channels->each(function ($channel) use ($avatarService){
-            $channel->avatar = $avatarService->getAvatarUrl($channel);
+            $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);
             return $channel;
         });
 
@@ -91,9 +100,9 @@ class ChannelController extends Controller
         ];
     }
 
-    protected function getChannelWithAvatar(Channel $channel, ChannelAvatarService $avatarService)
+    protected function getChannelWithAvatar(Channel $channel, AvatarService $avatarService)
     {
-        $channel->avatar = $avatarService->getAvatarUrl($channel);
+        $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);
         return $channel;
     }
 }

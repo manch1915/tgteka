@@ -14,7 +14,6 @@ class PatternFactory extends Factory
     {
         return [
             'user_id' => 1,
-            'media' => $this->faker->imageUrl(),
             'body' => '<p>fake factory</p>>',
             'status' => $this->faker->randomElement(['pending', 'accepted', 'declined']),
             'created_at' => $this->faker->dateTimeThisYear()

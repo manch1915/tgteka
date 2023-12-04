@@ -16,7 +16,6 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'channel_id' => Channel::factory(),
             'pattern_id' => Pattern::factory(),
             'description' => $this->faker->text(100),
             'status' => $this->faker->randomElement(['pending', 'accepted', 'declined']),

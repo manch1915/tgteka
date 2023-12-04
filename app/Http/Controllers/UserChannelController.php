@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreChannelRequest;
 use App\Http\Requests\UpdateChannelRequest;
 use App\Models\Channel;
-use App\Services\ChannelAvatarService;
+use App\Services\AvatarService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +20,7 @@ class UserChannelController extends Controller
         return inertia('Dashboard/Channels');
     }
 
-    public function channelsGet(Request $request, ChannelAvatarService $avatarService)
+    public function channelsGet(Request $request, AvatarService $avatarService)
     {
         $search = $request->input('search');
 
@@ -30,7 +30,7 @@ class UserChannelController extends Controller
 
 
         $channels->each(function ($channel) use ($avatarService) {
-            $channel->avatar = $avatarService->getAvatarUrl($channel);
+            $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);
             return $channel;
         });
 
@@ -82,9 +82,9 @@ class UserChannelController extends Controller
         return response()->json($channel);
     }
 
-    public function edit(Channel $channel, ChannelAvatarService $avatarService)
+    public function edit(Channel $channel, AvatarService $avatarService)
     {
-        $channelAvatar = $avatarService->getAvatarUrl($channel);
+        $channelAvatar = $avatarService->getAvatarUrlOfChannel($channel);
 
         return inertia('Dashboard/EditChannel', [
             'channelId' => $channel->id,

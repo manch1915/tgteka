@@ -4,6 +4,8 @@ import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiCheck, mdiClose, mdiEyeOutline, mdiForumOutline} from "@mdi/js";
 import {openModal} from "jenesius-vue-modal";
 import Mission from "@/Components/Dashboard/Mission.vue";
+import { useMessage } from "naive-ui";
+import CancelOrder from "@/Components/Dashboard/CancelOrder.vue";
 
 const props = defineProps({
     order: Object
@@ -11,8 +13,21 @@ const props = defineProps({
 const openMission = () => {
     openModal(Mission, {order: props.order})
 }
+
+const message = useMessage()
+const accept = () => {
+    axios.patch(route('order.accept', {orderId: props.order.id}))
+        .then(response => {
+            message.success(response.data.message);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+const decline = () => {
+   openModal(CancelOrder, {order: props.order.id})
+}
 const wrap = ref(false)
-console.log(props.order)
 </script>
 
 <template>
@@ -77,9 +92,9 @@ console.log(props.order)
 
         <div class="flex justify-between items-center py-6 unwrap px-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
             <div class="flex gap-x-4">
-                <button class="px-6 py-3.5 rounded-3xl border border-violet-100 transition hover:bg-gray-400 flex items-center gap-x-2">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
+                <button @click.prevent="accept" class="px-6 py-3.5 rounded-3xl border border-violet-100 transition hover:bg-gray-400 flex items-center gap-x-2">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
                 <button @click.prevent="openMission" class="px-6 py-3.5 rounded-3xl border border-violet-100 transition hover:bg-gray-400 flex items-center gap-x-2">Посмотреть задание <BaseIcon size="30" :path="mdiEyeOutline"/></button>
-                <button class="px-6 py-3.5 rounded-3xl border border-violet-100 transition hover:bg-gray-400 flex items-center gap-x-2">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
+                <button @click.prevent="decline" class="px-6 py-3.5 rounded-3xl border border-violet-100 transition hover:bg-gray-400 flex items-center gap-x-2">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
             </div>
             <div>
                 <button class="px-6 py-3.5 flex items-center gap-x-2">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>

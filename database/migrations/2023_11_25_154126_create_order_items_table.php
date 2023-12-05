@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('format_id')->constrained();
             $table->integer('count');
             $table->bigInteger('price');
+            $table->enum('status', ['pending', 'accepted', 'declined'])->default('pending');
             $table->timestamps();
         });
     }

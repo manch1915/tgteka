@@ -110,6 +110,10 @@ export const selectThemeOverrides = {
             color: 'rgba(13, 20, 58, 1)',
             optionTextColor: '#EAE0FF',
             optionTextColorPressed: 'rgba(135, 41, 255, 1)',
+            optionCheckColor: 'rgba(13, 20, 58, 1)',
+            optionColorPending: 'rgba(13, 20, 58, 1)',
+            optionColorActive: 'rgba(13, 20, 58, 1)',
+            optionColorActivePending: 'rgba(13, 20, 58, 1)',
             Scrollbar: {
                 color: '#EAE0FF'
             }

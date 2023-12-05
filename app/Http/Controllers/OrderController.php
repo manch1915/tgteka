@@ -30,7 +30,6 @@ class OrderController extends Controller
 
         $allItems = collect();
 
-
         foreach ($orders as $order) {
             foreach ($order->items as $item) {
                 $item->orderPattern = $order->pattern;
@@ -51,6 +50,31 @@ class OrderController extends Controller
             ['path' => request()->url(), 'query' => request()->query()]);
     }
 
+    public function acceptOrder($orderId)
+    {
+        $order = Order::find($orderId);
+        if(!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+
+        $order->status = 'accepted';
+        $order->save();
+
+        return response()->json(['message' => 'Order accepted successfully']);
+    }
+
+    public function declineOrder($orderId)
+    {
+        $order = Order::find($orderId);
+        if(!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+
+        $order->status = 'declined';
+        $order->save();
+
+        return response()->json(['message' => 'Order declined successfully']);
+    }
     public function sendPatternByBot(Request $request, AvatarService $avatarService)
     {
         $pattern = $request->input('pattern');

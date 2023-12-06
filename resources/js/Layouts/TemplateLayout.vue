@@ -35,5 +35,10 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 </script>
 
 <style lang="scss">
-
+.before_container{
+    a{
+        color: #0059ff;
+        text-decoration: underline;
+    }
+}
 </style>

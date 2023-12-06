@@ -2,7 +2,6 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import OrderCard from "@/Components/Dashboard/OrderCard.vue";
 import {onMounted, ref} from "vue";
-import CatalogChannelCard from "@/Components/Dashboard/CatalogChannelCard.vue";
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
 import axios from "axios";
 
@@ -21,7 +20,6 @@ const getOrders = async (page = 1) => {
     <AppLayout>
         <div class="py-20 text-center">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Заявки</h1>
-            <button @click.prevent="getOrders">Click</button>
             <div class="flex flex-col gap-y-4 mt-8">
                 <template v-if="orders" v-for="(order, index) in orders.data" :key="index">
                     <order-card :order="order"/>

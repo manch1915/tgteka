@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreOrderRequest;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Pattern;
 use App\Notifications\PatternByBotNotification;
 use App\Services\AvatarService;
@@ -50,28 +51,28 @@ class OrderController extends Controller
             ['path' => request()->url(), 'query' => request()->query()]);
     }
 
-    public function acceptOrder($orderId)
+    public function acceptOrder($orderItemId)
     {
-        $order = Order::find($orderId);
-        if(!$order) {
+        $orderItem = OrderItem::find($orderItemId);
+        if(!$orderItem) {
             return response()->json(['message' => 'Order not found'], 404);
         }
 
-        $order->status = 'accepted';
-        $order->save();
+        $orderItem->status = 'accepted';
+        $orderItem->save();
 
         return response()->json(['message' => 'Order accepted successfully']);
     }
 
-    public function declineOrder($orderId)
+    public function declineOrder($orderItemId)
     {
-        $order = Order::find($orderId);
-        if(!$order) {
+        $orderItem = OrderItem::find($orderItemId);
+        if(!$orderItem) {
             return response()->json(['message' => 'Order not found'], 404);
         }
 
-        $order->status = 'declined';
-        $order->save();
+        $orderItem->status = 'declined';
+        $orderItem->save();
 
         return response()->json(['message' => 'Order declined successfully']);
     }

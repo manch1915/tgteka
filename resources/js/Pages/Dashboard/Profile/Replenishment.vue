@@ -32,7 +32,7 @@ const activeTab = ref('bank-card')
                                     </div>
                                     <div @click.prevent="activeTab = 'wallets'" class="payment_types-card-wrapper">
                                         <div class="flex h-full flex-col items-center justify-evenly payment_types-card">
-                                            <div class="flex">
+                                            <div class="flex flex-wrap items-center justify-center">
                                                 <img class="w-16 sm:w-auto" src="/images/webmoney.svg" alt="webmoney">
                                                 <img class="w-16 sm:w-auto" src="/images/qiwi.svg" alt="qiwi">
                                             </div>

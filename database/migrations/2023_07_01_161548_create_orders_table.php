@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained();
             $table->foreignId('pattern_id')->constrained();
             $table->text('description')->nullable();
-            $table->enum('status', ['pending', 'accepted', 'declined'])->default('pending');
             $table->timestamps();
         });
     }

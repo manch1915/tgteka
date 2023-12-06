@@ -1,10 +1,11 @@
 <script setup>
-import {closeModal} from "jenesius-vue-modal";
+import {closeModal, pushModal} from "jenesius-vue-modal";
 import {mdiCheck, mdiClose, mdiEyeOutline, mdiForumOutline} from "@mdi/js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {inputThemeOverrides} from "@/themeOverrides.js";
-import {NInput} from "naive-ui";
+import {NInput, useMessage} from "naive-ui";
 import {ref} from "vue";
+import CancelOrder from "@/Components/Dashboard/CancelOrder.vue";
 
 const props = defineProps({
     order: Object
@@ -12,9 +13,15 @@ const props = defineProps({
 
 const uploadedImageUrl = ref(props.order.orderPattern.patternMedia || '/images/photo.png');
 
+const message = useMessage()
+
+const decline = () => {
+    pushModal(CancelOrder, {order: props.order.id})
+}
+
 const sendPostByBot = () => {
     axios.post(route('order.send-pattern-by-bot'), {pattern: props.order.orderPattern})
-        .then()
+        .catch(error => message.error(error.response.data.message))
 }
 
 </script>
@@ -27,7 +34,7 @@ const sendPostByBot = () => {
                     <div class="float-right cursor-pointer" @click.prevent="closeModal()">
                         <img src="/images/Icon-close.svg" alt="">
                     </div>
-                    <div class="flex flex-col items-start justify-center gap-y-6 sm:items-center">
+                    <div class="flex flex-col items-start justify-center gap-y-6 sm:items-center mb-8">
                         <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Посмотреть задание</h1>
                     </div>
                 </div>
@@ -55,7 +62,7 @@ const sendPostByBot = () => {
                                         <div class="flex">
                                             <div class="flex flex-col items-end">
                                                 <p class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Статус заявки</p>
-                                                <div class="text-violet-100 text-base font-bold font-['Poppins'] leading-tight flex items-center gap-x-2"><base-icon size="30" :path="mdiCheck"/>В работе</div>
+                                                <div class="text-violet-100 text-base font-bold font-['Poppins'] leading-tight flex items-center gap-x-2"><base-icon size="30" :path="mdiCheck"/>{{order.status}}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -93,8 +100,7 @@ const sendPostByBot = () => {
                     <div class="flex justify-between items-center py-6 unwrap px-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                         <div class="flex gap-x-4">
                             <button class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
-                            <button @click.prevent="openMission" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Посмотреть задание <BaseIcon size="30" :path="mdiEyeOutline"/></button>
-                            <button class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
+                            <button @click.prevent="decline" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
                         </div>
                         <div>
                             <button class="flex items-center gap-x-2 px-6 py-3.5">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>

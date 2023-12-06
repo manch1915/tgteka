@@ -16,7 +16,7 @@ const openMission = () => {
 
 const message = useMessage()
 const accept = () => {
-    axios.patch(route('order.accept', {orderId: props.order.id}))
+    axios.patch(route('order.accept', {orderItemId: props.order.id}))
         .then(response => {
             message.success(response.data.message);
         })
@@ -55,12 +55,11 @@ const wrap = ref(false)
                            <div class="flex">
                                <div class="flex flex-col items-end">
                                    <p class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Статус заявки</p>
-                                   <div class="text-violet-100 text-base font-bold font-['Poppins'] leading-tight flex items-center gap-x-2"><base-icon size="30" :path="mdiCheck"/>В работе</div>
+                                   <div class="text-violet-100 text-base font-bold font-['Poppins'] leading-tight flex items-center gap-x-2"><base-icon size="30" :path="mdiCheck"/>{{order.status}}</div>
                                </div>
                            </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="p-4">
                   <div class="p-0.5 wrapper">

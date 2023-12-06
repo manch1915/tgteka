@@ -24,7 +24,6 @@ const form = reactive({
 
 const errors = reactive({
     name: ref([]),
-    telegram_username: ref([]),
     mobile_number: ref([])
 });
 const loading = useLoadingBar()
@@ -53,7 +52,6 @@ const submit = async () => {
         .catch(error => {
             if (error.response && error.response.data && error.response.data.errors) {
                 errors.name = error.response.data.errors.name;
-                errors.telegram_username = error.response.data.errors.telegram_username;
                 errors.mobile_number = error.response.data.errors.mobile_number;
             }
             loading.error()
@@ -84,8 +82,7 @@ const logout = () => {
                 <n-input v-model:value="form.name" class="py-1.5 my-1 sm:!w-1/2" placeholder="Иванов Иван" :theme-overrides="inputThemeOverrides"/>
                 <span class="text-red-500" v-if="errors.name">{{ errors.name[0] }}</span>
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Telegram-аккаунт</p>
-                <n-input v-model:value="form.telegram_username" class="py-1.5 my-1 sm:!w-1/2" placeholder="@channel или https://t.me/dr_amina_pirmanova" :theme-overrides="inputThemeOverrides"/>
-                <span class="text-red-500" v-if="errors.telegram_username">{{ errors.telegram_username[0] }}</span>
+                <a :href="route('telegram-redirect')" class="sm:!w-2/4 block text-center w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal bg-purple-600 rounded-3xl py-2">Подключить Телеграм аккаунт</a>
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Телефон</p>
                 <n-input v-model:value="form.mobile_number" class="py-1.5 my-1 sm:!w-1/2" placeholder="+7 (___) ___-__-__" :theme-overrides="inputThemeOverrides"/>
                 <span class="text-red-500" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</span>

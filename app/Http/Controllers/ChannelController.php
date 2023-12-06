@@ -18,7 +18,7 @@ class ChannelController extends Controller
 
     public function index()
     {
-        return inertia('Dashboard/CatalogChannels');
+        return inertia('Dashboard/CatalogChannels', ['count' => Channel::where('status', '=', 'accepted')->count()]);
     }
 
     public function channelsGet(Request $request, AvatarService $avatarService)

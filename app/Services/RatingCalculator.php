@@ -3,61 +3,82 @@
 namespace App\Services;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use Carbon\Carbon;
 
 class RatingCalculator
 {
 
-    public function calculate(Order $order): void
+    public function calculate(OrderItem $orderItem): void
     {
-        $channel = $order->channel;
+        $channel = $orderItem->channel;
 
-        $channel->rating = $this->calculateRating($order);
-        $channel->score = $this->calculateScore($order);
+        $channel->rating = $this->calculateRating($orderItem);
+        $channel->score = $this->calculateScore($orderItem);
 
         $channel->save();
     }
 
-    private function calculateRating(Order $order): float
+    private function calculateRating(OrderItem $orderItem): float
     {
-        // You can also use DB query to make it faster, this is example with Collection methods
+
         $start = Carbon::now()->subYear();
-        $orders = $order->channel->orders()->where('created_at', '>', $start)->get();
+        $orderItems = $orderItem->channel->orderItems()->where('created_at', '>', $start)->where('status', 'accepted')->get();
 
-        $rating = $orders->sum(function ($order) {
+        $rating = $orderItems->sum(function ($orderItem) {
             $pointsForOrder = 1;
+            $total = $orderItem->price * $orderItem->count;
 
-            $pointsForVolume = $order->total / 1000 * 0.1;
+            $pointsForVolume = $total / 1000 * 0.1;
 
             $pointsForRating = 0;
-            if (!is_null($order->client_rating)) {
-                if ($order->client_rating === 5) {
-                    $pointsForRating = 5 * ($order->total / 10000);
-                } elseif ($order->client_rating === 4) {
-                    $pointsForRating = 4 * ($order->total / 10000) * 0.5;
-                } elseif ($order->client_rating === 3) {
-                    $pointsForRating = 3 * ($order->total / 10000) * 0.1;
-                } elseif ($order->client_rating === 2) {
-                    $pointsForRating = 2 * ($order->total / 10000) * -0.5;
-                } elseif ($order->client_rating === 1) {
-                    $pointsForRating = 1 * ($order->total / 10000) * -1;
+            if (!is_null($orderItem->client_rating)) {
+                if ($orderItem->client_rating === 5) {
+                    $pointsForRating = 5 * ($total / 10000);
+                } elseif ($orderItem->client_rating === 4) {
+                    $pointsForRating = 4 * ($total / 10000) * 0.5;
+                } elseif ($orderItem->client_rating === 3) {
+                    $pointsForRating = 3 * ($total / 10000) * 0.1;
+                } elseif ($orderItem->client_rating === 2) {
+                    $pointsForRating = 2 * ($total / 10000) * -0.5;
+                } elseif ($orderItem->client_rating === 1) {
+                    $pointsForRating = 1 * ($total / 10000) * -1;
                 }
             }
 
             return $pointsForOrder + $pointsForVolume + $pointsForRating;
         });
 
-        return $rating;
+        $bonusScore = $this->calculateBonusScore($orderItem->channel);
+
+        return $rating + $bonusScore;
     }
 
-    private function calculateScore(Order $order): float
+    private function calculateScore(OrderItem $orderItem): float
     {
 
         $start = Carbon::now()->subYear();
-        $orders = $order->channel->orders()->where('created_at', '>', $start)->get();
+        $orders = $orderItem->channel->orders()->where('created_at', '>', $start)->get();
 
         $score = $orders->avg('client_rating');
 
         return $score;
+    }
+
+    private function calculateBonusScore($channel): float
+    {
+        $bonusScore = 0;
+
+        if (
+            $channel->format_one_price !== 0 ||
+            $channel->format_two_price !== 0 ||
+            $channel->format_three_price !== 0 ||
+            $channel->no_deletion_price !== 0 ||
+            $channel->repost_price !== 0
+        ) {
+            $bonusScore = 1.0;
+        }
+
+        return $bonusScore;
     }
 }

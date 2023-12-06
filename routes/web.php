@@ -99,8 +99,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('orders')->name('order.')->group(function () {
         Route::get('/', [\App\Http\Controllers\OrderController::class, 'index'])->name('index');
         Route::get('/get', [\App\Http\Controllers\OrderController::class, 'get'])->name('get');
-        Route::patch('/{orderId}/accept', [\App\Http\Controllers\OrderController::class, 'acceptOrder'])->name('accept');
-        Route::patch('/{orderId}/decline', [\App\Http\Controllers\OrderController::class, 'declineOrder'])->name('decline');
+        Route::patch('/{orderItemId}/accept', [\App\Http\Controllers\OrderController::class, 'acceptOrder'])->name('accept');
+        Route::patch('/{orderItemId}/decline', [\App\Http\Controllers\OrderController::class, 'declineOrder'])->name('decline');
         Route::post('/send-pattern-by-bot', [\App\Http\Controllers\OrderController::class, 'sendPatternByBot'])->name('send-pattern-by-bot');
     });
 });

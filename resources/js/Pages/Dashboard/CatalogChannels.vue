@@ -21,6 +21,10 @@ import { useMainStore } from '@/stores/main.js'
 
 const SORT_DATA = ['Рейтинг', 'ER', 'Просмотры', 'Подписчики', 'Цена', 'CPМ']
 
+const props = defineProps({
+    count: Number,
+})
+
 closeModal()
 
 const store = useMainStore()
@@ -54,7 +58,7 @@ provide('searchData', searchData)
     <AppLayout>
         <div class="py-20 text-center">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Каталог Telegram-каналов</h1>
-            <p class="sm:hidden text-center block total pt-4 text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal">Всего каналов 63 448</p>
+            <p class="sm:hidden text-center block total pt-4 text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal">Всего каналов {{count}}</p>
         </div>
         <div class="grid catalog">
             <div class="w-full pr-0 filter sm:pr-10">
@@ -126,7 +130,7 @@ provide('searchData', searchData)
                 </transition>
             </div>
             <div class="channels">
-                <div class="hidden sm:block total text-right text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal">Всего каналов 63 448</div>
+                <div class="hidden sm:block total text-right text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal">Всего каналов {{count}}</div>
                 <div class="hidden gap-x-3 filter_buttons sm:flex">
                     <SortButton v-for="title in SORT_DATA" :title="title"/>
                 </div>

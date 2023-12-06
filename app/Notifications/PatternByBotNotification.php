@@ -41,7 +41,14 @@ class PatternByBotNotification extends Notification
         return strip_tags($text, $allowedTags);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function toTelegram($notifiable): TelegramFile {
+        if (!$notifiable->telegram_user_id) {
+            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        }
+
         $avatarUrl = $this->avatarService->getAvatarUrlOfPattern($this->pattern);
         $path = parse_url($avatarUrl, PHP_URL_PATH);
         $path = ltrim($path, "/");

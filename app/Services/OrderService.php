@@ -72,8 +72,7 @@ class OrderService
         return Order::create([
             'user_id' => auth()->id(),
             'pattern_id' => $request->pattern_id,
-            'description' => $request->description,
-            'status' => 'pending',
+            'description' => $request->description
         ]);
     }
 

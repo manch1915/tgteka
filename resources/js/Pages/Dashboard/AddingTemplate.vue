@@ -100,12 +100,15 @@ watch([content, uploadedImageUrl], () => {
         <template #editor>
             <QuillEditor v-model:content="content" :options="options" theme="snow" class="text-violet-100" @ready="onEditorReady" placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.  Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
         </template>
+        <template #clear-all>
+            <button class="text-purple-600 text-sm font-normal font-['Poppins'] leading-tight">Очистить всё</button>
+        </template>
         <template #file-upload>
             <div class="flex flex-col gap-y-8">
                 <div class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Медиафайлы</div>
                 <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Прикрепите файл</div>
                 <div>
-                    <label class="cursor-pointer px-6 py-2 bg-blue rounded-full shadow-inner border border-white border-opacity-10 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight custom-file-upload">
+                    <label class="cursor-pointer px-6 py-2 bg-blue-950 animation hover:bg-transparent rounded-full shadow-inner border border-white border-opacity-10 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight custom-file-upload">
                         <input type="file" class="hidden" accept="image/*" @change="handleFileUpload($event)" />
                         Загрузить файл
                     </label>

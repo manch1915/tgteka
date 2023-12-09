@@ -2,16 +2,28 @@
 import {ref} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiCheck, mdiClose, mdiEyeOutline, mdiForumOutline} from "@mdi/js";
-import {openModal} from "jenesius-vue-modal";
+import {openModal, pushModal} from "jenesius-vue-modal";
 import Mission from "@/Components/Dashboard/Mission.vue";
 import { useMessage } from "naive-ui";
 import CancelOrder from "@/Components/Dashboard/CancelOrder.vue";
+import ToCheck from "@/Components/Dashboard/ToCheck.vue";
 
 const props = defineProps({
-    order: Object
+    order: Object,
+    isCard: {
+        type: Boolean,
+        default: true
+    }
 })
 const openMission = () => {
     openModal(Mission, {order: props.order})
+}
+const decline = () => {
+    openModal(CancelOrder, {orderId: props.order.id})
+}
+
+const toCheck = () => {
+    pushModal(ToCheck)
 }
 
 const message = useMessage()
@@ -24,22 +36,21 @@ const accept = () => {
             console.log(error);
         });
 }
-const decline = () => {
-   openModal(CancelOrder, {order: props.order.id})
-}
+
+
 const wrap = ref(false)
 </script>
 
 <template>
     <div class="order_card">
-        <div class="order_card-container p-4">
+        <div class="p-4 order_card-container">
             <div class="grid">
                 <div>
                     <div class="flex gap-x-4">
-                        <img class="avatar rounded-full" :src="order.channel.channelAvatar" alt=""/>
+                        <img class="rounded-full avatar" :src="order.channel.channelAvatar" alt=""/>
                         <div class="text-start text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">
                             <h1>{{order.channel.channel_name}}</h1>
-                            <p class="normal text-sm">тип канала: {{order.channel.topic.title}}</p>
+                            <p class="text-sm normal">тип канала: {{order.channel.topic.title}}</p>
                         </div>
                     </div>
                     <div class="mt-4">
@@ -49,7 +60,7 @@ const wrap = ref(false)
                         </div>
                         <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">
                             <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">14/07/2023</p>
-                            <h1 class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">#1483252</h1>
+                            <h1 class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">#{{order.id}}</h1>
                         </div>
                         <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">
                            <div class="flex">
@@ -63,20 +74,20 @@ const wrap = ref(false)
                 </div>
                 <div class="p-4">
                   <div class="p-0.5 wrapper">
-                      <div class="wrapper_container px-2 py-4 text-start flex flex-col justify-between content-center">
+                      <div class="flex flex-col content-center justify-between px-2 py-4 text-start wrapper_container">
                           <div class="flex flex-col gap-y-1 py-1">
                               <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Формат</div>
                               <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{order.format.name}}</div>
                           </div>
-                          <div class="flex flex-col gap-y-1 py-1 border-t-2 border-violet-100 border-opacity-40">
+                          <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
                               <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">День публикации</div>
                               <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">14.07</div>
                           </div>
-                          <div class="flex flex-col gap-y-1 py-1 border-t-2 border-violet-100 border-opacity-40">
+                          <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
                               <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Время публикации (UTC +3)</div>
                               <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">08:00-12:00</div>
                           </div>
-                          <div class="flex flex-col gap-y-1 py-1 border-t-2 border-violet-100 border-opacity-40">
+                          <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
                               <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Цена</div>
                               <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{order.price}}&nbsp;₽</div>
                           </div>
@@ -84,19 +95,28 @@ const wrap = ref(false)
                   </div>
                 </div>
                 <div class="flex flex-col justify-center">
-                    <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Вы отправили пост на проверку</div>
+                    <template v-if="order.status === 'pending'">
+                        <div class="text-center">
+
+                        </div>
+                    </template>
+                    <template v-else-if="order.status === 'accepted'">
+                        <div class="text-center text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Разместите пост</div>
+                        <div class="text-center py-2 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">С 02 августа 16:31 MSK<br/>по 04 августа 16:31 MSK</div>
+                        <button @click.prevent="toCheck" class="px-6 inline-block py-3.5 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl border border-violet-100 transition hover:bg-gray-400">На проверку</button>
+                    </template>
                 </div>
             </div>
         </div>
 
         <div class="flex justify-between items-center py-6 unwrap px-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
             <div class="flex gap-x-4">
-                <button @click.prevent="accept" class="px-6 py-3.5 rounded-3xl border border-violet-100 transition hover:bg-gray-400 flex items-center gap-x-2">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
-                <button @click.prevent="openMission" class="px-6 py-3.5 rounded-3xl border border-violet-100 transition hover:bg-gray-400 flex items-center gap-x-2">Посмотреть задание <BaseIcon size="30" :path="mdiEyeOutline"/></button>
-                <button @click.prevent="decline" class="px-6 py-3.5 rounded-3xl border border-violet-100 transition hover:bg-gray-400 flex items-center gap-x-2">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
+                <button v-if="order.status !== 'accepted'" @click.prevent="accept" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
+                <button v-if="isCard" @click.prevent="openMission" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Посмотреть задание <BaseIcon size="30" :path="mdiEyeOutline"/></button>
+                <button @click.prevent="decline" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
             </div>
             <div>
-                <button class="px-6 py-3.5 flex items-center gap-x-2">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>
+                <button class="flex items-center gap-x-2 px-6 py-3.5">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>
             </div>
         </div>
     </div>
@@ -166,7 +186,7 @@ const wrap = ref(false)
     background: #301864;
 
     .order_card-container{
-        border-radius: 0 40px 0 0;
+        border-radius: 0;
         background: linear-gradient(to bottom, #131733, #343850);
     }
     .grid{

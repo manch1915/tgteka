@@ -10,7 +10,7 @@
                 <slot name="editor" />
                 <div class="flex sm:flex-row flex-col gap-y-4 items-center justify-between py-6">
                     <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Шаблон сохраняется автоматически</div>
-                    <div class="text-purple-600 text-sm font-normal font-['Poppins'] leading-tight">Очистить всё</div>
+                    <slot name="clear-all" />
                 </div>
                 <hr>
                 <div class="mt-5 grid sm:grid-cols-2 grid-cols-1 mediafiles">

@@ -35,7 +35,11 @@ class ChannelController extends Controller
 
     public function show(Channel $channel, AvatarService $avatarService)
     {
-        return inertia('Dashboard/CatalogChannelShow', ['channel' => $this->getChannelWithAvatar($channel, $avatarService)]);
+        if (!session()->has("viewed_channel.{$channel->id}")) {
+            $channel->increment('views_count');
+            session()->put("viewed_channel.{$channel->id}", true);
+        }
+        return inertia('Dashboard/CatalogChannelShow', ['channel' => $this->getChannelWithAvatarAndTopic($channel, $avatarService), 'favorites_count' => $channel->favoritesCount] );
     }
 
     public function orderPosts(Request $request)
@@ -100,9 +104,10 @@ class ChannelController extends Controller
         ];
     }
 
-    protected function getChannelWithAvatar(Channel $channel, AvatarService $avatarService)
+    protected function getChannelWithAvatarAndTopic(Channel $channel, AvatarService $avatarService)
     {
         $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);
+        $channel->load('topic');
         return $channel;
     }
 }

@@ -16,8 +16,8 @@ class CreateChannelsTable extends Migration
             $table->foreignId('topic_id')->constrained();
             $table->enum('type', ['chat', 'channel']);
             $table->string('language');
-            $table->string('description', 2400)->nullable();
-            $table->string('subscribers_source', 2400)->nullable();
+            $table->string('description', 300)->nullable();
+            $table->string('subscribers_source', 300)->nullable();
             $table->bigInteger('format_one_price')->default(0);
             $table->bigInteger('format_two_price')->default(0);
             $table->bigInteger('format_three_price')->default(0);

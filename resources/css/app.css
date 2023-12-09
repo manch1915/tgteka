@@ -77,3 +77,7 @@ body {
         flex-direction: column;
     }
 }
+.before_container a{
+    color: #0059ff;
+    text-decoration: underline;
+}

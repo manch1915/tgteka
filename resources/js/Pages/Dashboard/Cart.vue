@@ -79,7 +79,7 @@ onMounted(() => {
         <div class="grid grid-cols-[3fr_1fr] gap-x-4">
             <div>
                 <div class="channels">
-                    <div class="flex flex-col gap-y-4 mt-8">
+                    <div class="flex flex-col gap-y-4 mb-8">
                         <template v-if="channels" v-for="channel in channels" :key="channel.id">
                             <CatalogChannelCard @cart-updated="updateChannels"  :channel="channel" :count-value="channel.count" :format-value="channel.format"/>
                         </template>

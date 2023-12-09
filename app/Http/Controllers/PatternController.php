@@ -73,6 +73,8 @@ class PatternController extends Controller
             $pattern
                 ->addMedia($request->file('media'))
                 ->toMediaCollection('images');
+        }else {
+            $pattern->clearMediaCollection('images');
         }
 
         $pattern->update($request->validated());

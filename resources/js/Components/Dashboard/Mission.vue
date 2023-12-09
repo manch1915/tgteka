@@ -1,15 +1,32 @@
 <script setup>
 import {closeModal, pushModal} from "jenesius-vue-modal";
-import {mdiCheck, mdiClose, mdiEyeOutline, mdiForumOutline} from "@mdi/js";
+import {mdiCheck, mdiClose, mdiContentCopy, mdiEyeOutline, mdiForumOutline} from "@mdi/js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {inputThemeOverrides} from "@/themeOverrides.js";
-import {NInput, useMessage} from "naive-ui";
-import {ref} from "vue";
+import {NButton, NInput, NInputGroup, useMessage} from "naive-ui";
+import {onMounted, ref} from "vue";
 import CancelOrder from "@/Components/Dashboard/CancelOrder.vue";
+import OrderCard from "@/Components/Dashboard/OrderCard.vue";
 
 const props = defineProps({
     order: Object
 })
+const listOfLinks = ref([]);
+onMounted(() => {
+    parseLinks()
+})
+const parseLinks = () => {
+    const parser = new DOMParser();
+    const dom = parser.parseFromString(props.order.orderPattern.body, 'text/html');
+    const links = Array.from(dom.links);
+
+    links.forEach(link => {
+        listOfLinks.value.push({
+            href: link.getAttribute('href'),
+            text: link.innerText,
+        });
+    });
+}
 
 const uploadedImageUrl = ref(props.order.orderPattern.patternMedia || '/images/photo.png');
 
@@ -23,7 +40,15 @@ const sendPostByBot = () => {
     axios.post(route('order.send-pattern-by-bot'), {pattern: props.order.orderPattern})
         .catch(error => message.error(error.response.data.message))
 }
-
+const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            message.success('Link copied to clipboard');
+        })
+        .catch(err => {
+            console.error('Could not copy text: ', err);
+        });
+}
 </script>
 
 <template>
@@ -38,75 +63,7 @@ const sendPostByBot = () => {
                         <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Посмотреть задание</h1>
                     </div>
                 </div>
-                <div class="order_card">
-                    <div class="p-4 order_card-container">
-                        <div class="grid">
-                            <div>
-                                <div class="flex gap-x-4">
-                                    <img class="rounded-full avatar" :src="order.channel.channelAvatar" alt=""/>
-                                    <div class="text-start text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">
-                                        <h1>{{order.channel.channel_name}}</h1>
-                                        <p class="text-sm normal">тип канала: {{order.channel.topic.title}}</p>
-                                    </div>
-                                </div>
-                                <div class="mt-4">
-                                    <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">
-                                        <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Подписчики</p>
-                                        <h1 class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">146 774</h1>
-                                    </div>
-                                    <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">
-                                        <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">14/07/2023</p>
-                                        <h1 class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">#1483252</h1>
-                                    </div>
-                                    <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">
-                                        <div class="flex">
-                                            <div class="flex flex-col items-end">
-                                                <p class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Статус заявки</p>
-                                                <div class="text-violet-100 text-base font-bold font-['Poppins'] leading-tight flex items-center gap-x-2"><base-icon size="30" :path="mdiCheck"/>{{order.status}}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="p-4">
-                                <div class="p-0.5 wrapper">
-                                    <div class="flex flex-col content-center justify-between px-2 py-4 text-start wrapper_container">
-                                        <div class="flex flex-col gap-y-1 py-1">
-                                            <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Формат</div>
-                                            <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{order.format.name}}</div>
-                                        </div>
-                                        <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
-                                            <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">День публикации</div>
-                                            <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">14.07</div>
-                                        </div>
-                                        <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
-                                            <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Время публикации (UTC +3)</div>
-                                            <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">08:00-12:00</div>
-                                        </div>
-                                        <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
-                                            <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Цена</div>
-                                            <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{order.price}}&nbsp;₽</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex flex-col justify-center">
-                                <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Вы отправили пост на проверку</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-between items-center py-6 unwrap px-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                        <div class="flex gap-x-4">
-                            <button class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
-                            <button @click.prevent="decline" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
-                        </div>
-                        <div>
-                            <button class="flex items-center gap-x-2 px-6 py-3.5">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>
-                        </div>
-                    </div>
-                </div>
+                <order-card :order="order" :is-card="false"/>
                 <div class="mt-8 grid gap-x-4">
                     <div>
                         <div class="flex justify-between py-4">
@@ -116,10 +73,22 @@ const sendPostByBot = () => {
                         <div class="flex justify-between border-y-2 border-violet-100 border-opacity-40 py-4">
                             <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Формат размещения <span class="text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">{{order.format.name}}</span></p>
                         </div>
-                        <div class="py-4">
-                            <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Ссылка в тексте</div>
-                            <n-input class="my-1 py-1.5" placeholder="Ссылка в тексте" :theme-overrides="inputThemeOverrides"/>
-                        </div>
+                        <template v-for="list in listOfLinks">
+                            <div class="py-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Ссылка в тексте</div>
+                                    <div class="text-violet-100 text-sm font-bold py-1 px-2 rounded-lg bg-slate-700 font-['Open Sans'] leading-tight">{{list.text}}</div>
+                                </div>
+                                <n-input-group class="flex items-center gap-x-2">
+                                    <n-input class="my-1 py-1.5" readonly :value="list.href" placeholder="Ссылка в тексте" :theme-overrides="inputThemeOverrides"/>
+                                    <n-button @click.prevent="copyToClipboard(list.href)">
+                                        <template #icon>
+                                            <BaseIcon :path="mdiContentCopy"/>
+                                        </template>
+                                    </n-button>
+                                </n-input-group>
+                            </div>
+                        </template>
                     </div>
                     <div>
                         <div class="px-4 sm:p-0">

@@ -1,22 +1,137 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import {mdiCartOutline, mdiEyeOutline, mdiHeartOutline, mdiQrcodeScan, mdiRepeat, mdiStar} from '@mdi/js';
-import {NSelect, NTabPane, NTabs} from "naive-ui";
+import {
+    mdiCartMinus,
+    mdiCartPlus,
+    mdiEyeOutline,
+    mdiHeartOutline,
+    mdiQrcodeScan,
+    mdiRepeat,
+    mdiStar
+} from '@mdi/js';
+import {NSelect, NTabPane, NTabs, useMessage} from "naive-ui";
 import {nTabSegmentsThemeOverrides, selectThemeOverrides} from "@/themeOverrides.js";
-import {useMainStore} from "@/stores/main.js";
-import {ref} from "vue";
+import {computed, ref, watch} from "vue";
 import InfoCard from "@/Components/Dashboard/InfoCard.vue";
 
 const props = defineProps({
-  channel: Object
-})
+    channel: Object,
+    countValue: {
+        default: 1,
+        required: false,
+    },
+    formatValue: {
+        required: false,
+    },
+    favorites_count: Number
+});
 
-const store = useMainStore()
-const format = ref(1)
-const count = ref(1)
+const countValue = ref(props.countValue);
+const cartUpdateKey = ref(0);
+const fav = ref(false);
+const message = useMessage();
+
+const saveCart = (cart) => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+};
+
+const loadCart = () => {
+    return JSON.parse(localStorage.getItem("cart")) || [];
+};
+
+const removeCart = (cart, index, channel) => {
+    cart.splice(index, 1);
+    message.info(`Канал ${channel.channel_name} был удален из корзины.`);
+    saveCart(cart);
+};
+
+const toggleChannelInCart = (channel) => {
+    const cart = loadCart();
+    const index = cart.findIndex((ch) => ch.id === channel.id);
+
+    if (index > -1 && formatValue.value === cart[index].format && countValue.value === cart[index].count) {
+        removeCart(cart, index, channel);
+    } else {
+        updateCart(cart, channel, countValue.value, formatValue.value);
+    }
+
+    cartUpdateKey.value++;
+};
+
+const generateFormatArray = (channel) => [
+    { label: "1/24", value: "format_one_price" },
+    { label: "2/48", value: "format_two_price" },
+    { label: "3/72", value: "format_three_price" },
+    { label: "3/без удаления", value: "no_deletion_price" },
+].filter((item) => channel[item.value] !== 0);
+
+const format = computed(() => generateFormatArray(props.channel));
+const formatValue = ref(format.value[0]?.value || null);
+
+const count = [
+    { label: '1', value: 1 },
+    { label: '2', value: 2 },
+    { label: '3', value: 3 },
+    { label: '4', value: 4 },
+];
+
+const isInCart = (channel) => {
+    const dummy = cartUpdateKey.value;
+    const cart = loadCart();
+    return cart.findIndex((ch) => ch.id === channel.id) > -1;
+};
+
+const addChannelToFavorites = async (channel) => {
+    try {
+        const response = await axios.post(route("catalog.channels.favorite"), { channel_id: channel.id });
+
+        if (response.data.status === "success") {
+            const isFav = response.data.message.includes("added");
+            const operation = isFav ? "добавлен в избранное" : "удален из избранних";
+            message.info(`Канал ${channel.channel_name} ${operation}`);
+            fav.value = isFav;
+        } else {
+            message.error("Возникла проблема с добавлением канала в избранное.");
+        }
+    } catch (error) {
+        message.error("Произошла ошибка: ", error);
+    }
+};
+
+const updateCart = (cart, channel, count, format) => {
+    const channelIndex = cart.findIndex((ch) => ch.id === channel.id);
+
+    if (channelIndex > -1) {
+        cart[channelIndex] = Object.assign({}, channel, { count: count, format: format });
+        message.info(`Канал ${channel.channel_name} было обновлено в корзине.`);
+    } else {
+        const channelData = Object.assign({}, channel, { count: count, format: format });
+        cart.push(channelData);
+        message.info(`Канал ${channel.channel_name} был добавлен в корзину.`);
+    }
+
+    saveCart(cart);
+};
+const totalPrice = computed(() => {
+    const selectedFormat = format.value.find((item) => item.value === formatValue.value);
+    const pricePerUnit = selectedFormat ? props.channel[selectedFormat.value] : 0;
+    return pricePerUnit * countValue.value;
+});
+watch(countValue, (newValue) => {
+    let cart = loadCart();
+    if (isInCart(props.channel)) {
+        updateCart(cart, props.channel, newValue, formatValue.value)
+    }
+});
+
+watch(formatValue, (newValue) => {
+    let cart = loadCart();
+    if (isInCart(props.channel)) {
+        updateCart(cart, props.channel, countValue.value, newValue)
+    }
+});
 const activeButton = ref('info');
-
 const explain = ['','1 часа в топе / 24 часа в лент', '2 часа в топе / 48 часа в лент', "3 часа в топе / 72 часа в лент"]
 </script>
 
@@ -40,12 +155,11 @@ const explain = ['','1 часа в топе / 24 часа в лент', '2 ча�
                         </div>
                         <div class="flex flex-col gap-y-4">
                             <div class="flex gap-x-4 text-violet-100">
-                                <div class="text-base font-normal font-['Open Sans'] leading-tight flex items-center gap-x-1"><BaseIcon :path="mdiEyeOutline" size="25"/>9,8К</div>
-                                <div class="text-base font-normal font-['Open Sans'] leading-tight flex items-center gap-x-1"><BaseIcon :path="mdiHeartOutline"  size="25"/>966</div>
-                                <BaseIcon :path="mdiRepeat" size="25"/>
+                                <div class="text-base font-normal font-['Open Sans'] leading-tight flex items-center gap-x-1"><BaseIcon :path="mdiEyeOutline" size="25"/>{{channel.views_count}}</div>
+                                <div class="text-base font-normal font-['Open Sans'] leading-tight flex items-center gap-x-1"><BaseIcon :path="mdiHeartOutline"  size="25"/>{{favorites_count}}</div>
                             </div>
                             <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Язык:<span class="font-normal pl-2">{{ channel.language }}</span></div>
-                            <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Категория:<span class="font-normal pl-2">{{ channel.topic }}</span></div>
+                            <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Категория:<span class="font-normal pl-2">{{ channel.topic.title }}</span></div>
                             <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Вид ссылки:<span class="font-normal pl-2">Приватный канал</span></div>
                         </div>
                     </div>
@@ -53,19 +167,19 @@ const explain = ['','1 часа в топе / 24 часа в лент', '2 ча�
                         <h1 class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Купить интеграцию в этом канале</h1>
                         <div class="flex flex-wrap gap-x-14 w-full">
                             <div class="w-60">
-                                <n-select v-model:value="format" :theme-overrides="selectThemeOverrides" :value="format" :options="store.format"/>
+                                <n-select v-model:value="formatValue" :theme-overrides="selectThemeOverrides" :options="format"/>
                                 <div class="pl-3 pt-2 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ explain[format] }}</div>
                             </div>
                             <div class="w-60">
-                                <n-select  v-model:value="count" :theme-overrides="selectThemeOverrides" :value="store.count[0].value" :options="store.count"/>
+                                <n-select  v-model:value="countValue" :theme-overrides="selectThemeOverrides" :options="count"/>
                             </div>
                         </div>
                         <div class="flex flex-wrap justify-between pt-8">
                             <h1 class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Стоимость публикации:</h1>
-                            <h1 class="text-right text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">9 600 ₽</h1>
+                            <h1 class="text-right text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">{{totalPrice}} ₽</h1>
                         </div>
                         <div class="flex flex-wrap gap-4 pt-4">
-                            <button class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 bg-purple-600 rounded-3xl items-center inline-flex gap-x-2.5">Заказать <BaseIcon fill="white" size="20" :path="mdiCartOutline"/></button>
+                            <button @click.prevent="toggleChannelInCart(channel)" class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 bg-purple-600 rounded-3xl items-center inline-flex gap-x-2.5">Заказать<BaseIcon size="25" :path="isInCart(channel) ? mdiCartMinus : mdiCartPlus"/></button>
                             <button class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 border  rounded-3xl items-center inline-flex gap-x-2.5">Купить по QR <BaseIcon fill="white" size="20" :path="mdiQrcodeScan"/></button>
                         </div>
                     </div>

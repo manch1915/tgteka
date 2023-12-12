@@ -5,100 +5,105 @@ namespace App\Services;
 use App\Models\Channel;
 use App\Models\Format;
 use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\OrderTransaction;
+use DateTime;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderService
 {
-    public function createOrder(Request $request): float|int|string
+    const FORMAT_NAME = [
+        'format_one_price' => '1/24',
+        'format_two_price' => '2/48',
+        'format_three_price' => '3/72',
+        'no_deletion_price' => 'no_deletion'
+    ];
+
+    public function createOrder(Request $request): ?string
     {
+
         $totalSum = $this->calculateTotalSum($request->channels);
-//        $repeatDiscount = $this->checkRepeatDiscount(auth()->id(), $request->channels);
-        $user = auth()->user();
+        $user = Auth::user();
 
-//        $totalSum -= $repeatDiscount;
+        $balanceCheck = $this->checkBalanceAndExecuteTransaction($user, $totalSum);
 
+        if ($balanceCheck !== null) {
+            return $balanceCheck;
+        }
+        $this->createOrderRecord($request, $request->channels);
+
+        return null;
+    }
+
+    private function checkBalanceAndExecuteTransaction($user, $totalSum): ?string
+    {
         if ($user->balance >= $totalSum) {
             $user->decrementBalance($totalSum);
+            return null;
         } else {
             return 'You don\'t have enough money for this operation';
         }
-
-        $order = $this->createOrderRecord($request);
-
-        $this->createOrderItems($request->channels, $order);
-
-        $this->createOrderTransaction($order, $totalSum);
-
-        return $totalSum;
-    }
-
-    public function checkRepeatDiscount($userId, array $channels): float|int
-    {
-        $orderItems = OrderItem::with(['channel', 'order'])
-            ->whereHas('order', function ($query) use ($userId) {
-                $query->where('user_id', $userId)->where('status', 'accepted');
-            })
-            ->whereIn('channel_id', array_column($channels, 'id'))
-            ->get();
-
-        foreach ($orderItems as $orderItem) {
-            $channel = $orderItem->channel;
-            if ($channel && $channel->repeat_discount > 0) {
-                $discountPercentage = $channel->repeat_discount;
-                return $orderItem->price * ($discountPercentage / 100);
-            }
-        }
-
-        return 0;
     }
 
     private function calculateTotalSum(array $channels): float|int
     {
         $totalSum = 0;
-
         foreach ($channels as $channel) {
-            Channel::firstOrFail($channel['id']);
-            $formatPrice = $channel[$channel['format']];
-            $totalSum += $formatPrice * $channel['count'];
+            $totalSum += $this->calculateChannelSum($channel);
         }
 
         return $totalSum;
     }
 
-    private function createOrderRecord(Request $request)
+    private function calculateChannelSum(array $channel): float|int
     {
-        return Order::create([
-            'user_id' => auth()->id(),
-            'pattern_id' => $request->pattern_id,
-            'description' => $request->description
-        ]);
+        Channel::firstOrFail($channel['id']);
+        $formatPrice = $channel[$channel['format']];
+        return $formatPrice * $channel['count'];
     }
 
-    private function createOrderItems(array $channels, Order $order): void
+    /**
+     * @throws Exception
+     */
+    private function createOrderRecord(Request $request, array $channels): void
     {
         foreach ($channels as $channel) {
-            $formatName = ['format_one_price' => '1/24', 'format_two_price' => '2/48', 'format_three_price' => '3/72', 'no_deletion_price' => 'no_deletion'];
+            $price = $this->calculateChannelSum($channel);
+            $formatId = $this->getFormatId($channel);
 
-            $format = Format::where('name', $formatName[$channel['format']])->firstOrFail();
+            $timestamp = $channel['timestamp'];
 
-            OrderItem::create([
-                'order_id' => $order->id,
+            $date = $this->convertJsTimestampToMySqlDateTime($timestamp);
+
+            Order::create([
+                'user_id' => Auth::id(),
+                'description' => $request->description,
+                'pattern_id' => $request->pattern_id,
+                'post_date' => $date,
                 'channel_id' => $channel['id'],
-                'format_id' => $format->id,
+                'format_id' => $formatId,
                 'count' => $channel['count'],
-                'price' => $channel[$channel['format']] * $channel['count'],
+                'price' => $price,
             ]);
         }
     }
 
-    private function createOrderTransaction(Order $order, $totalSum): void
+    /**
+     * @throws Exception
+     */
+    private function convertJsTimestampToMySqlDateTime($timestamp): string
     {
-        OrderTransaction::create([
-            'user_id' => auth()->id(),
-            'order_id' => $order->id,
-            'amount' => -$totalSum,
-        ]);
+        $unixTimestamp = $timestamp / 1000; // Convert from milliseconds to seconds
+        $date = new DateTime('@' . $unixTimestamp); // Create a PHP DateTime object
+
+
+        return $date->format('Y-m-d H:i:s');
+    }
+
+    private function getFormatId(array $channel): int
+    {
+        $formatName = self::FORMAT_NAME[$channel['format']];
+        $format = Format::where('name', $formatName)->firstOrFail();
+        return $format->id;
     }
 }

@@ -1,12 +1,13 @@
 <script setup>
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiCheck, mdiClose, mdiEyeOutline, mdiForumOutline} from "@mdi/js";
 import {openModal, pushModal} from "jenesius-vue-modal";
 import Mission from "@/Components/Dashboard/Mission.vue";
-import { useMessage } from "naive-ui";
+import { useLoadingBar, useMessage} from "naive-ui";
 import CancelOrder from "@/Components/Dashboard/CancelOrder.vue";
 import ToCheck from "@/Components/Dashboard/ToCheck.vue";
+import {useOrdersStore} from "@/stores/orders.js";
 
 const props = defineProps({
     order: Object,
@@ -15,6 +16,10 @@ const props = defineProps({
         default: true
     }
 })
+
+const ordersStore = useOrdersStore()
+const loading = useLoadingBar()
+const isLoading = ref(false);
 const openMission = () => {
     openModal(Mission, {order: props.order})
 }
@@ -27,18 +32,43 @@ const toCheck = () => {
 }
 
 const message = useMessage()
-const accept = () => {
-    axios.patch(route('order.accept', {orderItemId: props.order.id}))
+const accept = async () => {
+    loading.start()
+    isLoading.value = true
+    await axios.patch(route('order.accept', {orderItemId: props.order.id}))
         .then(response => {
+            loading.finish()
+            isLoading.value = false
             message.success(response.data.message);
+            ordersStore.getOrders()
         })
         .catch(error => {
+            loading.error()
             console.log(error);
         });
 }
 
+let post_date = computed(() => props.order.post_date);
 
-const wrap = ref(false)
+const [date, time] = post_date.value.split(' ');
+
+let [year, month, day] = date.split('-');
+
+let pubDay = day + '.' + month;
+
+let [hours, minutes, seconds] = time.split(':');
+
+let dateTime = new Date(`1970-01-01T${hours}:${minutes}:${seconds}Z`);
+
+dateTime.setHours(dateTime.getHours() + 4);
+
+let formattedTime =
+    ('0' + dateTime.getHours()).slice(-2) + ':' +
+    ('0' + dateTime.getMinutes()).slice(-2) + ':' +
+    ('0' + dateTime.getSeconds()).slice(-2);
+
+let pubTime = time.substring(0,5) + "-" + formattedTime.substring(0,5);
+
 </script>
 
 <template>
@@ -81,11 +111,11 @@ const wrap = ref(false)
                           </div>
                           <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
                               <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">День публикации</div>
-                              <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">14.07</div>
+                              <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{pubDay}}</div>
                           </div>
                           <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
                               <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Время публикации (UTC +3)</div>
-                              <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">08:00-12:00</div>
+                              <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{pubTime}}</div>
                           </div>
                           <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
                               <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Цена</div>
@@ -105,15 +135,18 @@ const wrap = ref(false)
                         <div class="text-center py-2 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">С 02 августа 16:31 MSK<br/>по 04 августа 16:31 MSK</div>
                         <button @click.prevent="toCheck" class="px-6 inline-block py-3.5 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl border border-violet-100 transition hover:bg-gray-400">На проверку</button>
                     </template>
+                    <template v-else-if="order.status === 'declined'">
+                        <div class="text-center text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{order.decline_reason}}</div>
+                    </template>
                 </div>
             </div>
         </div>
 
         <div class="flex justify-between items-center py-6 unwrap px-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
             <div class="flex gap-x-4">
-                <button v-if="order.status !== 'accepted'" @click.prevent="accept" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
+                <button :disabled="isLoading" v-if="order.status !== 'accepted' && order.status !== 'declined'" @click.prevent="accept" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
                 <button v-if="isCard" @click.prevent="openMission" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Посмотреть задание <BaseIcon size="30" :path="mdiEyeOutline"/></button>
-                <button @click.prevent="decline" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
+                <button v-show="order.status !== 'declined'" @click.prevent="decline" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
             </div>
             <div>
                 <button class="flex items-center gap-x-2 px-6 py-3.5">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>

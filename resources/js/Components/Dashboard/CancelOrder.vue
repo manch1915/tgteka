@@ -1,26 +1,52 @@
 <script setup>
-import {NSelect, NInput, useMessage, NDatePicker, NConfigProvider, darkTheme} from "naive-ui";
+import {NSelect, NInput, useMessage, NDatePicker, NConfigProvider, darkTheme, useLoadingBar} from "naive-ui";
 import {closeModal} from "jenesius-vue-modal";
 import {inputThemeOverrides, selectThemeOverrides} from "@/themeOverrides.js";
 import {computed, ref, watch} from "vue";
+import {useOrdersStore} from "@/stores/orders.js";
+
+const ordersStore = useOrdersStore()
 
 const props = defineProps({
     orderId: Number
 })
 
 const message = useMessage()
+const loading = useLoadingBar()
 const decline = () => {
-    axios.patch(route('order.decline', {orderId: props.order.id}))
+    loading.start()
+    const data = {
+        reason: selectedValue.value,
+        orderItemId: props.orderId,
+    };
+
+    if (selectedValue.value === 'Другое') {
+        data.reason = otherBody.value;
+    }
+
+    if (dateSelect.value && timestamp.value && selectedValue.value === 'Нет свободного места. Предложить свою дату.') {
+        data['suggested_date'] = timestamp.value;
+    }
+
+    axios.patch(route('order.decline', data))
         .then(response => {
             message.error(response.data.message);
+            loading.finish()
         })
         .catch(error => {
             console.log(error);
+            loading.error()
         });
+    ordersStore.getOrders()
+    closeModal()
 }
 
 const selectedValue = ref('')
-const timestamp = ref(null)
+
+const date = new Date();
+date.setSeconds(0, 0);
+const timestamp = ref(date.getTime() + 24 * 60 * 60 * 1000)
+
 const options = [
     {
         value: 'Нет свободного места. Предложить свою дату.',
@@ -42,11 +68,11 @@ const options = [
 
 const other = computed(() => selectedValue.value === 'Другое')
 const dateSelect = computed(() => selectedValue.value === 'Нет свободного места. Предложить свою дату.')
+const otherBody = ref('');
 const disablePastDates = (currentTimestamp) => {
-    // Get the current timestamp
+
     const currentTimestampNow = Date.now();
 
-    // Disable dates before the current time
     return currentTimestamp < currentTimestampNow;
 }
 const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
@@ -58,15 +84,6 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
     };
 };
 
-
-
-watch(dateSelect, (newVal) => {
-    if (newVal) {
-        let date = new Date();
-        date.setSeconds(0, 0); // Reset seconds to 0
-        timestamp.value = date;
-    }
-});
 </script>
 
 <template>
@@ -87,8 +104,8 @@ watch(dateSelect, (newVal) => {
                     <n-config-provider :theme="darkTheme">
                         <n-date-picker v-show="dateSelect" v-model:value="timestamp" type="datetime" :is-date-disabled="disablePastDates" :is-time-disabled="disableMinutesAndSeconds"/>
                     </n-config-provider>
-                    <n-input v-show="other" :theme-overrides="inputThemeOverrides" placeholder="Другое"/>
-                    <button class="w-full py-2 my-2 bg-purple-600 animation hover:bg-purple-800 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Подтвердить</button>
+                    <n-input v-show="other" v-model:value="otherBody" :theme-overrides="inputThemeOverrides" placeholder="Другое"/>
+                    <button @click.prevent="decline" class="w-full py-2 my-2 bg-purple-600 animation hover:bg-purple-800 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Подтвердить</button>
                 </div>
             </div>
         </main>

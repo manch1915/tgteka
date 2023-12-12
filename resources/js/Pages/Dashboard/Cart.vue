@@ -81,7 +81,7 @@ onMounted(() => {
                 <div class="channels">
                     <div class="flex flex-col gap-y-4 mb-8">
                         <template v-if="channels" v-for="channel in channels" :key="channel.id">
-                            <CatalogChannelCard @cart-updated="updateChannels"  :channel="channel" :count-value="channel.count" :format-value="channel.format"/>
+                            <CatalogChannelCard @cart-updated="updateChannels" is-cart  :channel="channel" :count-value="channel.count" :format-value="channel.format" :timestamp="channel.timestamp"/>
                         </template>
                     </div>
                 </div>

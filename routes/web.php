@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\TelegramController;
 use App\Http\Controllers\PatternController;
 use App\Http\Controllers\Profile\PersonalDataController;
 use App\Http\Controllers\Profile\TotalBalanceController;
+use App\Http\Controllers\SuggestedDateController;
 use App\Http\Controllers\UserChannelController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -79,6 +80,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('generate-password', [\App\Http\Controllers\Profile\ChangePasswordController::class, 'generate'])->name('change-password.generate');
     });
 
+    Route::get('/suggested-date/accept/{id}/{suggestedDate}', [SuggestedDateController::class, 'accept'])->name('suggested-date.accept');
+    Route::get('/suggested-date/decline/{id}', [SuggestedDateController::class, 'decline'])->name('suggested-date.decline');
 
     Route::prefix('pattern')->name('pattern.')->group(function () {
         Route::get('adding', [PatternController::class, 'show'])->name('adding');

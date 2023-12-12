@@ -1,7 +1,7 @@
 <script setup>
-import { NSelect, useMessage } from "naive-ui";
+import {darkTheme, NSelect, NConfigProvider, NDatePicker , useMessage} from "naive-ui";
 import { selectCatalogThemeOverrides } from "@/themeOverrides.js";
-import { computed, ref, watch } from "vue";
+import {computed, ref, watch} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import { mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartMinus } from "@mdi/js";
 import { Link } from "@inertiajs/vue3";
@@ -15,6 +15,19 @@ const props = defineProps({
     formatValue: {
         required: false,
     },
+    timestamp: {
+        default: () => {
+            const date = new Date();
+            date.setSeconds(0, 0);
+            return date.getTime() + 24 * 60 * 60 * 1000
+        },
+        required: false,
+    },
+    isCart: {
+        type: Boolean,
+        default: false,
+        required: false,
+    }
 });
 
 const countValue = ref(props.countValue);
@@ -47,7 +60,7 @@ const toggleChannelInCart = (channel) => {
     if (index > -1 && formatValue.value === cart[index].format && countValue.value === cart[index].count) {
         removeCart(cart, index, channel);
     } else {
-        updateCart(cart, channel, countValue.value, formatValue.value);
+        updateCart(cart, channel, countValue.value, formatValue.value, timestamp.value);
     }
 
     cartUpdateKey.value++;
@@ -99,14 +112,14 @@ const addChannelToFavorites = async (channel) => {
     }
 };
 
-const updateCart = (cart, channel, count, format) => {
+const updateCart = (cart, channel, count, format, time) => {
     const channelIndex = cart.findIndex((ch) => ch.id === channel.id);
 
     if (channelIndex > -1) {
-        cart[channelIndex] = Object.assign({}, channel, { count: count, format: format });
+        cart[channelIndex] = Object.assign({}, channel, { count: count, format: format, timestamp: time });
         message.info(`Канал ${channel.channel_name} было обновлено в корзине.`);
     } else {
-        const channelData = Object.assign({}, channel, { count: count, format: format });
+        const channelData = Object.assign({}, channel, { count: count, format: format, timestamp: time });
         cart.push(channelData);
         message.info(`Канал ${channel.channel_name} был добавлен в корзину.`);
     }
@@ -118,16 +131,43 @@ const updateCart = (cart, channel, count, format) => {
 watch(countValue, (newValue) => {
     let cart = loadCart();
     if (isInCart(props.channel)) {
-        updateCart(cart, props.channel, newValue, formatValue.value)
+        updateCart(cart, props.channel, newValue, formatValue.value, timestamp.value)
     }
 });
 
 watch(formatValue, (newValue) => {
     let cart = loadCart();
     if (isInCart(props.channel)) {
-        updateCart(cart, props.channel, countValue.value, newValue)
+        updateCart(cart, props.channel, countValue.value, newValue, timestamp.value)
     }
 });
+const timestamp = ref(props.timestamp);
+
+watch(timestamp, (newValue) => {
+    let cart = loadCart();
+    if (isInCart(props.channel)) {
+        updateCart(cart, props.channel, countValue.value, formatValue.value, newValue)
+    }
+});
+
+
+
+const disablePastDates = (currentTimestamp) => {
+    // Get the current timestamp
+    const currentTimestampNow = Date.now();
+
+    // Disable dates before the current time
+    return currentTimestamp < currentTimestampNow;
+}
+const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
+
+    const defaultSecond = 0;
+
+    return {
+        isSecondDisabled: (second) => second !== defaultSecond,
+    };
+};
+
 </script>
 
 <template>
@@ -180,6 +220,11 @@ watch(formatValue, (newValue) => {
                     <n-select v-model:value="countValue" @update-value="emit('cartChanged');" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="count"/>
                 </div>
                 <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">{{ totalPrice }} ₽</h1>
+            </div>
+            <div v-show="isCart">
+                <n-config-provider :theme="darkTheme">
+                    <n-date-picker v-model:value="timestamp" default-time="12:00:00" type="datetime" :is-date-disabled="disablePastDates" :is-time-disabled="disableMinutesAndSeconds"/>
+                </n-config-provider>
             </div>
             <div class="flex items-center justify-between text-violet-100 gap-x-2.5">
                 <Link :href="route('catalog.channels.show', channel.id )" class="text-violet-100 text-xs font-normal font-['Open Sans'] underline leading-none">Подробнее о канале</Link>
@@ -283,6 +328,8 @@ watch(formatValue, (newValue) => {
                 height: 60px;
                 img{
                     border-radius: 50%;
+                    height: 100%;
+                    width: 100%;
                 }
             }
         }

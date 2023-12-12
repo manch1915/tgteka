@@ -12,9 +12,18 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+
+            $table->string('description', 300)->nullable();
+            $table->integer('count');
+            $table->bigInteger('price');
+            $table->enum('status', ['pending', 'accepted', 'declined', 'check', 'finished'])->default('pending');
+            $table->timestamp('post_date')->nullable();
+            $table->string('decline_reason', 300)->nullable();
+            $table->foreignId('channel_id')->constrained();
+            $table->foreignId('format_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('pattern_id')->constrained();
-            $table->text('description')->nullable();
+
             $table->timestamps();
         });
     }

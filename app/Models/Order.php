@@ -37,7 +37,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'description', 'channel_id', 'status', 'pattern_id'];
+    protected $fillable = ['user_id', 'description', 'channel_id', 'status', 'pattern_id', 'count', 'format_id', 'price', 'id', 'post_date'];
 
     public function user()
     {
@@ -48,9 +48,19 @@ class Order extends Model
     {
         return $this->belongsTo(Pattern::class);
     }
-    public function items()
+
+    public function order()
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->belongsTo(Order::class);
     }
 
+    public function channel()
+    {
+        return $this->belongsTo(Channel::class);
+    }
+
+    public function format()
+    {
+        return $this->belongsTo(Format::class);
+    }
 }

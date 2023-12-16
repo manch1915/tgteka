@@ -28,7 +28,7 @@ const decline = () => {
 }
 
 const toCheck = () => {
-    pushModal(ToCheck)
+    pushModal(ToCheck, {orderId: props.order.id})
 }
 
 const message = useMessage()
@@ -47,27 +47,41 @@ const accept = async () => {
             console.log(error);
         });
 }
+const canAccept = computed(() => !isLoading.value && !['accepted', 'declined', 'check'].includes(props.order.status))
+const canDecline = computed(() => ['pending'].includes(props.order.status))
 
-let post_date = computed(() => props.order.post_date);
 
-const [date, time] = post_date.value.split(' ');
+const formatDateTime = (dateTime, options) => {
+    return dateTime.toLocaleString('ru-RU', options);
+};
+
+let postDate = computed(() => props.order.post_date);
+
+const [date, time] = postDate.value.split(' ');
 
 let [year, month, day] = date.split('-');
-
 let pubDay = day + '.' + month;
 
 let [hours, minutes, seconds] = time.split(':');
 
-let dateTime = new Date(`1970-01-01T${hours}:${minutes}:${seconds}Z`);
+let originalDate = new Date(postDate.value);
+let newDate = new Date(originalDate);
+newDate.setHours(newDate.getHours() + 2);
 
-dateTime.setHours(dateTime.getHours() + 4);
+const newTime = newDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-let formattedTime =
-    ('0' + dateTime.getHours()).slice(-2) + ':' +
-    ('0' + dateTime.getMinutes()).slice(-2) + ':' +
-    ('0' + dateTime.getSeconds()).slice(-2);
+const pubDateOptions = { day: 'numeric', month: 'long' };
+const pubTimeOptions = { hour: 'numeric', minute: 'numeric', hour12: false };
 
-let pubTime = time.substring(0,5) + "-" + formattedTime.substring(0,5);
+const formattedPubDate = formatDateTime(originalDate, pubDateOptions);
+const formattedPubTime = formatDateTime(originalDate, pubTimeOptions);
+
+let pubDateEnd = new Date(props.order.post_date_end);
+
+const formattedPubDateEnd = formatDateTime(pubDateEnd, pubDateOptions);
+const formattedPubTimeEnd = formatDateTime(pubDateEnd, pubTimeOptions);
+
+const pubTime = `${formattedPubTime}-${newTime}`;
 
 </script>
 
@@ -130,9 +144,14 @@ let pubTime = time.substring(0,5) + "-" + formattedTime.substring(0,5);
 
                         </div>
                     </template>
+                    <template v-if="order.status === 'check'">
+                        <div class="text-center text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">
+                            Вы отправили пост на проверку
+                        </div>
+                    </template>
                     <template v-else-if="order.status === 'accepted'">
                         <div class="text-center text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Разместите пост</div>
-                        <div class="text-center py-2 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">С 02 августа 16:31 MSK<br/>по 04 августа 16:31 MSK</div>
+                        <div class="text-center py-2 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">С {{ formattedPubDate }} {{ formattedPubTime }} <br/> По {{formattedPubDateEnd}} {{ formattedPubTimeEnd}}</div>
                         <button @click.prevent="toCheck" class="px-6 inline-block py-3.5 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl border border-violet-100 transition hover:bg-gray-400">На проверку</button>
                     </template>
                     <template v-else-if="order.status === 'declined'">
@@ -144,9 +163,9 @@ let pubTime = time.substring(0,5) + "-" + formattedTime.substring(0,5);
 
         <div class="flex justify-between items-center py-6 unwrap px-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
             <div class="flex gap-x-4">
-                <button :disabled="isLoading" v-if="order.status !== 'accepted' && order.status !== 'declined'" @click.prevent="accept" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
+                <button v-if="canAccept" :disabled="isLoading"  @click.prevent="accept" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
                 <button v-if="isCard" @click.prevent="openMission" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Посмотреть задание <BaseIcon size="30" :path="mdiEyeOutline"/></button>
-                <button v-show="order.status !== 'declined'" @click.prevent="decline" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
+                <button v-if="canDecline" @click.prevent="decline" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
             </div>
             <div>
                 <button class="flex items-center gap-x-2 px-6 py-3.5">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>

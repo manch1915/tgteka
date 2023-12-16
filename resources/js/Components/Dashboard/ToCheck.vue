@@ -2,12 +2,25 @@
 import {NInput, useMessage} from "naive-ui";
 import {closeModal} from "jenesius-vue-modal";
 import {inputThemeOverrides} from "@/themeOverrides.js";
+import {ref} from "vue";
+import {useOrdersStore} from "@/stores/orders.js";
 
 const props = defineProps({
     orderId: Number
 })
 
 const message = useMessage()
+
+const post_link = ref('')
+const ordersStore = useOrdersStore()
+
+const toCheck = () => {
+    axios.post(route('to-check-telegram-post'), {post_link: post_link.value, orderId: props.orderId})
+        .then(r => console.log(r))
+        .catch(c => console.log(c))
+    ordersStore.getOrders()
+    closeModal()
+}
 
 </script>
 
@@ -27,8 +40,8 @@ const message = useMessage()
                     <div class="text-center my-8 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Вы разместили пост в соответствии со всеми требованиями, указанными в заявке. Вы обязуетесь не удалять пост <br/>пока не истечёт его формат размещения.</div>
                     <div class="text-center my-8 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Отправьте ссылку на размещённый пост для проверки заказчиком.</div>
                     <div class="w-1/2 mx-auto">
-                        <n-input :theme-overrides="inputThemeOverrides" placeholder="Ссылка на пост (https://t.me/c/1494800310/727)"/>
-                        <button class="py-2 w-full my-2 bg-purple-600 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Подтвердить</button>
+                        <n-input :theme-overrides="inputThemeOverrides" v-model:value="post_link" placeholder="Ссылка на пост (https://t.me/c/1494800310/727)"/>
+                        <button @click.prevent="toCheck" class="py-2 w-full my-2 bg-purple-600 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Подтвердить</button>
                     </div>
                 </div>
             </div>

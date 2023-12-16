@@ -4,11 +4,9 @@ namespace App\Notifications;
 
 use App\Models\Pattern;
 use App\Services\AvatarService;
-use App\Services\HtmlTelegramFile;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 use NotificationChannels\Telegram\TelegramFile;
-use NotificationChannels\Telegram\TelegramMessage;
 
 class PatternByBotNotification extends Notification
 {
@@ -57,15 +55,21 @@ class PatternByBotNotification extends Notification
         $content = $this->reformatTags($content);
         $content = $this->stripHtmlAttributes($content);
 
-        Log::info($content);
-
         $telegramMessage = TelegramFile::create()
             ->to($notifiable->telegram_user_id)
             ->content($content)
             ->options(['parse_mode' => 'HTML']);
 
         if ($avatarUrl !== null) {
-            $telegramMessage->file($path, 'photo'); // local photo
+            $telegramMessage->file($path, 'photo');
+        }else{
+            $defaultImagePath = 'images/photo.png';
+
+            if (File::exists(public_path($defaultImagePath))) {
+                $telegramMessage->file(public_path($defaultImagePath), 'photo');
+            } else {
+                throw new \Exception("Default image not found: ");
+            }
         }
 
         return $telegramMessage;

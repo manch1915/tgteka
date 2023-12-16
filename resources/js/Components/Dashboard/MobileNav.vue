@@ -12,7 +12,9 @@ import {Link} from "@inertiajs/vue3";
             <Link :href="route('adding-channel')">
                 <img src="/images/pattern.svg" alt="">
             </Link>
-            <img src="/images/bell.svg" alt="">
+            <Link :href="route('notifications')">
+                <img src="/images/bell.svg" alt="">
+            </Link>
             <img src="/images/messenger.svg" alt="">
         </main>
     </div>

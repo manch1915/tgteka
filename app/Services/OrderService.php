@@ -6,6 +6,7 @@ use App\Models\Channel;
 use App\Models\Format;
 use App\Models\Order;
 use DateTime;
+use DateTimeZone;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -71,10 +72,8 @@ class OrderService
             $price = $this->calculateChannelSum($channel);
             $formatId = $this->getFormatId($channel);
 
-            $timestamp = $channel['timestamp'];
-
-            $date = $this->convertJsTimestampToMySqlDateTime($timestamp);
-
+            $date = $channel['timestamp'];
+            \Log::info('before: ' . $date);
             Order::create([
                 'user_id' => Auth::id(),
                 'description' => $request->description,
@@ -86,18 +85,6 @@ class OrderService
                 'price' => $price,
             ]);
         }
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function convertJsTimestampToMySqlDateTime($timestamp): string
-    {
-        $unixTimestamp = $timestamp / 1000; // Convert from milliseconds to seconds
-        $date = new DateTime('@' . $unixTimestamp); // Create a PHP DateTime object
-
-
-        return $date->format('Y-m-d H:i:s');
     }
 
     private function getFormatId(array $channel): int

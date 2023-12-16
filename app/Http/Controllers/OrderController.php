@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ToCheckRequest;
 use App\Models\Order;
 use App\Models\Pattern;
 use App\Models\SuggestedDate;
@@ -9,6 +10,7 @@ use App\Notifications\OrderAcceptedNotification;
 use App\Notifications\OrderDeclinedNotification;
 use App\Notifications\OrderSuggestedDateNotification;
 use App\Notifications\PatternByBotNotification;
+use App\Notifications\ToCheckNotification;
 use App\Services\AvatarService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -30,12 +32,17 @@ class OrderController extends Controller
     public function get($page = 1, $perPage = 10)
     {
         $orders = auth()->user()->orders->load('format', 'channel.topic', 'pattern');
-
+        $orders = $orders->sortByDesc('created_at');
         $allItems = collect();
-
         foreach ($orders as $order) {
             $order->orderPattern = $order->pattern;
-
+            $post_date_end = match ($order->format->name) {
+                '1/24' => Carbon::parse($order->post_date)->addDays(1),
+                '2/48' => Carbon::parse($order->post_date)->addDays(2),
+                '3/72' => Carbon::parse($order->post_date)->addDays(3),
+                default => Carbon::parse($order->post_date)->addDays(1),
+            };
+            $order->post_date_end = $post_date_end->format('Y-m-d H:i:s');;
             $order->orderPattern->patternMedia = $this->avatarService->getAvatarUrlOfPattern($order->pattern);
             $order->channel->channelAvatar = $this->avatarService->getAvatarUrlOfChannel($order->channel);
             $allItems->push($order);
@@ -90,6 +97,20 @@ class OrderController extends Controller
 
         $orderItem->user->notify(new OrderDeclinedNotification($request->reason));
         return response()->json(['message' => 'Заказ успешно отклонен']);
+    }
+
+    public function toCheck(ToCheckRequest $request)
+    {
+        $validated = $request->validated();
+
+        $order = Order::findOrFail($validated['orderId']);
+
+        $order->status = 'check';
+        $order->save();
+
+        $order->user->notify(new ToCheckNotification($validated['post_link']));
+
+        return response()->json($validated);
     }
 
     public function sendPatternByBot(Request $request, AvatarService $avatarService)

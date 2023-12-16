@@ -29,12 +29,26 @@ const updateChannels = (updatedCart) => {
 };
 
 const loading = useLoadingBar()
+const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
 
 const orderPosts = () => {
     loading.start()
-    console.log('Channels', channels.value)
+    const formattedChannels = channels.value.map(channel => ({
+        ...channel,
+        timestamp: formatDate(channel.timestamp),
+    }));
     axios.post(route('catalog.channels.orderPosts'), {
-        channels: channels.value,
+        channels: formattedChannels,
         pattern_id: userPattern.value,
         description: description.value
     })

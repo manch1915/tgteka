@@ -74,7 +74,9 @@ const toggleBurger = () => {
                             <img src="/images/messenger.svg" alt="">
                         </div>
                         <div class="border-r-[1px] px-5">
-                            <img src="/images/notification.svg" alt="">
+                            <Link :href="route('notifications')">
+                                <img src="/images/notification.svg" alt="">
+                            </Link>
                         </div>
                         <div class="border-r-[1px] px-5">
                           <Link :href="route('personal-data')">

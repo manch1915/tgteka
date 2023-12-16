@@ -35,7 +35,7 @@ const buttons = [
     },
     {
         title: 'История уведомлений',
-        route: '#',
+        route: route('notifications'),
         icon: '/images/profile/book.svg'
     },
     {

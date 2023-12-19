@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Channel;
+use App\Models\Conversation;
 use App\Models\Format;
 use App\Models\Order;
 use DateTime;
@@ -20,6 +21,9 @@ class OrderService
         'no_deletion_price' => 'no_deletion'
     ];
 
+    /**
+     * @throws Exception
+     */
     public function createOrder(Request $request): ?string
     {
 
@@ -31,7 +35,26 @@ class OrderService
         if ($balanceCheck !== null) {
             return $balanceCheck;
         }
+
         $this->createOrderRecord($request, $request->channels);
+
+        $uniqueUserIds = collect($request->channels)->pluck('user_id')->unique()->toArray();
+
+        foreach ($uniqueUserIds as $userTwoId) {
+            $existingConversation = Conversation::where(function ($query) use ($user, $userTwoId) {
+                $query->where('user_one', $user->id)->where('user_two', $userTwoId);
+            })->orWhere(function ($query) use ($user, $userTwoId) {
+                $query->where('user_one', $userTwoId)->where('user_two', $user->id);
+            })->first();
+
+            if (!$existingConversation) {
+                Conversation::create([
+                    'user_one' => $user->id,
+                    'user_two' => $userTwoId,
+                ]);
+            }
+        }
+
 
         return null;
     }

@@ -1,8 +1,14 @@
 <script setup>
 const props = defineProps({
     text: String,
-    userAvatar: String
+    userAvatar: String,
+    created_at: String,
 })
+
+let createdAtUTC = props.created_at;
+let createdAtDate = new Date(`1970-01-01T${createdAtUTC}:00Z`);
+let options = { hour: '2-digit', minute: '2-digit', hour12: false };
+let createdAtLocalTimeString = createdAtDate.toLocaleTimeString('en-US', options);
 </script>
 
 <template>
@@ -18,7 +24,7 @@ const props = defineProps({
                     </div>
                     <div class="date float-right">
                         <div class="flex gap-x-0.5">
-                            <p class="text-right text-slate-900 text-opacity-40 text-base font-normal font-['Open Sans'] leading-tight">12:30</p>
+                            <p class="text-right text-slate-900 text-opacity-40 text-base font-normal font-['Open Sans'] leading-tight">{{createdAtLocalTimeString}}</p>
                             <img src="/images/vector.svg" alt="vector">
                         </div>
                     </div>

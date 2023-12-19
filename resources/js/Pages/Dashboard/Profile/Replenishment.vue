@@ -7,6 +7,13 @@ import {ref} from "vue";
 const activeButton = ref('add-payment-method');
 
 const activeTab = ref('bank-card')
+
+const amount = ref(0);
+
+const createPaymentRequest = () => {
+  axios.post(route('create-payment-request'), {amount: amount.value})
+      .then(r => console.log(r))
+}
 </script>
 
 <template>
@@ -79,13 +86,13 @@ const activeTab = ref('bank-card')
                                     <img src="/images/webmoney.svg" alt="webmoney">
                                     <img src="/images/qiwi.svg" alt="qiwi">
                                 </div>
-                                <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
+                                <n-input v-model:value="amount" class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
                                 <p class="py-4 text-violet-100 text-base font-normal font-['Open Sans']">Комиссия системы 15% (не менее 85.0 р.)<br/>Максимальная сумма пополнения 170 000 р. <br/>При необходимости пополниться на сумму больше, совершите несколько платежей.</p>
                                 <div class="flex items-center py-2 gap-x-2.5 sm:items-baseline">
                                     <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                                     <p class="text-violet-100 sm:text-lg text-xs font-normal font-['Open Sans'] leading-normal">Привязывая карту, вы соглашаетесь <br/>с <span class="underline">правилами настройки автопополнения</span></p>
                                 </div>
-                                <button class="sm:w-3/4 w-full my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</button>
+                                <button @click.prevent="createPaymentRequest" class="sm:w-3/4 w-full my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</button>
                             </div>
                             <div v-show="activeTab === 'qr'" class="mt-5 px-4 qr sm:w-3/4 sm:px-0">
                                 <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Оплата через QR код</h1>

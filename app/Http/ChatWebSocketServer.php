@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Factories\MessageFactory;
 use App\Http\Repositories\PersonalChatRepository;
 use App\Http\Repositories\SupportChatRepository;
+use App\Models\Conversation;
 use App\Models\Moderator;
 use App\Models\SupportTicket;
 use App\Services\Censure;
@@ -46,7 +47,6 @@ class ChatWebSocketServer implements MessageComponentInterface
     public function onMessage(ConnectionInterface $from, $msg): void
     {
         $data = json_decode($msg, true);
-        Log::info($data);
         if(json_last_error() !== JSON_ERROR_NONE) {
             Log::error("JSON decode error: " . json_last_error_msg());
         } else {
@@ -80,7 +80,7 @@ class ChatWebSocketServer implements MessageComponentInterface
         if($type === 'support') {
             $this->sendSupportChatMessage($data['sender_id'], $data['message'], $data['title'], $data['ticket_id']);
         } else {
-            $this->sendPersonalChatMessage($data['sender_id'], $data['recipient_id'], $data['message']);
+            $this->sendPersonalChatMessage($data['auth_id'], $data['message'], $data['conversation_id'] );
         }
     }
 
@@ -114,18 +114,33 @@ class ChatWebSocketServer implements MessageComponentInterface
         }
     }
 
-    private function sendPersonalChatMessage(int $senderId, int $recipientId, string $message): void
+    private function sendPersonalChatMessage(int $user_id, string $message, $conversation_id): void
     {
+        Log::info("sendPersonalChatMessage called with user_id: {$user_id}, message: {$message}, conversation_id: {$conversation_id}");
+
+        $conversation = Conversation::findOrFail($conversation_id);
+
+        $recipientId = ($conversation->user_one === $user_id) ? $conversation->user_two : $conversation->user_one;
+
+        Log::info("Recipient id: {$recipientId}");
+
         $message = Censure::replace($message);
-        $messageObject = $this->messageFactory->createPersonalChatMessage($senderId, $message);
+        Log::info("Message after censor: {$message}");
+
+        $messageObject = $this->messageFactory->createPersonalChatMessage($user_id, $message, $conversation_id);
+
+        $this->personalChatRepository->save($user_id, $conversation_id, $message);
+        Log::info("Message saved in repository for user: {$user_id}");
 
         if (!isset($this->userConnections[$recipientId])) {
+            Log::info("No connection found for recipient: {$recipientId}");
             return;
         }
 
         $this->userConnections[$recipientId]->send(json_encode($messageObject));
+        Log::info("Message sent to recipient: {$recipientId}");
 
-        $this->personalChatRepository->save($senderId, $recipientId, $message);
+
     }
 
     private function findAndRemoveUserConnection(ConnectionInterface $conn): ?int

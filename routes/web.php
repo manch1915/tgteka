@@ -46,12 +46,14 @@ Route::group(['prefix' => 'auth'], function (){
     });
 });
 
-Route::get('/terms-of-service',fn () => inertia('Agreement'))->name('terms-of-service');
-Route::get('/rules',fn () => inertia('Rules'))->name('rules');
+Route::get('/terms-of-service', fn () => inertia('Agreement'))->name('terms-of-service');
+Route::get('/rules', fn () => inertia('Rules'))->name('rules');
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    Route::post('create-payment-request', [\App\Http\Controllers\Payment\YooKassaController::class, 'createPayment'])->name('create-payment-request');
 
     Route::prefix('catalog')->name('catalog.')->group(function () {
         Route::resource('channels', \App\Http\Controllers\ChannelController::class);
@@ -70,6 +72,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [SupportController::class, 'index'])->name('support');
         Route::post('/get-messages', [SupportController::class, 'getMessagesByTicketId'])->name('get-messages-by-ticket-id');
     });
+
+    Route::get('conversations', [\App\Http\Controllers\ConversationController::class, 'index'])->name('conversations');
+    Route::get('conversations-messages/{conversationId}', [\App\Http\Controllers\ConversationController::class, 'conversationsMessages'])->name('conversations.messages');
 
     Route::group(['prefix' => 'profile'], function () {
         Route::get('personal-data', [PersonalDataController::class, 'index'])->name('personal-data');

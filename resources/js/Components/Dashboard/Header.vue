@@ -1,9 +1,10 @@
 <script setup>
 import {Link, router, usePage} from '@inertiajs/vue3'
-import {closeModal} from "jenesius-vue-modal";
+import {closeModal, pushModal} from "jenesius-vue-modal";
 import {ref, watchEffect} from "vue";
 import {useMainStore} from "@/stores/main.js";
 import AnimatedNumber from "@/Components/Dashboard/AnimatedNumber.vue";
+import Messenger from "@/Components/Messenger/Messenger.vue";
 
 closeModal()
 
@@ -26,6 +27,10 @@ const toggleBurger = () => {
     } else {
         document.body.style.overflow = '';
     }
+}
+
+const openMessenger = () => {
+    pushModal(Messenger)
 }
 </script>
 
@@ -70,7 +75,7 @@ const toggleBurger = () => {
                         </div>
                     </div>
                     <div class="hidden sm:flex interactive items-center gap-x-3">
-                        <div class="border-r-[1px] px-5">
+                        <div @click.prevent="openMessenger" class="border-r-[1px] px-5">
                             <img src="/images/messenger.svg" alt="">
                         </div>
                         <div class="border-r-[1px] px-5">

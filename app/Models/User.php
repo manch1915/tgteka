@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -140,19 +142,25 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function entityInfo()
+    public function entityInfo(): HasOne
     {
         return $this->hasOne(EntityInfo::class);
     }
 
-    public function reviews()
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
     }
 
-    public function tickets()
+    public function tickets(): HasMany
     {
         return $this->hasMany(SupportTicket::class, 'sender_id');
+    }
+
+    public function conversations(): HasMany
+    {
+        return $this
+            ->hasMany(Conversation::class, 'user_one')->orWhere('user_two', '=', $this->id)->with('userOne', 'userTwo');
     }
 
 }

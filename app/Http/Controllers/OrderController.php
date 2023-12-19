@@ -31,7 +31,7 @@ class OrderController extends Controller
 
     public function get($page = 1, $perPage = 10)
     {
-        $orders = auth()->user()->orders->load('format', 'channel.topic', 'pattern');
+        $orders = auth()->user()->channels->orders->load('format', 'channel.topic', 'pattern');
         $orders = $orders->sortByDesc('created_at');
         $allItems = collect();
         foreach ($orders as $order) {

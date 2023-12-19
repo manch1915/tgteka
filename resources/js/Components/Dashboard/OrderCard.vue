@@ -8,6 +8,7 @@ import { useLoadingBar, useMessage} from "naive-ui";
 import CancelOrder from "@/Components/Dashboard/CancelOrder.vue";
 import ToCheck from "@/Components/Dashboard/ToCheck.vue";
 import {useOrdersStore} from "@/stores/orders.js";
+import Messenger from "@/Components/Messenger/Messenger.vue"
 
 const props = defineProps({
     order: Object,
@@ -82,6 +83,10 @@ const formattedPubDateEnd = formatDateTime(pubDateEnd, pubDateOptions);
 const formattedPubTimeEnd = formatDateTime(pubDateEnd, pubTimeOptions);
 
 const pubTime = `${formattedPubTime}-${newTime}`;
+
+const openMessenger = () => {
+  pushModal(Messenger)
+}
 
 </script>
 
@@ -168,7 +173,7 @@ const pubTime = `${formattedPubTime}-${newTime}`;
                 <button v-if="canDecline" @click.prevent="decline" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
             </div>
             <div>
-                <button class="flex items-center gap-x-2 px-6 py-3.5">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>
+                <button @click.prevent="openMessenger" class="flex items-center gap-x-2 px-6 py-3.5">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>
             </div>
         </div>
     </div>

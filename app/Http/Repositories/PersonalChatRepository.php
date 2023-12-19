@@ -2,16 +2,17 @@
 
 namespace App\Http\Repositories;
 
-use App\Models\Chat;
+
+use App\Models\ConversationMessages;
 
 class PersonalChatRepository
 {
-    public function save(int $senderId, int $recipientId, string $message): void
+    public function save(int $user_id, int $conversation_id, string $message): void
     {
         try {
-            $chat = new Chat([
-                'sender_id' => $senderId,
-                'recipient_id' => $recipientId,
+            $chat = new ConversationMessages([
+                'user_id' => $user_id,
+                'conversation_id' => $conversation_id,
                 'message' => $message,
             ]);
 
@@ -19,13 +20,5 @@ class PersonalChatRepository
         } catch (\Exception $e) {
             echo "Error while saving personal chat message: " . $e->getMessage() . "\n";
         }
-    }
-
-    public function getMessagesForUser(int $userId): array
-    {
-        return Chat::where(function($query) use ($userId) {
-            $query->where('sender_id', $userId)
-                ->orWhere('recipient_id', $userId);
-        })->get()->toArray();
     }
 }

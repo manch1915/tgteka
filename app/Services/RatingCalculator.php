@@ -2,14 +2,12 @@
 
 namespace App\Services;
 
-use App\Models\Order;
-use App\Models\OrderItem;
 use Carbon\Carbon;
 
 class RatingCalculator
 {
 
-    public function calculate(OrderItem $orderItem): void
+    public function calculate($orderItem): void
     {
         $channel = $orderItem->channel;
 
@@ -19,7 +17,7 @@ class RatingCalculator
         $channel->save();
     }
 
-    private function calculateRating(OrderItem $orderItem): float
+    private function calculateRating($orderItem): float
     {
 
         $start = Carbon::now()->subYear();
@@ -54,7 +52,7 @@ class RatingCalculator
         return $rating + $bonusScore;
     }
 
-    private function calculateScore(OrderItem $orderItem): float
+    private function calculateScore($orderItem): float
     {
 
         $start = Carbon::now()->subYear();

@@ -76,7 +76,7 @@ class Channel extends Model implements HasMedia
 {
     use HasFactory, Favoriteable, InteractsWithMedia;
 
-    protected $guarded = [];
+    protected $fillable = ['id', 'user_id', 'channel_url', 'channel_name', 'telegram_username', 'avatar', 'topic', 'language', 'description', 'format_one', 'format_two', 'format_three', 'no_deletion', 'repost', 'repeat_discount', 'score', 'rating', 'likes_count', 'views_count', 'status', 'url', 'topic_id', 'type', 'subscribers_source', 'format_one_price', 'format_two_price', 'format_three_price', 'no_deletion_price', 'repost_price', 'registerMediaConversionsUsingModelInstance'];
 
     public function user()
     {

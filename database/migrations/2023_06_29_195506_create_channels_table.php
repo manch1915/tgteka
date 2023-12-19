@@ -28,7 +28,7 @@ class CreateChannelsTable extends Migration
             $table->float('rating')->default(0);
             $table->integer('likes_count')->default(0); // Number of likes
             $table->integer('views_count')->default(0); // Number of views
-            $table->enum('status', ['pending', 'accepted', 'declined'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'declined', 'loading'])->default('pending');
             $table->timestamps();
         });
     }

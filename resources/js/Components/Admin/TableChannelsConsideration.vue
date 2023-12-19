@@ -33,7 +33,7 @@ const deleteChannel = () => {
 }
 
 const channelAccept = () => {
-    axios.patch(route('admin.api.channels.update', modalChannel.value.id), {status: 'accepted'})
+    axios.patch(route('admin.api.channels.update', modalChannel.value.id), {status: 'loading'})
         .then(r => {
             console.log(r);
             mainStore.fetchChannels(); // Fetch after accepting a channel

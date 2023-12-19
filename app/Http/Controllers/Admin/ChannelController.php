@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Console\Commands\UpdateChannelStatistics;
 use App\Http\Controllers\Controller;
+use App\Jobs\FetchChannelStatisticsJob;
 use App\Models\Channel;
 use Illuminate\Http\Request;
 
@@ -43,6 +45,11 @@ class ChannelController extends Controller
     public function update(Request $request, Channel $channel)
     {
         $channel->update($request->all());
+
+        if($channel->status === 'loading'){
+            FetchChannelStatisticsJob::dispatch($channel);
+        }
+
         return response()->json();
 
     }

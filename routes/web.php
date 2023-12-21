@@ -58,6 +58,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('catalog')->name('catalog.')->group(function () {
         Route::resource('channels', \App\Http\Controllers\ChannelController::class);
         Route::get('channels-list', [\App\Http\Controllers\ChannelController::class, 'channelsGet'])->name('channels.list');
+        Route::get('channel-stats/{channelId}', [\App\Http\Controllers\ChannelController::class, 'fetchChannelStatistics'])->name('channel.stats');
+        Route::get('channel-stats-all/{channelId}', [\App\Http\Controllers\ChannelController::class, 'fetchChannelStatisticsAll'])->name('channel.stats.all');
         Route::post('favorite-channel', [\App\Http\Controllers\ChannelController::class, 'favorite'])->name('channels.favorite');
         Route::post('order-posts', [\App\Http\Controllers\ChannelController::class, 'orderPosts'])->name('channels.orderPosts');
     });

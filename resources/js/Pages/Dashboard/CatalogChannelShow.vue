@@ -7,14 +7,18 @@ import {
     mdiEyeOutline,
     mdiHeartOutline,
     mdiQrcodeScan,
-    mdiRepeat,
     mdiStar
 } from '@mdi/js';
 import {NSelect, NTabPane, NTabs, useMessage} from "naive-ui";
 import {nTabSegmentsThemeOverrides, selectThemeOverrides} from "@/themeOverrides.js";
-import {computed, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import InfoCard from "@/Components/Dashboard/InfoCard.vue";
+import { saveCart, loadCart, isInCart as checkInCart, generateFormatArray } from "@/utilities/cartUtilities.js";
+import { Chart,Title,Tooltip, Legend, BarElement, LinearScale, CategoryScale , PointElement, LineElement } from 'chart.js';
+import { Line } from 'vue-chartjs'
+import "chartjs-plugin-style";
 
+Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,PointElement, LineElement);
 const props = defineProps({
     channel: Object,
     countValue: {
@@ -31,14 +35,8 @@ const countValue = ref(props.countValue);
 const cartUpdateKey = ref(0);
 const fav = ref(false);
 const message = useMessage();
-
-const saveCart = (cart) => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-};
-
-const loadCart = () => {
-    return JSON.parse(localStorage.getItem("cart")) || [];
-};
+const format = computed(() => generateFormatArray(props.channel));
+const formatValue = ref(format.value[0]?.value || null);
 
 const removeCart = (cart, index, channel) => {
     cart.splice(index, 1);
@@ -59,16 +57,6 @@ const toggleChannelInCart = (channel) => {
     cartUpdateKey.value++;
 };
 
-const generateFormatArray = (channel) => [
-    { label: "1/24", value: "format_one_price" },
-    { label: "2/48", value: "format_two_price" },
-    { label: "3/72", value: "format_three_price" },
-    { label: "3/без удаления", value: "no_deletion_price" },
-].filter((item) => channel[item.value] !== 0);
-
-const format = computed(() => generateFormatArray(props.channel));
-const formatValue = ref(format.value[0]?.value || null);
-
 const count = [
     { label: '1', value: 1 },
     { label: '2', value: 2 },
@@ -78,8 +66,7 @@ const count = [
 
 const isInCart = (channel) => {
     const dummy = cartUpdateKey.value;
-    const cart = loadCart();
-    return cart.findIndex((ch) => ch.id === channel.id) > -1;
+    return checkInCart(channel);
 };
 
 const addChannelToFavorites = async (channel) => {
@@ -133,6 +120,103 @@ watch(formatValue, (newValue) => {
 });
 const activeButton = ref('info');
 const explain = ['','1 часа в топе / 24 часа в лент', '2 часа в топе / 48 часа в лент', "3 часа в топе / 72 часа в лент"]
+
+let glowEffectApplied = ref(false);
+
+const applyGlowEffect = () => {
+    let draw = Chart.controllers.line.prototype.draw;
+    Chart.controllers.line.prototype.draw = function() {
+        let chart = this.chart;
+        let ctx = chart.ctx;
+        let _stroke = ctx.stroke;
+        ctx.stroke = function() {
+            ctx.save();
+            ctx.shadowColor = '#8729FF';
+            ctx.shadowBlur = 15;
+            _stroke.apply(this, arguments);
+            ctx.restore();
+        };
+        draw.apply(this, arguments);
+        ctx.stroke = _stroke;
+    };
+
+    glowEffectApplied.value = true;
+};
+
+const channelStats = ref({})
+
+let chartDataSubs = ref({
+    labels: [],
+    datasets: [{
+        label: 'Subscribers',
+        data: [],
+        borderColor: '#007BFF',
+        fill: false,
+    }]
+})
+
+let chartDataAvg = ref({
+    labels: [],
+    datasets: [{
+        label: 'Avg Post Reach',
+        data: [],
+        borderColor: '#FF4500',
+        fill: false,
+    }]
+})
+
+let chartDataER = ref({
+    labels: [],
+    datasets: [{
+        label: 'ER',
+        data: [],
+        borderColor: '#FFD700',
+        fill: false,
+    }]
+})
+
+const fetchChannelStats = async () => {
+    try {
+        const response = await axios.get(route('catalog.channel.stats.all', props.channel.id))
+        channelStats.value = response.data;
+
+        chartDataSubs.value = {
+            labels: channelStats.value.subscribers.map(item => item.period),
+            datasets: [{
+                label: 'Subscribers',
+                data: channelStats.value.subscribers.map(item => item.participants_count),
+                borderColor: '#007BFF',
+                fill: false,
+
+            }]
+        };
+        chartDataAvg.value = {
+            labels: channelStats.value.avg_posts_reach.map(item => item.period),
+            datasets: [{
+                label: 'avg_posts_reach',
+                data: channelStats.value.avg_posts_reach.map(item => item.avg_posts_reach),
+                borderColor: '#007BFF',
+                fill: false,
+            }]
+        };
+        chartDataER.value = {
+            labels: channelStats.value.er.map(item => item.period),
+            datasets: [{
+                label: 'ER',
+                data: channelStats.value.er.map(item => item.er),
+                borderColor: '#FFD700',
+                fill: false,
+            }]
+        };
+    }
+    catch (err) {
+        console.error(err)
+    }
+}
+
+onMounted(() => {
+    fetchChannelStats();
+});
 </script>
 
 <template>
@@ -193,7 +277,7 @@ const explain = ['','1 часа в топе / 24 часа в лент', '2 ча�
                         <button @click.prevent="activeButton = 'info'" :class="['tab-button', 'transition', 'text-violet-100', 'text-lg', 'font-bold', 'font-[\'Open Sans\']', 'leading-normal', activeButton === 'info' ? 'active' : '']">Информация</button>
                     </template>
                     <div class="flex justify-center">
-                        <p class="sm:w-1/2 w-full py-6 text-center text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">Авторитет и известность автора. Живая и активная аудитория. Посты о красоте и здоровье, косметологии и уходе за кожей и волосами, эстетической медицине и пластической хирургии, дерматологии и трихологии.</p>
+                        <p class="sm:w-1/2 w-full py-6 text-center text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">{{channel.description}}</p>
                     </div>
                     <div class="flex justify-center gap-x-8">
                         <InfoCard>
@@ -204,7 +288,10 @@ const explain = ['','1 часа в топе / 24 часа в лент', '2 ча�
                         <InfoCard>
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Выявлено</h2>
                             <h3 class="text-center text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">заявок</h3>
-                            <h1 class="flex gap-x-1 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">734</h1>
+                            <h1 class="flex gap-x-1 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">
+
+<!--                              todo orders count for channel  -->
+                            </h1>
                         </InfoCard>
                     </div>
                     <div class="flex flex-wrap mt-4 justify-center gap-8">
@@ -214,20 +301,19 @@ const explain = ['','1 часа в топе / 24 часа в лент', '2 ча�
                         </InfoCard>
                         <InfoCard>
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Просмотры на<br> пост</h2>
-                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">12.8К</h3>
+                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ }}</h3>
                         </InfoCard>
                         <InfoCard>
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">ER</h2>
-                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">8.74%</h3>
+                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{  }}%</h3>
                         </InfoCard>
                         <InfoCard>
-                            <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Публикаций
-                                <br> в день</h2>
-                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">146 774</h3>
+                            <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Публикаций</h2>
+                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ }}</h3>
                         </InfoCard>
                         <InfoCard>
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">СРМ</h2>
-                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">0.35 ₽</h3>
+                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"> ₽</h3>
                         </InfoCard>
                     </div>
                 </n-tab-pane>
@@ -235,6 +321,20 @@ const explain = ['','1 часа в топе / 24 часа в лент', '2 ча�
                     <template #tab>
                         <button @click.prevent="activeButton = 'stat'" :class="['tab-button', 'transition', 'text-violet-100', 'text-lg', 'font-bold', 'font-[\'Open Sans\']', 'leading-normal', activeButton === 'stat' ? 'active' : '']">Статистика</button>
                     </template>
+                    <div class="grid grid-cols-2">
+                        <div>
+                            <h1 class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"> График с текущим количеством подписчиков</h1>
+                            <Line :data="chartDataSubs"/>
+                        </div>
+                        <div>
+                            <h1 class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Охват за 24 часа</h1>
+                            <Line :data="chartDataAvg"/>
+                        </div>
+                        <div>
+                            <h1 class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">ER% — вовлеченность по взаимодействиям</h1>
+                            <Line :data="chartDataER"/>
+                        </div>
+                    </div>
                 </n-tab-pane>
                 <n-tab-pane name="review">
                     <template #tab>
@@ -295,4 +395,5 @@ const explain = ['','1 часа в топе / 24 часа в лент', '2 ча�
     background: #301864;
     padding: 10px 25px;
 }
+
 </style>

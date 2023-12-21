@@ -2,7 +2,7 @@
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
 import axios from "axios";
 import {inject, ref, watch} from "vue";
-import {useLoadingBar} from "naive-ui"
+import {NSkeleton, useLoadingBar} from "naive-ui"
 import CatalogChannelCard from "@/Components/Dashboard/CatalogChannelCard.vue";
 
 const channels = ref([])
@@ -31,8 +31,14 @@ watch(searchData, (newValue) => {
 
 <template>
     <div class="flex flex-col gap-y-4 mt-8">
-        <template v-if="channels" v-for="(channel, index) in channels.data" :key="index">
+        <template v-if="channels?.data?.length > 0" v-for="(channel, index) in channels.data" :key="index">
             <CatalogChannelCard :channel="channel"/>
+        </template>
+        <template v-else>
+            <n-skeleton v-for="i in 4" height="210px" animated :theme-overrides="{
+                color: '#301864',
+                colorEnd: 'rgba(48,24,100,0.67)',
+            }"/>
         </template>
     </div>
     <div class="flex justify-center">

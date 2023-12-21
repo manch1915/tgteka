@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Channel;
+use App\Models\ChannelStatistic;
 use App\Services\AvatarService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
@@ -74,6 +75,29 @@ class ChannelController extends Controller
         });
 
         return $channels;
+    }
+
+    public function fetchChannelStatistics($channelId)
+    {
+        $statistics = ChannelStatistic::where('channel_id', $channelId)->first(['stats']);
+
+        $statisticsArray = json_decode($statistics->stats, true);
+
+        return response()->json($statisticsArray);
+    }
+
+    public function fetchChannelStatisticsAll($channelId)
+    {
+        $channel = ChannelStatistic::where('channel_id', $channelId)->first(['stats', 'subscribers', 'avg_posts_reach', 'er']);
+
+        $decodedData = [
+            'stats' => json_decode($channel->stats, true)['response'],
+            'subscribers' => json_decode($channel->subscribers, true)['response'],
+            'avg_posts_reach' => json_decode($channel->avg_posts_reach, true)['response'],
+            'er' => json_decode($channel->er, true)['response'],
+        ];
+
+        return response()->json($decodedData);
     }
 
     protected function toggleFavorite(Request $request)

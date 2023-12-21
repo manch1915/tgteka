@@ -1,10 +1,11 @@
 <script setup>
 import {darkTheme, NSelect, NConfigProvider, NDatePicker , useMessage} from "naive-ui";
 import { selectCatalogThemeOverrides } from "@/themeOverrides.js";
-import {computed, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import { mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartMinus } from "@mdi/js";
 import { Link } from "@inertiajs/vue3";
+import { saveCart, loadCart, isInCart as checkInCart, generateFormatArray } from "@/utilities/cartUtilities.js";
 
 const props = defineProps({
     channel: Object,
@@ -35,14 +36,8 @@ const cartUpdateKey = ref(0);
 const fav = ref(false);
 const wrap = ref(false);
 const message = useMessage();
-
-const saveCart = (cart) => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-};
-
-const loadCart = () => {
-    return JSON.parse(localStorage.getItem("cart")) || [];
-};
+const format = computed(() => generateFormatArray(props.channel));
+const formatValue = ref(format.value[0]?.value || null);
 
 const emit = defineEmits(["cartChanged", "cartUpdated"]);
 
@@ -66,15 +61,6 @@ const toggleChannelInCart = (channel) => {
     cartUpdateKey.value++;
 };
 
-const generateFormatArray = (channel) => [
-    { label: "1/24", value: "format_one_price" },
-    { label: "2/48", value: "format_two_price" },
-    { label: "3/72", value: "format_three_price" },
-    { label: "3/без удаления", value: "no_deletion_price" },
-].filter((item) => channel[item.value] !== 0);
-
-const format = computed(() => generateFormatArray(props.channel));
-const formatValue = ref(format.value[0]?.value || null);
 
 const count = [
     { label: '1', value: 1 },
@@ -91,8 +77,7 @@ const totalPrice = computed(() => {
 
 const isInCart = (channel) => {
     const dummy = cartUpdateKey.value;
-    const cart = loadCart();
-    return cart.findIndex((ch) => ch.id === channel.id) > -1;
+    return checkInCart(channel);
 };
 
 const addChannelToFavorites = async (channel) => {
@@ -168,6 +153,19 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
     };
 };
 
+const channelStats = ref({})
+
+const fetchChannelStats = async (channelId) => {
+    try {
+        const response = await axios.get(route('catalog.channel.stats', props.channel.id))
+        channelStats.value = response.data.response
+    } catch (err) {
+        console.error(err)
+    }
+}
+onMounted(() => {
+    fetchChannelStats(props.channel.id)
+})
 </script>
 
 <template>
@@ -191,13 +189,13 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
                     <div class="sm:border-x-[1px] h-full w-full border-[#6522D9] flex flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                             <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Подписчики</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">146 774</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ channelStats.participants_count }}</p>
                         </div>
                     </div>
                     <div class="sm:border-r-[1px] h-full w-full border-[#6522D9] flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                             <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Просмотры</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">36.7К</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ channelStats.avg_post_reach}}</p>
                         </div>
                     </div>
                     <div class="flex h-full w-full flex-col items-center justify-center">

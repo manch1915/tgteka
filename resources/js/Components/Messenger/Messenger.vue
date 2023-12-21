@@ -1,5 +1,4 @@
 <script setup>
-
 import MessengerLayout from "@/Layouts/MessengerLayout.vue";
 import SearchBar from "@/Components/Dashboard/SearchBar.vue";
 import {useConversationsStore} from "@/stores/ConversationsStore.js";
@@ -8,64 +7,72 @@ import MessageBox from "@/Components/Dashboard/MessageBox.vue";
 import {computed, ref, watchEffect} from "vue";
 import {usePage} from "@inertiajs/vue3";
 
-const conversations = useConversationsStore();
+const store = useConversationsStore();
+store.getConversations();
 
-conversations.getConversations();
+const inputMessage = ref('');
+const page = usePage();
+const authenticatedUserID = computed(() => page.props.auth.user.id);
+const webSocket = initWebSocket(authenticatedUserID.value);
 
-const message = ref('');
-
-const page = usePage()
-
-const userId = computed(() => page.props.auth.user.id)
-const socket = new WebSocket(`ws://localhost:1915?userid=${userId.value}`);
-
-const getCurrTime = () => {
+const getCurrentTime = () => {
     const now = new Date();
-    const utcString = now.toUTCString(); // Generates UTC string
-    const timePart = utcString.split(' ')[4]; // Extracts the 'HH:mm:ss' part
-    const [ hours, minutes ] = timePart.split(':'); // Breaks 'HH:mm:ss' into [ 'HH', 'mm', 'ss' ]
-    return `${hours}:${minutes}`; // Returns 'HH:mm'
+    const utcString = now.toUTCString();
+    const timePart = utcString.split(' ')[4];
+    const [hours, minutes] = timePart.split(':');
+    return `${hours}:${minutes}`;
 };
 
-socket.onerror = function(error) {
-    console.log(error);
+const generateAvatarURL = (userID) => `https://ui-avatars.com/api/?name=${userID}&color=7F9CF5&background=EBF4FF`;
+
+const addNewMessage = (message, senderID) => {
+    store.addNewMessage(message, generateAvatarURL(senderID), getCurrentTime());
 };
+
+const processIncomingMessage = (data) => {
+    if (data.conversation_id === store.conversation_id) {
+        addNewMessage(data.message, data.sender_id);
+    }
+};
+
+function initWebSocket(userID) {
+    const socket = new WebSocket(`ws://localhost:1915?userid=${userID}`);
+
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        processIncomingMessage(data);
+    };
+
+    socket.onerror = (error) => {
+        console.log(error);
+    };
+
+    return socket;
+}
 
 const sendMessage = () => {
-    if (!conversations.conversation_id) {
+    if (!store.conversation_id) {
         return;
     }
-    socket.send(JSON.stringify({
-        auth_id: userId.value,
-        conversation_id: conversations.conversation_id,
-        message: message.value,
+
+    webSocket.send(JSON.stringify({
+        auth_id: authenticatedUserID.value,
+        conversation_id: store.conversation_id,
+        message: inputMessage.value,
         type: 'personal'
     }));
 
-    conversations.addNewMessage(
-        message.value,
-        `https://ui-avatars.com/api/?name=${userId.value}&color=7F9CF5&background=EBF4FF`,
-        getCurrTime()
-    );
-    message.value = ''
-}
-socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
+    addNewMessage(inputMessage.value, authenticatedUserID.value);
 
-    if(data.conversation_id === conversations.conversation_id) {
-        conversations.addNewMessage(
-            data.message,
-            `https://ui-avatars.com/api/?name=${data.sender_id}&color=7F9CF5&background=EBF4FF`,
-            getCurrTime()
-        )
-    }
+    inputMessage.value = '';
 };
+
 watchEffect(() => {
-    if (conversations.conversation_id != null) {
-        conversations.getConversationsMessages();
+    if (store.conversation_id != null) {
+        store.getConversationsMessages();
     }
 });
-
+//todo <search-bar @search="handleSearch"/>
 </script>
 
 <template>
@@ -76,14 +83,14 @@ watchEffect(() => {
                     <search-bar @search="handleSearch"/>
                 </div>
                 <div class="overflow-y-auto" style="max-height: calc(90vh - 129px - 60px)">
-                    <messenger-user :chats="conversations.conversations"/>
+                    <messenger-user :chats="store.conversations"/>
                 </div>
             </div>
         </template>
         <template #conversation_messages>
-            <div v-if="conversations.conversation_id" class="h-full flex flex-col">
+            <div v-if="store.conversation_id" class="h-full flex flex-col">
                 <div class="flex flex-col gap-y-3" style=" overflow-y: auto">
-                    <MessageBox v-for="message in conversations.conversationsMessages" :text="message.message" :user-avatar="message.user.profile_photo_url" :created_at="message.created_at_time"/>
+                    <MessageBox v-for="message in store.conversationsMessages" :text="message.message" :user-avatar="message.user.profile_photo_url" :created_at="message.created_at_time"/>
                 </div>
                 <div class="footer">
                     <div class="conversation-panel">
@@ -91,12 +98,18 @@ watchEffect(() => {
                             <button class="conversation-panel__button panel-item btn-icon add-file-button">
                                 <img src="/images/file.svg" alt="file">
                             </button>
-                            <input v-model="message" class="conversation-panel__input panel-item" placeholder="Ведите ваше сообщения"/>
+                            <input v-model="inputMessage" class="conversation-panel__input panel-item" placeholder="Ведите ваше сообщения"/>
                             <button @click.prevent="sendMessage" class="conversation-panel__button panel-item btn-icon send-message-button">
                                 <img src="/images/ic-2.svg" alt="send">
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div v-else  class="h-full flex flex-col justify-center">
+                <p class="text-center py-6 text-gray-500 text-base font-normal font-['Open Sans'] leading-tight">Выберите чат</p>
+                <div class="flex justify-center">
+                    <img src="/images/chats.svg" alt="">
                 </div>
             </div>
         </template>

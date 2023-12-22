@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->bigInteger('price');
             $table->enum('status', ['pending', 'accepted', 'declined', 'check', 'finished'])->default('pending');
             $table->timestamp('post_date')->nullable();
+            $table->timestamp('post_date_end')->nullable();
             $table->string('decline_reason', 300)->nullable();
             $table->foreignId('channel_id')->constrained();
             $table->foreignId('format_id')->constrained();

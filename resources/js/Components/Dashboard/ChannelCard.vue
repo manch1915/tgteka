@@ -181,6 +181,8 @@ const wrap = ref(false)
                 height: 60px;
                 img{
                     border-radius: 50%;
+                    height: 100%;
+                    width: 100%;
                 }
             }
         }

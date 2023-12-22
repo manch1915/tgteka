@@ -55,7 +55,6 @@ class OrderService
             }
         }
 
-
         return null;
     }
 
@@ -93,27 +92,34 @@ class OrderService
     {
         foreach ($channels as $channel) {
             $price = $this->calculateChannelSum($channel);
-            $formatId = $this->getFormatId($channel);
+            $formatDetails = $this->getFormatDetails($channel);
 
-            $date = $channel['timestamp'];
-            \Log::info('before: ' . $date);
+            // Add days to post_date
+            $postDate = new DateTime($channel['timestamp']);
+            $postDateEnd = $postDate->modify('+' . $formatDetails['days'] . ' day');
+
             Order::create([
                 'user_id' => Auth::id(),
                 'description' => $request->description,
                 'pattern_id' => $request->pattern_id,
-                'post_date' => $date,
+                'post_date' => $channel['timestamp'],
+                'post_date_end' => $postDateEnd,
                 'channel_id' => $channel['id'],
-                'format_id' => $formatId,
+                'format_id' => $formatDetails['id'],
                 'count' => $channel['count'],
                 'price' => $price,
             ]);
         }
     }
 
-    private function getFormatId(array $channel): int
+    private function getFormatDetails(array $channel): array
     {
         $formatName = self::FORMAT_NAME[$channel['format']];
         $format = Format::where('name', $formatName)->firstOrFail();
-        return $format->id;
+
+        $formatParts = explode('/', $formatName);
+        $days = $formatParts[0];
+
+        return ['id' => $format->id, 'days' => $days];
     }
 }

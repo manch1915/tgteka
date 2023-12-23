@@ -88,13 +88,21 @@ class ChannelController extends Controller
 
     public function fetchChannelStatisticsAll($channelId)
     {
-        $channel = ChannelStatistic::where('channel_id', $channelId)->first(['stats', 'subscribers', 'avg_posts_reach', 'er']);
+        $channelStatistic = ChannelStatistic::where('channel_id', $channelId)->first(['stats', 'subscribers', 'avg_posts_reach', 'er', 'channel_id']);
+        $channel = Channel::find($channelStatistic->channel_id);
+
+        $finishedOrdersQuery = $channel->orders()->where('status', 'finished');
+
+        $finishedOrdersCount = $finishedOrdersQuery->count();
+        $finishedOrdersPriceSum = $finishedOrdersQuery->sum('price');
 
         $decodedData = [
-            'stats' => json_decode($channel->stats, true)['response'],
-            'subscribers' => json_decode($channel->subscribers, true)['response'],
-            'avg_posts_reach' => json_decode($channel->avg_posts_reach, true)['response'],
-            'er' => json_decode($channel->er, true)['response'],
+            'stats' => json_decode($channelStatistic->stats, true)['response'],
+            'subscribers' => json_decode($channelStatistic->subscribers, true)['response'],
+            'avg_posts_reach' => json_decode($channelStatistic->avg_posts_reach, true)['response'],
+            'er' => json_decode($channelStatistic->er, true)['response'],
+            'finished_orders_count' => $finishedOrdersCount,
+            'finished_orders_price_sum' => $finishedOrdersPriceSum
         ];
 
         return response()->json($decodedData);

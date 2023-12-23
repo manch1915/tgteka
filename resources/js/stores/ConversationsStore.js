@@ -21,7 +21,6 @@ export const useConversationsStore = defineStore("conversations", {
             if (!this.conversation_id) return;
             let url = route('conversations.messages', {conversationId: this.conversation_id});
             this.loading = true;
-            console.log(123)
             const response = await axios.get(url);
             this.conversationsMessages = response.data;
             this.loading = false;

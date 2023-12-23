@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import OrderCard from "@/Components/Dashboard/OrderCard.vue";
 import {onMounted} from "vue";
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
-import {useOrdersStore} from "@/stores/orders.js";
+import {useOrdersStore} from "@/stores/OrdersStore.js";
 
 
 onMounted(() => getOrders())

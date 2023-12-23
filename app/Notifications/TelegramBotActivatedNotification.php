@@ -34,8 +34,15 @@ class TelegramBotActivatedNotification extends Notification
         ];
     }
 
+    /**
+     * @throws \Exception
+     */
     public function toTelegram($notifiable): TelegramMessage
     {
+        if (!$notifiable->telegram_user_id) {
+            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        }
+
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->content("Здравствуйте, бот для уведомлений теперь активен!");

@@ -31,31 +31,30 @@ class OrderController extends Controller
 
     public function get($page = 1, $perPage = 10)
     {
-        $orders = auth()->user()->channels->orders->load('format', 'channel.topic', 'pattern');
-        $orders = $orders->sortByDesc('created_at');
-        $allItems = collect();
-        foreach ($orders as $order) {
+        $orders = auth()->user()->channelOrders()->with('format', 'channel.topic', 'pattern')
+            ->orderByDesc('created_at')
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        $orders->getCollection()->transform(function ($order) {
             $order->orderPattern = $order->pattern;
-            $post_date_end = match ($order->format->name) {
-                '1/24' => Carbon::parse($order->post_date)->addDays(1),
-                '2/48' => Carbon::parse($order->post_date)->addDays(2),
-                '3/72' => Carbon::parse($order->post_date)->addDays(3),
-                default => Carbon::parse($order->post_date)->addDays(1),
+
+            $additionalDays = match($order->format->name) {
+                '1/24' => 1,
+                '2/48' => 2,
+                '3/72' => 3,
+                default => 1,
             };
-            $order->post_date_end = $post_date_end->format('Y-m-d H:i:s');;
+
+            $post_date_end = Carbon::parse($order->post_date)->addDays($additionalDays);
+            $order->post_date_end = $post_date_end->format('Y-m-d H:i:s');
+
             $order->orderPattern->patternMedia = $this->avatarService->getAvatarUrlOfPattern($order->pattern);
             $order->channel->channelAvatar = $this->avatarService->getAvatarUrlOfChannel($order->channel);
-            $allItems->push($order);
-        }
 
-        $offset = ($page * $perPage) - $perPage;
+            return $order;
+        });
 
-        return new \Illuminate\Pagination\LengthAwarePaginator(
-            $allItems->slice($offset, $perPage)->values(),
-            $allItems->count(),
-            $perPage,
-            $page,
-            ['path' => request()->url(), 'query' => request()->query()]);
+        return $orders;
     }
 
     public function acceptOrder($orderItemId)

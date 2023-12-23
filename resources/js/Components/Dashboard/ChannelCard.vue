@@ -1,6 +1,6 @@
 <script setup>
 import {router} from "@inertiajs/vue3";
-import {NTabPane, NTabs} from "naive-ui";
+import {NBadge, NTabPane, NTabs} from "naive-ui";
 import AboutChannel from "@/Components/Dashboard/ChannelTab/AboutChannel.vue";
 import {nTabThemeOverrides} from "@/themeOverrides.js";
 import {ref} from "vue";
@@ -19,7 +19,6 @@ const wrap = ref(false)
     <div class="channel_card">
         <div class="channel_card-container">
             <div class="grid">
-                <!-- TODO badge from naive ui           -->
                 <div class="flex grid-element flex-col items-center justify-center gap-y-3">
                     <div :class="{'bg-yellow-400 point': channel.status === 'pending', 'bg-green-400 point': channel.status === 'accepted', 'bg-red-400 point': channel.status === 'declined'}"></div>
                     <div class="flex rating text-white text-sm font-normal font-['Poppins'] leading-tight">
@@ -43,7 +42,9 @@ const wrap = ref(false)
                     <div class="flex w-full justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                         <button class="watch flex items-center gap-x-1.5">Канал в каталоге <i class="block eye"></i></button>
                         <button @click.prevent="router.visit(route('channels.edit', channel.id))" class="edit">Редактировать канал</button>
-                        <button class="orders flex items-center gap-x-1.5">К заявкам <i class="block inkarrow"></i></button>
+                        <n-badge :value="channel.pending_order_count" type="info" >
+                            <button @click.prevent="router.visit(route('order.index'))" class="orders flex items-center text-violet-100 gap-x-1.5">К заявкам <i class="block inkarrow"></i></button>
+                        </n-badge>
                     </div>
                 </div>
             </div>
@@ -76,7 +77,7 @@ const wrap = ref(false)
                             Статистика
                             </div>
                         </template>
-                        <Statistics/>
+                        <Statistics :channel_id="channel.id"/>
                     </n-tab-pane>
                 </n-tabs>
                 </div>

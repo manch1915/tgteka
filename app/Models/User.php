@@ -132,6 +132,11 @@ class User extends Authenticatable
         return $this->hasMany(Channel::class);
     }
 
+    public function channelOrders()
+    {
+        return $this->hasManyThrough(Order::class, Channel::class);
+    }
+
     public function patterns()
     {
         return $this->hasMany(Pattern::class);

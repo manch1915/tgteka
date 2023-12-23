@@ -1,13 +1,10 @@
 <script setup>
 import {computed, ref} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import {mdiCheck, mdiClose, mdiEyeOutline, mdiForumOutline} from "@mdi/js";
-import {openModal, pushModal} from "jenesius-vue-modal";
-import Mission from "@/Components/Dashboard/Mission.vue";
+import {mdiBug, mdiCheck, mdiForumOutline} from "@mdi/js";
+import {pushModal} from "jenesius-vue-modal";
+import Report from "@/Components/Dashboard/Report.vue";
 import { useLoadingBar, useMessage} from "naive-ui";
-import CancelOrder from "@/Components/Dashboard/CancelOrder.vue";
-import ToCheck from "@/Components/Dashboard/ToCheck.vue";
-import {useOrdersStore} from "@/stores/OrdersStore.js";
 import Messenger from "@/Components/Messenger/Messenger.vue"
 
 const props = defineProps({
@@ -18,39 +15,12 @@ const props = defineProps({
     }
 })
 
-const ordersStore = useOrdersStore()
 const loading = useLoadingBar()
 const isLoading = ref(false);
-const openMission = () => {
-    openModal(Mission, {order: props.order})
-}
-const decline = () => {
-    openModal(CancelOrder, {orderId: props.order.id})
-}
-
-const toCheck = () => {
-    pushModal(ToCheck, {orderId: props.order.id})
-}
 
 const message = useMessage()
-const accept = async () => {
-    loading.start()
-    isLoading.value = true
-    await axios.patch(route('order.accept', {orderItemId: props.order.id}))
-        .then(response => {
-            loading.finish()
-            isLoading.value = false
-            message.success(response.data.message);
-            ordersStore.getOrders()
-        })
-        .catch(error => {
-            loading.error()
-            console.log(error);
-        });
-}
-const canAccept = computed(() => !isLoading.value && !['accepted', 'declined', 'check', 'finished'].includes(props.order.status))
-const canDecline = computed(() => ['pending'].includes(props.order.status))
 
+const canReport = computed(() => !isLoading.value && ['accepted','check'].includes(props.order.status))
 
 const formatDateTime = (dateTime, options) => {
     return dateTime.toLocaleString('ru-RU', options);
@@ -74,13 +44,7 @@ const newTime = newDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-dig
 const pubDateOptions = { day: 'numeric', month: 'long' };
 const pubTimeOptions = { hour: 'numeric', minute: 'numeric', hour12: false };
 
-const formattedPubDate = formatDateTime(originalDate, pubDateOptions);
 const formattedPubTime = formatDateTime(originalDate, pubTimeOptions);
-
-let pubDateEnd = new Date(props.order.post_date_end);
-
-const formattedPubDateEnd = formatDateTime(pubDateEnd, pubDateOptions);
-const formattedPubTimeEnd = formatDateTime(pubDateEnd, pubTimeOptions);
 
 const pubTime = `${formattedPubTime}-${newTime}`;
 
@@ -88,12 +52,16 @@ const openMessenger = () => {
   pushModal(Messenger)
 }
 
+const openReport = () => {
+  pushModal(Report, {order_id: props.order.id})
+}
+
 </script>
 
 <template>
     <div class="order_card">
         <div class="p-4 order_card-container">
-            <div class="grid">
+            <div class="grid ">
                 <div>
                     <div class="flex gap-x-4">
                         <img class="rounded-full avatar" :src="order.channel.channelAvatar" alt=""/>
@@ -143,35 +111,13 @@ const openMessenger = () => {
                       </div>
                   </div>
                 </div>
-                <div class="flex flex-col justify-center">
-                    <template v-if="order.status === 'pending'">
-                        <div class="text-center">
-
-                        </div>
-                    </template>
-                    <template v-if="order.status === 'check'">
-                        <div class="text-center text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">
-                            Вы отправили пост на проверку
-                        </div>
-                    </template>
-                    <template v-else-if="order.status === 'accepted'">
-                        <div class="text-center text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Разместите пост</div>
-                        <div class="text-center py-2 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">С {{ formattedPubDate }} {{ formattedPubTime }} <br/> По {{formattedPubDateEnd}} {{ formattedPubTimeEnd}}</div>
-                        <button @click.prevent="toCheck" class="px-6 inline-block py-3.5 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl border border-violet-100 transition hover:bg-gray-400">На проверку</button>
-                    </template>
-                    <template v-else-if="order.status === 'declined'">
-                        <div class="text-center text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{order.decline_reason}}</div>
-                    </template>
-                </div>
             </div>
         </div>
 
         <div class="flex justify-between items-center py-6 unwrap px-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
             <div class="flex gap-x-4">
-                <button v-if="canAccept" :disabled="isLoading"  @click.prevent="accept" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
-                <button v-if="isCard" @click.prevent="openMission" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Посмотреть задание <BaseIcon size="30" :path="mdiEyeOutline"/></button>
-                <button v-if="canDecline" @click.prevent="decline" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
-            </div>
+                <button v-if="canReport" :disabled="isLoading"  @click.prevent="openReport" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Пожаловаться <BaseIcon size="30" :path="mdiBug"/></button>
+             </div>
             <div>
                 <button @click.prevent="openMessenger" class="flex items-center gap-x-2 px-6 py-3.5">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>
             </div>
@@ -255,11 +201,12 @@ const openMessenger = () => {
                 border-right: 1px solid #6522D9;
             }
         }
-        grid-template-columns: 5fr 5fr 3fr;
+        grid-template-columns: 5fr 5fr;
 
         @media screen and (max-width: 640px) {
             grid-template-columns: 1fr;
         }
+
         div{
             .point{
                 width: 15px;

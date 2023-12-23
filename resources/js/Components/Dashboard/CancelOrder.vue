@@ -2,8 +2,8 @@
 import {NSelect, NInput, useMessage, NDatePicker, NConfigProvider, darkTheme, useLoadingBar} from "naive-ui";
 import {closeModal} from "jenesius-vue-modal";
 import {inputThemeOverrides, selectThemeOverrides} from "@/themeOverrides.js";
-import {computed, ref, watch} from "vue";
-import {useOrdersStore} from "@/stores/orders.js";
+import {computed, ref} from "vue";
+import {useOrdersStore} from "@/stores/OrdersStore.js";
 
 const ordersStore = useOrdersStore()
 

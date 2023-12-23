@@ -18,6 +18,7 @@ class CreateReviewsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('channel_id')->constrained();
             $table->text('review_text');
+            $table->integer('rating')->unsigned();
             $table->timestamps();
         });
     }

@@ -40,9 +40,14 @@ class OrderSuggestedDateNotification extends Notification
 
     /**
      * @throws \JsonException
+     * @throws \Exception
      */
     public function toTelegram($notifiable): TelegramMessage
     {
+        if (!$notifiable->telegram_user_id) {
+            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        }
+
         $acceptUrl = route('suggested-date.accept', [$this->orderItemId, $this->suggestedDate]);
         $declineUrl = route('suggested-date.decline', $this->suggestedPostDateId);
 

@@ -155,7 +155,7 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
 
 const channelStats = ref({})
 
-const fetchChannelStats = async (channelId) => {
+const fetchChannelStats = async () => {
     try {
         const response = await axios.get(route('catalog.channel.stats', props.channel.id))
         channelStats.value = response.data.response

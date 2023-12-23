@@ -31,6 +31,7 @@ class UserChannelController extends Controller
 
         $channels->each(function ($channel) use ($avatarService) {
             $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);
+            $channel->pending_order_count = $channel->orders()->where('status', 'pending')->count();
             return $channel;
         });
 

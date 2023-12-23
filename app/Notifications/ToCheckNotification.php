@@ -35,12 +35,20 @@ class ToCheckNotification extends Notification
         ];
     }
 
+    /**
+     * @throws \Exception
+     */
     public function toTelegram($notifiable): TelegramMessage
     {
+        if (!$notifiable->telegram_user_id) {
+            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        }
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->content("Ваш пост разместили, пожалуйста перейдите по ссылке и проверьте: " . $this->post_link);
+            ->content(sprintf("Ваш пост разместили, пожалуйста перейдите по ссылке и проверьте: [%s](%s)", $this->post_link, $this->post_link))
+            ->options(['parse_mode' => 'Markdown']);
     }
+
 
     public function toArray($notifiable): array
     {

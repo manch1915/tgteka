@@ -69,6 +69,8 @@ class PatternController extends Controller
      */
     public function update(UpdatePatternRequest $request, Pattern $pattern): JsonResponse
     {
+        $validatedData = $request->validated();
+
         if ($request->hasFile('media')) {
             $pattern
                 ->addMedia($request->file('media'))
@@ -77,7 +79,9 @@ class PatternController extends Controller
             $pattern->clearMediaCollection('images');
         }
 
-        $pattern->update($request->validated());
+        unset($validatedData['media']);
+
+        $pattern->update($validatedData);
 
         return response()->json($pattern);
     }

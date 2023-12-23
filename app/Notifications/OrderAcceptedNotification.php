@@ -34,8 +34,15 @@ class OrderAcceptedNotification extends Notification
         ];
     }
 
-    public function toTelegram($notifiable): TelegramMessage
+    /**
+     * @throws \Exception
+     */
+    public function toTelegram($notifiable)
     {
+        if (!$notifiable->telegram_user_id) {
+            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        }
+
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->content("Ваш заказ приняли в канале: " . $this->chanelTitle);

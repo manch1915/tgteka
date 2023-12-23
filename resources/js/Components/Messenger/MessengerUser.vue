@@ -16,7 +16,7 @@ const conversations = useConversationsStore()
             </div>
             <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">
                 {{chat.user.name}}
-                <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-snug">{{ chat.last_message.message }}</p>
+                <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-snug">{{ chat?.last_message?.message }}</p>
             </div>
         </div>
     </div>

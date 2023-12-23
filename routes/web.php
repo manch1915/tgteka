@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\TelegramController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PatternController;
+use App\Http\Controllers\PlacementController;
 use App\Http\Controllers\Profile\ChangePasswordController;
 use App\Http\Controllers\Profile\NotificationsHistoryController;
 use App\Http\Controllers\Profile\NotificationsSettingController;
@@ -65,6 +66,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::get('cart', fn () => inertia('Dashboard/Cart'));
+
+    Route::group(['prefix' => 'placements'], function () {
+        Route::get('/', [PlacementController::class, 'index'])->name('placements');
+        Route::get('/get', [PlacementController::class, 'get'])->name('placements.get');
+        Route::post('/send-report', [PlacementController::class, 'sendReport'])->name('report-send');
+    });
+
 
     Route::get('/patterns', [PatternController::class, 'index'])->name('patterns');
     Route::get('/userPatternsPaginated', [PatternController::class, 'userPatternsPaginated'])->name('user-patterns-paginated');

@@ -55,6 +55,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::post('create-payment-request', [\App\Http\Controllers\Payment\YooKassaController::class, 'createPayment'])->name('create-payment-request');
+    Route::post('create-payout-request', [\App\Http\Controllers\Payment\YooKassaController::class, 'createPayout'])->name('create-payout-request');
 
     Route::prefix('catalog')->name('catalog.')->group(function () {
         Route::resource('channels', \App\Http\Controllers\ChannelController::class);

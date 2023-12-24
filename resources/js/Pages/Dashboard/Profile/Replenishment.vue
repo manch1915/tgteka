@@ -9,10 +9,12 @@ const activeButton = ref('add-payment-method');
 const activeTab = ref('bank-card')
 
 const amount = ref(0);
-
+const paymentLink = ref('');
 const createPaymentRequest = () => {
   axios.post(route('create-payment-request'), {amount: amount.value})
-      .then(r => console.log(r))
+      .then(r => {
+          paymentLink.value = r.data[0]
+      });
 }
 </script>
 
@@ -38,11 +40,8 @@ const createPaymentRequest = () => {
                                         </div>
                                     </div>
                                     <div @click.prevent="activeTab = 'wallets'" class="payment_types-card-wrapper">
-                                        <div class="flex h-full flex-col items-center justify-evenly payment_types-card">
-                                            <div class="flex flex-wrap items-center justify-center">
-                                                <img class="w-16 sm:w-auto" src="/images/webmoney.svg" alt="webmoney">
-                                                <img class="w-16 sm:w-auto" src="/images/qiwi.svg" alt="qiwi">
-                                            </div>
+                                        <div class="flex h-full flex-col items-center justify-center payment_types-card">
+                                            <img src="/images/yookassa.png" alt="yookassa">
                                             <p class="text-violet-100 text-lg font-normal font-['Open Sans']">Кошельки</p>
                                         </div>
                                     </div>
@@ -83,8 +82,7 @@ const createPaymentRequest = () => {
                             <div v-show="activeTab === 'wallets'" class="mt-5 px-4 wallets sm:w-3/4 sm:px-0">
                                 <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Пополнение кошельками</h1>
                                 <div class="my-4 flex justify-center gap-x-5 sm:justify-start">
-                                    <img src="/images/webmoney.svg" alt="webmoney">
-                                    <img src="/images/qiwi.svg" alt="qiwi">
+                                    <img class="w-36" src="/images/yookassa.png" alt="yookassa">
                                 </div>
                                 <n-input v-model:value="amount" class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
                                 <p class="py-4 text-violet-100 text-base font-normal font-['Open Sans']">Комиссия системы 15% (не менее 85.0 р.)<br/>Максимальная сумма пополнения 170 000 р. <br/>При необходимости пополниться на сумму больше, совершите несколько платежей.</p>
@@ -92,7 +90,10 @@ const createPaymentRequest = () => {
                                     <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                                     <p class="text-violet-100 sm:text-lg text-xs font-normal font-['Open Sans'] leading-normal">Привязывая карту, вы соглашаетесь <br/>с <span class="underline">правилами настройки автопополнения</span></p>
                                 </div>
+                                <div class="flex flex-col">
                                 <button @click.prevent="createPaymentRequest" class="sm:w-3/4 w-full my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</button>
+                                <a v-if="paymentLink" :href="paymentLink" class="text-center sm:w-3/4 w-full my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Страница формы</a>
+                                </div>
                             </div>
                             <div v-show="activeTab === 'qr'" class="mt-5 px-4 qr sm:w-3/4 sm:px-0">
                                 <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Оплата через QR код</h1>

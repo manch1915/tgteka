@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CheckPaymentStatusJob;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use YooKassa\Client;
 
@@ -47,13 +49,64 @@ class YooKassaController extends Controller
             $idempotenceKey = uniqid('', true);
             $response = $client->createPayment($request, $idempotenceKey);
 
+
+
+            $payment  = Transaction::create([
+                'user_id' => auth()->id(),
+                'transaction_id' => $response->getId(),
+                'amount' => $request->amount->getValue(),
+                'type' => 'payment'
+            ]);
+
+            CheckPaymentStatusJob::dispatch($payment);
+
             //получаем confirmationUrl для дальнейшего редиректа
             $confirmationUrl = $response->getConfirmation()->getConfirmationUrl();
             return response()->json([$confirmationUrl,  $response->getId()]);
         } catch (\Exception $e) {
             $response = $e;
         }
+        return response()->json($response);
+    }
 
+    public function createPayout(Request $request)
+    {
+        $client = new Client();
+        $client->setAuth('294111', 'test_WK472tUJGdRv6larB3TqhEJu7-Hi9eDTFH7jYzT_7a0');
 
+        try {
+            $payoutRequest = [
+                'amount' => [
+                    'value' => $request->input('amount'),
+                    'currency' => 'RUB',
+                ],
+                'payout_destination_data' => [
+                    'type' => 'bank_card',
+                    'card' => [
+                        'number' => $request->input('card'),
+                    ],
+                ],
+                'description' => 'Payout of ' . $request->input('amount') .  ' RUB',
+                'metadata' => [
+                    'order_id' => '37',
+                    'transaction_id' => '789-456-123',
+                ],
+            ];
+            $idempotenceKey = uniqid('', true);
+            $response = $client->createPayout($payoutRequest, $idempotenceKey);
+
+            $payout = Transaction::create([
+                'user_id' => auth()->id(),
+                'transaction_id' => $response->getId(),
+                'amount' => -$request->input('amount'),
+                'type' => 'payout'
+            ]);
+
+            return response()->json(['Payout ID' => $response->getId(), 'Payout Status' => $response->getStatus()]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error in payout creation: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }

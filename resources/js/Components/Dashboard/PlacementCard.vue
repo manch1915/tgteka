@@ -1,9 +1,10 @@
 <script setup>
 import {computed, ref} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import {mdiBug, mdiCheck, mdiForumOutline} from "@mdi/js";
+import {mdiBug, mdiCheck, mdiForumOutline, mdiForumPlusOutline} from "@mdi/js";
 import {pushModal} from "jenesius-vue-modal";
 import Report from "@/Components/Dashboard/Report.vue";
+import Review from "@/Components/Dashboard/Review.vue";
 import { useLoadingBar, useMessage} from "naive-ui";
 import Messenger from "@/Components/Messenger/Messenger.vue"
 
@@ -20,7 +21,8 @@ const isLoading = ref(false);
 
 const message = useMessage()
 
-const canReport = computed(() => !isLoading.value && ['accepted','check'].includes(props.order.status))
+const canReport = computed(() => !isLoading.value && ['accepted', 'check'].includes(props.order.status))
+const canReview = computed(() => !isLoading.value && ['finished'].includes(props.order.status))
 
 const formatDateTime = (dateTime, options) => {
     return dateTime.toLocaleString('ru-RU', options);
@@ -41,7 +43,6 @@ newDate.setHours(newDate.getHours() + 2);
 
 const newTime = newDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-const pubDateOptions = { day: 'numeric', month: 'long' };
 const pubTimeOptions = { hour: 'numeric', minute: 'numeric', hour12: false };
 
 const formattedPubTime = formatDateTime(originalDate, pubTimeOptions);
@@ -54,6 +55,10 @@ const openMessenger = () => {
 
 const openReport = () => {
   pushModal(Report, {order_id: props.order.id})
+}
+
+const openReview = () => {
+  pushModal(Review, {order_id: props.order.id})
 }
 
 </script>
@@ -117,6 +122,7 @@ const openReport = () => {
         <div class="flex justify-between items-center py-6 unwrap px-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
             <div class="flex gap-x-4">
                 <button v-if="canReport" :disabled="isLoading"  @click.prevent="openReport" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Пожаловаться <BaseIcon size="30" :path="mdiBug"/></button>
+                <button v-if="canReview" :disabled="isLoading"  @click.prevent="openReview" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Оставить отзыв <BaseIcon size="30" :path="mdiForumPlusOutline"/></button>
              </div>
             <div>
                 <button @click.prevent="openMessenger" class="flex items-center gap-x-2 px-6 py-3.5">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>

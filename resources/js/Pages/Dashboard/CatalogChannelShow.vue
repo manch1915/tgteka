@@ -16,7 +16,8 @@ import InfoCard from "@/Components/Dashboard/InfoCard.vue";
 import { saveCart, loadCart, isInCart as checkInCart, generateFormatArray } from "@/utilities/cartUtilities.js";
 import { Chart,Title,Tooltip, Legend, BarElement, LinearScale, CategoryScale , PointElement, LineElement } from 'chart.js';
 import { Line } from 'vue-chartjs'
-import "chartjs-plugin-style";
+import Reviews from "@/Components/Dashboard/ChannelTab/Reviews.vue";
+import axios from "axios";
 
 Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,PointElement, LineElement);
 const props = defineProps({
@@ -67,23 +68,6 @@ const count = [
 const isInCart = (channel) => {
     const dummy = cartUpdateKey.value;
     return checkInCart(channel);
-};
-
-const addChannelToFavorites = async (channel) => {
-    try {
-        const response = await axios.post(route("catalog.channels.favorite"), { channel_id: channel.id });
-
-        if (response.data.status === "success") {
-            const isFav = response.data.message.includes("added");
-            const operation = isFav ? "добавлен в избранное" : "удален из избранних";
-            message.info(`Канал ${channel.channel_name} ${operation}`);
-            fav.value = isFav;
-        } else {
-            message.error("Возникла проблема с добавлением канала в избранное.");
-        }
-    } catch (error) {
-        message.error("Произошла ошибка: ", error);
-    }
 };
 
 const updateCart = (cart, channel, count, format) => {
@@ -181,30 +165,35 @@ const fetchChannelStats = async () => {
         channelStats.value = response.data;
 
         chartDataSubs.value = {
-            labels: channelStats.value.subscribers.map(item => item.period),
+            labels: channelStats.value.subscribers.reverse().map(item => {
+                let date = new Date(item.period);
+                return `${date.getMonth() + 1}-${date.getDate()}`;}),
             datasets: [{
                 label: 'Subscribers',
                 data: channelStats.value.subscribers.map(item => item.participants_count),
-                borderColor: '#007BFF',
+                borderColor: '#8729FF',
                 fill: false,
-
             }]
         };
         chartDataAvg.value = {
-            labels: channelStats.value.avg_posts_reach.map(item => item.period),
+            labels: channelStats.value.avg_posts_reach.reverse().map(item => {
+                let date = new Date(item.period);
+                return `${date.getMonth() + 1}-${date.getDate()}`;}),
             datasets: [{
                 label: 'avg_posts_reach',
                 data: channelStats.value.avg_posts_reach.map(item => item.avg_posts_reach),
-                borderColor: '#007BFF',
+                borderColor: '#8729FF',
                 fill: false,
             }]
         };
         chartDataER.value = {
-            labels: channelStats.value.er.map(item => item.period),
+            labels: channelStats.value.er.reverse().map(item => {
+                let date = new Date(item.period);
+                return `${date.getMonth() + 1}-${date.getDate()}`;}),
             datasets: [{
                 label: 'ER',
                 data: channelStats.value.er.map(item => item.er),
-                borderColor: '#FFD700',
+                borderColor: '#8729FF',
                 fill: false,
             }]
         };
@@ -214,8 +203,17 @@ const fetchChannelStats = async () => {
     }
 }
 
+const ordersCount = ref(0)
+
+const getChannelOrdersCount = () => {
+    axios.get(route('catalog.channel.orders.count', {channelId: props.channel.id}))
+        .then(r => ordersCount.value = r.data)
+        .catch(c => console.log(c))
+}
+
 onMounted(() => {
     fetchChannelStats();
+    getChannelOrdersCount();
 });
 </script>
 
@@ -281,35 +279,32 @@ onMounted(() => {
                     </div>
                     <div class="flex justify-center gap-x-8">
                         <InfoCard>
-                            <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Оценка</h2>
-                            <h3 class="text-center text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">отзывов</h3>
-                            <div class="flex gap-x-1 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight"><BaseIcon :path="mdiStar" fill="#FFB800"/>4.8</div>
+                            <h3 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Оценка отзывов</h3>
+                            <div class="flex gap-x-1 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight"><BaseIcon :path="mdiStar" fill="#FFB800"/>{{channel.rating}}</div>
                         </InfoCard>
                         <InfoCard>
-                            <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Выявлено</h2>
-                            <h3 class="text-center text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">заявок</h3>
+                            <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Выявлено заявок</h2>
                             <h1 class="flex gap-x-1 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">
-
-<!--                              todo orders count for channel  -->
+                               {{ordersCount}}
                             </h1>
                         </InfoCard>
                     </div>
                     <div class="flex flex-wrap mt-4 justify-center gap-8">
                         <InfoCard>
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Подписчики</h2>
-                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">146 774</h3>
+                            <h3 v-if="channelStats.stats" class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ channelStats.stats.participants_count }}</h3>
                         </InfoCard>
                         <InfoCard>
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Просмотры на<br> пост</h2>
-                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ }}</h3>
+                            <h3 v-if="channelStats.stats" class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ channelStats.stats.avg_post_reach }}</h3>
                         </InfoCard>
                         <InfoCard>
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">ER</h2>
-                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{  }}%</h3>
+                            <h3 v-if="channelStats.stats" class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ channelStats.stats.er_percent }}%</h3>
                         </InfoCard>
                         <InfoCard>
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Публикаций</h2>
-                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ }}</h3>
+                            <h3 v-if="channelStats.stats" class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ channelStats.stats.posts_count }}</h3>
                         </InfoCard>
                         <InfoCard>
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">СРМ</h2>
@@ -321,7 +316,7 @@ onMounted(() => {
                     <template #tab>
                         <button @click.prevent="activeButton = 'stat'" :class="['tab-button', 'transition', 'text-violet-100', 'text-lg', 'font-bold', 'font-[\'Open Sans\']', 'leading-normal', activeButton === 'stat' ? 'active' : '']">Статистика</button>
                     </template>
-                    <div class="grid grid-cols-2">
+                    <div class="grid sm:grid-cols-2 grid-cols-1 gap-y-10 px-2">
                         <div>
                             <h1 class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"> График с текущим количеством подписчиков</h1>
                             <Line :data="chartDataSubs"/>
@@ -340,6 +335,8 @@ onMounted(() => {
                     <template #tab>
                         <button @click.prevent="activeButton = 'review'" :class="['tab-button' , 'transition', 'text-violet-100', 'text-lg', 'font-bold', 'font-[\'Open Sans\']', 'leading-normal', activeButton === 'review' ? 'active' : '']">Отзывы</button>
                     </template>
+
+                    <Reviews :channel-id="channel.id"/>
                 </n-tab-pane>
             </n-tabs>
         </div>

@@ -32,6 +32,8 @@ class Review extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['id', 'user_id', 'channel_id', 'review_text', 'rating'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

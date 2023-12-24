@@ -5,8 +5,9 @@ import { useModalStore } from '@/stores/authModal.js'
 import TextInput from '@/Components/TextInput.vue';
 import {reactive} from "vue";
 import {Link} from "@inertiajs/vue3";
-import {NCheckbox, useLoadingBar} from "naive-ui";
+import {NCheckbox, useLoadingBar, useMessage} from "naive-ui";
 import {checkboxThemeOverrides} from "@/themeOverrides.js";
+import {closeModal} from "jenesius-vue-modal";
 
 const modalStore = useModalStore()
 
@@ -22,11 +23,14 @@ const state = reactive({
   errors: {}
 });
 const loading = useLoadingBar()
+const message = useMessage()
 const submit = async () => {
     loading.start()
     await axios.post(route('register'), state.form)
         .then(res => {
             loading.finish()
+            message.info('Мы отправили ваш пароль на ваш e-mail')
+            closeModal()
         })
         .catch(error => {
             loading.error()

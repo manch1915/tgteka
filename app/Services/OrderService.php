@@ -64,7 +64,7 @@ class OrderService
             $user->decrementBalance($totalSum);
             return null;
         } else {
-            return 'You don\'t have enough money for this operation';
+            return 'У вас недостаточно денег на эту операцию';
         }
     }
 

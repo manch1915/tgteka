@@ -98,8 +98,4 @@ class Channel extends Model implements HasMedia
         return $this->belongsTo(Topic::class);
     }
 
-    public function orderItems(): HasMany
-    {
-        return $this->hasMany(OrderItem::class);
-    }
 }

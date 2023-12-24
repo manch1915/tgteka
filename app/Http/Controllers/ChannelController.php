@@ -136,6 +136,22 @@ class ChannelController extends Controller
         ];
     }
 
+    public function fetchChannelReviews($channelId)
+    {
+        $reviews = Channel::find($channelId)->reviews()
+            ->with('user:id,email')
+            ->get();
+
+        return response()->json($reviews);
+    }
+
+    public function fetchChannelOrdersCount($channelId)
+    {
+        $ordersCount = Channel::find($channelId)->orders()->count();
+
+        return response()->json($ordersCount);
+    }
+
     protected function getChannelWithAvatarAndTopic(Channel $channel, AvatarService $avatarService)
     {
         $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);

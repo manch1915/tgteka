@@ -1,5 +1,5 @@
 <script setup>
-import {NInput, useMessage} from "naive-ui";
+import {NInput, NRate, useMessage} from "naive-ui";
 import {closeModal} from "jenesius-vue-modal";
 import {inputThemeOverrides} from "@/themeOverrides.js";
 import {ref} from "vue";
@@ -10,15 +10,22 @@ const props = defineProps({
 
 const message = useMessage()
 
-const reportMessage = ref('')
+const reviewMessage = ref('')
+const rate = ref(0)
 
-const sendReport = () => {
-    axios.post(route('report-send'), {report_message: reportMessage.value, order_id: props.order_id})
+const sendReview = () => {
+    axios.post(route('review-send'), {review_text: reviewMessage.value, order_id: props.order_id, rating:rate.value })
         .then(r => console.log(r))
-        .catch(c => console.log(c))
+        .catch(error => {
+            if (error.response && error.response.data) {
+                message.error(error.response.data.error);
+            }
+        })
     closeModal()
 }
-
+const updateRate = (value) => {
+  rate.value = value
+}
 </script>
 
 <template>
@@ -30,15 +37,19 @@ const sendReport = () => {
                         <img src="/images/Icon-close.svg" alt="">
                     </div>
                     <div class="flex flex-col items-start justify-center gap-y-6 sm:items-center">
-                        <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Напишите пожалуйста ваш текст жалобы</h1>
+                        <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Напишите пожалуйста отзыв</h1>
                     </div>
                 </div>
-                <div class="sm:w-3/4 mx-auto">
-                    <div class="sm:w-1/2 mx-auto">
-                        <n-input :theme-overrides="inputThemeOverrides" v-model:value="reportMessage" placeholder="Текст жалобы" type="textarea"/>
-                        <button @click.prevent="sendReport" class="py-2 w-full mt-6 bg-purple-600 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Отправить</button>
+                <div class="w-3/4 mx-auto">
+                    <div class="w-1/2 mx-auto">
+                        <n-input :theme-overrides="inputThemeOverrides" v-model:value="reviewMessage" placeholder="Отзыв" type="textarea"/>
+                        <div class="flex justify-center py-2">
+                            <n-rate :on-update:value="updateRate" :value="rate" size="large"/>
+                        </div>
+                        <button @click.prevent="sendReview" class="py-2 w-full mt-6 bg-purple-600 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Отправить</button>
                     </div>
                 </div>
+
             </div>
         </main>
     </div>
@@ -57,8 +68,8 @@ main{
     background: rgba(7, 12, 41, 1);
 
     @media screen and (max-width: 640px){
-        padding: 40px;
-        height: auto;
+        padding: 10px;
+        height: 70vh;
     }
     .overflowing{
         overflow-y: auto;

@@ -61,8 +61,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('channels-list', [\App\Http\Controllers\ChannelController::class, 'channelsGet'])->name('channels.list');
         Route::get('channel-stats/{channelId}', [\App\Http\Controllers\ChannelController::class, 'fetchChannelStatistics'])->name('channel.stats');
         Route::get('channel-stats-all/{channelId}', [\App\Http\Controllers\ChannelController::class, 'fetchChannelStatisticsAll'])->name('channel.stats.all');
+        Route::get('channel-reviews/{channelId}', [\App\Http\Controllers\ChannelController::class, 'fetchChannelReviews'])->name('channel.reviews');
         Route::post('favorite-channel', [\App\Http\Controllers\ChannelController::class, 'favorite'])->name('channels.favorite');
         Route::post('order-posts', [\App\Http\Controllers\ChannelController::class, 'orderPosts'])->name('channels.orderPosts');
+
+        Route::get('channel-orders-count/{channelId}', [\App\Http\Controllers\ChannelController::class, 'fetchChannelOrdersCount'])->name('channel.orders.count');
     });
 
     Route::get('cart', fn () => inertia('Dashboard/Cart'));
@@ -71,6 +74,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [PlacementController::class, 'index'])->name('placements');
         Route::get('/get', [PlacementController::class, 'get'])->name('placements.get');
         Route::post('/send-report', [PlacementController::class, 'sendReport'])->name('report-send');
+        Route::post('/send-review', [PlacementController::class, 'sendReview'])->name('review-send');
     });
 
 

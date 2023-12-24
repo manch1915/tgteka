@@ -68,7 +68,7 @@ const wrap = ref(false)
                           Отзывы
                         </div>
                       </template>
-                        <Reviews/>
+                        <Reviews :channel-id="channel.id"/>
                     </n-tab-pane>
                     <n-tab-pane name="jay chou" tab="Статистика">
                         <template #tab>

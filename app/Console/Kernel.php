@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('channel:statistics:update')->daily();
         $schedule->command('update:finished-orders')->hourly();
+        $schedule->job(new \App\Jobs\UpdateChannelRatingAndScore)->hourly();
     }
 
     /**

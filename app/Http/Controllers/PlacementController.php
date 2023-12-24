@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReportRequest;
+use App\Http\Requests\ReviewRequest;
 use App\Models\Order;
 use App\Models\OrderReport;
+use App\Models\Review;
+use App\Notifications\ChannelReviewNotification;
 use App\Notifications\OrderReportNotification;
 use App\Services\AvatarService;
 use Illuminate\Http\Request;
@@ -61,6 +64,31 @@ class PlacementController extends Controller
 
         $order = Order::find($validated['order_id']);
         $order->channel->user->notify(new OrderReportNotification($validated['report_message']));
+    }
 
+    public function sendReview(ReviewRequest $request)
+    {
+        $validated = $request->validated();
+
+        $order = Order::findOrFail($validated['order_id']);
+        $channelId = $order->channel->id;
+
+        $hasReviewed = Review::where([
+            ['channel_id', '=', $channelId],
+            ['user_id', '=', auth()->id()]
+        ])->exists();
+
+        if ($hasReviewed) {
+            return response(['error' => 'Вы уже оставляли отзыв для этого канала'], 403);
+        }
+
+        Review::create([
+            'channel_id' => $channelId,
+            'rating' => $validated['rating'],
+            'review_text' => $validated['review_text'],
+            'user_id' => auth()->id()
+        ]);
+
+        $order->channel->user->notify(new ChannelReviewNotification($validated['review_text'], $validated['rating'], $order->channel->channel_name));
     }
 }

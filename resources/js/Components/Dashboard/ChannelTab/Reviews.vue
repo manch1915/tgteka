@@ -1,22 +1,31 @@
 <script setup>
-
 import ReviewsCard from "@/Components/Dashboard/ChannelTab/ReviewsCard.vue";
 import {NScrollbar} from "naive-ui";
 import {scrollbarThemeOverrides} from "@/themeOverrides.js";
+import {onMounted, ref} from "vue";
+
+const props = defineProps({
+    channelId: Number,
+})
+
+const reviews = ref({})
+
+const getChannelReviews = () => {
+    axios.get(route('catalog.channel.reviews', {channelId: props.channelId}))
+        .then(r => reviews.value = r.data)
+        .catch(c => console.log(c))
+}
+
+onMounted(() => getChannelReviews())
 </script>
 
 <template>
     <div class="w-full reviews p-6">
         <n-scrollbar :theme-overrides="scrollbarThemeOverrides" class="max-h-96 ">
-            <div class="grid grid-cols-2 gap-5 px-1">
-            <ReviewsCard/>
-            <ReviewsCard/>
-            <ReviewsCard/>
-            <ReviewsCard/>
-            <ReviewsCard/>
-            <ReviewsCard/>
-            <ReviewsCard/>
-            <ReviewsCard/>
+            <div class="grid sm:grid-cols-2 grid-cols-1 gap-5 px-1">
+                <template v-for="review in reviews">
+                    <ReviewsCard :review="review"/>
+                </template>
             </div>
         </n-scrollbar>
     </div>

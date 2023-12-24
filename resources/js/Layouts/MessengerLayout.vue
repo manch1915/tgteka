@@ -16,7 +16,7 @@ import {closeModal} from "jenesius-vue-modal";
                 </div>
             </div>
         </div>
-        <div class="flex-1 flex" style="height: calc(90vh - 124px)">
+        <div class="flex-1 grid sm:grid-cols-2 grid-cols-1" style="height: calc(90vh - 124px)">
             <div class="flex-1 conversations py-2">
                 <slot name="conversations"/>
             </div>

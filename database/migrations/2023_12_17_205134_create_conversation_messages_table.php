@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->text('message');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('conversation_id')->constrained();
-            $table->boolean('is_seen')->default('false');
+            $table->boolean('is_seen')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

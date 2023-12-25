@@ -152,7 +152,7 @@ Route::middleware(['role:Admin'])->group(function () {
 
         Route::prefix('api')->name('api.')->group(function () {
             Route::apiResource('channels', ChannelController::class);
-            Route::apiResource('support', SupportController::class);
+            Route::apiResource('support', App\Http\Controllers\Admin\SupportController::class);
         });
     });
 });

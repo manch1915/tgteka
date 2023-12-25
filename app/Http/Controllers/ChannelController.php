@@ -63,11 +63,26 @@ class ChannelController extends Controller
     protected function fetchChannels(Request $request, AvatarService $avatarService)
     {
         $search = $request->input('search');
+        $sort = $request->input('order');
 
-        $channels = Channel::where('status', 'accepted')
-            ->when($search, function ($query, $search) {
-                return $query->where('channel_name', 'like', '%' . $search . '%');
-            })->orderBy('created_at', 'desc')->paginate(10);
+        $order = $sort == 'subs' || $sort == 'avg_posts_reach' || $sort == 'er' ? 'desc' : 'asc';
+
+        $channelsQuery = Channel::query();
+
+        $index = 'channel_statistics.stats->$."response"';
+
+        $channelsQuery
+            ->leftJoin('channel_statistics', 'channels.id', '=', 'channel_statistics.channel_id');
+
+        if ($sort != null) {
+            $channelsQuery->orderByRaw('CAST(' . $index . '->' . $sort . ' as UNSIGNED) ' . $order);
+        }
+
+        if ($search != null && $search != '') {
+            $channelsQuery->where('channel_name', 'like', '%' . $search . '%');
+        }
+
+        $channels = $channelsQuery->paginate(10);
 
         $channels->each(function ($channel) use ($avatarService){
             $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);

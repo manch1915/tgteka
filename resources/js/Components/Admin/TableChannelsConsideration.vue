@@ -106,15 +106,15 @@ const checked = (isChecked, client) => {
 
 <template>
   <CardBoxModal @confirm="channelAccept" button="success" has-cancel v-model="isModalActive" title="Просмотр канала">
-    <a class="text-blue-800" :href="modalChannel.url">{{modalChannel.channel_name}}</a>
-    <p>{{modalChannel.description}}</p>
-    <p>{{modalChannel.subscribers_source}}</p>
-    <p>{{modalChannel.format_one_price}}</p>
-    <p>{{modalChannel.format_two_price}}</p>
-    <p>{{modalChannel.format_three_price}}</p>
-    <p>{{modalChannel.no_deletion_price}}</p>
-    <p>{{modalChannel.language}}</p>
-    <p>{{modalChannel.topic}}</p>
+    <a class="text-blue-800" :href="modalChannel.url">Ссылка: {{modalChannel.channel_name}}</a>
+    <p>Описание канала: {{modalChannel.description}}</p>
+    <p>Источник подписчиков: {{modalChannel.subscribers_source}}</p>
+    <p>1/24: {{modalChannel.format_one_price}}</p>
+    <p>2/48: {{modalChannel.format_two_price}}</p>
+    <p>3/72: {{modalChannel.format_three_price}}</p>
+    <p>Без удаления: {{modalChannel.no_deletion_price}}</p>
+    <p>Язык: {{modalChannel.language}}</p>
+    <p v-if="modalChannel.topic">Категория: {{modalChannel.topic.title}}</p>
   </CardBoxModal>
 
   <CardBoxModal
@@ -167,8 +167,8 @@ const checked = (isChecked, client) => {
         <td data-label="Company">
             {{ truncateDescription(channel.description, 20) }}
         </td>
-        <td data-label="topic">
-          {{ channel.topic }}
+        <td v-if="channel.topic.title" data-label="topic">
+          {{ channel.topic.title }}
         </td>
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>

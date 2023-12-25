@@ -146,7 +146,7 @@ const checked = (isChecked, client) => {
             {{ truncateDescription(channel.description, 20) }}
         </td>
         <td data-label="Тематика">
-          {{ channel.topic }}
+          {{ channel.topic.title }}
         </td>
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>

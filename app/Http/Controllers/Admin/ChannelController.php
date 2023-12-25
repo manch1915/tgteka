@@ -12,7 +12,7 @@ class ChannelController extends Controller
 {
     public function index()
     {
-        $channels = Channel::all();
+        $channels = Channel::with('topic')->get();
         $channels->each(function ($channel) {
             $media = $channel->getMedia('avatars')->last();
 

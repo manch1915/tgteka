@@ -18,6 +18,7 @@ import {
 import { ref, provide, computed } from 'vue'
 import CatalogChannels from '@/Components/Dashboard/CatalogChannels.vue'
 import { useMainStore } from '@/stores/main.js'
+import { useChannelStore } from "@/stores/channelStore.js";
 
 const SORT_DATA = ['Рейтинг', 'ER', 'Просмотры', 'Подписчики', 'Цена', 'CPМ']
 
@@ -42,16 +43,17 @@ const formatTooltipPercent = (value) => `> ${value}%`
 const additionalFilter = ref(false)
 const placeholder = ['от', 'до']
 
+const channelStore = useChannelStore();
+
 let timeout
-const searchData = ref('')
 const searchHandler = (value) => {
     clearTimeout(timeout)
     timeout = setTimeout(() => {
-        searchData.value = value
-    }, 500) // 500ms delay
+        channelStore.searchData = value
+        channelStore.fetchChannels()
+    }, 500)
 }
 
-provide('searchData', searchData)
 </script>
 
 <template>

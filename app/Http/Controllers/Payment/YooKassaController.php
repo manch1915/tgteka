@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\CheckPaymentStatusJob;
+use App\Jobs\CheckPayoutStatusJob;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use YooKassa\Client;
@@ -13,7 +14,7 @@ class YooKassaController extends Controller
     public function createPayment(Request $request)
     {
         $client = new Client();
-        $client->setAuth('294111', 'test_WK472tUJGdRv6larB3TqhEJu7-Hi9eDTFH7jYzT_7a0');
+        $client->setAuth(config('services.yookassa.client_id'), config('services.yookassa.client_secret'));
 
         try {
             $builder = \YooKassa\Request\Payments\CreatePaymentRequest::builder();
@@ -71,8 +72,16 @@ class YooKassaController extends Controller
 
     public function createPayout(Request $request)
     {
+        $user = auth()->user();
+
+        if($user->balance < $request->input('amount')){
+            return response()->json([
+                'message' => 'Insufficient balance',
+            ], 400);
+        }
+
         $client = new Client();
-        $client->setAuth('294111', 'test_WK472tUJGdRv6larB3TqhEJu7-Hi9eDTFH7jYzT_7a0');
+        $client->setAuth(config('services.yookassa.client_id'), config('services.yookassa.client_secret'));
 
         try {
             $payoutRequest = [
@@ -83,7 +92,7 @@ class YooKassaController extends Controller
                 'payout_destination_data' => [
                     'type' => 'bank_card',
                     'card' => [
-                        'number' => $request->input('card'),
+                        'number' => $request->input('cardNumbers'),
                     ],
                 ],
                 'description' => 'Payout of ' . $request->input('amount') .  ' RUB',
@@ -101,6 +110,8 @@ class YooKassaController extends Controller
                 'amount' => -$request->input('amount'),
                 'type' => 'payout'
             ]);
+
+            CheckPayoutStatusJob::dispatch($payout);
 
             return response()->json(['Payout ID' => $response->getId(), 'Payout Status' => $response->getStatus()]);
         } catch (\Exception $e) {

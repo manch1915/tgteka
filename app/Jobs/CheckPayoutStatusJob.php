@@ -8,7 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use YooKassa\Client;
 use YooKassa\Common\Exceptions\ApiException;
 use YooKassa\Common\Exceptions\BadApiRequestException;
@@ -19,9 +18,9 @@ use YooKassa\Common\Exceptions\NotFoundException;
 use YooKassa\Common\Exceptions\ResponseProcessingException;
 use YooKassa\Common\Exceptions\TooManyRequestsException;
 use YooKassa\Common\Exceptions\UnauthorizedException;
-use YooKassa\Model\Payment\PaymentStatus;
+use YooKassa\Model\Payout\PayoutStatus;
 
-class CheckPaymentStatusJob implements ShouldQueue
+class CheckPayoutStatusJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -50,21 +49,18 @@ class CheckPaymentStatusJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $response = $this->client->getPaymentInfo($this->transaction->transaction_id);
+        $response = $this->client->getPayoutInfo($this->transaction->transaction_id);
 
-        if ($response && $response->getStatus() === PaymentStatus::SUCCEEDED) {
-            // Update Transaction Status
+        if ($response && $response->getStatus() === PayoutStatus::SUCCEEDED) {
             $this->transaction->update(['status' => 'succeeded']);
 
-            // Update balance of the User associated with Transaction
-            $this->transaction->user()->increment('balance', $this->transaction->amount);
+            $this->transaction->user()->decrement('balance', abs($this->transaction->amount));
         } else {
             if ($this->attempts() < $this->tries) {
                 $this->release(120);
-            }else {
+            } else {
                 $this->transaction->update(['status' => 'failed']);
             }
         }
     }
-
 }

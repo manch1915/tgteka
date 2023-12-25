@@ -1,15 +1,32 @@
 <script setup>
 import {Link, router, usePage} from '@inertiajs/vue3'
 import {closeModal, pushModal} from "jenesius-vue-modal";
-import {ref, watchEffect} from "vue";
+import { onMounted, reactive, ref, watch, watchEffect } from "vue";
 import {useMainStore} from "@/stores/main.js";
 import AnimatedNumber from "@/Components/Dashboard/AnimatedNumber.vue";
 import Messenger from "@/Components/Messenger/Messenger.vue";
+import { loadCart } from "@/channelHelpers.js";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
+import { mdiCart } from "@mdi/js";
+import { useCartStore } from "@/stores/CartStore.js";
+import { NBadge } from "naive-ui";
 
 closeModal()
 
 const store = useMainStore()
+const cartStore = useCartStore()
 const page = usePage()
+
+const cart = reactive({ items: [] });
+
+watch(() => cartStore.cartUpdate, () => {
+    cart.items = loadCart();
+});
+
+onMounted(() => {
+    cart.items = loadCart();
+})
+
 
 watchEffect(() => {
     if (page.props.auth.user && page.props.auth.user.balance !== store.userBalance) {
@@ -81,6 +98,13 @@ const openMessenger = () => {
                         <div class="border-r-[1px] px-5">
                             <Link :href="route('notifications')">
                                 <img src="/images/notification.svg" alt="">
+                            </Link>
+                        </div>
+                        <div v-if="cart.items.length > 0" class="border-r-[1px] px-5">
+                            <Link :href="route('cart')">
+                                <n-badge  type="info" :value="cart.items.length">
+                                    <BaseIcon class="text-purple-400" size="25" :path="mdiCart"/>
+                                </n-badge>
                             </Link>
                         </div>
                         <div class="border-r-[1px] px-5">

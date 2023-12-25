@@ -4,8 +4,10 @@ import SearchBar from "@/Components/Dashboard/SearchBar.vue";
 import {useConversationsStore} from "@/stores/ConversationsStore.js";
 import MessengerUser from "@/Components/Messenger/MessengerUser.vue";
 import MessageBox from "@/Components/Dashboard/MessageBox.vue";
-import {computed, ref, watchEffect} from "vue";
+import { computed, nextTick, ref, watchEffect } from "vue";
 import {usePage} from "@inertiajs/vue3";
+import { mdiArrowLeft } from "@mdi/js";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 
 const store = useConversationsStore();
 store.getConversations();
@@ -72,6 +74,19 @@ watchEffect(() => {
         store.getConversationsMessages();
     }
 });
+
+const goBack = () => {
+    store.goBack();
+};
+
+const vScrollBottom = {
+    async updated(el) {
+        // Let Vue finish rendering elements
+        await nextTick();
+        // Scroll to the bottom
+        el.scrollTop = el.scrollHeight;
+    },
+};
 //todo <search-bar @search="handleSearch"/>
 </script>
 
@@ -88,10 +103,14 @@ watchEffect(() => {
             </div>
         </template>
         <template #conversation_messages>
-            <div v-if="store.conversation_id" class="h-full flex flex-col">
-                <div class="flex flex-col gap-y-3" style=" overflow-y: auto">
+            <div v-if="store.conversation_id" class="h-full flex flex-col ">
+                <div>
+                    <button :class="{ 'hidden': store.showChat }" @click="goBack" class="back-button"><BaseIcon style="color: #B5BBDB" size="40" :path="mdiArrowLeft"/></button>
+                </div>
+                <div class="flex-grow overflow-y-auto flex flex-col gap-y-3" v-scroll-bottom>
                     <MessageBox v-for="message in store.conversationsMessages" :text="message.message" :user-avatar="message.user.profile_photo_url" :created_at="message.created_at_time"/>
                 </div>
+
                 <div class="footer">
                     <div class="conversation-panel">
                         <div class="conversation-panel__container">
@@ -106,7 +125,7 @@ watchEffect(() => {
                     </div>
                 </div>
             </div>
-            <div v-else  class="h-full flex flex-col justify-center">
+            <div v-else class="h-full flex flex-col justify-center">
                 <p class="text-center py-6 text-gray-500 text-base font-normal font-['Open Sans'] leading-tight">Выберите чат</p>
                 <div class="flex justify-center">
                     <img src="/images/chats.svg" alt="">
@@ -125,6 +144,7 @@ watchEffect(() => {
     border-radius:0 0 30px 30px ;
     padding: 12px 20px;
     background: rgba(42, 47, 77, 1);
+    flex-shrink: 0;
     .conversation-panel {
         background: rgba(13, 20, 58, 1);
         border-radius: 24px;

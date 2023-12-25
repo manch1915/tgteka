@@ -39,7 +39,7 @@ const wrap = ref(false)
                     </div>
                 </div>
                 <div class="grid-element flex flex-col items-center justify-center">
-                    <div class="flex w-full justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                    <div class="flex flex-wrap gap-y-3 w-full justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                         <button class="watch flex items-center gap-x-1.5">Канал в каталоге <i class="block eye"></i></button>
                         <button @click.prevent="router.visit(route('channels.edit', channel.id))" class="edit">Редактировать канал</button>
                         <n-badge :value="channel.pending_order_count" type="info" >
@@ -171,6 +171,9 @@ const wrap = ref(false)
             }
         }
         grid-template-columns: 1fr 3fr 7fr;
+        @media screen and (max-width: 640px){
+            grid-template-columns: 1fr;
+        }
         div{
             .point{
                 width: 15px;

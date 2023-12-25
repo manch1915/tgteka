@@ -1,6 +1,30 @@
 <script setup>
+import { Link, usePage } from "@inertiajs/vue3";
+import { useCartStore } from "@/stores/CartStore.js";
+import { onMounted, reactive, watch } from "vue";
+import { loadCart } from "@/channelHelpers.js";
+import { mdiCart } from "@mdi/js";
+import { NBadge } from "naive-ui";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
+import { pushModal } from "jenesius-vue-modal";
+import Messenger from "@/Components/Messenger/Messenger.vue";
 
-import {Link} from "@inertiajs/vue3";
+const cartStore = useCartStore()
+const page = usePage()
+
+const cart = reactive({ items: [] });
+
+watch(() => cartStore.cartUpdate, () => {
+    cart.items = loadCart();
+});
+
+onMounted(() => {
+    cart.items = loadCart();
+})
+
+const openMessenger = () => {
+    pushModal(Messenger)
+}
 </script>
 
 <template>
@@ -15,7 +39,12 @@ import {Link} from "@inertiajs/vue3";
             <Link :href="route('notifications')">
                 <img src="/images/bell.svg" alt="">
             </Link>
-            <img src="/images/messenger.svg" alt="">
+            <Link v-if="cart.items.length > 0" :href="route('cart')">
+                <n-badge  type="info" :value="cart.items.length">
+                    <BaseIcon class="text-purple-400" size="25" :path="mdiCart"/>
+                </n-badge>
+            </Link>
+            <img @click.prevent="openMessenger" class="cursor-pointer" src="/images/messenger.svg" alt="">
         </main>
     </div>
 </template>

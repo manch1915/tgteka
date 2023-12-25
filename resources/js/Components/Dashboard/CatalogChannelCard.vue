@@ -6,6 +6,7 @@ import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import { mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartMinus } from "@mdi/js";
 import { Link } from "@inertiajs/vue3";
 import { saveCart, loadCart, isInCart as checkInCart, generateFormatArray } from "@/utilities/cartUtilities.js";
+import { useCartStore } from "@/stores/CartStore.js";
 
 const props = defineProps({
     channel: Object,
@@ -40,7 +41,7 @@ const format = computed(() => generateFormatArray(props.channel));
 const formatValue = ref(format.value[0]?.value || null);
 
 const emit = defineEmits(["cartChanged", "cartUpdated"]);
-
+const cartStore = useCartStore()
 const removeCart = (cart, index, channel) => {
     cart.splice(index, 1);
     message.info(`Канал ${channel.channel_name} был удален из корзины.`);
@@ -58,6 +59,7 @@ const toggleChannelInCart = (channel) => {
         updateCart(cart, channel, countValue.value, formatValue.value, timestamp.value);
     }
 
+    cartStore.cartUpdate++;
     cartUpdateKey.value++;
 };
 
@@ -207,7 +209,7 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-        <div class="flex flex-wrap items-center justify-between p-6 unwrap">
+        <div class="flex flex-wrap items-center sm:justify-between p-6 unwrap gap-y-2">
             <div class="flex flex-wrap sm:w-auto w-full items-center gap-x-4">
                 <div class="flex  flex-col items-start gap-y-1">
                     <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Формат</p>

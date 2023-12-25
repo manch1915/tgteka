@@ -47,4 +47,9 @@ return [
     'telegram-bot-api' => [
         'token' => env('TELEGRAM_BOT_TOKEN', 'YOUR BOT TOKEN HERE')
     ],
+
+    'yookassa' => [
+        'client_id' => env('YOOKASSA_CLIENT_ID'),
+        'client_secret' => env('YOOKASSA_CLIENT_SECRET'),
+    ],
 ];

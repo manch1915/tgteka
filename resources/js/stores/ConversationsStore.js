@@ -7,6 +7,7 @@ export const useConversationsStore = defineStore("conversations", {
         conversation_id: null,
         conversations: {},
         conversationsMessages: {},
+        showChat: true
     }),
     actions: {
         async getConversations() {
@@ -37,6 +38,16 @@ export const useConversationsStore = defineStore("conversations", {
             };
 
             this.conversationsMessages.push(newMessage);
+        },
+        openChat() {
+            if(window.innerWidth <= 768) {
+                this.showChat = false;
+            }
+        },
+        goBack() {
+            if(window.innerWidth <= 768) {
+                this.showChat = true;
+            }
         },
     }
 });

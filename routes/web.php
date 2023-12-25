@@ -69,7 +69,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('channel-orders-count/{channelId}', [\App\Http\Controllers\ChannelController::class, 'fetchChannelOrdersCount'])->name('channel.orders.count');
     });
 
-    Route::get('cart', fn () => inertia('Dashboard/Cart'));
+    Route::get('cart', fn () => inertia('Dashboard/Cart'))->name('cart');
 
     Route::group(['prefix' => 'placements'], function () {
         Route::get('/', [PlacementController::class, 'index'])->name('placements');

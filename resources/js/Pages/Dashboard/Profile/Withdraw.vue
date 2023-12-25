@@ -3,12 +3,25 @@ import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import {NCheckbox, NInput, NTabPane, NTabs} from "naive-ui";
 import {checkboxThemeOverrides, inputThemeOverrides, nTabSegmentsThemeOverrides} from "@/themeOverrides.js";
-import {ref} from "vue";
+import { reactive, ref } from "vue";
 const activeButton = ref('self-employed');
 
 const activeTab = ref('bank-card')
 
 const read = ref(false)
+
+const bankCard = reactive({
+    cardNumbers: null,
+    amount: null,
+})
+
+const createPaymentRequest = () => {
+    axios.post(route('create-payout-request'), bankCard)
+        .then(r => {
+            console.log(r);
+        });
+}
+
 </script>
 
 <template>
@@ -103,16 +116,10 @@ const read = ref(false)
                                             <p class="text-violet-100 text-lg font-normal font-['Open Sans']">Банковская карта</p>
                                         </div>
                                     </div>
-                                    <div @click.prevent="activeTab = 'webmoney'" class="payment_types-card-wrapper">
+                                    <div @click.prevent="activeTab = 'yookassa'" class="payment_types-card-wrapper">
                                         <div class="flex h-full flex-col items-center justify-evenly payment_types-card">
-                                            <img src="/images/webmoney.svg" alt="webmoney">
-                                            <p class="text-violet-100 text-lg font-normal font-['Open Sans']">WebMoney</p>
-                                        </div>
-                                    </div>
-                                    <div @click.prevent="activeTab = 'qiwi'" class="payment_types-card-wrapper">
-                                        <div class="flex h-full flex-col items-center justify-center payment_types-card">
-                                            <img src="/images/qiwi.svg" alt="qr">
-                                            <p class="text-violet-100 text-lg font-normal font-['Open Sans']">QIWI</p>
+                                            <img src="/images/yookassa.png" alt="yookassa">
+                                            <p class="text-violet-100 text-lg font-normal font-['Open Sans']">Yookassa</p>
                                         </div>
                                     </div>
                                 </div>
@@ -124,8 +131,8 @@ const read = ref(false)
                                 </div>
                                 <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Вывод на банковскую карту</h1>
                                 <div class="py-8">
-                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="420XXXXXXXXХХ000" :theme-overrides="inputThemeOverrides"/>
-                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" v-model:value="bankCard.cardNumbers" placeholder="420XXXXXXXXХХ000" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input class="py-1.5 my-1 sm:!w-3/4" v-model:value="bankCard.amount" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
                                 </div>
                                 <div class="my-4">
                                     <div class="flex items-center gap-x-2.5">
@@ -137,40 +144,17 @@ const read = ref(false)
                                         <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Максимальная сумма одной заявки на вывод составляет 35000 р.</p>
                                     </div>
                                 </div>
-                                <button class="sm:w-3/4 w-full my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
+                                <button @click.prevent="createPaymentRequest" class="sm:w-3/4 w-full my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
                                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">При необходимости вы можете создать несколько заявок или выбрать альтернативный <br/>способ вывода средств.</p>
                             </div>
-                            <div v-show="activeTab === 'webmoney'" class="mt-5 wallets sm:w-3/4">
+                            <div v-show="activeTab === 'yookassa'" class="mt-5 wallets sm:w-3/4">
                                 <div class="flex py-4 gap-x-2.5">
                                     <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
                                     <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
                                 </div>
-                                <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Вывод на WebMoney</h1>
+                                <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Вывод на Yookassa</h1>
                                 <div class="py-8">
                                     <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="420XXXXXXXXХХ000" :theme-overrides="inputThemeOverrides"/>
-                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
-                                </div>
-                                <div class="my-4">
-                                    <div class="flex items-center gap-x-2.5">
-                                        <img src="/images/database-import.svg" alt="">
-                                        <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Выведено за текущий месяц: 0₽</p>
-                                    </div>
-                                    <div class="flex items-center gap-x-2.5">
-                                        <img src="/images/information-white.svg" alt="">
-                                        <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Максимальная сумма одной заявки на вывод составляет 35000 р.</p>
-                                    </div>
-                                </div>
-                                <button class="sm:w-3/4 w-full my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
-                                <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">При необходимости вы можете создать несколько заявок или выбрать альтернативный <br/>способ вывода средств.</p>
-                            </div>
-                            <div v-show="activeTab === 'qiwi'" class="mt-5 qr sm:w-3/4">
-                                <div class="flex py-4 gap-x-2.5">
-                                    <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
-                                    <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
-                                </div>
-                                <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Вывод на Qiwi</h1>
-                                <div class="py-8">
-                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="+7 (___) ___-__-__" :theme-overrides="inputThemeOverrides"/>
                                     <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
                                 </div>
                                 <div class="my-4">

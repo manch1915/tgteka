@@ -15,13 +15,13 @@ let createdAtLocalTimeString = createdAtDate.toLocaleTimeString('en-US', options
     <div class="main">
         <div class="message">
             <div class="flex gap-x-3">
-                <div class="avatar flex flex-col justify-end">
+                <div class="avatar flex flex-col justify-end flex-shrink-0">
                     <img style="width: 34px; height: 34px; border-radius: 50%" :src="userAvatar" alt="ava">
                 </div>
                 <div class="message__box">
-                    <div class="text text-slate-800 text-base font-normal font-['Open Sans'] leading-tight">
+                    <p class="text break-words text-slate-800 text-base font-normal font-['Open Sans'] leading-tight">
                         {{text}}
-                    </div>
+                    </p>
                     <div class="date float-right">
                         <div class="flex gap-x-0.5">
                             <p class="text-right text-slate-900 text-opacity-40 text-base font-normal font-['Open Sans'] leading-tight">{{createdAtLocalTimeString}}</p>
@@ -35,16 +35,21 @@ let createdAtLocalTimeString = createdAtDate.toLocaleTimeString('en-US', options
 </template>
 
 <style scoped lang="scss">
+.avatar{
+    flex-shrink: 0;
+}
 .message__box{
     background: #EAE0FF;
     border-radius: 10px 10px 10px 0;
     padding: 12px;
     width: 40%;
     position: relative;
-
+    flex-grow: 1;
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
     @media screen and (max-width: 640px){
         width: 100%;
-
     }
     &:before {
         content: "";

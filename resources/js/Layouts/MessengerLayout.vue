@@ -1,60 +1,69 @@
 <script setup>
 import {closeModal} from "jenesius-vue-modal";
+import { useConversationsStore } from "@/stores/ConversationsStore.js";
+
+const conversations = useConversationsStore()
+
 </script>
 
 <template>
     <div class="wrapper container">
         <div class="h-full flex flex-col">
-        <div class="top">
-            <div class="header flex items-center w-full">
-                <div class="flex-1"></div>
-                <div class="flex flex-1 flex-col justify-center sm:items-center items-start gap-y-6">
-                    <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Чат</h1>
+            <div class="top header">
+                <div class="flex items-center w-full">
+                    <div class="flex-1"></div>
+                    <div class="flex flex-1 flex-col justify-center sm:items-center items-start gap-y-6">
+                        <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Чат</h1>
+                    </div>
+                    <div class="flex-1 flex justify-end cursor-pointer" @click.prevent="closeModal()">
+                        <img src="/images/Icon-close.svg" alt="">
+                    </div>
                 </div>
-                <div class="flex-1 flex justify-end cursor-pointer" @click.prevent="closeModal()">
-                    <img src="/images/Icon-close.svg" alt="">
+            </div>
+            <div class="content">
+                <div class="conversations py-2" :class="{ 'hidden': !conversations.showChat }">
+                    <slot name="conversations"/>
+                </div>
+                <div class="message" :class="{ 'hidden': conversations.showChat }">
+                    <slot name="conversation_messages"/>
                 </div>
             </div>
-        </div>
-        <div class="flex-1 grid sm:grid-cols-2 grid-cols-1" style="height: calc(90vh - 124px)">
-            <div class="flex-1 conversations py-2">
-                <slot name="conversations"/>
-            </div>
-            <div class="flex-1">
-                <slot name="conversation_messages"/>
-            </div>
-        </div>
         </div>
     </div>
 </template>
 
 <style scoped lang="scss">
 .wrapper{
+    height: 90vh;
     border: 1px solid #6522D9;
     background: #070C29;
-    height: 90vh;
     border-radius: 0 20px 20px 20px;
+
 }
 .top{
-    padding: 65px 65px 20px 65px;
+    padding: 30px 65px 0 65px;
     border-radius: 30px 30px 0 0;
     background: rgba(7, 12, 41, 1);
-
+    box-sizing: border-box;
     @media screen and (max-width: 640px){
         padding: 10px;
-        height: 70vh;
     }
-    .overflowing{
-        overflow-y: auto;
-        height: calc(100% - 35px);
-        @media screen and (max-width: 640px){
-            height: calc(100% - 75px);
-        }
+}
+.content {
+    display: flex;
+    flex-direction: row;
+    height: 90%;
+}
+.conversations, .message {
+    flex-basis: 50%;
+    overflow-y: auto;
+    @media screen and (max-width: 768px){
+        flex-basis: 100%;
     }
+
 }
 .conversations{
     background: #0D143A;
     border-radius: 0 20px 0 20px;
-    height: 100%;
 }
 </style>

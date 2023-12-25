@@ -90,8 +90,8 @@ onMounted(() => {
         <div class="py-20 text-center">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Корзина</h1>
         </div>
-        <div class="grid grid-cols-[3fr_1fr] gap-x-4">
-            <div>
+        <div class="grid sm:grid-cols-[3fr_1fr] grid-cols-1 gap-x-4">
+            <div class="sm:order-1 order-2">
                 <div class="channels">
                     <div class="flex flex-col gap-y-4 mb-8">
                         <template v-if="channels" v-for="channel in channels" :key="channel.id">
@@ -101,37 +101,37 @@ onMounted(() => {
                 </div>
             </div>
 
-            <div>
+            <div class="sm:order-2 order-1 sm:p-0 p-2">
                 <div class="my-2">
                     <n-select placeholder="Шаблоны" v-model:value="userPattern" :options="userPatterns" :theme-overrides="selectThemeOverrides"/>
                 </div>
                 <div class="my-2">
                     <n-input type="textarea" v-model:value="description" :theme-overrides="inputThemeOverrides" placeholder="Описание заказа"/>
                 </div>
-                <n-table :theme-overrides="tableThemeOverrides" :single-line="false">
-                    <thead>
-                    <tr>
-                        <th>Каналы</th>
-                        <td>{{channelCount}}</td>
-                    </tr>
-                    <tr>
-                        <th>Размещения</th>
-                        <td>{{placementCount}}</td>
-                    </tr>
-                    <tr>
-                        <th>Подписчики</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>Просмотры</th>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th>Сумма</th>
-                        <th>{{totalSum}}₽</th>
-                    </tr>
-                    </thead>
-                </n-table>
+                <table class="table-auto">
+                    <tbody class="text-violet-100">
+                        <tr>
+                            <th>Каналы</th>
+                            <td>{{channelCount}}</td>
+                        </tr>
+                        <tr>
+                            <th>Размещения</th>
+                            <td>{{placementCount}}</td>
+                        </tr>
+                        <tr>
+                            <th>Подписчики</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Просмотры</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th>Сумма</th>
+                            <th>{{totalSum}}₽</th>
+                        </tr>
+                    </tbody>
+                </table>
                 <button @click.prevent="orderPosts" class="w-full my-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal transition bg-purple-600 hover:bg-purple-800 rounded-3xl py-2">
                     Купить размещение
                 </button>
@@ -140,19 +140,20 @@ onMounted(() => {
     </AppLayout>
 </template>
 <style scoped>
-    .channels{
-        @media screen and (max-width: 640px) {
-            padding: 0 15px;
-        }
-        min-width: 0;
+.channels{
+    @media screen and (max-width: 640px) {
+        padding: 0 15px;
     }
+    min-width: 0;
+}
 .v-enter-active,
 .v-leave-active {
     transition: all 0.5s ease;
 }
-
 .v-enter-from,
 .v-leave-to {
     opacity: 0;
 }
+
+
 </style>

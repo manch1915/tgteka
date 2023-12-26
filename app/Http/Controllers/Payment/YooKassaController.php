@@ -32,7 +32,7 @@ class YooKassaController extends Controller
             // Устанавливаем страницу для редиректа после оплаты
             $builder->setConfirmation([
                 'type'      => \YooKassa\Model\Payment\ConfirmationType::REDIRECT,
-                'returnUrl' => 'https://merchant-site.ru/payment-return-page',
+                'returnUrl' => route('replenishment'),
             ]);
 
             // Можем установить конкретный способ оплаты

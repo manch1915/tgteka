@@ -36,9 +36,8 @@ const processIncomingMessage = (data) => {
         addNewMessage(data.message, data.sender_id);
     }
 };
-
 function initWebSocket(userID) {
-    const socket = new WebSocket(`ws://localhost:1915?userid=${userID}`);
+    const socket = new WebSocket(`ws://${import.meta.env.VITE_APP_WEBSOCKETS_IP}:1915/?userid=${userID}`);
 
     socket.onmessage = (event) => {
         const data = JSON.parse(event.data);

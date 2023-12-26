@@ -8,19 +8,19 @@
             <div class="rounded-tr-3xl rounded-br-3xl rounded-bl-3xl border-2 border-white p-8 backdrop-blur-3xl blok">
                 <h2 class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed mb-5"><slot name="post-title" /></h2>
                 <slot name="editor" />
-                <div class="flex sm:flex-row flex-col gap-y-4 items-center justify-between py-6">
+                <div class="flex flex-col items-center justify-between gap-y-4 py-6 sm:flex-row">
                     <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Шаблон сохраняется автоматически</div>
                     <slot name="clear-all" />
                 </div>
                 <hr>
-                <div class="mt-5 grid sm:grid-cols-2 grid-cols-1 mediafiles">
+                <div class="mt-5 grid grid-cols-1 mediafiles sm:grid-cols-2">
                     <slot name="file-upload" />
                 </div>
             </div>
         </div>
         <div class="mt-24 text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Предпросмотр поста</div>
-        <div class="sm:p-0 px-4">
-            <div class="mt-6 sm:w-1/4 w-full before">
+        <div class="px-4 sm:p-0">
+            <div class="mt-6 w-full before sm:w-1/3">
                 <div class="before_container">
                     <slot name="post-preview" />
                 </div>

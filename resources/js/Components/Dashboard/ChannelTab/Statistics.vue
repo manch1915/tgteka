@@ -114,7 +114,7 @@ onMounted(() => {
 <!--todo statistikaaaa-->
 <template>
     <div class="w-full reviews p-6">
-        <div class="grid grid-cols-4 gap-4 mb-2">
+        <div class="grid sm:grid-cols-4 grid-cols-2 gap-4 mb-2">
             <div class="item text-center !py-10">
                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Рейтинг</p>
                 <p class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">504.6</p>
@@ -131,35 +131,35 @@ onMounted(() => {
                 <p class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">{{channelStats.finished_orders_price_sum}}</p>
             </div>
         </div>
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid sm:grid-cols-2 grid-cols-1 gap-4">
             <div class="item">
-                <div class="grid grid-cols-2">
+                <div class="grid sm:grid-cols-2 grid-cols-1">
                     <div>
                         <h1 class="text-center text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">Подписчики</h1>
                         <Line :data="chartDataSubs"/>
                     </div>
                     <div>
                         <div v-if="channelStats.stats">
-                            <div class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">{{ channelStats.stats.participants_count }}</div>
+                            <div class="text-violet-100 sm:text-2xl text-lg font-bold font-['Open Sans'] leading-loose">{{ channelStats.stats.participants_count }}</div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="item">
-                <div class="grid grid-cols-2">
+                <div class="grid sm:grid-cols-2 grid-cols-1">
                     <div>
-                        <h1 class="text-center text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">Охват </h1>
+                        <h1 class="text-center text-violet-100 sm:text-xl text-lg font-normal font-['Open Sans'] leading-relaxed">Охват </h1>
                         <Line :data="chartDataAvg"/>
                     </div>
                     <div>
                         <div v-if="channelStats.stats">
-                            <div class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Охват за 24 часа: {{ channelStats.stats.adv_post_reach_24h }}</div>
+                            <div class="text-violet-100 sm:text-2xl text-lg font-bold font-['Open Sans'] sm:leading-loose">Охват за 24 часа: {{ channelStats.stats.adv_post_reach_24h }}</div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="item">
-                <div class="grid grid-cols-2">
+                <div class="grid sm:grid-cols-2 grid-cols-1">
                     <div>
                         <h1 class="text-center text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">ER% — вовлеченность по взаимодействиям</h1>
                         <Line :data="chartDataER"/>

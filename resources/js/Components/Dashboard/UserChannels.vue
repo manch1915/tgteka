@@ -46,7 +46,7 @@ onMounted(() => getChannels())
     <div class="w-full py-16">
         <search-bar @search="handleSearch"/>
     </div>
-    <div class="flex gap-x-2">
+    <div class="flex gap-2 flex-wrap">
         <SortButton v-for="title in sortData" :title="title"/>
     </div>
     <div class="flex flex-col gap-y-4 mt-8">

@@ -3,6 +3,7 @@ import {closeModal} from "jenesius-vue-modal";
 import { useConversationsStore } from "@/stores/ConversationsStore.js";
 
 const conversations = useConversationsStore()
+let isSmallScreen = window.innerWidth <= 768;
 
 </script>
 
@@ -21,10 +22,10 @@ const conversations = useConversationsStore()
                 </div>
             </div>
             <div class="content">
-                <div class="conversations py-2" :class="{ 'hidden': !conversations.showChat }">
+                <div class="conversations py-2" :class="{ 'hidden': !conversations.showChat && isSmallScreen }">
                     <slot name="conversations"/>
                 </div>
-                <div class="message" :class="{ 'hidden': conversations.showChat }">
+                <div class="message" :class="{ 'hidden': conversations.showChat && isSmallScreen }">
                     <slot name="conversation_messages"/>
                 </div>
             </div>

@@ -75,7 +75,7 @@ class ChannelController extends Controller
             ->leftJoin('channel_statistics', 'channels.id', '=', 'channel_statistics.channel_id');
 
         if ($sort != null) {
-            $channelsQuery->orderByRaw('CAST(' . $index . '->' . $sort . ' as UNSIGNED) ' . $order);
+            $channelsQuery->orderByRaw("CAST(JSON_EXTRACT(channel_statistics.stats, '$.response.".$sort."') as UNSIGNED) ".$order);
         }
 
         if ($search != null && $search != '') {

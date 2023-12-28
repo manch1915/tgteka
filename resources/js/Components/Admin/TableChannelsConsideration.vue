@@ -18,17 +18,25 @@ mainStore.fetchChannels()
 const items = computed(() => Object.values(mainStore.channels).filter(channel => channel.status === 'pending'));
 
 const isModalActive = ref(false);
+const isModalDangerActive = ref(false);
+
 const modalChannel = ref({})
 const modalChannelActive = (c) => {
     isModalActive.value = true
     modalChannel.value = c
 }
+const modalDangerActive = (c) => {
+    isModalDangerActive.value = true
+    modalChannel.value = c
+}
 
-const isModalDangerActive = ref(false);
 const channelId = ref(null);
-const deleteChannel = () => {
-    axios.delete(route('admin.api.channels.destroy', channelId.value))
-        .then(r => console.log(r))
+const declineChannel = () => {
+    axios.patch(route('admin.api.channels.update', modalChannel.value.id), {status: 'declined'})
+        .then(r => {
+            console.log(r);
+            mainStore.fetchChannels();
+        })
         .catch(e => console.log(e))
 }
 
@@ -39,11 +47,6 @@ const channelAccept = () => {
             mainStore.fetchChannels(); // Fetch after accepting a channel
         })
         .catch(e => console.log(e))
-}
-
-const deletingChannel = (id) => {
-    isModalDangerActive.value = true
-    channelId.value = id
 }
 
 const perPage = ref(5);
@@ -105,7 +108,7 @@ const checked = (isChecked, client) => {
 </script>
 
 <template>
-  <CardBoxModal @confirm="channelAccept" button="success" has-cancel v-model="isModalActive" title="Просмотр канала">
+  <CardBoxModal button-label="Одобрить канал" @confirm="channelAccept" button="success" has-cancel v-model="isModalActive" title="Просмотр канала">
     <a class="text-blue-800" :href="modalChannel.url">Ссылка: {{modalChannel.channel_name}}</a>
     <p>Описание канала: {{modalChannel.description}}</p>
     <p>Источник подписчиков: {{modalChannel.subscribers_source}}</p>
@@ -121,10 +124,11 @@ const checked = (isChecked, client) => {
     v-model="isModalDangerActive"
     title="Пожалуйста подтвердите"
     button="danger"
-    @confirm="deleteChannel"
+    @confirm="declineChannel"
     has-cancel
+    button-label="Отклонить канал"
   >
-    <p>вы действительно хотите удалить этот канал?</p>
+    <p>вы действительно хотите отклонить этот канал?</p>
   </CardBoxModal>
 
   <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
@@ -158,7 +162,7 @@ const checked = (isChecked, client) => {
           <UserAvatar
             :avatar="channel.avatar"
             :username="channel.channel_name"
-            class="w-24 h-24 mx-auto lg:w-6 lg:h-6"
+            class="w-24 mx-auto lg:w-6 lg:h-6"
           />
         </td>
         <td data-label="Name">
@@ -182,7 +186,7 @@ const checked = (isChecked, client) => {
               color="danger"
               :icon="mdiTrashCan"
               small
-              @click="deletingChannel(channel.id)"
+              @click="modalDangerActive(channel)"
             />
           </BaseButtons>
         </td>

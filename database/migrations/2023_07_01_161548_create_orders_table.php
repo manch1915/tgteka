@@ -20,9 +20,9 @@ return new class extends Migration {
             $table->timestamp('post_date')->nullable();
             $table->timestamp('post_date_end')->nullable();
             $table->string('decline_reason', 300)->nullable();
-            $table->foreignId('channel_id')->constrained();
+            $table->foreignId('channel_id')->constrained()->cascadeOnDelete();
             $table->foreignId('format_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('pattern_id')->constrained();
 
             $table->timestamps();

@@ -1,7 +1,5 @@
 <script setup>
-import {NCheckbox} from "naive-ui";
-import {checkboxThemeOverrides} from "@/themeOverrides.js";
-import {Link} from "@inertiajs/vue3"
+import CallbackForm from "@/Components/Home/CallbackForm.vue";
 </script>
 
 <template>
@@ -11,25 +9,7 @@ import {Link} from "@inertiajs/vue3"
             проблемы с доступом или оплатой?
         </div>
         <div class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">Заполните форму и мы с вами свяжемся</div>
-        <div class="issues__block sm:p-16 p-6 mt-14">
-            <!--TODO gradient border-->
-            <div class="form flex flex-col justify-center gap-y-2">
-                <input type="text" placeholder="Имя">
-                <input type="text" placeholder="+7(___) - ___ - __ - __">
-                <div class="form__checkbox flex items-center gap-x-1.5">
-                    <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
-                    <label class="terms text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
-                        Нажимая на кнопку «Отправить» я соглашаюсь с
-                        <Link :href="route('rules')" class="underline">
-                            Правилами пользования Сервисом
-                        </Link>
-                    </label>
-                </div>
-                <button class="px-3 py-2 bg-purple-600 animation hover:bg-purple-800 rounded-full w-full gap-2.5 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                    Заказать обратный звонок
-                </button>
-            </div>
-        </div>
+        <CallbackForm/>
     </div>
 </template>
 
@@ -41,41 +21,6 @@ import {Link} from "@inertiajs/vue3"
     padding-top: 400px;
     @media screen and (max-width: 640px) {
         padding-top: 100px;
-    }
-}
-.issues__block{
-    position: relative;
-    border-radius: 0 40px 40px 40px;
-    border: 1.5px solid #FFF;
-    background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.00) 100%);
-    backdrop-filter: blur(21px);
-    .form{
-        input[type=text]{
-            padding: 13px 14px;
-            border-radius: 30px;
-            background: transparent;
-            border: 1px solid #FFFFFF;
-        }
-    }
-    &:after{
-        content: '';
-        position: absolute;
-        right: -30%;
-        bottom: -7%;
-        background: url("/images/plane-consul.svg");
-        width: 405px;
-        height: 120px;
-    }
-    @media screen and (max-width: 640px) {
-        &:after{
-            content: '';
-            position: absolute;
-            right: -5%;
-            bottom: -35%;
-            background: url("/images/plane-consul.svg");
-            width: 405px;
-            height: 120px;
-        }
     }
 }
 </style>

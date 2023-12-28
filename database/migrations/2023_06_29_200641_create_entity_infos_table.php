@@ -15,7 +15,7 @@ class CreateEntityInfosTable extends Migration
     {
         Schema::create('entity_infos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('company_name');
             $table->string('company_tax_id');
             $table->string('legal_address');

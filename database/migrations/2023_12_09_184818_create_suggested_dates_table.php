@@ -10,7 +10,8 @@ return new class extends Migration {
         Schema::create('suggested_dates', function (Blueprint $table) {
             $table->id();
             $table->dateTime('suggested_post_date');
-            $table->foreignId('order_id')->constrained();
+            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

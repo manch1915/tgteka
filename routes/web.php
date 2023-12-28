@@ -50,6 +50,8 @@ Route::group(['prefix' => 'auth'], function (){
 Route::get('/terms-of-service', fn () => inertia('Agreement'))->name('terms-of-service');
 Route::get('/rules', fn () => inertia('Rules'))->name('rules');
 
+Route::post('/order/callback', [\App\Http\Controllers\CallbackController::class, 'handleCallback'])->name('order.callback')->middleware('throttle:2,10');;
+
 Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -140,11 +142,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('to-check-telegram-post', [OrderController::class, 'toCheck'])->name('to-check-telegram-post');
 });
-Route::middleware(['role:Admin'])->group(function () {
+Route::middleware(['role:Admin|Moderator'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [Controller::class, 'index'])->name('admin');
 
         Route::get('channels', fn () => inertia('Admin/TablesView'))->name('channels');
+
+        Route::get('users', fn () => inertia('Admin/UsersView'))->name('users');
 
         Route::get('support', fn () => inertia('Admin/SupportChatView'))->name('support');
 
@@ -153,6 +157,7 @@ Route::middleware(['role:Admin'])->group(function () {
         Route::prefix('api')->name('api.')->group(function () {
             Route::apiResource('channels', ChannelController::class);
             Route::apiResource('support', App\Http\Controllers\Admin\SupportController::class);
+            Route::apiResource('users', App\Http\Controllers\Admin\UserController::class);
         });
     });
 });

@@ -136,7 +136,7 @@ const checked = (isChecked, client) => {
           <UserAvatar
             :avatar="channel.avatar"
             :username="channel.channel_name"
-            class="w-24 h-24 mx-auto lg:w-6 lg:h-6"
+            class="w-24 mx-auto lg:w-6 lg:h-6"
           />
         </td>
         <td data-label="Название">

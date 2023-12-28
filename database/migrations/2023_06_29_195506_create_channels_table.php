@@ -10,7 +10,7 @@ class CreateChannelsTable extends Migration
     {
         Schema::create('channels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('url')->unique();
             $table->string('channel_name', 64);
             $table->foreignId('topic_id')->constrained();
@@ -29,6 +29,7 @@ class CreateChannelsTable extends Migration
             $table->integer('likes_count')->default(0); // Number of likes
             $table->integer('views_count')->default(0); // Number of views
             $table->enum('status', ['pending', 'accepted', 'declined', 'loading'])->default('pending');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

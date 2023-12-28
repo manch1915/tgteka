@@ -36,9 +36,9 @@ class ChangePasswordController extends Controller
         $password = Str::random(10);
         auth()->user()->update(['password' => Hash::make($password)]);
         $user = auth()->user();
-        Mail::raw("Here is your new generated: {$password}", function ($message) use ($user) {
+        Mail::raw("Вот ваш новый сгенерированный: {$password}", function ($message) use ($user) {
             $message->to($user->email);
-            $message->subject('Welcome to our app');
+            $message->subject('Добро пожаловать в наше приложение');
         });
 
         Auth::guard('web')->logout();

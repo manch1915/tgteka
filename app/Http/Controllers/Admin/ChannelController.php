@@ -51,7 +51,6 @@ class ChannelController extends Controller
         }
 
         return response()->json();
-
     }
 
     public function destroy(Channel $channel)

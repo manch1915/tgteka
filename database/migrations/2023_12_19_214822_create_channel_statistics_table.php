@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('channel_statistics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('channel_id')->constrained();
+            $table->foreignId('channel_id')->constrained()->cascadeOnDelete();
             $table->json('stats');
             $table->json('subscribers')->nullable();
             $table->json('avg_posts_reach')->nullable();

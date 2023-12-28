@@ -69,6 +69,8 @@ class ChannelController extends Controller
 
         $channelsQuery = Channel::query();
 
+        $channelsQuery->where('status', 'accepted');
+
         $index = 'channel_statistics.stats->$."response"';
 
         $channelsQuery

@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('order_reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained();
+            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->text('message');
             $table->enum('status', ['pending', 'accepted', 'declined'])->default('pending');
             $table->softDeletes();

@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('patterns', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->text('title')->nullable();
             $table->text('body')->nullable();
             $table->enum('status', ['pending', 'accepted', 'declined'])->default('pending');

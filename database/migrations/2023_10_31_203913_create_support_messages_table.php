@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('sender_id');
             $table->text('message');
             $table->timestamps();
-
+            $table->softDeletes();
             $table->foreign('ticket_id')->references('id')->on('support_tickets')->onDelete('cascade');
             $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
         });

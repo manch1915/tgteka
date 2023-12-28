@@ -3,7 +3,7 @@ import {
     mdiTable,
     mdiMessage,
     mdiMessageText,
-    mdiForum, mdiCog, mdiTextLong,
+    mdiForum, mdiCog, mdiTextLong, mdiAccount,
 } from "@mdi/js";
 
 export default [
@@ -16,6 +16,11 @@ export default [
     route: 'admin.channels',
     label: "Каналы",
     icon: mdiTable,
+  },
+  {
+    route: 'admin.users',
+    label: "Пользователи",
+    icon: mdiAccount,
   },
   {
     label: "Чаты",
@@ -38,7 +43,7 @@ icon: mdiCog,
 menu: [
   {
     icon: mdiTextLong,
-    label: "тематики",
+    label: "Тематики",
     route: 'admin.topics',
   },
 ],

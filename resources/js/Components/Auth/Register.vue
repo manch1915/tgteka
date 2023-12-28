@@ -8,6 +8,7 @@ import {Link} from "@inertiajs/vue3";
 import {NCheckbox, useLoadingBar, useMessage} from "naive-ui";
 import {checkboxThemeOverrides} from "@/themeOverrides.js";
 import {closeModal} from "jenesius-vue-modal";
+import { vMaska } from "maska"
 
 const modalStore = useModalStore()
 
@@ -18,7 +19,7 @@ const switchToLogin = () => {
 const state = reactive({
   form: {
     email: '',
-    mobile_number: ''
+    mobile_number: '+7'
   },
   errors: {}
 });
@@ -66,6 +67,8 @@ const submit = async () => {
                     class="mt-1 block w-full"
                     required
                     type="tel"
+                    v-maska
+                    data-maska="+7 ### ###-##-##"
                     autocomplete="current-mobile_number"
                     placeholder="+7 (___) ___-__-__"
                 />

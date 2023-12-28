@@ -7,16 +7,17 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('conversations', function (Blueprint $table) {
+        Schema::create('callbacks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_one')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('user_two')->constrained('users')->cascadeOnDelete();
+            $table->string('name', 25);
+            $table->string('mobile_number', 16);
+            $table->enum('status', ['pending', 'finished', 'declined'])->default('pending');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('conversations');
+        Schema::dropIfExists('callbacks');
     }
 };

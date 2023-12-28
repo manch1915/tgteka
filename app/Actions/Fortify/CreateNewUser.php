@@ -24,7 +24,7 @@ class CreateNewUser implements CreatesNewUsers
 
             // Generate a random password
             $password = Str::random(10);
-            Log::info($input['email'] . '  password =>' . $password,);
+
             // Create the user
             $user = User::create([
                 'email' => $input['email'],
@@ -32,9 +32,9 @@ class CreateNewUser implements CreatesNewUsers
                 'password' => Hash::make($password),
             ]);
 
-            Mail::raw("Here is your password: {$password}", function ($message) use ($user) {
+            Mail::raw("Вот ваш пароль: {$password}", function ($message) use ($user) {
                 $message->to($user->email);
-                $message->subject('Welcome to our app');
+                $message->subject('Добро пожаловать в наше приложение');
             });
 
             return [

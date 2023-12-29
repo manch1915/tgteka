@@ -7,6 +7,7 @@ export const inputThemeOverrides = {
     borderRadius: '30px',
     placeholderColor: '#EAE0FF99',
     color: '#0D143A',
+    colorDisabled: '#0D143A',
     textColor: '#FFFFFF',
     colorFocus: '#0D143A',
     border: '1px solid #6522D9',
@@ -14,6 +15,23 @@ export const inputThemeOverrides = {
     borderDisabled: '1px solid #6522D9',
     borderFocus: '1px solid #6522D9',
     caretColor: 'rgba(135, 41, 255, 1)',
+};
+
+
+export const datePickerThemeOverrides = {
+    peers: {
+        Input: {
+            textColor: '#FFFFFF',
+        },
+        Button: {
+            textColor: '#FFFFFF',
+            textColorHover: '#FFFFFF',
+            textColorPressed: '#FFFFFF',
+            textColorFocus: '#FFFFFF'
+            // repeat for all states you need
+        },
+    },
+    textColor: '#FFFFFF',
 };
 
 export const checkboxThemeOverrides = {
@@ -120,6 +138,7 @@ export const selectThemeOverrides = {
         },
     }
 };
+
 export const selectCatalogThemeOverrides = {
     menuBoxShadow:
         '0 6px 16px -9px rgba(0, 0, 0, .08), 0 9px 28px 0 rgba(0, 0, 0, .05), 0 12px 48px 16px rgba(0, 0, 0, .03)',

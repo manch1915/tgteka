@@ -20,7 +20,7 @@
               </div>
             </div>
           </div>
-          <div class="flex justify-between gap-4">
+          <div class="flex justify-between gap-4 flex-wrap">
             <InterestChannelsCard/>
             <InterestChannelsCard/>
             <InterestChannelsCard/>

@@ -261,7 +261,10 @@ onMounted(() => {
                             <h1 class="text-right text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">{{totalPrice}} ₽</h1>
                         </div>
                         <div class="flex flex-wrap gap-4 pt-4">
-                            <button @click.prevent="toggleChannelInCart(channel)" class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 bg-purple-600 rounded-3xl items-center inline-flex gap-x-2.5">Заказать<BaseIcon size="25" :path="isInCart(channel) ? mdiCartMinus : mdiCartPlus"/></button>
+                            <button @click.prevent="toggleChannelInCart(channel)" class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 bg-purple-600 rounded-3xl items-center inline-flex gap-x-2.5">
+                                {{ isInCart(channel) ? 'Удалить из корзины' : 'Добавить в корзину'}}
+                                <BaseIcon size="25" :path="isInCart(channel) ? mdiCartMinus : mdiCartPlus"/>
+                            </button>
                             <button class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 border  rounded-3xl items-center inline-flex gap-x-2.5">Купить по QR <BaseIcon fill="white" size="20" :path="mdiQrcodeScan"/></button>
                         </div>
                     </div>

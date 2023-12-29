@@ -27,6 +27,7 @@ onMounted(() => {
     cart.items = loadCart();
 })
 
+const isActiveRoute = (routeUrl) => page.url === routeUrl
 
 watchEffect(() => {
     if (page.props.auth.user && page.props.auth.user.balance !== store.userBalance) {
@@ -80,7 +81,7 @@ const openMessenger = () => {
                         <div class="balance flex items-center gap-x-3">
                             <div class="sm:border-r-[1px] pr-2 flex">
                                 <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Общий баланс&nbsp;</p>
-                                <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"> <animated-number :number="store.userBalance"/></p>
+                                <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"> <animated-number :number="store.userBalance"/>&nbsp;₽</p>
                             </div>
                             <div class="sm:border-r-[1px] pr-2 flex items-center gap-x-1">
                                 <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</p>
@@ -92,22 +93,22 @@ const openMessenger = () => {
                         </div>
                     </div>
                     <div class="hidden sm:flex interactive items-center gap-x-3">
-                        <div @click.prevent="openMessenger" class="border-r-[1px] px-5">
+                        <div @click.prevent="openMessenger" class="h-8 border-r-[1px] px-5 flex flex-col justify-center">
                             <img src="/images/messenger.svg" alt="">
                         </div>
-                        <div class="border-r-[1px] px-5">
+                        <div class="border-r-[1px] px-5 h-8 flex flex-col justify-center">
                             <Link :href="route('notifications')">
                                 <img src="/images/notification.svg" alt="">
                             </Link>
                         </div>
-                        <div v-if="cart.items.length > 0" class="border-r-[1px] px-5">
+                        <div v-if="cart.items.length > 0" class="flex flex-col justify-center h-8 border-r-[1px] px-5">
                             <Link :href="route('cart')">
                                 <n-badge  type="info" :value="cart.items.length">
                                     <BaseIcon class="text-purple-400" size="25" :path="mdiCart"/>
                                 </n-badge>
                             </Link>
                         </div>
-                        <div class="border-r-[1px] px-5">
+                        <div class="border-r-[1px] px-5 h-8 flex flex-col justify-center">
                           <Link :href="route('personal-data')">
                             <img src="/images/person.svg" alt="">
                           </Link>
@@ -162,11 +163,11 @@ const openMessenger = () => {
         <div class="container mx-auto">
         <div class="py-10">
             <ul class="flex gap-x-5 justify-center">
-                <Link :href="route('patterns')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои шаблоны</li></Link>
-                <Link :href="route('placements')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои размещения</li></Link>
-                <Link :href="route('catalog.channels.index')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Каталог каналов</li></Link>
-                <Link :href="route('channels')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Мои каналы</li></Link>
-                <Link :href="route('order.index')"><li class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal cursor-pointer">Заявки на размещение</li></Link>
+                <Link :href="route('patterns')"><li :class="{ 'active': isActiveRoute('/patterns'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои шаблоны</li></Link>
+                <Link :href="route('placements')"><li :class="{ 'active': isActiveRoute('/placements'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои размещения</li></Link>
+                <Link :href="route('catalog.channels.index')"><li :class="{ 'active': isActiveRoute('/catalog/channels'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Каталог каналов</li></Link>
+                <Link :href="route('channels')"><li :class="{ 'active': isActiveRoute('/channels'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои каналы</li></Link>
+                <Link :href="route('order.index')"><li :class="{ 'active': isActiveRoute('/orders'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Заявки на размещение</li></Link>
             </ul>
         </div>
         </div>
@@ -186,7 +187,7 @@ header {
         background: #171961;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) inset;
         @media screen and (max-width: 640px) {
-            border-radius: none;
+            border-radius: 0;
             border: none;
             background: transparent;
             box-shadow: none;
@@ -196,6 +197,9 @@ header {
 .nav{
     background: #0D143A;
     li:hover{
+        filter: drop-shadow(0 0 5px rgb(237 233 254));
+    }
+    li.active{
         filter: drop-shadow(0 0 5px rgb(237 233 254));
     }
 }

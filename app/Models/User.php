@@ -103,5 +103,9 @@ class User extends Authenticatable
         return $this
             ->hasMany(Conversation::class, 'user_one')->orWhere('user_two', '=', $this->id)->with('userOne', 'userTwo');
     }
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
 
 }

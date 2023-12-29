@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import {computed, reactive, ref} from "vue";
-import TextInput from "@/Components/TextInput.vue";
+import { vMaska } from "maska"
 import {router, usePage} from "@inertiajs/vue3";
 import axios from "axios";
 import {NInput, NSelect, useLoadingBar} from "naive-ui";
@@ -84,10 +84,7 @@ const logout = () => {
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Telegram-аккаунт</p>
                 <a :href="route('telegram-redirect')" class="sm:!w-2/4 block text-center w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal bg-purple-600 rounded-3xl py-2">Подключить Телеграм аккаунт</a>
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Телефон</p>
-                <n-input v-model:value="form.mobile_number" class="py-1.5 my-1 sm:!w-1/2" placeholder="+7 (___) ___-__-__" :theme-overrides="inputThemeOverrides"/>
-                <span class="text-red-500" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</span>
-                <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Язык уведомлений</p>
-                <n-select class="sm:w-1/2" :theme-overrides="selectThemeOverrides" :options="languages" default-value="russian"/>
+                <n-input v-maska :input-props="{'data-maska': '+7 ### ###-##-##',}" v-model:value="form.mobile_number" class="py-1.5 my-1 sm:!w-1/2" placeholder="+7 (___) ___-__-__" :theme-overrides="inputThemeOverrides"/>
                 <span class="text-red-500" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</span>
             </div>
             <div class="px-4 sm:px-0">

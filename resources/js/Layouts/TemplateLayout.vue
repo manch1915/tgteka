@@ -35,6 +35,9 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 </script>
 
 <style lang="scss">
+.before{
+    box-shadow: 0 0 3px #9d9d9d;
+}
 .before_container{
     a{
         color: #0059ff;

@@ -98,7 +98,7 @@ const toUp = () => {
                         </ul>
                     </div>
                     <div class="list">
-                        <h1 class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Продукты</h1>
+                        <h1 class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Сервисы</h1>
                         <ul>
                             <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
                                 Блог
@@ -186,7 +186,8 @@ footer {
             cursor: pointer;
             transition: color 0.5s ease;
             &:hover{
-                color: rgba(66, 38, 72, 1);
+                color: rgb(210, 132, 229);
+                text-shadow: 0 0 3px rgba(255, 255, 255, 0.62);
             }
         }
     }

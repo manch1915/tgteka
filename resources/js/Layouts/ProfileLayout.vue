@@ -30,7 +30,7 @@ const buttons = [
     },
     {
         title: 'История транзакций',
-        route: '#',
+        route: route('transactions'),
         icon: '/images/profile/transaction-history.svg'
     },
     {

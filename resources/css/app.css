@@ -81,3 +81,6 @@ body {
     color: #0059ff;
     text-decoration: underline;
 }
+.n-button__content {
+    color: #FFFFFF !important; /* replace with the color you want */
+}

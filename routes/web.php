@@ -15,6 +15,7 @@ use App\Http\Controllers\Profile\NotificationsSettingController;
 use App\Http\Controllers\Profile\PersonalDataController;
 use App\Http\Controllers\Profile\ReplenishmentController;
 use App\Http\Controllers\Profile\TotalBalanceController;
+use App\Http\Controllers\Profile\TransactionsHistoryController;
 use App\Http\Controllers\Profile\WithdrawController;
 use App\Http\Controllers\SuggestedDateController;
 use App\Http\Controllers\SupportController;
@@ -107,6 +108,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('/mark-as-read-all', [NotificationsHistoryController::class, 'markAsReadAll'])->name('notifications.mark-as-read-all');
         });
 
+        Route::group(['prefix' => 'transactions'], function () {
+            Route::get('/history', [TransactionsHistoryController::class, 'index'])->name('transactions');
+            Route::get('/get', [TransactionsHistoryController::class, 'getTransactions'])->name('transactions.get');
+        });
 
         Route::get('change-password', [ChangePasswordController::class, 'index'])->name('change-password');
         Route::patch('change-password', [ChangePasswordController::class, 'update'])->name('change-password.update');

@@ -1,6 +1,6 @@
 <script setup>
-import {darkTheme, NSelect, NConfigProvider, NDatePicker , useMessage} from "naive-ui";
-import { selectCatalogThemeOverrides } from "@/themeOverrides.js";
+import {darkTheme, NSelect, NConfigProvider, NDatePicker , useMessage, ruRU, dateRuRU} from "naive-ui";
+import { datePickerThemeOverrides, selectCatalogThemeOverrides } from "@/themeOverrides.js";
 import {computed, onMounted, ref, watch} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import { mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartMinus } from "@mdi/js";
@@ -222,8 +222,8 @@ onMounted(() => {
                 <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">{{ totalPrice }} ₽</h1>
             </div>
             <div v-show="isCart">
-                <n-config-provider :theme="darkTheme">
-                    <n-date-picker v-model:value="timestamp" default-time="12:00:00" type="datetime" :is-date-disabled="disablePastDates" :is-time-disabled="disableMinutesAndSeconds"/>
+                <n-config-provider :locale="ruRU" :date-locale="dateRuRU" :theme="darkTheme">
+                    <n-date-picker :theme-overrides="datePickerThemeOverrides" v-model:value="timestamp" default-time="12:00:00" type="datetime" :is-date-disabled="disablePastDates" :is-time-disabled="disableMinutesAndSeconds"/>
                 </n-config-provider>
             </div>
             <div class="flex items-center justify-between text-violet-100 gap-x-2.5">

@@ -1,9 +1,10 @@
 <script setup>
 import { useProfileButtons } from "@/stores/profileButtons.js";
-import { ref, watch } from 'vue';
-import {Link} from '@inertiajs/vue3'
+import { onBeforeMount, onMounted, ref, watch } from "vue";
+import {Link, usePage} from '@inertiajs/vue3'
 
 const profileButton = useProfileButtons();
+const page = usePage();
 const profileButtonTitle = ref(profileButton.activeButton);
 const props = defineProps({
     title: String,
@@ -17,6 +18,9 @@ watch(
         profileButtonTitle.value = newButton;
     }
 );
+onBeforeMount(() => {
+    profileButton.setActiveButtonByUrl(page.url);
+});
 </script>
 
 <template>

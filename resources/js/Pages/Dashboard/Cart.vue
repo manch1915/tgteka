@@ -11,7 +11,7 @@ import {router} from "@inertiajs/vue3";
 const loadCart = () => {
     return JSON.parse(localStorage.getItem('cart')) || [];
 };
-
+const isCartEmpty = computed(() => channels.value.length === 0);
 const channels = ref(loadCart())
 const userPatterns = ref([])
 const userPattern = ref(null)
@@ -103,10 +103,10 @@ onMounted(() => {
 
             <div class="sm:order-2 order-1 sm:p-0 p-2">
                 <div class="my-2">
-                    <n-select placeholder="Шаблоны" v-model:value="userPattern" :options="userPatterns" :theme-overrides="selectThemeOverrides"/>
+                    <n-select :disabled="isCartEmpty"  placeholder="Шаблоны" v-model:value="userPattern" :options="userPatterns" :theme-overrides="selectThemeOverrides"/>
                 </div>
                 <div class="my-2">
-                    <n-input type="textarea" v-model:value="description" :theme-overrides="inputThemeOverrides" placeholder="Описание заказа"/>
+                    <n-input :disabled="isCartEmpty" type="textarea" v-model:value="description" :theme-overrides="inputThemeOverrides" placeholder="Описание заказа"/>
                 </div>
                 <table class="table-auto">
                     <tbody class="text-violet-100">
@@ -132,7 +132,7 @@ onMounted(() => {
                         </tr>
                     </tbody>
                 </table>
-                <button @click.prevent="orderPosts" class="w-full my-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal transition bg-purple-600 hover:bg-purple-800 rounded-3xl py-2">
+                <button :disabled="isCartEmpty" @click.prevent="orderPosts" class="w-full my-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal transition bg-purple-600 hover:bg-purple-800 rounded-3xl py-2">
                     Купить размещение
                 </button>
             </div>

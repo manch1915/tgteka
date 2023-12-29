@@ -147,7 +147,7 @@ onMounted(() => getPatterns())
                             </div>
                             <div>
                                 <Link :href="route('pattern.adding')">
-                                    <button class="text-violet-100 sm:w-auto w-full px-6 py-4 bg-purple-600 rounded-full">Создать шаблон</button>
+                                    <button style="box-shadow: 0 0 3px #b7b7b7" class="text-violet-100 sm:w-auto w-full px-6 py-4 bg-purple-600 rounded-full">Создать шаблон</button>
                                 </Link>
                             </div>
                     </div>

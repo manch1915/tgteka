@@ -86,7 +86,8 @@ class ChannelController extends Controller
 
         $channels = $channelsQuery->paginate(10);
 
-        $channels->each(function ($channel) use ($avatarService){
+        $channels->each(function ($channel) use ($avatarService, $request){
+            $channel->isFav = $request->user()->hasFavorited($channel);
             $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);
             return $channel;
         });

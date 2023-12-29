@@ -42,6 +42,7 @@ return [
     'ends_with'            => 'The :attribute must end with one of the following: :values.',
     'enum'                 => 'The selected :attribute is invalid.',
     'exists'               => 'The selected :attribute is invalid.',
+    'extensions'           => 'The :attribute field must have one of the following extensions: :values.',
     'file'                 => 'The :attribute must be a file.',
     'filled'               => 'The :attribute field is required.',
     'gt'                   => [
@@ -56,6 +57,7 @@ return [
         'numeric' => 'The :attribute must be greater than or equal :value.',
         'string'  => 'The :attribute must be greater than or equal :value characters.',
     ],
+    'hex_color'            => 'The :attribute field must be a valid hexadecimal color.',
     'image'                => 'The :attribute must be an image.',
     'in'                   => 'The selected :attribute is invalid.',
     'in_array'             => 'The :attribute field does not exist in :other.',

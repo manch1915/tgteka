@@ -34,7 +34,7 @@ const props = defineProps({
 
 const countValue = ref(props.countValue);
 const cartUpdateKey = ref(0);
-const fav = ref(false);
+const fav = computed(() => props.channel.isFav);
 const wrap = ref(false);
 const message = useMessage();
 const format = computed(() => generateFormatArray(props.channel));
@@ -90,7 +90,7 @@ const addChannelToFavorites = async (channel) => {
             const isFav = response.data.message.includes("added");
             const operation = isFav ? "добавлен в избранное" : "удален из избранних";
             message.info(`Канал ${channel.channel_name} ${operation}`);
-            fav.value = isFav;
+            props.channel.isFav = isFav;
         } else {
             message.error("Возникла проблема с добавлением канала в избранное.");
         }

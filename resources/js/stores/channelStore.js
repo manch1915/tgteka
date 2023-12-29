@@ -9,6 +9,7 @@ export const useChannelStore = defineStore('channel',{
         searchData: '',
         sort: '',
         loading: false,
+        activeButton: null
     }),
 
     actions: {

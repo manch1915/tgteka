@@ -25,7 +25,7 @@ let isSmallScreen = window.innerWidth <= 768;
                 <div class="conversations py-2" :class="{ 'hidden': !conversations.showChat && isSmallScreen }">
                     <slot name="conversations"/>
                 </div>
-                <div class="message" :class="{ 'hidden': conversations.showChat && isSmallScreen }">
+                <div class="message rounded-br-2xl" :class="{ 'hidden': conversations.showChat && isSmallScreen }">
                     <slot name="conversation_messages"/>
                 </div>
             </div>

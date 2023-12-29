@@ -58,7 +58,7 @@ const width = window.innerWidth
                             канала
                         </li>
                     </Link>
-                    <li class="text-paleblue font-bold py-1 px-4 cursor-pointer flex gap-1">Сервисы <i class="arrow-circle-down"></i></li>
+                    <li class="text-paleblue select-none font-bold py-1 px-4 cursor-pointer flex gap-1">Сервисы <i class="arrow-circle-down"></i></li>
                 </ul>
             </nav>
             <div class="flex flex-1 justify-end">

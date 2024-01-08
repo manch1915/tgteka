@@ -17,15 +17,15 @@ let isSmallScreen = window.innerWidth <= 768;
                         <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Чат</h1>
                     </div>
                     <div class="flex-1 flex justify-end cursor-pointer" @click.prevent="closeModal()">
-                        <img src="/images/Icon-close.svg" alt="">
+                        <img class="messenger_close" src="/images/Icon-close.svg" alt="">
                     </div>
                 </div>
             </div>
             <div class="content">
-                <div class="conversations py-2" :class="{ 'hidden': !conversations.showChat && isSmallScreen }">
+                <div class="conversations m-2 mr-0 py-2" :class="{ 'hidden': !conversations.showChat && isSmallScreen }">
                     <slot name="conversations"/>
                 </div>
-                <div class="message rounded-br-2xl" :class="{ 'hidden': conversations.showChat && isSmallScreen }">
+                <div class="message m-2 ml-0 rounded-br-2xl" :class="{ 'hidden': conversations.showChat && isSmallScreen }">
                     <slot name="conversation_messages"/>
                 </div>
             </div>
@@ -54,6 +54,7 @@ let isSmallScreen = window.innerWidth <= 768;
     display: flex;
     flex-direction: row;
     height: 90%;
+    column-gap: 5px;
 }
 .conversations, .message {
     flex-basis: 50%;
@@ -66,5 +67,11 @@ let isSmallScreen = window.innerWidth <= 768;
 .conversations{
     background: #0D143A;
     border-radius: 0 20px 0 20px;
+}
+.messenger_close{
+    transition: all .5s;
+    &:hover{
+        filter: drop-shadow(0 0 8px #9d9d9d) ;
+    }
 }
 </style>

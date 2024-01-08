@@ -9,10 +9,13 @@ class FormatSeeder extends Seeder
 {
     public function run(): void
     {
-        $formats = ['1/24', '2/48', '3/72', 'no_deletion', 'repost'];
+        $formats = [
+            ['name' => '1/24'],
+            ['name' => '2/48'],
+            ['name' => '3/72'],
+            ['name' => 'no_deletion'],
+            ['name' => 'repost']];
 
-        collect($formats)->each(function($format) {
-            Format::create(['name' => $format]);
-        });
+        Format::insert($formats);
     }
 }

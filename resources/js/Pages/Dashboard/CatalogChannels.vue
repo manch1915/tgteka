@@ -119,11 +119,6 @@ const searchHandler = (value) => {
                             :theme-overrides="inputThemeOverrides"
                         />
                     </div>
-                    <div class="flex gap-x-3 border-t border-b border-violet-100 border-opacity-40 py-2">
-                        <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
-                        <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Верифицированный</p>
-                        <img src="/images/Icon.svg" alt="">
-                    </div>
                     <button class="my-6 px-6 py-2 w-full bg-purple-600 transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Искать</button>
                     <div class="flex justify-center">
                         <button class="text-violet-100 text-xs font-normal font-['Open Sans'] underline leading-none">Очистить форму</button>

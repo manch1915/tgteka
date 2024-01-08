@@ -3,7 +3,7 @@ import {darkTheme, NSelect, NConfigProvider, NDatePicker , useMessage, ruRU, dat
 import { datePickerThemeOverrides, selectCatalogThemeOverrides } from "@/themeOverrides.js";
 import {computed, onMounted, ref, watch} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import { mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartMinus } from "@mdi/js";
+import {mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartRemove} from "@mdi/js";
 import { Link } from "@inertiajs/vue3";
 import { saveCart, loadCart, isInCart as checkInCart, generateFormatArray } from "@/utilities/cartUtilities.js";
 import { useCartStore } from "@/stores/CartStore.js";
@@ -232,7 +232,7 @@ onMounted(() => {
                     <BaseIcon size="25" :path="fav ? mdiHeart : mdiHeartOutline"/>
                 </div>
                 <div class="cursor-pointer" @click="toggleChannelInCart(channel)">
-                    <BaseIcon size="25" :path="isInCart(channel) ? mdiCartMinus : mdiCartPlus"/>
+                    <BaseIcon size="25" :path="isInCart(channel) ? mdiCartRemove : mdiCartPlus"/>
                 </div>
             </div>
         </div>

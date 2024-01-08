@@ -7,7 +7,7 @@ import AnimatedNumber from "@/Components/Dashboard/AnimatedNumber.vue";
 import Messenger from "@/Components/Messenger/Messenger.vue";
 import { loadCart } from "@/channelHelpers.js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import { mdiCart } from "@mdi/js";
+import {mdiCart, mdiFaceAgent} from "@mdi/js";
 import { useCartStore } from "@/stores/CartStore.js";
 import { NBadge } from "naive-ui";
 
@@ -89,7 +89,7 @@ const openMessenger = () => {
                             </div>
                         </div>
                     </div>
-                    <div class="hidden sm:flex interactive items-center gap-x-3">
+                    <div class="hidden sm:flex interactive items-center">
                         <div @click.prevent="openMessenger" class="h-8 border-r-[1px] px-5 flex flex-col justify-center">
                             <img src="/images/messenger.svg" alt="">
                         </div>
@@ -99,13 +99,18 @@ const openMessenger = () => {
                             </Link>
                         </div>
                         <div v-if="cart.items.length > 0" class="flex flex-col justify-center h-8 border-r-[1px] px-5">
-                            <Link :href="route('cart')">
-                                <n-badge  type="info" :value="cart.items.length">
-                                    <BaseIcon class="text-purple-400" size="25" :path="mdiCart"/>
+                            <Link :href="route('cart')" class="flex flex-col items-center">
+                                <n-badge type="info" :value="cart.items.length">
+                                    <BaseIcon class="text-purple-400" size="30" :path="mdiCart"/>
                                 </n-badge>
                             </Link>
                         </div>
-                        <div class="border-r-[1px] px-5 h-8 flex flex-col justify-center">
+                        <div class="px-5 h-8 border-r-[1px] flex flex-col justify-center">
+                          <Link :href="route('support')" class="flex flex-col items-center">
+                              <BaseIcon class="text-purple-400" size="30" :path="mdiFaceAgent"/>
+                          </Link>
+                        </div>
+                        <div class="px-5 h-8 flex flex-col justify-center">
                           <Link :href="route('personal-data')">
                             <img src="/images/person.svg" alt="">
                           </Link>

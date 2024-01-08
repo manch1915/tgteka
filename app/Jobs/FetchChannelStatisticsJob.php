@@ -34,7 +34,7 @@ class FetchChannelStatisticsJob implements ShouldQueue
 
         $baseURL = 'https://api.tgstat.ru/';
 
-        $token = 'e3b38be1f953b4118758d333de716a20'; //token
+        $token = '3de0a70af1d9e03800a888742cf07468'; //token
 
         $channel = $this->channel;
 
@@ -50,8 +50,9 @@ class FetchChannelStatisticsJob implements ShouldQueue
                 ]
             ]);
 
+            Log::info($generalStatistics->error);
 
-            FetchChannelStatisticsJob::dispatch($channel)->delay(now()->addMinutes(20));
+            $this->release(60 * 20);
 
             return;
         }

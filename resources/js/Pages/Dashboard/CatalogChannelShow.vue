@@ -2,7 +2,7 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {
-    mdiCartMinus,
+    mdiCartRemove,
     mdiCartPlus,
     mdiEyeOutline,
     mdiHeartOutline,
@@ -263,7 +263,7 @@ onMounted(() => {
                         <div class="flex flex-wrap gap-4 pt-4">
                             <button @click.prevent="toggleChannelInCart(channel)" class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 bg-purple-600 rounded-3xl items-center inline-flex gap-x-2.5">
                                 {{ isInCart(channel) ? 'Удалить из корзины' : 'Добавить в корзину'}}
-                                <BaseIcon size="25" :path="isInCart(channel) ? mdiCartMinus : mdiCartPlus"/>
+                                <BaseIcon size="25" :path="isInCart(channel) ? mdiCartRemove : mdiCartPlus"/>
                             </button>
                             <button class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 border  rounded-3xl items-center inline-flex gap-x-2.5">Купить по QR <BaseIcon fill="white" size="20" :path="mdiQrcodeScan"/></button>
                         </div>

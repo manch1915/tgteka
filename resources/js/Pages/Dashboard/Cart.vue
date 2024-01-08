@@ -109,7 +109,7 @@ onMounted(() => {
                     <n-select :disabled="isCartEmpty"  placeholder="Шаблоны" v-model:value="userPattern" :options="userPatterns" :theme-overrides="selectThemeOverrides"/>
                 </div>
                 <div class="my-2">
-                    <n-input :disabled="isCartEmpty" type="textarea" v-model:value="description" :theme-overrides="inputThemeOverrides" placeholder="Описание заказа"/>
+                    <n-input :autosize="{minRows: 4, maxRows: 10}" :disabled="isCartEmpty" type="textarea" maxlength="300" show-count v-model:value="description" :theme-overrides="inputThemeOverrides" placeholder="Описание заказа"/>
                 </div>
                 <table class="table-auto">
                     <tbody class="text-violet-100">
@@ -157,6 +157,5 @@ onMounted(() => {
 .v-leave-to {
     opacity: 0;
 }
-
 
 </style>

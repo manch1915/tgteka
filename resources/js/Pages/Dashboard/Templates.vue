@@ -70,7 +70,7 @@ onMounted(() => getPatterns())
                     <transition-group name="fade" tag="div" mode="in-out">
                     <template v-if="patterns" v-for="(pattern, index) in patterns.data" :key="index">
                     <div class="relative">
-                        <div class="mb-5 data_container flex items-center justify-between origin-top-left rounded-tr-3xl rounded-bl-3xl rounded-br-3xl border border-color backdrop-blur-2xl px-4 py-3">
+                        <div @click.prevent="navigateToEditPattern(pattern.id)" class="cursor-pointer mb-5 data_container flex items-center justify-between origin-top-left rounded-tr-3xl rounded-bl-3xl rounded-br-3xl border border-color backdrop-blur-2xl px-4 py-3">
                             <div class="flex items-center">
                                 <div class="data shadow px-2.5 py-1 rounded-lg flex gap-x-1 items-center">
                                     <div>

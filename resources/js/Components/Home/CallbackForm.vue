@@ -43,7 +43,7 @@ const orderCallback = () => {
             <!--TODO gradient border-->
             <div class="form flex flex-col text-violet-100 justify-center gap-y-4">
                 <input v-model="form.name" type="text" placeholder="Имя">
-                <input v-model="form.mobile_number" v-maska data-maska="+7 ### ###-##-##" type="text" placeholder="+7(___) - ___ - __ - __">
+                <input v-model="form.mobile_number" v-maska data-maska="+7 (###) ###-##-##" type="text" placeholder="+7(___) - ___ - __ - __">
                 <div class="form__checkbox flex items-center gap-x-2">
                     <!--TODO checkbox styling-->
                     <n-checkbox v-model:checked="form.terms" :theme-overrides="checkboxThemeOverrides"/>

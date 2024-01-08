@@ -1,6 +1,6 @@
 <script setup>
 import { useProfileButtons } from "@/stores/profileButtons.js";
-import { onBeforeMount, onMounted, ref, watch } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 import {Link, usePage} from '@inertiajs/vue3'
 
 const profileButton = useProfileButtons();

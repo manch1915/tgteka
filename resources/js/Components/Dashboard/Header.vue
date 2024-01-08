@@ -83,12 +83,9 @@ const openMessenger = () => {
                                 <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Общий баланс&nbsp;</p>
                                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"> <animated-number :number="store.userBalance"/>&nbsp;₽</p>
                             </div>
-                            <div class="sm:border-r-[1px] pr-2 flex items-center gap-x-1">
+                            <div @click.prevent="router.visit(route('replenishment'))" class="cursor-pointer replenish pr-2 flex items-center gap-x-1">
                                 <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</p>
                                 <div><img src="/images/group.svg" alt=""></div>
-                            </div>
-                            <div class="flex items-center gap-x-1">
-                                <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">0 ₽</p>
                             </div>
                         </div>
                     </div>
@@ -300,6 +297,17 @@ header {
         top: 18px;
         width: 0%;
         left: 50%;
+    }
+}
+
+.replenish:hover{
+    p{
+        transition: color .4s;
+        color: rgb(97, 97, 97);
+    }
+    img{
+        transition: filter .4s;
+        filter: invert(0.7);
     }
 }
 </style>

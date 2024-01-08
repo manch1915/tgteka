@@ -1,7 +1,6 @@
 <script setup>
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import InputError from '@/Components/InputError.vue';
-import { useModalStore } from '@/stores/authModal.js'
 import TextInput from '@/Components/TextInput.vue';
 import {reactive} from "vue";
 import {Link} from "@inertiajs/vue3";
@@ -9,12 +8,7 @@ import {NCheckbox, useLoadingBar, useMessage} from "naive-ui";
 import {checkboxThemeOverrides} from "@/themeOverrides.js";
 import {closeModal} from "jenesius-vue-modal";
 import { vMaska } from "maska"
-
-const modalStore = useModalStore()
-
-const switchToLogin = () => {
-    modalStore.setModalToOpen('login')
-}
+import { openLogin } from "@/utilities/authModals.js";
 
 const state = reactive({
   form: {
@@ -68,7 +62,7 @@ const submit = async () => {
                     required
                     type="tel"
                     v-maska
-                    data-maska="+7 ### ###-##-##"
+                    data-maska="+7 (###) ###-##-##"
                     autocomplete="current-mobile_number"
                     placeholder="+7 (___) ___-__-__"
                 />
@@ -98,7 +92,7 @@ const submit = async () => {
             <hr class="border border-violet-100 border-opacity-40">
             <div class="w-full flex justify-center gap-3">
                 <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Уже есть аккаунт? </div>
-                <button @click.prevent="switchToLogin" class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight cursor-pointer">
+                <button @click.prevent="openLogin" class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight cursor-pointer">
                     Войти
                 </button>
             </div>

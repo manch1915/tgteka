@@ -1,34 +1,9 @@
 <script setup>
-import {Link, router} from '@inertiajs/vue3';
-import {useModalStore} from '@/stores/authModal.js'
-import {openModal} from "jenesius-vue-modal";
-import Login from "@/Components/Auth/Login.vue";
-import Register from "@/Components/Auth/Register.vue";
-import {ref, watch} from "vue";
-import PasswordRecovery from "@/Components/Auth/PasswordRecovery.vue";
+import { Link, router, usePage } from "@inertiajs/vue3";
+import { onBeforeMount, ref, watch } from "vue";
+import { useHomeButtons } from "@/stores/homeButtons.js";
+import { openLogin, openRegister } from "@/utilities/authModals.js";
 
-const modals = {
-    register: Register,
-    login: Login,
-    recovery: PasswordRecovery
-};
-
-const modalStore = useModalStore()
-const closeModal = () => {
-    modalStore.closeCurrentModal(); // Close the current modal
-}
-
-const openModalWithName = (value) => {
-    closeModal();
-    modalStore.setModalToOpen(value);
-}
-
-watch(() => modalStore.modalShouldOpen, (newModalName) => {
-    if (newModalName) {
-        closeModal() // Close any opened modal
-        openModal(modals[newModalName]) // Open new modal
-    }
-})
 const burgerActive = ref(false)
 const toggleBurger = () => {
     burgerActive.value = !burgerActive.value
@@ -40,6 +15,20 @@ const toggleBurger = () => {
     }
 }
 const width = window.innerWidth
+
+const homeButtons = useHomeButtons();
+const page = usePage();
+const profileButtonTitle = ref(homeButtons.activeButton);
+
+watch(
+    () => homeButtons.activeButton,
+    (newButton) => {
+        profileButtonTitle.value = newButton;
+    }
+);
+onBeforeMount(() => {
+    homeButtons.setActiveButtonByUrl(page.url);
+});
 </script>
 
 <template>
@@ -49,25 +38,23 @@ const width = window.innerWidth
                 <img src="/images/logo.svg" alt="Application logo">
             </div>
             <nav class="navigation flex-1">
-                <ul class="flex">
+                <ul class="flex justify-center gap-x-0.5">
                     <Link :href="route('customers')">
-                        <li class="text-paleblue font-bold py-1 px-4 cursor-pointer">Заказчикам</li>
+                        <li class="text-paleblue font-bold py-1 px-4 cursor-pointer" :class="profileButtonTitle === 'Заказчикам' ? 'background' : ''">Заказчикам</li>
                     </Link>
                     <Link :href="route('owners')">
-                        <li class="text-paleblue font-bold py-1 px-4 cursor-pointer whitespace-nowrap">Владельцу
-                            канала
-                        </li>
+                        <li class="text-paleblue font-bold py-1 px-4 cursor-pointer whitespace-nowrap" :class="profileButtonTitle === 'Владельцу канала' ? 'background' : ''">Владельцу канала</li>
                     </Link>
-                    <li class="text-paleblue select-none font-bold py-1 px-4 cursor-pointer flex gap-1">Сервисы <i class="arrow-circle-down"></i></li>
+<!--                    <li class="text-paleblue select-none font-bold py-1 px-4 cursor-pointer flex gap-1">Сервисы <i class="arrow-circle-down"></i></li>-->
                 </ul>
             </nav>
             <div class="flex flex-1 justify-end">
                 <ul class="flex items-center gap-1 text-paleblue font-bold">
                     <li><img src="/images/house-user.svg" alt="home"></li>
                     <li class="flex">
-                        <span class="hover:text-violet-300 cursor-pointer" @click.prevent="openModalWithName('register')">Регистрация</span>
+                        <span class="hover:text-violet-300 cursor-pointer" @click.prevent="openRegister()">Регистрация</span>
                         /
-                        <span class="hover:text-violet-300 cursor-pointer" @click.prevent="openModalWithName('login')">Войти</span>
+                        <span class="hover:text-violet-300 cursor-pointer" @click.prevent="openLogin()">Войти</span>
                     </li>
                 </ul>
             </div>
@@ -88,7 +75,7 @@ const width = window.innerWidth
                     <img class="w-8" src="/images/logo.svg" alt="Application logo">
                 </div>
             </div>
-            <div @click.prevent="openModalWithName('register')">
+            <div @click.prevent="openRegister">
                 <img class="w-10" src="/images/house-user.svg" alt="home">
             </div>
         </div>
@@ -274,5 +261,12 @@ const width = window.innerWidth
     width: 0%;
     left: 50%;
 }
+}
+
+.background{
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    background: #171961;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
 }
 </style>

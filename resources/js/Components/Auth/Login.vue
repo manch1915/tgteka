@@ -1,15 +1,9 @@
 <script setup>
-import {router, useForm} from '@inertiajs/vue3';
+import { useForm} from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
-import {useModalStore} from "@/stores/authModal.js";
-
-const modalStore = useModalStore()
-
-const switchTo = (modal) => {
-    modalStore.setModalToOpen(modal)
-}
+import { openPasswordRecovery, openRegister } from "@/utilities/authModals.js";
 
 const form = useForm({
     email: '',
@@ -54,10 +48,10 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
             <div class="pt-4">
-                <button @click.prevent="switchTo('recovery')" class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight cursor-pointer">Забыли пароль?</button>
+                <button type="button" @click.prevent="openPasswordRecovery()" class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight cursor-pointer">Забыли пароль?</button>
             </div>
             <div class="pt-4 w-full">
-                <button class="w-full text-center pr-6 py-3.5 bg-purple-600 text-white text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl">
+                <button type="submit" class="w-full text-center pr-6 py-3.5 bg-purple-600 text-white text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl">
                    Войти
                 </button>
             </div>
@@ -71,7 +65,7 @@ const submit = () => {
             <hr class="mt-4 border border-violet-100 border-opacity-40">
             <div class="pt-4 w-full flex justify-center gap-3">
                 <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Нет аккаунта?</div>
-                <button @click.prevent="switchTo('register')" class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight cursor-pointer">
+                <button @click.prevent="openRegister()" class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight cursor-pointer">
                     Зарегистрироваться
                 </button>
             </div>

@@ -68,6 +68,9 @@ const orderPosts = () => {
 const message = useMessage()
 
 onMounted(() => {
+    if (isCartEmpty.value) {
+        router.visit(route('catalog.channels.index'))
+    }
     axios.get(route('user-patterns'))
         .then(response => {
             const patterns = response.data;

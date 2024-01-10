@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 10.25.2.
+ * Generated for Laravel 10.34.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -435,6 +435,18 @@
         {
                         /** @var \Illuminate\Foundation\Application $instance */
                         return $instance->runningInConsole();
+        }
+                    /**
+         * Determine if the application is running any of the given console commands.
+         *
+         * @param string|array $commands
+         * @return bool 
+         * @static 
+         */ 
+        public static function runningConsoleCommand(...$commands)
+        {
+                        /** @var \Illuminate\Foundation\Application $instance */
+                        return $instance->runningConsoleCommand(...$commands);
         }
                     /**
          * Determine if the application is running unit tests.
@@ -3508,6 +3520,18 @@
                         $instance->assertDispatchedWithoutChain($command, $callback);
         }
                     /**
+         * Create a new assertion about a chained batch.
+         *
+         * @param \Closure $callback
+         * @return \Illuminate\Support\Testing\Fakes\ChainedBatchTruthTest 
+         * @static 
+         */ 
+        public static function chainedBatch($callback)
+        {
+                        /** @var \Illuminate\Support\Testing\Fakes\BusFake $instance */
+                        return $instance->chainedBatch($callback);
+        }
+                    /**
          * Assert if a batch was dispatched based on a truth-test callback.
          *
          * @param callable $callback
@@ -5539,6 +5563,18 @@
                         return $instance->pretend($callback);
         }
                     /**
+         * Execute the given callback without "pretending".
+         *
+         * @param \Closure $callback
+         * @return mixed 
+         * @static 
+         */ 
+        public static function withoutPretending($callback)
+        {            //Method inherited from \Illuminate\Database\Connection         
+                        /** @var \Illuminate\Database\SQLiteConnection $instance */
+                        return $instance->withoutPretending($callback);
+        }
+                    /**
          * Bind values to their parameters in the given statement.
          *
          * @param \PDOStatement $statement
@@ -6464,6 +6500,18 @@
         {
                         /** @var \Illuminate\Events\Dispatcher $instance */
                         return $instance->setQueueResolver($resolver);
+        }
+                    /**
+         * Set the database transaction manager resolver implementation.
+         *
+         * @param callable $resolver
+         * @return \Illuminate\Events\Dispatcher 
+         * @static 
+         */ 
+        public static function setTransactionManagerResolver($resolver)
+        {
+                        /** @var \Illuminate\Events\Dispatcher $instance */
+                        return $instance->setTransactionManagerResolver($resolver);
         }
                     /**
          * Gets the raw, unprepared listeners.
@@ -8132,6 +8180,17 @@
                         return $instance->getDispatcher();
         }
                     /**
+         * Get the array of global middleware.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getGlobalMiddleware()
+        {
+                        /** @var \Illuminate\Http\Client\Factory $instance */
+                        return $instance->getGlobalMiddleware();
+        }
+                    /**
          * Register a custom macro.
          *
          * @param string $name
@@ -8283,6 +8342,18 @@
         {
                         /** @var \Illuminate\Translation\Translator $instance */
                         $instance->load($namespace, $group, $locale);
+        }
+                    /**
+         * Register a callback that is responsible for handling missing translation keys.
+         *
+         * @param callable|null $callback
+         * @return static 
+         * @static 
+         */ 
+        public static function handleMissingKeysUsing($callback)
+        {
+                        /** @var \Illuminate\Translation\Translator $instance */
+                        return $instance->handleMissingKeysUsing($callback);
         }
                     /**
          * Add a new namespace to the loader.
@@ -10447,6 +10518,83 @@
                         return $instance->setConnectionName($name);
         }
                     /**
+         * Release a reserved job back onto the queue after (n) seconds.
+         *
+         * @param string $queue
+         * @param \Illuminate\Queue\Jobs\DatabaseJobRecord $job
+         * @param int $delay
+         * @return mixed 
+         * @static 
+         */ 
+        public static function release($queue, $job, $delay)
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        return $instance->release($queue, $job, $delay);
+        }
+                    /**
+         * Delete a reserved job from the queue.
+         *
+         * @param string $queue
+         * @param string $id
+         * @return void 
+         * @throws \Throwable
+         * @static 
+         */ 
+        public static function deleteReserved($queue, $id)
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        $instance->deleteReserved($queue, $id);
+        }
+                    /**
+         * Delete a reserved job from the reserved queue and release it.
+         *
+         * @param string $queue
+         * @param \Illuminate\Queue\Jobs\DatabaseJob $job
+         * @param int $delay
+         * @return void 
+         * @static 
+         */ 
+        public static function deleteAndRelease($queue, $job, $delay)
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        $instance->deleteAndRelease($queue, $job, $delay);
+        }
+                    /**
+         * Delete all of the jobs from the queue.
+         *
+         * @param string $queue
+         * @return int 
+         * @static 
+         */ 
+        public static function clear($queue)
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        return $instance->clear($queue);
+        }
+                    /**
+         * Get the queue or return the default.
+         *
+         * @param string|null $queue
+         * @return string 
+         * @static 
+         */ 
+        public static function getQueue($queue)
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        return $instance->getQueue($queue);
+        }
+                    /**
+         * Get the underlying database instance.
+         *
+         * @return \Illuminate\Database\Connection 
+         * @static 
+         */ 
+        public static function getDatabase()
+        {
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
+                        return $instance->getDatabase();
+        }
+                    /**
          * Get the backoff for an object-based queue handler.
          *
          * @param mixed $job
@@ -10455,7 +10603,7 @@
          */ 
         public static function getJobBackoff($job)
         {            //Method inherited from \Illuminate\Queue\Queue         
-                        /** @var \Illuminate\Queue\SyncQueue $instance */
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
                         return $instance->getJobBackoff($job);
         }
                     /**
@@ -10467,7 +10615,7 @@
          */ 
         public static function getJobExpiration($job)
         {            //Method inherited from \Illuminate\Queue\Queue         
-                        /** @var \Illuminate\Queue\SyncQueue $instance */
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
                         return $instance->getJobExpiration($job);
         }
                     /**
@@ -10479,7 +10627,7 @@
          */ 
         public static function createPayloadUsing($callback)
         {            //Method inherited from \Illuminate\Queue\Queue         
-                        \Illuminate\Queue\SyncQueue::createPayloadUsing($callback);
+                        \Illuminate\Queue\DatabaseQueue::createPayloadUsing($callback);
         }
                     /**
          * Get the container instance being used by the connection.
@@ -10489,7 +10637,7 @@
          */ 
         public static function getContainer()
         {            //Method inherited from \Illuminate\Queue\Queue         
-                        /** @var \Illuminate\Queue\SyncQueue $instance */
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
                         return $instance->getContainer();
         }
                     /**
@@ -10501,7 +10649,7 @@
          */ 
         public static function setContainer($container)
         {            //Method inherited from \Illuminate\Queue\Queue         
-                        /** @var \Illuminate\Queue\SyncQueue $instance */
+                        /** @var \Illuminate\Queue\DatabaseQueue $instance */
                         $instance->setContainer($container);
         }
          
@@ -13474,6 +13622,7 @@
      * @method static \Illuminate\Routing\RouteRegistrar controller(string $controller)
      * @method static \Illuminate\Routing\RouteRegistrar domain(string $value)
      * @method static \Illuminate\Routing\RouteRegistrar middleware(array|string|null $middleware)
+     * @method static \Illuminate\Routing\RouteRegistrar missing(\Closure $missing)
      * @method static \Illuminate\Routing\RouteRegistrar name(string $value)
      * @method static \Illuminate\Routing\RouteRegistrar namespace(string|null $value)
      * @method static \Illuminate\Routing\RouteRegistrar prefix(string $prefix)
@@ -14482,6 +14631,41 @@
                         return $instance->dropDatabaseIfExists($name);
         }
                     /**
+         * Get the tables for the database.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getTables()
+        {
+                        /** @var \Illuminate\Database\Schema\SQLiteBuilder $instance */
+                        return $instance->getTables();
+        }
+                    /**
+         * Get all of the table names for the database.
+         *
+         * @deprecated Will be removed in a future Laravel version.
+         * @return array 
+         * @static 
+         */ 
+        public static function getAllTables()
+        {
+                        /** @var \Illuminate\Database\Schema\SQLiteBuilder $instance */
+                        return $instance->getAllTables();
+        }
+                    /**
+         * Get all of the view names for the database.
+         *
+         * @deprecated Will be removed in a future Laravel version.
+         * @return array 
+         * @static 
+         */ 
+        public static function getAllViews()
+        {
+                        /** @var \Illuminate\Database\Schema\SQLiteBuilder $instance */
+                        return $instance->getAllViews();
+        }
+                    /**
          * Drop all tables from the database.
          *
          * @return void 
@@ -14502,28 +14686,6 @@
         {
                         /** @var \Illuminate\Database\Schema\SQLiteBuilder $instance */
                         $instance->dropAllViews();
-        }
-                    /**
-         * Get all of the table names for the database.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getAllTables()
-        {
-                        /** @var \Illuminate\Database\Schema\SQLiteBuilder $instance */
-                        return $instance->getAllTables();
-        }
-                    /**
-         * Get all of the view names for the database.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getAllViews()
-        {
-                        /** @var \Illuminate\Database\Schema\SQLiteBuilder $instance */
-                        return $instance->getAllViews();
         }
                     /**
          * Empty the database file.
@@ -14603,6 +14765,17 @@
                         return $instance->hasTable($table);
         }
                     /**
+         * Get the views that belong to the database.
+         *
+         * @return array 
+         * @static 
+         */ 
+        public static function getViews()
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\SQLiteBuilder $instance */
+                        return $instance->getViews();
+        }
+                    /**
          * Determine if the given table has a given column.
          *
          * @param string $table
@@ -14661,13 +14834,14 @@
          *
          * @param string $table
          * @param string $column
+         * @param bool $fullDefinition
          * @return string 
          * @static 
          */ 
-        public static function getColumnType($table, $column)
+        public static function getColumnType($table, $column, $fullDefinition = false)
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
                         /** @var \Illuminate\Database\Schema\SQLiteBuilder $instance */
-                        return $instance->getColumnType($table, $column);
+                        return $instance->getColumnType($table, $column, $fullDefinition);
         }
                     /**
          * Get the column listing for a given table.
@@ -14680,6 +14854,18 @@
         {            //Method inherited from \Illuminate\Database\Schema\Builder         
                         /** @var \Illuminate\Database\Schema\SQLiteBuilder $instance */
                         return $instance->getColumnListing($table);
+        }
+                    /**
+         * Get the columns for a given table.
+         *
+         * @param string $table
+         * @return array 
+         * @static 
+         */ 
+        public static function getColumns($table)
+        {            //Method inherited from \Illuminate\Database\Schema\Builder         
+                        /** @var \Illuminate\Database\Schema\SQLiteBuilder $instance */
+                        return $instance->getColumns($table);
         }
                     /**
          * Modify a table on the schema.
@@ -14867,6 +15053,28 @@
         {
                         /** @var \Illuminate\Session\SessionManager $instance */
                         return $instance->blockDriver();
+        }
+                    /**
+         * Get the maximum number of seconds the session lock should be held for.
+         *
+         * @return int 
+         * @static 
+         */ 
+        public static function defaultRouteBlockLockSeconds()
+        {
+                        /** @var \Illuminate\Session\SessionManager $instance */
+                        return $instance->defaultRouteBlockLockSeconds();
+        }
+                    /**
+         * Get the maximum number of seconds to wait while attempting to acquire a route block session lock.
+         *
+         * @return int 
+         * @static 
+         */ 
+        public static function defaultRouteBlockWaitSeconds()
+        {
+                        /** @var \Illuminate\Session\SessionManager $instance */
+                        return $instance->defaultRouteBlockWaitSeconds();
         }
                     /**
          * Get the session configuration.
@@ -18374,543 +18582,209 @@
      * 
      *
      */ 
+        class Number {
+         
+    }
+            /**
+     * 
+     *
+     */ 
         class Str {
          
     }
      
 }
 
-        namespace Jenssegers\Agent\Facades { 
+        namespace Intervention\Image\Facades { 
             /**
      * 
      *
      */ 
-        class Agent {
+        class Image {
                     /**
-         * Get all detection rules. These rules include the additional
-         * platforms and browsers and utilities.
+         * Overrides configuration settings
          *
+         * @param array $config
+         * @return self 
+         * @static 
+         */ 
+        public static function configure($config = [])
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->configure($config);
+        }
+                    /**
+         * Initiates an Image instance from different input types
+         *
+         * @param mixed $data
+         * @return \Intervention\Image\Image 
+         * @static 
+         */ 
+        public static function make($data)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->make($data);
+        }
+                    /**
+         * Creates an empty image canvas
+         *
+         * @param int $width
+         * @param int $height
+         * @param mixed $background
+         * @return \Intervention\Image\Image 
+         * @static 
+         */ 
+        public static function canvas($width, $height, $background = null)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->canvas($width, $height, $background);
+        }
+                    /**
+         * Create new cached image and run callback
+         * (requires additional package intervention/imagecache)
+         *
+         * @param \Closure $callback
+         * @param int $lifetime
+         * @param boolean $returnObj
+         * @return \Image 
+         * @static 
+         */ 
+        public static function cache($callback, $lifetime = null, $returnObj = false)
+        {
+                        /** @var \Intervention\Image\ImageManager $instance */
+                        return $instance->cache($callback, $lifetime, $returnObj);
+        }
+         
+    }
+     
+}
+
+    namespace Laravel\Socialite\Facades { 
+            /**
+     * 
+     *
+     * @see \Laravel\Socialite\SocialiteManager
+     */ 
+        class Socialite {
+                    /**
+         * Get a driver instance.
+         *
+         * @param string $driver
+         * @return mixed 
+         * @static 
+         */ 
+        public static function with($driver)
+        {
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->with($driver);
+        }
+                    /**
+         * Build an OAuth 2 provider instance.
+         *
+         * @param string $provider
+         * @param array $config
+         * @return \Laravel\Socialite\Two\AbstractProvider 
+         * @static 
+         */ 
+        public static function buildProvider($provider, $config)
+        {
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->buildProvider($provider, $config);
+        }
+                    /**
+         * Format the server configuration.
+         *
+         * @param array $config
          * @return array 
          * @static 
          */ 
-        public static function getDetectionRulesExtended()
+        public static function formatConfig($config)
         {
-                        return \Jenssegers\Agent\Agent::getDetectionRulesExtended();
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->formatConfig($config);
         }
                     /**
-         * 
+         * Forget all of the resolved driver instances.
          *
+         * @return \Laravel\Socialite\SocialiteManager 
          * @static 
          */ 
-        public static function getRules()
+        public static function forgetDrivers()
         {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->getRules();
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->forgetDrivers();
         }
                     /**
-         * 
+         * Set the container instance used by the manager.
          *
-         * @return \Jaybizzle\CrawlerDetect\CrawlerDetect 
+         * @param \Illuminate\Contracts\Container\Container $container
+         * @return \Laravel\Socialite\SocialiteManager 
          * @static 
          */ 
-        public static function getCrawlerDetect()
+        public static function setContainer($container)
         {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->getCrawlerDetect();
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->setContainer($container);
         }
                     /**
-         * 
+         * Get the default driver name.
          *
-         * @static 
-         */ 
-        public static function getBrowsers()
-        {
-                        return \Jenssegers\Agent\Agent::getBrowsers();
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function getOperatingSystems()
-        {
-                        return \Jenssegers\Agent\Agent::getOperatingSystems();
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function getPlatforms()
-        {
-                        return \Jenssegers\Agent\Agent::getPlatforms();
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function getDesktopDevices()
-        {
-                        return \Jenssegers\Agent\Agent::getDesktopDevices();
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function getProperties()
-        {
-                        return \Jenssegers\Agent\Agent::getProperties();
-        }
-                    /**
-         * Get accept languages.
-         *
-         * @param string $acceptLanguage
-         * @return array 
-         * @static 
-         */ 
-        public static function languages($acceptLanguage = null)
-        {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->languages($acceptLanguage);
-        }
-                    /**
-         * Get the browser name.
-         *
-         * @param string|null $userAgent
-         * @return string|bool 
-         * @static 
-         */ 
-        public static function browser($userAgent = null)
-        {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->browser($userAgent);
-        }
-                    /**
-         * Get the platform name.
-         *
-         * @param string|null $userAgent
-         * @return string|bool 
-         * @static 
-         */ 
-        public static function platform($userAgent = null)
-        {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->platform($userAgent);
-        }
-                    /**
-         * Get the device name.
-         *
-         * @param string|null $userAgent
-         * @return string|bool 
-         * @static 
-         */ 
-        public static function device($userAgent = null)
-        {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->device($userAgent);
-        }
-                    /**
-         * Check if the device is a desktop computer.
-         *
-         * @param string|null $userAgent deprecated
-         * @param array $httpHeaders deprecated
-         * @return bool 
-         * @static 
-         */ 
-        public static function isDesktop($userAgent = null, $httpHeaders = null)
-        {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->isDesktop($userAgent, $httpHeaders);
-        }
-                    /**
-         * Check if the device is a mobile phone.
-         *
-         * @param string|null $userAgent deprecated
-         * @param array $httpHeaders deprecated
-         * @return bool 
-         * @static 
-         */ 
-        public static function isPhone($userAgent = null, $httpHeaders = null)
-        {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->isPhone($userAgent, $httpHeaders);
-        }
-                    /**
-         * Get the robot name.
-         *
-         * @param string|null $userAgent
-         * @return string|bool 
-         * @static 
-         */ 
-        public static function robot($userAgent = null)
-        {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->robot($userAgent);
-        }
-                    /**
-         * Check if device is a robot.
-         *
-         * @param string|null $userAgent
-         * @return bool 
-         * @static 
-         */ 
-        public static function isRobot($userAgent = null)
-        {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->isRobot($userAgent);
-        }
-                    /**
-         * Get the device type
-         *
-         * @param null $userAgent
-         * @param null $httpHeaders
          * @return string 
+         * @throws \InvalidArgumentException
          * @static 
          */ 
-        public static function deviceType($userAgent = null, $httpHeaders = null)
+        public static function getDefaultDriver()
         {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->deviceType($userAgent, $httpHeaders);
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->getDefaultDriver();
         }
                     /**
-         * 
+         * Get a driver instance.
          *
+         * @param string|null $driver
+         * @return mixed 
+         * @throws \InvalidArgumentException
          * @static 
          */ 
-        public static function version($propertyName, $type = 'text')
-        {
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->version($propertyName, $type);
+        public static function driver($driver = null)
+        {            //Method inherited from \Illuminate\Support\Manager         
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->driver($driver);
         }
                     /**
-         * Get the current script version.
-         * 
-         * This is useful for the demo.php file,
-         * so people can check on what version they are testing
-         * for mobile devices.
+         * Register a custom driver creator Closure.
          *
-         * @return string The version number in semantic version format.
+         * @param string $driver
+         * @param \Closure $callback
+         * @return \Laravel\Socialite\SocialiteManager 
          * @static 
          */ 
-        public static function getScriptVersion()
-        {            //Method inherited from \Mobile_Detect         
-                        return \Jenssegers\Agent\Agent::getScriptVersion();
+        public static function extend($driver, $callback)
+        {            //Method inherited from \Illuminate\Support\Manager         
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->extend($driver, $callback);
         }
                     /**
-         * Set the HTTP Headers. Must be PHP-flavored. This method will reset existing headers.
-         *
-         * @param array $httpHeaders The headers to set. If null, then using PHP's _SERVER to extract
-         *                           the headers. The default null is left for backwards compatibility.
-         * @static 
-         */ 
-        public static function setHttpHeaders($httpHeaders = null)
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->setHttpHeaders($httpHeaders);
-        }
-                    /**
-         * Retrieves the HTTP headers.
+         * Get all of the created "drivers".
          *
          * @return array 
          * @static 
          */ 
-        public static function getHttpHeaders()
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->getHttpHeaders();
+        public static function getDrivers()
+        {            //Method inherited from \Illuminate\Support\Manager         
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->getDrivers();
         }
                     /**
-         * Retrieves a particular header. If it doesn't exist, no exception/error is caused.
-         * 
-         * Simply null is returned.
+         * Get the container instance used by the manager.
          *
-         * @param string $header The name of the header to retrieve. Can be HTTP compliant such as
-         *                       "User-Agent" or "X-Device-User-Agent" or can be php-esque with the
-         *                       all-caps, HTTP_ prefixed, underscore separated awesomeness.
-         * @return string|null The value of the header.
+         * @return \Illuminate\Contracts\Container\Container 
          * @static 
          */ 
-        public static function getHttpHeader($header)
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->getHttpHeader($header);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function getMobileHeaders()
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->getMobileHeaders();
-        }
-                    /**
-         * Get all possible HTTP headers that
-         * can contain the User-Agent string.
-         *
-         * @return array List of HTTP headers.
-         * @static 
-         */ 
-        public static function getUaHttpHeaders()
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->getUaHttpHeaders();
-        }
-                    /**
-         * Set CloudFront headers
-         * http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html#header-caching-web-device
-         *
-         * @param array $cfHeaders List of HTTP headers
-         * @return boolean If there were CloudFront headers to be set
-         * @static 
-         */ 
-        public static function setCfHeaders($cfHeaders = null)
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->setCfHeaders($cfHeaders);
-        }
-                    /**
-         * Retrieves the cloudfront headers.
-         *
-         * @return array 
-         * @static 
-         */ 
-        public static function getCfHeaders()
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->getCfHeaders();
-        }
-                    /**
-         * Set the User-Agent to be used.
-         *
-         * @param string $userAgent The user agent string to set.
-         * @return string|null 
-         * @static 
-         */ 
-        public static function setUserAgent($userAgent = null)
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->setUserAgent($userAgent);
-        }
-                    /**
-         * Retrieve the User-Agent.
-         *
-         * @return string|null The user agent if it's set.
-         * @static 
-         */ 
-        public static function getUserAgent()
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->getUserAgent();
-        }
-                    /**
-         * Set the detection type. Must be one of self::DETECTION_TYPE_MOBILE or
-         * self::DETECTION_TYPE_EXTENDED. Otherwise, nothing is set.
-         *
-         * @deprecated since version 2.6.9
-         * @param string $type The type. Must be a self::DETECTION_TYPE_* constant. The default
-         *                     parameter is null which will default to self::DETECTION_TYPE_MOBILE.
-         * @static 
-         */ 
-        public static function setDetectionType($type = null)
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->setDetectionType($type);
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function getMatchingRegex()
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->getMatchingRegex();
-        }
-                    /**
-         * 
-         *
-         * @static 
-         */ 
-        public static function getMatchesArray()
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->getMatchesArray();
-        }
-                    /**
-         * Retrieve the list of known phone devices.
-         *
-         * @return array List of phone devices.
-         * @static 
-         */ 
-        public static function getPhoneDevices()
-        {            //Method inherited from \Mobile_Detect         
-                        return \Jenssegers\Agent\Agent::getPhoneDevices();
-        }
-                    /**
-         * Retrieve the list of known tablet devices.
-         *
-         * @return array List of tablet devices.
-         * @static 
-         */ 
-        public static function getTabletDevices()
-        {            //Method inherited from \Mobile_Detect         
-                        return \Jenssegers\Agent\Agent::getTabletDevices();
-        }
-                    /**
-         * Alias for getBrowsers() method.
-         *
-         * @return array List of user agents.
-         * @static 
-         */ 
-        public static function getUserAgents()
-        {            //Method inherited from \Mobile_Detect         
-                        return \Jenssegers\Agent\Agent::getUserAgents();
-        }
-                    /**
-         * Retrieve the list of known utilities.
-         *
-         * @return array List of utilities.
-         * @static 
-         */ 
-        public static function getUtilities()
-        {            //Method inherited from \Mobile_Detect         
-                        return \Jenssegers\Agent\Agent::getUtilities();
-        }
-                    /**
-         * Method gets the mobile detection rules. This method is used for the magic methods $detect->is*().
-         *
-         * @deprecated since version 2.6.9
-         * @return array All the rules (but not extended).
-         * @static 
-         */ 
-        public static function getMobileDetectionRules()
-        {            //Method inherited from \Mobile_Detect         
-                        return \Jenssegers\Agent\Agent::getMobileDetectionRules();
-        }
-                    /**
-         * Method gets the mobile detection rules + utilities.
-         * 
-         * The reason this is separate is because utilities rules
-         * don't necessary imply mobile. This method is used inside
-         * the new $detect->is('stuff') method.
-         *
-         * @deprecated since version 2.6.9
-         * @return array All the rules + extended.
-         * @static 
-         */ 
-        public static function getMobileDetectionRulesExtended()
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->getMobileDetectionRulesExtended();
-        }
-                    /**
-         * Check the HTTP headers for signs of mobile.
-         * 
-         * This is the fastest mobile check possible; it's used
-         * inside isMobile() method.
-         *
-         * @return bool 
-         * @static 
-         */ 
-        public static function checkHttpHeadersForMobile()
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->checkHttpHeadersForMobile();
-        }
-                    /**
-         * Check if the device is mobile.
-         * 
-         * Returns true if any type of mobile device detected, including special ones
-         *
-         * @param null $userAgent deprecated
-         * @param null $httpHeaders deprecated
-         * @return bool 
-         * @static 
-         */ 
-        public static function isMobile($userAgent = null, $httpHeaders = null)
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->isMobile($userAgent, $httpHeaders);
-        }
-                    /**
-         * Check if the device is a tablet.
-         * 
-         * Return true if any type of tablet device is detected.
-         *
-         * @param string $userAgent deprecated
-         * @param array $httpHeaders deprecated
-         * @return bool 
-         * @static 
-         */ 
-        public static function isTablet($userAgent = null, $httpHeaders = null)
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->isTablet($userAgent, $httpHeaders);
-        }
-                    /**
-         * This method checks for a certain property in the
-         * userAgent.
-         *
-         * @todo : The httpHeaders part is not yet used.
-         * @param string $key
-         * @param string $userAgent deprecated
-         * @param string $httpHeaders deprecated
-         * @return bool|int|null 
-         * @static 
-         */ 
-        public static function is($key, $userAgent = null, $httpHeaders = null)
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->is($key, $userAgent, $httpHeaders);
-        }
-                    /**
-         * Some detection rules are relative (not standard),
-         * because of the diversity of devices, vendors and
-         * their conventions in representing the User-Agent or
-         * the HTTP headers.
-         * 
-         * This method will be used to check custom regexes against
-         * the User-Agent string.
-         *
-         * @param $regex
-         * @param string $userAgent
-         * @return bool 
-         * @todo : search in the HTTP headers too.
-         * @static 
-         */ 
-        public static function match($regex, $userAgent = null)
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->match($regex, $userAgent);
-        }
-                    /**
-         * Prepare the version number.
-         *
-         * @todo Remove the error supression from str_replace() call.
-         * @param string $ver The string version, like "2.6.21.2152";
-         * @return float 
-         * @static 
-         */ 
-        public static function prepareVersionNo($ver)
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->prepareVersionNo($ver);
-        }
-                    /**
-         * Retrieve the mobile grading, using self::MOBILE_GRADE_* constants.
-         *
-         * @deprecated This is no longer being maintained, it was an experiment at the time.
-         * @return string One of the self::MOBILE_GRADE_* constants.
-         * @static 
-         */ 
-        public static function mobileGrade()
-        {            //Method inherited from \Mobile_Detect         
-                        /** @var \Jenssegers\Agent\Agent $instance */
-                        return $instance->mobileGrade();
+        public static function getContainer()
+        {            //Method inherited from \Illuminate\Support\Manager         
+                        /** @var \Laravel\Socialite\SocialiteManager $instance */
+                        return $instance->getContainer();
         }
          
     }
@@ -20476,6 +20350,39 @@ namespace  {
             {
                                 /** @var \Illuminate\Database\Eloquent\Builder $instance */
                                 return $instance->chunkById($count, $callback, $column, $alias);
+            }
+             
+                /**
+             * Chunk the results of a query by comparing IDs in descending order.
+             *
+             * @param int $count
+             * @param callable $callback
+             * @param string|null $column
+             * @param string|null $alias
+             * @return bool 
+             * @static 
+             */ 
+            public static function chunkByIdDesc($count, $callback, $column = null, $alias = null)
+            {
+                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
+                                return $instance->chunkByIdDesc($count, $callback, $column, $alias);
+            }
+             
+                /**
+             * Chunk the results of a query by comparing IDs in a given order.
+             *
+             * @param int $count
+             * @param callable $callback
+             * @param string|null $column
+             * @param string|null $alias
+             * @param bool $descending
+             * @return bool 
+             * @static 
+             */ 
+            public static function orderedChunkById($count, $callback, $column = null, $alias = null, $descending = false)
+            {
+                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
+                                return $instance->orderedChunkById($count, $callback, $column, $alias, $descending);
             }
              
                 /**
@@ -23431,6 +23338,7 @@ namespace  {
             class Log extends \Illuminate\Support\Facades\Log {}
             class Mail extends \Illuminate\Support\Facades\Mail {}
             class Notification extends \Illuminate\Support\Facades\Notification {}
+            class Number extends \Illuminate\Support\Number {}
             class Password extends \Illuminate\Support\Facades\Password {}
             class Process extends \Illuminate\Support\Facades\Process {}
             class Queue extends \Illuminate\Support\Facades\Queue {}
@@ -23447,7 +23355,8 @@ namespace  {
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
             class Vite extends \Illuminate\Support\Facades\Vite {}
-            class Agent extends \Jenssegers\Agent\Facades\Agent {}
+            class Image extends \Intervention\Image\Facades\Image {}
+            class Socialite extends \Laravel\Socialite\Facades\Socialite {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}
      
 }

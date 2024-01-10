@@ -103,7 +103,6 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-
             <div class="sm:order-2 order-1 sm:p-0 p-2">
                 <div class="my-2">
                     <n-select :disabled="isCartEmpty"  placeholder="Шаблоны" v-model:value="userPattern" :options="userPatterns" :theme-overrides="selectThemeOverrides"/>

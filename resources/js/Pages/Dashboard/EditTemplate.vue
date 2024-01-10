@@ -2,13 +2,16 @@
 import {Quill, QuillEditor} from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import "quill-emoji/dist/quill-emoji.css";
-import { ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import TemplateLayout from "@/Layouts/TemplateLayout.vue";
+import {NImage, NImageGroup, useMessage} from "naive-ui";
+import {mdiDelete} from "@mdi/js";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 
 const props = defineProps({
     patternContent: [String, null],
     patternId: Number,
-    patternMedia: [String, null],
+    patternMedia: [Array, null],
     patternName: [String, null]
 })
 
@@ -32,6 +35,9 @@ let onEditorReady = (methods, quill) => {
 };
 
 const content = ref(props.patternContent || '');
+let imageFileRefs = ref([]);
+let images = ref(props.patternMedia || []);
+const message = useMessage();
 
 watch(content, () => {
     if(editorMethods.value) {
@@ -54,18 +60,34 @@ const htmlToDelta = (html) => {
 htmlContent.value = content.value
 content.value = htmlToDelta(content.value);
 const handleFileUpload = (event) => {
-    file.value = event.target.files[0];
-
-    if (!file) {
+    const files = event.target.files;
+    if (images.value.length + files.length > 10) {
+        message.error("Вы не можете загрузить более 10 изображений.", {duration: 1000 * 10});
         return;
     }
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        uploadedImageUrl.value = e.target.result;
-    };
-    reader.readAsDataURL(file.value);
+    let newImages = [];
+    let newImageFileRefs = [];
+    for(let i=0; i<files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            newImages.push(e.target.result);
+            newImageFileRefs.push(file);
+            if (newImages.length === files.length) { // This ensures that only after all files are read, the new values are assigned
+                images.value = [...images.value, ...newImages];
+                imageFileRefs.value = [...imageFileRefs.value, ...newImageFileRefs];
+            }
+        };
+        reader.readAsDataURL(file);
+    }
 };
+
+const isEmptyEditor = computed(() => {
+    if (typeof content.value === 'object' && content.value.ops) {
+        return content.value.ops.length === 1 && content.value.ops[0].insert === '\n';
+    }
+    return true;
+});
 
 const file = ref(null)
 const uploadedImageUrl = ref(props.patternMedia || '/images/photo.png');
@@ -82,20 +104,25 @@ const clearAll = () => {
     file.value = null
     editorMethods.value.setContents([])
 }
-
+const deleteImage = (index) => {
+    images.value = [...images.value.slice(0, index), ...images.value.slice(index + 1)];
+    imageFileRefs.value = [...imageFileRefs.value.slice(0, index), ...imageFileRefs.value.slice(index + 1)];
+};
 const patchPattern = async () => {
     let formData = new FormData();
     formData.append('_method', 'PATCH');
     if (htmlContent.value) {
         formData.append('body', htmlContent.value);
     }
-    if (file.value) {
-        formData.append('media', file.value);
+    if (imageFileRefs.value.length > 0) {
+        for (let i=0; i < imageFileRefs.value.length; i++) {
+            formData.append('media[]', imageFileRefs.value[i]);
+        }
     }
     try {
         if (props.patternId) {
             const response = await axios.post(route('pattern.update', props.patternId), formData, config);
-            console.log(response)
+            console.log(response);
         }
     } catch (error) {
         console.error(error);
@@ -104,10 +131,12 @@ const patchPattern = async () => {
 
 let typingTimer;
 
-watch([content, uploadedImageUrl], () => {
+watch(content, () => {
     clearTimeout(typingTimer);
     typingTimer = setTimeout(patchPattern, 500);
-}, { immediate: true, deep: true });
+}, { immediate: false, deep: true });
+
+watch(imageFileRefs, patchPattern, { immediate: false, deep: true });
 
 </script>
 
@@ -125,7 +154,7 @@ watch([content, uploadedImageUrl], () => {
             Ваш пост
         </template>
         <template #editor>
-            <QuillEditor @ready="(methods, quill) => onEditorReady(methods, quill)" v-model:content="content" :options="options" theme="snow" class="text-violet-100"  placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.  Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
+            <QuillEditor @ready="(methods, quill) => onEditorReady(methods, quill)" v-model:content="content" :options="options" theme="snow" :class="{'empty-editor': isEmptyEditor}" class="text-violet-100 ql-container ql-snow"  placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.  Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
         </template>
         <template #clear-all>
             <button @click.prevent="clearAll" class="text-purple-600 text-sm font-normal font-['Poppins'] leading-tight">Очистить всё</button>
@@ -136,17 +165,38 @@ watch([content, uploadedImageUrl], () => {
                 <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Прикрепите файл</div>
                 <div>
                     <label class="cursor-pointer px-6 py-2 bg-blue-950 animation hover:bg-transparent rounded-full shadow-inner border border-white border-opacity-10 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight custom-file-upload">
-                        <input type="file" class="hidden" accept="image/*" @change="handleFileUpload($event)" />
+                        <input type="file" multiple class="hidden" accept="image/*" @change="handleFileUpload($event)" />
                         Загрузить файл
                     </label>
                 </div>
             </div>
-            <div class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2">
-                <div v-for="n in 10" class="sm:h-24 sm:w-24 h-12 w-12 rounded-lg bg-zinc-300"></div>
-            </div>
+            <n-image-group>
+                <transition-group name="delete" tag="div" class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2">
+                    <div v-for="(image, index) in images" :key="'img-' + index" class=" sm:h-24 sm:w-24 h-12 w-12 rounded-lg relative">
+                        <n-image :src="image" alt="" class="absolute top-0 left-0 object-cover w-full h-full" />
+                        <div @click="deleteImage(index)" class="cursor-pointer absolute bottom-0 right-0 rounded m-1 bg-gray-700 bg-opacity-80">
+                            <BaseIcon class="p-1 text-white" :path="mdiDelete"/>
+                        </div>
+                    </div>
+                </transition-group>
+            </n-image-group>
         </template>
         <template #post-preview>
+            <n-image-group v-if="images.length">
+                <transition-group name="fade" tag="div" :class="[images.length <= 2 ? 'grid-cols-1' : '',
+              images.length === 3 ? 'grid-cols-1 sm:grid-cols-2' : '',
+              images.length >= 4 && images.length <= 6 ? 'grid-cols-2' : '',
+              images.length > 6 ? 'grid-cols-3' : '']"
+                                  class="grid gap-2">
+                    <div v-for="(image, index) in images" :key="'img-' + index" class="bg-center bg-cover">
+                        <n-image :src="image" alt="" class="w-full h-full" />
+                    </div>
+                </transition-group>
+            </n-image-group>
+
+            <div v-else>
                 <img :src="uploadedImageUrl" class="object-cover" alt="" />
+            </div>
                 <div class="break-words pt-2 text-violet-100 text-base font-normal font-['Inter'] leading-tight" v-html="htmlContent"></div>
         </template>
     </TemplateLayout>
@@ -161,10 +211,18 @@ watch([content, uploadedImageUrl], () => {
     border-radius: 0 0 20px 20px;
     border: 1px solid #EAE0FF;
     padding-bottom: 100px;
+    height: auto;
+    transition: height 1s ease-out;
     @media screen and (max-width: 640px){
         padding-bottom: 30rem;
     }
 }
+
+.ql-container.empty-editor {
+    height: 200px;
+    transition: height 1s ease-out;
+}
+
 .ql-editor.ql-blank::before{
     color: #EAE0FF;
     font-size: 16px;

@@ -9,7 +9,8 @@ class UpdatePatternRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'media' => ['file', 'nullable'],
+            'media' => ['array', 'nullable'],
+            'media.*' => ['file', 'nullable'],
             'body' => ['string', 'nullable'],
         ];
     }

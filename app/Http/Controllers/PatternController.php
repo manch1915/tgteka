@@ -71,11 +71,13 @@ class PatternController extends Controller
     {
         $validatedData = $request->validated();
 
-        if ($request->hasFile('media')) {
-            $pattern
-                ->addMedia($request->file('media'))
-                ->toMediaCollection('images');
-        }else {
+        if ($request->hasfile('media')) {
+            foreach($request->file('media') as $file) {
+                $pattern
+                    ->addMedia($file)
+                    ->toMediaCollection('images');
+            }
+        } else {
             $pattern->clearMediaCollection('images');
         }
 
@@ -111,10 +113,16 @@ class PatternController extends Controller
 
     public function edit(Pattern $pattern)
     {
+        $patternMedia = $pattern
+            ->getMedia('images')
+            ->map(function ($item) {
+                return $item->getFullUrl();
+            });
+
         return inertia('Dashboard/EditTemplate', [
             'patternId' => $pattern->id,
             'patternContent' => $pattern->body,
-            'patternMedia' => $this->avatarService->getAvatarUrlOfPattern($pattern),
+            'patternMedia' => $patternMedia,
             'patternName' => $pattern->title,
         ]);
     }

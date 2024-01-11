@@ -2,11 +2,12 @@
 import {Quill, QuillEditor} from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import "quill-emoji/dist/quill-emoji.css";
-import {computed, ref, watch} from "vue";
+import {computed,defineComponent, ref, watch} from "vue";
 import TemplateLayout from "@/Layouts/TemplateLayout.vue";
 import {NImage, NImageGroup, useMessage} from "naive-ui";
 import {mdiDelete} from "@mdi/js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
+import { VueDraggableNext } from 'vue-draggable-next'
 
 const props = defineProps({
     patternContent: [String, null],
@@ -25,6 +26,8 @@ const options = {
         }
     }
 }
+
+const draggable = defineComponent(VueDraggableNext)
 
 let editorMethods = ref(null);
 let htmlContent = ref('');
@@ -171,14 +174,16 @@ watch(imageFileRefs, patchPattern, { immediate: false, deep: true });
                 </div>
             </div>
             <n-image-group>
-                <transition-group name="delete" tag="div" class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2">
-                    <div v-for="(image, index) in images" :key="'img-' + index" class=" sm:h-24 sm:w-24 h-12 w-12 rounded-lg relative">
-                        <n-image :src="image" alt="" class="absolute top-0 left-0 object-cover w-full h-full" />
-                        <div @click="deleteImage(index)" class="cursor-pointer absolute bottom-0 right-0 rounded m-1 bg-gray-700 bg-opacity-80">
-                            <BaseIcon class="p-1 text-white" :path="mdiDelete"/>
+                <draggable v-model="images" group="people" item-key="id" class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2">
+                    <transition-group name="delete" >
+                        <div v-for="(image, index) in images" :key="'img-' + index" class=" sm:h-24 sm:w-24 h-12 w-12 rounded-lg relative">
+                            <n-image :src="image" alt="" class="absolute top-0 left-0 object-cover w-full h-full" />
+                            <div @click="deleteImage(index)" class="cursor-pointer absolute bottom-0 right-0 rounded m-1 bg-gray-700 bg-opacity-80">
+                                <BaseIcon class="p-1 text-white" :path="mdiDelete"/>
+                            </div>
                         </div>
-                    </div>
-                </transition-group>
+                    </transition-group>
+                </draggable>
             </n-image-group>
         </template>
         <template #post-preview>

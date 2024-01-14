@@ -38,7 +38,6 @@ let onEditorReady = (methods, quill) => {
 };
 
 const content = ref(props.patternContent || '');
-let imageFileRefs = ref([]);
 let images = ref(props.patternMedia || []);
 const message = useMessage();
 
@@ -68,18 +67,11 @@ const handleFileUpload = (event) => {
         message.error("Вы не можете загрузить более 10 изображений.", {duration: 1000 * 10});
         return;
     }
-    let newImages = [];
-    let newImageFileRefs = [];
-    for(let i=0; i<files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const reader = new FileReader();
-        reader.onload = (e) => {
-            newImages.push(e.target.result);
-            newImageFileRefs.push(file);
-            if (newImages.length === files.length) { // This ensures that only after all files are read, the new values are assigned
-                images.value = [...images.value, ...newImages];
-                imageFileRefs.value = [...imageFileRefs.value, ...newImageFileRefs];
-            }
+        reader.onload = () => {
+            images.value.push({url: URL.createObjectURL(file), file: file});
         };
         reader.readAsDataURL(file);
     }
@@ -108,8 +100,7 @@ const clearAll = () => {
     editorMethods.value.setContents([])
 }
 const deleteImage = (index) => {
-    images.value = [...images.value.slice(0, index), ...images.value.slice(index + 1)];
-    imageFileRefs.value = [...imageFileRefs.value.slice(0, index), ...imageFileRefs.value.slice(index + 1)];
+    images.value.splice(index, 1);
 };
 const patchPattern = async () => {
     let formData = new FormData();
@@ -117,11 +108,16 @@ const patchPattern = async () => {
     if (htmlContent.value) {
         formData.append('body', htmlContent.value);
     }
-    if (imageFileRefs.value.length > 0) {
-        for (let i=0; i < imageFileRefs.value.length; i++) {
-            formData.append('media[]', imageFileRefs.value[i]);
+    if (images.value.length > 0) {
+        for (let i=0; i < images.value.length; i++) {
+            if (images.value[i].file) {
+                formData.append('media[]', images.value[i].file);
+            } else {
+                formData.append('media[]', images.value[i].url);
+            }
         }
     }
+    console.log(formData)
     try {
         if (props.patternId) {
             const response = await axios.post(route('pattern.update', props.patternId), formData, config);
@@ -139,7 +135,7 @@ watch(content, () => {
     typingTimer = setTimeout(patchPattern, 500);
 }, { immediate: false, deep: true });
 
-watch(imageFileRefs, patchPattern, { immediate: false, deep: true });
+watch(images, patchPattern, { immediate: false, deep: true });
 
 </script>
 
@@ -177,7 +173,7 @@ watch(imageFileRefs, patchPattern, { immediate: false, deep: true });
                 <draggable v-model="images" group="people" item-key="id" class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2">
                     <transition-group name="delete" >
                         <div v-for="(image, index) in images" :key="'img-' + index" class=" sm:h-24 sm:w-24 h-12 w-12 rounded-lg relative">
-                            <n-image :src="image" alt="" class="absolute top-0 left-0 object-cover w-full h-full" />
+                            <n-image :src="image.url" alt="" class="absolute top-0 left-0 object-cover w-full h-full" />
                             <div @click="deleteImage(index)" class="cursor-pointer absolute bottom-0 right-0 rounded m-1 bg-gray-700 bg-opacity-80">
                                 <BaseIcon class="p-1 text-white" :path="mdiDelete"/>
                             </div>
@@ -194,7 +190,7 @@ watch(imageFileRefs, patchPattern, { immediate: false, deep: true });
               images.length > 6 ? 'grid-cols-3' : '']"
                                   class="grid gap-2">
                     <div v-for="(image, index) in images" :key="'img-' + index" class="bg-center bg-cover">
-                        <n-image :src="image" alt="" class="w-full h-full" />
+                        <n-image :src="image.url" alt="" class="w-full h-full" />
                     </div>
                 </transition-group>
             </n-image-group>

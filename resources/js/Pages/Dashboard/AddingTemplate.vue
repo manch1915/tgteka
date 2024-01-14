@@ -2,7 +2,7 @@
 import { QuillEditor} from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import "quill-emoji/dist/quill-emoji.css";
-import {computed, defineComponent, ref, watch} from "vue";
+import {computed, defineComponent, onUnmounted, ref, watch} from "vue";
 import TemplateLayout from "@/Layouts/TemplateLayout.vue";
 import {NImage, NImageGroup, useMessage} from "naive-ui";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
@@ -56,23 +56,20 @@ const handleFileUpload = (event) => {
         message.error("Вы не можете загрузить более 10 изображений.", {duration: 1000 * 10});
         return;
     }
-    for(let i=0; i<files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const reader = new FileReader();
-        reader.onload = (e) => {
-            images.value.push(e.target.result); // push the image URI to our array
-            imageFileRefs.value.push(file); // store the actual file too
+        reader.onload = () => {
+            images.value.push({displayImage: URL.createObjectURL(file), file: file});
         };
         reader.readAsDataURL(file);
     }
 };
 const deleteImage = (index) => {
     images.value.splice(index, 1);
-    imageFileRefs.value.splice(index, 1);
 };
 const file = ref(null)
 const images = ref([])
-const imageFileRefs = ref([])
 const uploadedImageUrl = ref('/images/photo.png');
 
 let config = {
@@ -88,12 +85,14 @@ const patchPattern = async () => {
         formData.append('body', htmlContent.value);
     }
 
-    if (imageFileRefs.value.length > 0) {
-        for (let i=0; i < imageFileRefs.value.length; i++) {
-            formData.append('media[]', imageFileRefs.value[i]);
+    if (images.value.length > 0) {
+        for (let i=0; i < images.value.length; i++) {
+            formData.append('media[]', images.value[i].file);
         }
     }
-
+    for (let pair of formData.entries()) {
+        console.log(pair[0]+ ', ' + pair[1])
+    }
     try {
         if (props.patternId) {
             const response = await axios.post(
@@ -108,9 +107,15 @@ const patchPattern = async () => {
     }
 };
 
+onUnmounted(() => {
+    images.value.forEach(image => {
+        URL.revokeObjectURL(image.displayImage);
+    });
+});
+
 let typingTimer;
 
-watch([content, imageFileRefs], () => {
+watch([content, images], () => {
     clearTimeout(typingTimer);
     typingTimer = setTimeout(patchPattern, 500);
 }, { immediate: true, deep: true });
@@ -150,7 +155,7 @@ watch([content, imageFileRefs], () => {
                 <draggable v-model="images" group="people" item-key="id" class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2">
                     <transition-group name="delete" >
                         <div v-for="(image, index) in images" :key="'img-' + index" class=" sm:h-24 sm:w-24 h-12 w-12 rounded-lg relative">
-                            <n-image :src="image" alt="" class="absolute top-0 left-0 object-cover w-full h-full" />
+                            <n-image :src="image.displayImage" alt="" class="absolute top-0 left-0 object-cover w-full h-full" />
                             <div @click="deleteImage(index)" class="cursor-pointer absolute bottom-0 right-0 rounded m-1 bg-gray-700 bg-opacity-80">
                                 <BaseIcon class="p-1 text-white" :path="mdiDelete"/>
                             </div>
@@ -168,7 +173,7 @@ watch([content, imageFileRefs], () => {
               images.length > 6 ? 'grid-cols-3' : '']"
                                   class="grid gap-2">
                     <div v-for="(image, index) in images" :key="'img-' + index" class="bg-center bg-cover">
-                        <n-image :src="image" alt="" class="w-full h-full" />
+                        <n-image :src="image.displayImage" alt="" class="w-full h-full" />
                     </div>
                 </transition-group>
             </n-image-group>

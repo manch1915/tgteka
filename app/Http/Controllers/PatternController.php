@@ -9,8 +9,9 @@ use App\Models\User;
 use App\Services\AvatarService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -64,29 +65,128 @@ class PatternController extends Controller
     }
 
     /**
+     * @throws FileCannotBeAdded
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
     public function update(UpdatePatternRequest $request, Pattern $pattern): JsonResponse
     {
-        $validatedData = $request->validated();
+        $mediaDataUrls = $request->input('media') ?? [];
+        $mediaDataFiles = $request->file('media') ?? [];
 
-        if ($request->hasfile('media')) {
-            foreach($request->file('media') as $file) {
-                $pattern
-                    ->addMedia($file)
-                    ->toMediaCollection('images');
+        $mediaData = array_merge($mediaDataUrls, $mediaDataFiles);
+
+
+        $existingMediaItems = $pattern->getMedia('images');
+
+        if (!$request->has('media')) {
+            foreach ($existingMediaItems as $mediaItem) {
+                $mediaItem->delete();
             }
-        } else {
-            $pattern->clearMediaCollection('images');
+            return response()->json(['message' => 'All media deleted successfully']);
         }
 
-        unset($validatedData['media']);
 
-        $pattern->update($validatedData);
+        $incomingHashes = [];
 
-        return response()->json($pattern);
+        foreach ($mediaData as $i => $mediaItem) {
+            $this->processMediaItem($mediaItem, $i, $existingMediaItems, $pattern, $incomingHashes);
+        }
+        Log::info('incomingHashes: ' . json_encode($incomingHashes));
+        foreach ($existingMediaItems as $mediaItem) {
+            $this->clearDeprecatedMedia($mediaItem, $mediaData, $incomingHashes);
+        }
+
+        $validated = $request->validated();
+        $body = $validated['body'] ?? null;
+        if($body) {
+            $pattern->body = $body;
+            $pattern->save();
+        }
+
+        return response()->json(['message' => 'Pattern updated successfully']);
     }
+
+    /**
+     * @throws FileCannotBeAdded
+     * @throws FileIsTooBig
+     * @throws FileDoesNotExist
+     */
+    private function processMediaItem($mediaItem, int $order, $existingMediaItems, Pattern $pattern, array &$incomingHashes)
+    {
+        if (is_string($mediaItem)) {
+            $this->processUrlMediaItem($mediaItem, $order, $existingMediaItems, $pattern);
+        } elseif ($mediaItem instanceof \Illuminate\Http\UploadedFile) {
+            $this->processFileMediaItem($mediaItem, $order, $existingMediaItems, $pattern, $incomingHashes);
+        }
+    }
+
+    /**
+     * @throws FileCannotBeAdded
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    private function processUrlMediaItem(string $url, int $order, $existingMediaItems, Pattern $pattern)
+    {
+        $existingImage = $existingMediaItems->first(fn($media) => $url === $media->getFullUrl());
+
+        if (!$existingImage) {
+            $pattern
+                ->addMediaFromUrl($url)
+                ->withCustomProperties(['order' => $order])
+                ->toMediaCollection('images');
+        } else {
+            $existingImage->setCustomProperty('order', $order);
+            $existingImage->save();
+        }
+    }
+
+    /**
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    private function processFileMediaItem(\Illuminate\Http\UploadedFile $file, int $order, $existingMediaItems, Pattern $pattern, array &$incomingHashes)
+    {
+        $hash = hash_file('sha256', $file->path());
+        $existingImage = $existingMediaItems->first(fn($media) => $hash === $media->getCustomProperty('hash'));
+
+        if (!$existingImage) {
+            $mediaItem = $pattern
+                ->addMedia($file)
+                ->withCustomProperties(['hash' => $hash, 'order' => $order])
+                ->toMediaCollection('images');
+
+            $incomingHashes[] = $mediaItem->getCustomProperty('hash');
+        } else {
+            $existingImage->setCustomProperty('order', $order);
+            $existingImage->save();
+
+            $incomingHashes[] = $existingImage->getCustomProperty('hash');
+        }
+    }
+
+
+
+    private function clearDeprecatedMedia($mediaItem, array $mediaData, array $incomingHashes)
+    {
+        foreach ($mediaData as $item) {
+            if (is_string($item)) {
+                // If the item is a URL and matches the mediaItem's URL, we keep the mediaItem
+                if($item === $mediaItem->getFullUrl()){
+                    return;
+                }
+            } elseif ($item instanceof \Illuminate\Http\UploadedFile) {
+                // If the item is a file and its hash is in the incomingHashes, we keep the mediaItem
+                $mediaHash = $mediaItem->getCustomProperty('hash');
+                if($mediaHash && in_array($mediaHash, $incomingHashes)) {
+                    return;
+                }
+            }
+        }
+
+        $mediaItem->delete();
+    }
+
 
     public function rename(Pattern $pattern, Request $request): JsonResponse
     {
@@ -116,13 +216,16 @@ class PatternController extends Controller
         $patternMedia = $pattern
             ->getMedia('images')
             ->map(function ($item) {
-                return $item->getFullUrl();
+                return [
+                    'url' => $item->getFullUrl(),
+                    'order' => $item->getCustomProperty('order')
+                ];
             });
 
         return inertia('Dashboard/EditTemplate', [
             'patternId' => $pattern->id,
             'patternContent' => $pattern->body,
-            'patternMedia' => $patternMedia,
+            'patternMedia' => $patternMedia->sortBy('order')->values(),
             'patternName' => $pattern->title,
         ]);
     }

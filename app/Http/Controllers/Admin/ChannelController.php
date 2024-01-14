@@ -19,7 +19,7 @@ class ChannelController extends Controller
             if ($media) {
                 $channel->avatar = $media->getUrl();
             } else {
-                $channel->avatar = 'https://avatars.dicebear.com/api/bottts/' . $channel->channel_name. '.svg';
+                $channel->avatar = 'https://api.dicebear.com/7.x/initials/svg?seed=' . $channel->channel_name;
             }
 
             return $channel;

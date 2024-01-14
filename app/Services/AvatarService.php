@@ -10,7 +10,7 @@ class AvatarService
     public function getAvatarUrlOfChannel(Channel $channel): string
     {
         return $this->getMediaUrl('avatars', $channel) ??
-            'https://avatars.dicebear.com/api/bottts/' . $channel->channel_name . '.svg';
+            'https://api.dicebear.com/7.x/initials/svg?seed=' . $channel->channel_name;
     }
 
     public function getAvatarUrlOfPattern(Pattern $pattern): ?string

@@ -2,12 +2,15 @@
 
 namespace App\Notifications;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class ToCheckNotification extends Notification
+class ToCheckNotification extends Notification implements ShouldQueue
 {
+    use Queueable;
 
     private string $post_link;
 

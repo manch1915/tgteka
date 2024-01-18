@@ -2,12 +2,15 @@
 
 namespace App\Notifications;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class OrderReportNotification extends Notification
+class OrderReportNotification extends Notification implements ShouldQueue
 {
+    use Queueable;
     protected string $report_text;
 
     public function __construct($report_text)

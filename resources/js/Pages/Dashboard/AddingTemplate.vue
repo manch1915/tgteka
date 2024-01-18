@@ -4,28 +4,22 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import "quill-emoji/dist/quill-emoji.css";
 import {computed, defineComponent, onUnmounted, ref, watch} from "vue";
 import TemplateLayout from "@/Layouts/TemplateLayout.vue";
-import {NImage, NImageGroup, useMessage} from "naive-ui";
+import {NImage, NImageGroup, useLoadingBar, useMessage} from "naive-ui";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiDelete} from "@mdi/js";
 import { VueDraggableNext } from 'vue-draggable-next'
+import {options, handleFileUpload, deleteImage, isEmptyEditor} from "@/utilities/templateUtilities.js"
 
 const props = defineProps({
     patternCount: Number,
     patternId: Number
 })
 
-const options = {
-    modules: {
-        toolbar: {
-            container: [
-                ['bold', 'italic', 'underline', 'emoji'],
-                ['link'],
-            ],
-        }
-    }
-}
+
 
 const draggable = defineComponent(VueDraggableNext)
+
+const loading = useLoadingBar()
 
 const content = ref('')
 let editorMethods = ref(null);
@@ -58,11 +52,12 @@ const handleFileUpload = (event) => {
     }
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const reader = new FileReader();
-        reader.onload = () => {
+
+        if (file.size <= 5 * 1024 * 1024) {
             images.value.push({displayImage: URL.createObjectURL(file), file: file});
-        };
-        reader.readAsDataURL(file);
+        } else {
+            message.error("Размер файла не должен превышать 5MB.", {duration: 1000 * 10});
+        }
     }
 };
 const deleteImage = (index) => {
@@ -78,6 +73,7 @@ let config = {
     }
 }
 const patchPattern = async () => {
+    loading.start();
     let formData = new FormData();
     formData.append('_method', 'PATCH');
 
@@ -90,9 +86,6 @@ const patchPattern = async () => {
             formData.append('media[]', images.value[i].file);
         }
     }
-    for (let pair of formData.entries()) {
-        console.log(pair[0]+ ', ' + pair[1])
-    }
     try {
         if (props.patternId) {
             const response = await axios.post(
@@ -100,10 +93,12 @@ const patchPattern = async () => {
                 formData,
                 config
             );
+            loading.finish();
             console.log(response);
         }
     } catch (error) {
         console.error(error);
+        loading.error();
     }
 };
 
@@ -146,18 +141,23 @@ watch([content, images], () => {
                 <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Прикрепите файл</div>
                 <div>
                     <label class="cursor-pointer transition px-6 py-2 bg-blue-950 animation hover:bg-transparent rounded-full shadow-inner border border-white border-opacity-10 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight custom-file-upload">
-                        <input type="file" multiple class="hidden" accept="image/*" @change="handleFileUpload($event)" />
+                        <input type="file" multiple class="hidden" accept="image/*,video/*" @change="handleFileUpload($event)" />
                         Загрузить файл
                     </label>
                 </div>
             </div>
             <n-image-group>
                 <draggable v-model="images" group="people" item-key="id" class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2">
-                    <transition-group name="delete" >
-                        <div v-for="(image, index) in images" :key="'img-' + index" class=" sm:h-24 sm:w-24 h-12 w-12 rounded-lg relative">
-                            <n-image :src="image.displayImage" alt="" class="absolute top-0 left-0 object-cover w-full h-full" />
+                    <transition-group name="delete">
+                        <div v-for="(image, index) in images" :key="'img-' + index" class="sm:h-24 sm:w-24 h-12 w-12 rounded-lg relative">
+                            <template v-if="image.file && image.file.type.includes('image/')">
+                                <n-image :src="image.displayImage" alt="" class="absolute top-0 left-0 object-cover w-full h-full"/>
+                            </template>
+                            <template v-else-if="image.file && image.file.type.includes('video/')">
+                                <video :src="image.displayImage" autoplay loop muted class="absolute top-0 left-0 object-cover w-full h-full"></video>
+                            </template>
                             <div @click="deleteImage(index)" class="cursor-pointer absolute bottom-0 right-0 rounded m-1 bg-gray-700 bg-opacity-80">
-                                <BaseIcon class="p-1 text-white" :path="mdiDelete"/>
+                                <BaseIcon class="p-1 text-white" :path="mdiDelete" />
                             </div>
                         </div>
                     </transition-group>
@@ -173,7 +173,12 @@ watch([content, images], () => {
               images.length > 6 ? 'grid-cols-3' : '']"
                                   class="grid gap-2">
                     <div v-for="(image, index) in images" :key="'img-' + index" class="bg-center bg-cover">
-                        <n-image :src="image.displayImage" alt="" class="w-full h-full" />
+                        <template v-if="image.file && image.file.type.includes('image/')">
+                            <n-image :src="image.displayImage" alt="" class="w-full h-full" />
+                        </template>
+                        <template v-else-if="image.file && image.file.type.includes('video/')">
+                            <video :src="image.displayImage" autoplay loop muted/>
+                        </template>
                     </div>
                 </transition-group>
             </n-image-group>
@@ -183,6 +188,9 @@ watch([content, images], () => {
             </div>
             <div class="break-words pt-2 text-violet-100 text-base font-normal font-['Inter'] leading-tight" v-html="htmlContent"></div>
         </template>
+        <div class="mt-4 flex justify-center">
+            <button @click.prevent="patchPattern" class="save__button text-violet-100 px-6 py-2 transition bg-purple-600 hover:bg-purple-800 rounded-full text-lg">Сохранить</button>
+        </div>
     </TemplateLayout>
 </template>
 
@@ -260,5 +268,12 @@ watch([content, images], () => {
     word-wrap: break-word;
     word-break: break-word;  /* Non standard for webkit */
     white-space: pre-wrap; /* CSS3 */
+}
+
+.save__button{
+    box-shadow: 0 0 4px #9d9d9d;
+    &:hover{
+        box-shadow: 0 0 10px #9d9d9d;
+    }
 }
 </style>

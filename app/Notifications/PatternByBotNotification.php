@@ -4,12 +4,15 @@ namespace App\Notifications;
 
 use App\Models\Pattern;
 use App\Services\AvatarService;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\File;
 use NotificationChannels\Telegram\TelegramFile;
 
-class PatternByBotNotification extends Notification
+class PatternByBotNotification extends Notification implements ShouldQueue
 {
+    use Queueable;
 
     protected Pattern $pattern;
     protected AvatarService $avatarService;

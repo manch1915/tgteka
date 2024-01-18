@@ -2,12 +2,16 @@
 
 namespace App\Notifications;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class ChannelReviewNotification extends Notification
+class ChannelReviewNotification extends Notification implements ShouldQueue
 {
+    use Queueable;
+
     protected string $reviewText;
     protected string $channelRating;
     protected string $channelName;

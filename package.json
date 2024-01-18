@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "@mdi/js": "^7.3.67",
+        "@videojs-player/vue": "^1.0.0",
         "@vueup/vue-quill": "^1.2.0",
         "chart.js": "^4.4.0",
         "jenesius-vue-modal": "^1.9.2",
@@ -33,6 +34,7 @@
         "pinia": "^2.1.6",
         "quill-emoji": "^0.2.0",
         "swiper": "^10.3.1",
+        "video.js": "^8.9.0",
         "vue-chartjs": "^5.3.0",
         "vue-draggable-next": "^2.2.1"
     }

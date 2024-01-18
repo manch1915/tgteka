@@ -31,7 +31,14 @@ createInertiaApp({
             render() {
                 return h(
                     NLoadingBarProvider,
-                    {},
+                    {
+                        loadingBarStyle: {
+                            loading: {
+                                backgroundColor: '#7f4fc5',
+                                height: '3px'
+                            }
+                        }
+                    },
                     {
                         default: () =>
                             h(

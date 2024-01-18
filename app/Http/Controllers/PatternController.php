@@ -9,11 +9,12 @@ use App\Models\User;
 use App\Services\AvatarService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use FFMpeg\FFMpeg;
+use FFMpeg\Coordinate\TimeCode;
 
 class PatternController extends Controller
 {
@@ -86,13 +87,12 @@ class PatternController extends Controller
             return response()->json(['message' => 'All media deleted successfully']);
         }
 
-
         $incomingHashes = [];
 
         foreach ($mediaData as $i => $mediaItem) {
             $this->processMediaItem($mediaItem, $i, $existingMediaItems, $pattern, $incomingHashes);
         }
-        Log::info('incomingHashes: ' . json_encode($incomingHashes));
+
         foreach ($existingMediaItems as $mediaItem) {
             $this->clearDeprecatedMedia($mediaItem, $mediaData, $incomingHashes);
         }
@@ -104,7 +104,17 @@ class PatternController extends Controller
             $pattern->save();
         }
 
-        return response()->json(['message' => 'Pattern updated successfully']);
+        $patternMedia = $pattern
+            ->getMedia('images')
+            ->map(function ($item) {
+                return [
+                    'url' => $item->getFullUrl(),
+                    'thumbnail_path' => $item->getCustomProperty('thumbnail_path'),
+                    'order' => $item->getCustomProperty('order')
+                ];
+            });
+
+        return response()->json($patternMedia->sortBy('order')->values());
     }
 
     /**
@@ -147,16 +157,49 @@ class PatternController extends Controller
      */
     private function processFileMediaItem(\Illuminate\Http\UploadedFile $file, int $order, $existingMediaItems, Pattern $pattern, array &$incomingHashes)
     {
-        $hash = hash_file('sha256', $file->path());
+        $type = $file->getMimeType();
+        $hash = $file->hashName();
         $existingImage = $existingMediaItems->first(fn($media) => $hash === $media->getCustomProperty('hash'));
 
         if (!$existingImage) {
+            // Save the original media item first.
             $mediaItem = $pattern
                 ->addMedia($file)
                 ->withCustomProperties(['hash' => $hash, 'order' => $order])
                 ->toMediaCollection('images');
 
             $incomingHashes[] = $mediaItem->getCustomProperty('hash');
+
+            if ($type == 'video/mp4' || $type == 'video/quicktime') {
+                // Generate Video Thumbnail
+                $ffmpeg = FFMpeg::create([
+                    'ffmpeg.binaries'  => 'C:\ffmpeg\bin\ffmpeg.exe',
+                    'ffprobe.binaries' => 'C:\ffmpeg\bin\ffprobe.exe'
+                ]);
+
+                $video = $ffmpeg->open($mediaItem->getPath());
+                // Get the video duration
+                $duration = $video->getFFProbe()->streams($mediaItem->getPath())->videos()->first()->get('duration');
+
+                $timeInSecondsForOneThird = $duration * (1 / 3);
+
+                $frame = $video->frame(TimeCode::fromSeconds($timeInSecondsForOneThird));
+
+                // Save the frame to a temp location
+                $tempPath = tempnam(storage_path('app/temp'), 'thumbnail_') . '.jpg';
+                $frame->save($tempPath);
+
+                // Add the temp image to the media library associated to the $mediaItem model
+                $thumbnailItem = $pattern->addMedia($tempPath)
+                    ->usingName('thumbnail')
+                    ->toMediaCollection('thumbnails');
+
+
+                // Save the URL of the thumbnail to the media item
+                $mediaItem->setCustomProperty('thumbnail_path', $thumbnailItem->getUrl());
+
+                $mediaItem->save();
+            }
         } else {
             $existingImage->setCustomProperty('order', $order);
             $existingImage->save();
@@ -164,8 +207,6 @@ class PatternController extends Controller
             $incomingHashes[] = $existingImage->getCustomProperty('hash');
         }
     }
-
-
 
     private function clearDeprecatedMedia($mediaItem, array $mediaData, array $incomingHashes)
     {
@@ -218,7 +259,8 @@ class PatternController extends Controller
             ->map(function ($item) {
                 return [
                     'url' => $item->getFullUrl(),
-                    'order' => $item->getCustomProperty('order')
+                    'order' => $item->getCustomProperty('order'),
+                    'thumbnail_path' => $item->getCustomProperty('thumbnail_path')
                 ];
             });
 

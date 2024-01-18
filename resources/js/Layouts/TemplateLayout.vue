@@ -28,6 +28,7 @@
                 <div class="mt-5 grid grid-cols-1 mediafiles sm:grid-cols-2">
                     <slot name="file-upload" />
                 </div>
+                <slot/>
             </div>
         </div>
     </AppLayout>

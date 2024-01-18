@@ -158,8 +158,11 @@ onMounted(() => getPatterns())
 </template>
 
 <style scoped lang="scss">
+$gradient-background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.00) 100%);
+$font-OpenSans: Open Sans;
+
 .data_container {
-    background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.00) 100%);
+    background: $gradient-background;
 }
 
 .data {
@@ -169,19 +172,16 @@ onMounted(() => getPatterns())
 .context {
     border-radius: 20px;
     border: 3.5px solid #2611A5;
-    background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.00) 100%);
+    background: $gradient-background;
     backdrop-filter: blur(21px);
     padding: 10px;
     right: -8%;
     top: 50%;
-    @media screen and (max-width: 640px){
-        right: 0;
-    }
     ul {
         li {
             color: #EAE0FF;
             font-feature-settings: 'clig' off, 'liga' off;
-            font-family: Open Sans;
+            font-family: $font-OpenSans;
             font-size: 14px;
             font-style: normal;
             font-weight: 400;
@@ -189,48 +189,52 @@ onMounted(() => getPatterns())
             cursor: pointer;
         }
     }
+    @media screen and (max-width: 640px){
+        right: 0;
+    }
 }
 
 .v-enter-active,
-.v-leave-active {
-    transition: opacity 0.5s ease;
+.v-leave-active,
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.2s ease;
 }
 
 .v-enter-from,
-.v-leave-to {
+.v-leave-to,
+.fade-enter,
+.fade-leave-to {
     opacity: 0;
 }
 
-.fade-enter-active, .fade-leave-active {
-    transition: opacity 0.5s;
-}
-
-.fade-enter, .fade-leave-to {
-    opacity: 0;
-}
 .grid{
     grid-template-columns: 9fr 3fr;
     @media screen and (max-width: 640px){
         grid-template-columns: 1fr;
     }
 }
+
 .create-pattern{
     width: 280px;
     height: 368px;
     border-radius: 0 62px 62px 62px;
-    //TODO gridient border
     border: 2px solid #FFF;
-    background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.40) 0%, rgba(81, 63, 255, 0.00) 100%);
+    background: $gradient-background;
     backdrop-filter: blur(13px);
 }
 </style>
 <style>
+$border-color: rgb(23 37 84);
+
 .bg-blue-950{
     background: #171961;
 }
+
 .border-color {
-    border-color: rgb(23 37 84);
+    border-color: $border-color;
 }
+
 .wrapper{
     position: relative;
     &::before {
@@ -241,15 +245,10 @@ onMounted(() => getPatterns())
         top: 0;
         bottom: -25px;
         border-radius: 0 40px 40px 40px;
-        background: radial-gradient(
-            278.82% 137.51% at 1.95% 3.59%,
-            rgba(255, 255, 255, 0.26) 0%,
-            rgba(255, 255, 255, 0) 100%
-        );
+        background: $gradient-background;
         backdrop-filter: blur(21px);
         transform: rotate(10deg);
         z-index: -1;
     }
-
 }
 </style>

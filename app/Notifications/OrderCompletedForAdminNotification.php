@@ -2,12 +2,16 @@
 
 namespace App\Notifications;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class OrderCompletedForAdminNotification extends Notification
+class OrderCompletedForAdminNotification extends Notification implements ShouldQueue
 {
+    use Queueable;
+
     protected string $price;
     protected string $channel;
 

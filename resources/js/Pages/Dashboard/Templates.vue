@@ -32,9 +32,6 @@ const navigateToEditPattern = (patternID) => {
     router.visit(route('pattern.edit', patternID))
 }
 
-const renamePattern = async (patternTitleToRename) => {
-    await axios.patch(`/pattern/${patternTitleToRename}/rename`, {title: patternTitleToRename});
-};
 
 const duplicatePattern = async (patternIdToDuplicate) => {
     const {data} = await axios.post(`/pattern/${patternIdToDuplicate}/duplicate`);
@@ -81,7 +78,7 @@ onMounted(() => getPatterns())
                                     </p>
                                 </div>
                                 <h3 class="pl-12 text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">
-                                    Название шаблона
+                                   {{ pattern.title }}
                                 </h3>
                             </div>
                             <div @click.stop="changeContext(pattern.id)" class="cursor-pointer">

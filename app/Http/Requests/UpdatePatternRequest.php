@@ -11,6 +11,7 @@ class UpdatePatternRequest extends FormRequest
         return [
             'media' => ['array', 'nullable'],
             'body' => ['string', 'nullable'],
+            'title' => ['string', 'required'],
         ];
     }
 

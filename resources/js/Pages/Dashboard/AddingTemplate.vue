@@ -1,50 +1,49 @@
 <script setup>
-import { QuillEditor} from '@vueup/vue-quill'
+import { QuillEditor } from '@vueup/vue-quill';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import "quill-emoji/dist/quill-emoji.css";
-import {computed, defineComponent, onUnmounted, ref, watch} from "vue";
+import { computed, defineComponent, onUnmounted, ref, watch } from "vue";
+import { NImageGroup, NImage, NInput, useLoadingBar, useMessage } from "naive-ui";
+import { mdiDelete } from "@mdi/js";
+import { VueDraggableNext } from 'vue-draggable-next';
 import TemplateLayout from "@/Layouts/TemplateLayout.vue";
-import {NImage, NImageGroup, useLoadingBar, useMessage} from "naive-ui";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import {mdiDelete} from "@mdi/js";
-import { VueDraggableNext } from 'vue-draggable-next'
-import {options, handleFileUpload, deleteImage, isEmptyEditor} from "@/utilities/templateUtilities.js"
+import { options } from "@/utilities/templateUtilities.js";
+import { inputThemeOverrides } from "@/themeOverrides.js";
 
 const props = defineProps({
     patternCount: Number,
-    patternId: Number
+    patternId: Number,
+    title: String
 })
 
-
+let typingTimer;
 
 const draggable = defineComponent(VueDraggableNext)
 
-const loading = useLoadingBar()
-
-const content = ref('')
-let editorMethods = ref(null);
-let htmlContent = ref('');
-
+const loading = useLoadingBar();
 const message = useMessage();
 
-const isEmptyEditor = computed(() => {
-    if (typeof content.value === 'object' && content.value.ops) {
-        return content.value.ops.length === 1 && content.value.ops[0].insert === '\n';
+const content = ref('');
+let editorMethods = ref(null);
+let htmlContent = ref('');
+let images = ref([]);
+let file = ref(null);
+let config = {
+    headers: {
+        'Content-Type': 'multipart/form-data'
     }
-    return true;
-});
+};
+const uploadedImageUrl = ref('/images/photo.png');
+const title = ref(props.title);
 
 let onEditorReady = (methods) => {
     editorMethods.value = methods; // store editor methods
 };
 
-watch(content, () => {
-    if(editorMethods.value) {
-        htmlContent.value = editorMethods.value.root.innerHTML;
-    }
-}, { immediate: true, deep: true });
-
-const handleFileUpload = (event) => {
+// Functions and Computed Properties
+const isEmptyEditor = computed(() => !!(typeof content.value === 'object' && content.value.ops && content.value.ops.length === 1 && content.value.ops[0].insert === '\n'));
+const handleFileUpload = function(event) {
     const files = event.target.files;
     if (images.value.length + files.length > 10) {
         message.error("Вы не можете загрузить более 10 изображений.", {duration: 1000 * 10});
@@ -60,60 +59,58 @@ const handleFileUpload = (event) => {
         }
     }
 };
-const deleteImage = (index) => {
+const deleteImage = function(index) {
     images.value.splice(index, 1);
 };
-const file = ref(null)
-const images = ref([])
-const uploadedImageUrl = ref('/images/photo.png');
+const patchPattern = async function() {
+    const { patternId } = props;
 
-let config = {
-    headers: {
-        'Content-Type': 'multipart/form-data'
+    if (!patternId) {
+        return;
     }
-}
-const patchPattern = async () => {
+
     loading.start();
+
     let formData = new FormData();
     formData.append('_method', 'PATCH');
+    formData.append('title', title.value);
 
     if (htmlContent.value) {
         formData.append('body', htmlContent.value);
     }
 
-    if (images.value.length > 0) {
-        for (let i=0; i < images.value.length; i++) {
-            formData.append('media[]', images.value[i].file);
-        }
-    }
+    images.value.forEach(image => formData.append('media[]', image.file));
+
     try {
-        if (props.patternId) {
-            const response = await axios.post(
-                route('pattern.update', props.patternId),
-                formData,
-                config
-            );
-            loading.finish();
-            console.log(response);
-        }
+        const response = await axios.post(route('pattern.update', patternId), formData, config);
+        loading.finish();
+        console.log(response);
     } catch (error) {
-        console.error(error);
         loading.error();
+        console.error(error);
+    } finally {
+        loading.finish();
     }
 };
 
+// Watches
+watch(content, () => {
+    if(editorMethods.value) {
+        htmlContent.value = editorMethods.value.root.innerHTML;
+    }
+}, { immediate: true, deep: true });
+
+watch([content, images, title], () => {
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(patchPattern, 500);
+}, { immediate: true, deep: true });
+
+// Cleanup on Unmount
 onUnmounted(() => {
     images.value.forEach(image => {
         URL.revokeObjectURL(image.displayImage);
     });
 });
-
-let typingTimer;
-
-watch([content, images], () => {
-    clearTimeout(typingTimer);
-    typingTimer = setTimeout(patchPattern, 500);
-}, { immediate: true, deep: true });
 </script>
 
 <template>
@@ -130,6 +127,7 @@ watch([content, images], () => {
             Ваш пост
         </template>
         <template #editor>
+            <n-input :theme-overrides="inputThemeOverrides" class="mb-4" v-model:value="title"/>
             <QuillEditor v-model:content="content" :options="options" theme="snow" :class="{'empty-editor': isEmptyEditor}"  class="text-violet-100 ql-container ql-snow" @ready="onEditorReady" placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.  Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
         </template>
         <template #clear-all>

@@ -1,15 +1,19 @@
 <script setup>
-import {Quill, QuillEditor} from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
+// Importing Modules
+import { Quill, QuillEditor } from '@vueup/vue-quill'
+import "@vueup/vue-quill/dist/vue-quill.snow.css";
 import "quill-emoji/dist/quill-emoji.css";
-import {computed,defineComponent, ref, watch} from "vue";
-import TemplateLayout from "@/Layouts/TemplateLayout.vue";
-import {NImage, NImageGroup, useMessage, useLoadingBar} from "naive-ui";
-import {mdiDelete} from "@mdi/js";
-import BaseIcon from "@/Components/Admin/BaseIcon.vue";
+import { computed, defineComponent, ref, watch } from "vue";
+import { NImage, NImageGroup, useMessage, useLoadingBar, NInput } from "naive-ui";
+import { mdiDelete } from "@mdi/js";
 import { VueDraggableNext } from 'vue-draggable-next'
-import {pushModal} from "jenesius-vue-modal";
+import { pushModal } from "jenesius-vue-modal";
+import { inputThemeOverrides } from "@/themeOverrides.js";
+import TemplateLayout from "@/Layouts/TemplateLayout.vue";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import MainVideoPlayer from "@/Components/Dashboard/MainVideoPlayer.vue";
+
+// Properties Definition
 const props = defineProps({
     patternContent: [String, null],
     patternId: Number,
@@ -17,6 +21,7 @@ const props = defineProps({
     patternName: [String, null]
 })
 
+// Quill Options
 const options = {
     modules: {
         toolbar: {
@@ -28,29 +33,27 @@ const options = {
     }
 }
 
+// API and Helpers
 const draggable = defineComponent(VueDraggableNext)
+let config = { headers: { 'Content-Type': 'multipart/form-data' } }
 
+// State Variables
+let images = ref(props.patternMedia || []);
+const message = useMessage();
 const loading = useLoadingBar()
-
 const editorMethods = ref(null);
 const htmlContent = ref('');
 const quillInstance = ref(null);
-const onEditorReady = (methods, quill) => {
-    editorMethods.value = methods; // store editor methods
-    quillInstance.value = quill;  // store the Quill instance
-};
-
 const content = ref(props.patternContent || '');
-let images = ref(props.patternMedia || []);
-const message = useMessage();
+const file = ref(null)
+const uploadedImageUrl = ref(props.patternMedia || '/images/photo.png');
+const title = ref(props.patternName)
 
-watch(content, () => {
-    if(editorMethods.value) {
-        htmlContent.value = editorMethods.value.root.innerHTML;
-    }
-}, { immediate: true, deep: true });
 
-const htmlToDelta = (html) => {
+const onEditorReady = (methods, quill) => { editorMethods.value = methods; quillInstance.value = quill; };
+const isEmptyEditor = computed(() => !!(typeof content.value === 'object' && content.value.ops && content.value.ops.length === 1 && content.value.ops[0].insert === '\n'));
+
+const htmlToDelta = function(html) {
     const div = document.createElement('div');
     div.setAttribute('id', 'htmlToDelta');
     div.innerHTML = `<div id="quillEditor" style="display:none">${html}</div>`;
@@ -61,10 +64,8 @@ const htmlToDelta = (html) => {
     const delta = quill.getContents();
     document.getElementById('htmlToDelta').remove();
     return delta;
-}
-htmlContent.value = content.value
-content.value = htmlToDelta(content.value);
-const handleFileUpload = (event) => {
+};
+const handleFileUpload = function(event) {
     const files = event.target.files;
     if (images.value.length + files.length > 10) {
         message.error("Вы не можете загрузить более 10 изображений.", {duration: 1000 * 10});
@@ -79,64 +80,58 @@ const handleFileUpload = (event) => {
         reader.readAsDataURL(file);
     }
 };
-
-const isEmptyEditor = computed(() => {
-    if (typeof content.value === 'object' && content.value.ops) {
-        return content.value.ops.length === 1 && content.value.ops[0].insert === '\n';
-    }
-    return true;
-});
-
-const file = ref(null)
-const uploadedImageUrl = ref(props.patternMedia || '/images/photo.png');
-
-let config = {
-    headers: {
-        'Content-Type': 'multipart/form-data'
-    }
-}
-
-const clearAll = () => {
+const clearAll = function() {
     htmlContent.value = ''
     uploadedImageUrl.value = '/images/photo.png'
     file.value = null
     editorMethods.value.setContents([])
-}
-const deleteImage = (index) => {
+};
+const deleteImage = function(index) {
     images.value.splice(index, 1);
 };
-const patchPattern = async () => {
+const patchPattern = async function() {
+    const { patternId } = props;
+
+    if (!patternId) {
+        return;
+    }
+
     loading.start();
+
     let formData = new FormData();
     formData.append('_method', 'PATCH');
+    formData.append('title', title.value);
+
     if (htmlContent.value) {
         formData.append('body', htmlContent.value);
     }
-    if (images.value.length > 0) {
-        for (let i=0; i < images.value.length; i++) {
-            if (images.value[i].file) {
-                formData.append('media[]', images.value[i].file);
-            } else {
-                formData.append('media[]', images.value[i].url);
-            }
-        }
-    }
-    console.log(formData)
+
+    images.value.forEach(image => formData.append('media[]', image.file || image.url));
+
     try {
-        if (props.patternId) {
-            const response = await axios.post(route('pattern.update', props.patternId), formData, config);
-            loading.finish()
-            console.log(response);
-        }
+        const response = await axios.post(route('pattern.update', patternId), formData, config);
+        loading.finish();
+        console.log(response);
     } catch (error) {
         loading.error();
         console.error(error);
+    } finally {
+        loading.finish();
     }
 };
-
-const openVideoPlayer = (data) => {
+const openVideoPlayer = function(data) {
     pushModal(MainVideoPlayer, {url: data.url, image: data.image})
-}
+};
+
+// Watches
+watch(content, () => {
+    if (editorMethods.value) {
+        htmlContent.value = editorMethods.value.root.innerHTML;
+    }
+}, { immediate: true, deep: true });
+
+htmlContent.value = content.value;
+content.value = htmlToDelta(content.value);
 </script>
 
 <template>
@@ -153,6 +148,7 @@ const openVideoPlayer = (data) => {
             Ваш пост
         </template>
         <template #editor>
+            <n-input :theme-overrides="inputThemeOverrides" class="mb-4" v-model:value="title"/>
             <QuillEditor @ready="(methods, quill) => onEditorReady(methods, quill)" v-model:content="content" :options="options" theme="snow" :class="{'empty-editor': isEmptyEditor}" class="text-violet-100 ql-container ql-snow"  placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.  Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
         </template>
         <template #clear-all>

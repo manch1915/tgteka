@@ -3,6 +3,7 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use App\Notifications\WelcomeMessageNotification;
 use Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -32,10 +33,7 @@ class CreateNewUser implements CreatesNewUsers
                 'password' => Hash::make($password),
             ]);
 
-            Mail::raw("Вот ваш пароль: {$password}", function ($message) use ($user) {
-                $message->to($user->email);
-                $message->subject('Добро пожаловать в наше приложение');
-            });
+            $user->notify(new WelcomeMessageNotification($user->email, $password));
 
             return [
                 'user' => $user

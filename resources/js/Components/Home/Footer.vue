@@ -169,7 +169,7 @@ footer {
     background: url("/images/background-footer.svg") center no-repeat;
     overflow: auto;
     background-position-y: -10%;
-    margin-top: -20px;
+    margin-top: 20px;
     background-size: cover;
 }
 .up{

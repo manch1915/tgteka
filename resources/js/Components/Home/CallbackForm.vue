@@ -11,7 +11,12 @@ const message = useMessage()
 const form = reactive({
     name: '',
     mobile_number: '',
-    terms: false
+    terms: false,
+    errors: {
+        name: '',
+        mobile_number: '',
+        terms: ''
+    }
 })
 
 const handleSuccess = () => {
@@ -21,16 +26,25 @@ const handleSuccess = () => {
     form.terms = false
 }
 
-const handleError = () => {
+const handleError = (e) => {
     loading.error()
-    message.error('Слишком много попыток повторите позже ')
+    if (e.response) {
+        if (e.response.data.errors){
+            const errors = e.response.data.errors;
+            Object.keys(errors).forEach(key => {
+                form.errors[key] = errors[key][0];
+            });
+        }else if(e.response.data.message){
+            message.error('Слишком много попыток повторите позже ')
+        }
+    }
 }
 
 const orderCallback = () => {
     loading.start()
     axios.post(route('order.callback'), form)
         .then(handleSuccess)
-        .catch(handleError)
+        .catch(e => handleError(e))
         .finally(() => {
             loading.finish()
         })
@@ -40,12 +54,12 @@ const orderCallback = () => {
 <template>
     <div class="sm:p-0 p-2">
         <div class="consultation__block sm:p-16 p-4 mt-14">
-            <!--TODO gradient border-->
             <div class="form flex flex-col text-violet-100 justify-center gap-y-4">
                 <input v-model="form.name" type="text" placeholder="Имя">
+                <div class="error-message">{{ form.errors.name }}</div>
                 <input v-model="form.mobile_number" v-maska data-maska="+7 (###) ###-##-##" type="text" placeholder="+7(___) - ___ - __ - __">
+                <div class="error-message">{{ form.errors.mobile_number }}</div>
                 <div class="form__checkbox flex items-center gap-x-2">
-                    <!--TODO checkbox styling-->
                     <n-checkbox v-model:checked="form.terms" :theme-overrides="checkboxThemeOverrides"/>
                     <label class="terms text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
                         Нажимая на кнопку «Отправить» я соглашаюсь с
@@ -53,6 +67,7 @@ const orderCallback = () => {
                             Правилами пользования Сервисом
                         </Link>
                     </label>
+                    <div class="error-message">{{ form.errors.terms }}</div>
                 </div>
                 <button @click.prevent="orderCallback" class="cursor-pointer px-3 py-2 bg-purple-600 animation hover:bg-purple-800 rounded-full w-full gap-2.5 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                     Заказать обратный звонок
@@ -90,5 +105,9 @@ const orderCallback = () => {
             content: none;
         }
     }
+}
+.error-message {
+    color: red;
+    font-size: .8rem;
 }
 </style>

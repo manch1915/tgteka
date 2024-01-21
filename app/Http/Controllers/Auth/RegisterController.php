@@ -12,7 +12,7 @@ class RegisterController extends Controller
     {
         $validatedData = $request->validate([
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'mobile_number' => ['required', 'string', 'min:16', 'max:16', 'unique:users', 'regex:/\+\d{1}\s\d{3}\s\d{3}-\d{2}-\d{2}/']
+            'mobile_number' => ['required', 'string', 'min:18', 'max:18', 'unique:users', 'regex:/\+\d\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}/']
         ]);
 
         $creator->create($validatedData);

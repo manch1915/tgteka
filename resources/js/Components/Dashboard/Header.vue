@@ -307,12 +307,12 @@ header {
 
 .replenish:hover{
     p{
-        transition: color .4s;
-        color: rgb(97, 97, 97);
+        transition: filter .4s;
+        filter: drop-shadow(0 0 5px rgb(237, 233, 254));
     }
     img{
         transition: filter .4s;
-        filter: invert(0.7);
+        filter: drop-shadow(0 0 5px rgb(237, 233, 254));
     }
 }
 </style>

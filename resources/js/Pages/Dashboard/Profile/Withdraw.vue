@@ -73,7 +73,6 @@ const createPaymentRequest = () => {
                                 </div>
                             </div>
                             <button class="block sm:w-2/4 w-full my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
-                            <button class="block mt-20 text-violet-100 text-lg font-normal font-['Open Sans'] underline">Посмотреть историю транзакций</button>
                         </div>
                     </n-tab-pane>
                     <n-tab-pane name="natural">
@@ -170,7 +169,6 @@ const createPaymentRequest = () => {
                                 <button class="sm:w-3/4 w-full my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
                                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">При необходимости вы можете создать несколько заявок или выбрать альтернативный <br/>способ вывода средств.</p>
                             </div>
-                            <button class="mt-20 text-violet-100 text-lg font-normal font-['Open Sans'] underline">Посмотреть историю транзакций</button>
                         </div>
                     </n-tab-pane>
                     <n-tab-pane name="org">
@@ -234,7 +232,6 @@ const createPaymentRequest = () => {
                             </div>
                             <button class="sm:w-2/4 w-full py-2 bg-purple-600 rounded-full text-white text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
                         </div>
-                            <p class="mt-8 text-violet-100 text-lg font-normal font-['Open Sans'] underline">Посмотреть историю транзакций</p>
                     </n-tab-pane>
                 </n-tabs>
             </div>

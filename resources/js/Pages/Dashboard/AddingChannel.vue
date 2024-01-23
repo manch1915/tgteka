@@ -2,16 +2,18 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TextInput from '@/Components/TextInput.vue';
 import TextArea from '@/Components/TextArea.vue';
-import {NCheckbox, NSelect, NSwitch, useLoadingBar} from 'naive-ui';
+import {NCheckbox, NSelect, NSlider, NSwitch, useLoadingBar} from 'naive-ui';
 import {
     switchThemeOverrides,
     checkboxThemeOverrides,
     selectThemeOverrides,
-    checkboxToRadioThemeOverrides,
+    checkboxToRadioThemeOverrides, sliderGenderThemeOverrides,
 } from '@/themeOverrides.js';
 import {computed, reactive, ref, toRefs, watch} from 'vue';
 import {router, Link} from "@inertiajs/vue3";
 import {useMainStore} from "@/stores/main.js";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
+import {mdiFaceMan, mdiFaceWoman} from "@mdi/js";
 
 const discount_check = ref(false);
 const format_one_checkbox = ref(false);
@@ -35,7 +37,8 @@ const form = reactive({
     format_one_price: 0,
     format_two_price: 0,
     format_three_price: 0,
-    no_deletion_price: 0
+    no_deletion_price: 0,
+    male_percentage: 30,
 });
 const handleFileUpload = (event) => {
     form.avatar = event.target.files[0];
@@ -69,6 +72,11 @@ const uploadChannel = () => {
           }
       })
 }
+
+const malePercentage = computed(() => form.male_percentage);
+const femalePercentage = computed(() => 100 - form.male_percentage);
+
+
 
 const languages = [
     {
@@ -232,6 +240,23 @@ watch(state.type, (newRadio) => {
                         </p>
                         </n-checkbox>
                         <span class="text-red-500" v-if="errors.type">{{ errors.type[0] }}</span>
+                    </div>
+                </div>
+                <div class="w-full text-start">
+                    <h2
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        Соотношение полов, %
+                    </h2>
+                    <n-slider class="my-4" v-model:value="form.male_percentage" :tooltip="false" :step="10" :theme-overrides="sliderGenderThemeOverrides"/>
+                    <div class="flex justify-between items-center">
+                        <div class="border rounded p-4 flex items-center gap-x-1.5">
+                            <BaseIcon class="text-[#3259d2]" size="25" :path="mdiFaceMan"/>
+                            <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">{{ malePercentage }}%</p>
+                        </div>
+                        <div class="border rounded p-4 flex items-center gap-x-1.5">
+                            <BaseIcon class="text-[#dc78d8]" size="25" :path="mdiFaceWoman"/>
+                            <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">{{ femalePercentage }}%</p>
+                        </div>
                     </div>
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">

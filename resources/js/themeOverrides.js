@@ -68,6 +68,13 @@ export const sliderThemeOverrides = {
     indicatorBorderRadius: '5px'
 };
 
+export const sliderGenderThemeOverrides = {
+    railColor: '#dc78d8',
+    fillColor: '#3259d2',
+    railColorHover: '#dc78d8',
+    fillColorHover: '#3259d2',
+};
+
 export const checkboxToRadioThemeOverrides = {
     color: 'transparent',
     borderRadius: '50%',

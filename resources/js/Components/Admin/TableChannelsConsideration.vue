@@ -8,6 +8,8 @@ import BaseLevel from "@/Components/Admin/BaseLevel.vue";
 import BaseButtons from "@/Components/Admin/BaseButtons.vue";
 import BaseButton from "@/Components/Admin/BaseButton.vue";
 import UserAvatar from "@/Components/Admin/UserAvatar.vue";
+import {darkTheme, dateRuRU, NConfigProvider, NDatePicker, NInput, ruRU} from "naive-ui";
+import {datePickerThemeOverrides, inputThemeOverrides} from "@/themeOverrides.js";
 
 defineProps({
   checkable: Boolean,
@@ -19,6 +21,8 @@ const items = computed(() => Object.values(mainStore.channels).filter(channel =>
 
 const isModalActive = ref(false);
 const isModalDangerActive = ref(false);
+
+const timestamp = ref()
 
 const modalChannel = ref({})
 const modalChannelActive = (c) => {
@@ -41,7 +45,7 @@ const declineChannel = () => {
 }
 
 const channelAccept = () => {
-    axios.patch(route('admin.api.channels.update', modalChannel.value.id), {status: 'loading'})
+    axios.patch(route('admin.api.channels.update', modalChannel.value.id), {status: 'loading', channel_creation_date: timestamp.value})
         .then(r => {
             console.log(r);
             mainStore.fetchChannels(); // Fetch after accepting a channel
@@ -108,17 +112,21 @@ const checked = (isChecked, client) => {
 </script>
 
 <template>
-  <CardBoxModal button-label="Одобрить канал" @confirm="channelAccept" button="success" has-cancel v-model="isModalActive" title="Просмотр канала">
-    <a class="text-blue-800" :href="modalChannel.url">Ссылка: {{modalChannel.channel_name}}</a>
-    <p>Описание канала: {{modalChannel.description}}</p>
-    <p>Источник подписчиков: {{modalChannel.subscribers_source}}</p>
-    <p>1/24: {{modalChannel.format_one_price}}</p>
-    <p>2/48: {{modalChannel.format_two_price}}</p>
-    <p>3/72: {{modalChannel.format_three_price}}</p>
-    <p>Без удаления: {{modalChannel.no_deletion_price}}</p>
-    <p>Язык: {{modalChannel.language}}</p>
-    <p v-if="modalChannel.topic">Категория: {{modalChannel.topic.title}}</p>
-  </CardBoxModal>
+    <CardBoxModal button-label="Одобрить канал" @confirm="channelAccept" button="success" has-cancel v-model="isModalActive" title="Просмотр канала">
+        <a class="text-blue-800" :href="modalChannel.url">Ссылка: {{ modalChannel.channel_name }}</a>
+        <p>Описание канала: {{ modalChannel.description }}</p>
+        <p>Источник подписчиков: {{ modalChannel.subscribers_source }}</p>
+        <p>1/24: {{ modalChannel.format_one_price }}</p>
+        <p>2/48: {{ modalChannel.format_two_price }}</p>
+        <p>3/72: {{ modalChannel.format_three_price }}</p>
+        <p>Без удаления: {{ modalChannel.no_deletion_price }}</p>
+        <p>Язык: {{ modalChannel.language }}</p>
+        <p>male_percentage: {{ modalChannel.male_percentage }}%</p>
+        <n-config-provider :locale="ruRU" :date-locale="dateRuRU" :theme="darkTheme">
+            <n-date-picker :theme-overrides="datePickerThemeOverrides" v-model:value="timestamp" type="date"/>
+        </n-config-provider>
+        <p v-if="modalChannel.topic">Категория: {{ modalChannel.topic.title }}</p>
+    </CardBoxModal>
 
   <CardBoxModal
     v-model="isModalDangerActive"

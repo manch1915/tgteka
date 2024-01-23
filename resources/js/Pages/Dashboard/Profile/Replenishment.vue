@@ -4,18 +4,37 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import {NCheckbox, NInput, NTabPane, NTabs} from "naive-ui";
 import {checkboxThemeOverrides, inputThemeOverrides, nTabSegmentsThemeOverrides} from "@/themeOverrides.js";
 import {ref} from "vue";
+import {vMaska} from "maska";
+
 const activeButton = ref('add-payment-method');
 
-const activeTab = ref('bank-card')
-
-const amount = ref(0);
-const paymentLink = ref('');
+const amount = ref();
+const initialValue = ref(0);
 const createPaymentRequest = () => {
-  axios.post(route('create-payment-request'), {amount: amount.value})
+  let myWindow = window.open('about:blank', "_blank");
+  axios.post(route('create-payment-request'), {amount: initialValue.value})
       .then(r => {
-          paymentLink.value = r.data[0]
+          myWindow.location.href = r.data[0]
+          myWindow.focus()
       });
 }
+
+const options = {
+    preProcess: val => val.replace(/[₽,\s]/g, ''),
+    postProcess: val => {
+        if (!val) return '';
+
+        initialValue.value = val
+        // Format the actual value instead of the previously formatted value
+        return Intl.NumberFormat('ru-RU', {
+            style: 'currency',
+            currency: 'RUB',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(parseFloat(val));
+    }
+}
+
 </script>
 
 <template>
@@ -31,81 +50,10 @@ const createPaymentRequest = () => {
                             <button @click.prevent="activeButton = 'add-payment-method'" :class="['tab-button', 'transition', 'text-violet-100', 'text-lg', 'font-bold', 'font-[\'Open Sans\']', 'leading-normal', activeButton === 'add-payment-method' ? 'active' : '']">Физическое лицо</button>
                         </template>
                         <div>
-                            <div class="payment_types">
-                                <div class="grid grid-cols-2 gap-4 payment_types-cards sm:grid-cols-3">
-                                    <div @click.prevent="activeTab = 'bank-card'" class="payment_types-card-wrapper">
-                                        <div class="flex h-full flex-col items-center justify-center payment_types-card">
-                                            <img src="/images/card-white.svg" alt="card-white">
-                                            <p class="text-violet-100 text-lg font-normal font-['Open Sans']">Банковская карта</p>
-                                        </div>
-                                    </div>
-                                    <div @click.prevent="activeTab = 'wallets'" class="payment_types-card-wrapper">
-                                        <div class="flex h-full flex-col items-center justify-center payment_types-card">
-                                            <img src="/images/yookassa.png" alt="yookassa">
-                                            <p class="text-violet-100 text-lg font-normal font-['Open Sans']">Кошельки</p>
-                                        </div>
-                                    </div>
-                                    <div @click.prevent="activeTab = 'qr'" class="payment_types-card-wrapper">
-                                        <div class="flex h-full flex-col items-center justify-center payment_types-card">
-                                            <img src="/images/qr.svg" alt="qr">
-                                            <p class="text-violet-100 text-lg font-normal font-['Open Sans']">QR код</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="cursor-pointer sm:text-left text-center text-violet-100 text-lg font-normal font-['Open Sans'] underline">Пополнить другим способом</p>
-                            <div v-show="activeTab === 'bank-card'" class="mt-5 px-4 bank-card sm:w-3/4 sm:px-0">
-                                <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Пополнение банковской картой</h1>
-                                <div class="my-4 flex justify-center gap-x-5 sm:justify-start">
-                                    <img src="/images/visa-logo.svg" alt="visa">
-                                    <img src="/images/master-cart-logo.svg" alt="master-card">
-                                    <img src="/images/mir-logo.svg" alt="mir">
-                                </div>
-                                <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
-                                <div class="py-2">
-                                    <p class="text-violet-100 text-base font-normal font-['Open Sans']">Комиссия системы 15% (не менее 85.0 р.)<br/>Максимальная сумма пополнения 170 000 р. <br/>При необходимости пополниться на сумму больше, совершите несколько платежей.</p>
-                                </div>
-                                <div class="flex items-center py-2 gap-x-2.5 sm:items-baseline">
-                                    <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
-                                    <p class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-normal">Привязывая карту, вы соглашаетесь <br/>с <span class="underline">правилами настройки автопополнения</span></p>
-                                </div>
-                                <div class="flex items-center py-2 gap-x-2.5 sm:items-baseline">
-                                    <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
-                                    <p class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-normal">Привязывая карту, вы соглашаетесь <br/>с <span class="underline">правилами настройки автопополнения</span></p>
-                                </div>
-                                <div class="flex items-center py-2 gap-x-2.5 sm:items-baseline">
-                                    <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
-                                    <p class="text-violet-100 sm:text-lg text-xs font-normal font-['Open Sans'] leading-normal">Привязывая карту, вы соглашаетесь <br/>с <span class="underline">правилами настройки автопополнения</span></p>
-                                </div>
-                                <button class="sm:w-3/4 w-full my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</button>
-                            </div>
-                            <div v-show="activeTab === 'wallets'" class="mt-5 px-4 wallets sm:w-3/4 sm:px-0">
-                                <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Пополнение кошельками</h1>
-                                <div class="my-4 flex justify-center gap-x-5 sm:justify-start">
-                                    <img class="w-36" src="/images/yookassa.png" alt="yookassa">
-                                </div>
-                                <n-input v-model:value="amount" class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
-                                <p class="py-4 text-violet-100 text-base font-normal font-['Open Sans']">Комиссия системы 15% (не менее 85.0 р.)<br/>Максимальная сумма пополнения 170 000 р. <br/>При необходимости пополниться на сумму больше, совершите несколько платежей.</p>
-                                <div class="flex items-center py-2 gap-x-2.5 sm:items-baseline">
-                                    <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
-                                    <p class="text-violet-100 sm:text-lg text-xs font-normal font-['Open Sans'] leading-normal">Привязывая карту, вы соглашаетесь <br/>с <span class="underline">правилами настройки автопополнения</span></p>
-                                </div>
-                                <div class="flex flex-col">
+                            <n-input v-maska:[options]  v-model:value="amount" class="py-1.5 my-1 sm:!w-3/4" placeholder="Укажите сумму в рублях" :theme-overrides="inputThemeOverrides"/>
+                            <div class="flex flex-col">
                                 <button @click.prevent="createPaymentRequest" class="sm:w-3/4 w-full my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</button>
-                                <a v-if="paymentLink" :href="paymentLink" class="text-center sm:w-3/4 w-full my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Страница формы</a>
-                                </div>
                             </div>
-                            <div v-show="activeTab === 'qr'" class="mt-5 px-4 qr sm:w-3/4 sm:px-0">
-                                <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Оплата через QR код</h1>
-                                <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
-                                <p class="py-4 text-violet-100 text-base font-normal font-['Open Sans']">Комиссия системы 15% (не менее 85.0 р.)<br/>Максимальная сумма пополнения 170 000 р. <br/>При необходимости пополниться на сумму больше, совершите несколько платежей.</p>
-                                <div class="flex items-center py-2 gap-x-2.5 sm:items-baseline">
-                                    <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
-                                    <p class="text-violet-100 sm:text-lg text-xs font-normal font-['Open Sans'] leading-normal">Привязывая карту, вы соглашаетесь <br/>с <span class="underline">правилами настройки автопополнения</span></p>
-                                </div>
-                                <button class="sm:w-3/4 w-full my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</button>
-                            </div>
-                            <button class="sm:w-auto w-full mt-20 text-violet-100 text-lg font-normal font-['Open Sans'] underline">Посмотреть историю транзакций</button>
                         </div>
                     </n-tab-pane>
                     <n-tab-pane name="org">

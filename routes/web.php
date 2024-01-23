@@ -81,7 +81,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/send-review', [PlacementController::class, 'sendReview'])->name('review-send');
     });
 
-
     Route::get('/patterns', [PatternController::class, 'index'])->name('patterns');
     Route::get('/userPatternsPaginated', [PatternController::class, 'userPatternsPaginated'])->name('user-patterns-paginated');
     Route::get('/userPatterns', [PatternController::class, 'userPatterns'])->name('user-patterns');
@@ -97,7 +96,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::group(['prefix' => 'profile'], function () {
         Route::get('personal-data', [PersonalDataController::class, 'index'])->name('personal-data');
         Route::patch('personal-data', [PersonalDataController::class, 'update'])->name('personal-data.store');
-        Route::get('total-balance', [TotalBalanceController::class, 'index'])->name('total-balance');
         Route::get('replenishment', [ReplenishmentController::class, 'index'])->name('replenishment');
         Route::get('withdraw', [WithdrawController::class, 'index'])->name('withdraw');
         Route::get('notifications-setting', [NotificationsSettingController::class, 'index'])->name('notifications-setting');

@@ -88,7 +88,7 @@ const addChannelToFavorites = async (channel) => {
 
         if (response.data.status === "success") {
             const isFav = response.data.message.includes("added");
-            const operation = isFav ? "добавлен в избранное" : "удален из избранних";
+            const operation = isFav ? "добавлен в избранное" : "удален из избранных";
             message.info(`Канал ${channel.channel_name} ${operation}`);
             props.channel.isFav = isFav;
         } else {

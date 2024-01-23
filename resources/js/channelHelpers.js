@@ -24,7 +24,7 @@ export async function addChannelToFavorites(channel) {
 
         if (response.data.status === "success") {
             const isFav = response.data.message.includes("added");
-            message.info(`Канал ${channel.channel_name} ${`${isFav ? "добавлен в избранное" : "удален из избранних"}`}`);
+            message.info(`Канал ${channel.channel_name} ${`${isFav ? "добавлен в избранное" : "удален из избранных"}`}`);
             return isFav;
         } else {
             message.error("Возникла проблема с добавлением канала в избранное.");
@@ -32,4 +32,4 @@ export async function addChannelToFavorites(channel) {
     } catch (error) {
         message.error("Произошла ошибка: ", error);
     }
-};
+}

@@ -57,7 +57,7 @@ const orderPosts = () => {
             store.subtractFromUserBalance(response.data)
             localStorage.removeItem('cart')
             loading.finish()
-            router.visit(route('catalog.channels.index'))
+            router.visit(route('placements'))
         })
         .catch(c => {
             loading.error()
@@ -108,7 +108,7 @@ onMounted(() => {
                     <n-select :disabled="isCartEmpty"  placeholder="Шаблоны" v-model:value="userPattern" :options="userPatterns" :theme-overrides="selectThemeOverrides"/>
                 </div>
                 <div class="my-2">
-                    <n-input :autosize="{minRows: 4, maxRows: 10}" :disabled="isCartEmpty" type="textarea" maxlength="300" show-count v-model:value="description" :theme-overrides="inputThemeOverrides" placeholder="Описание заказа"/>
+                    <n-input :autosize="{minRows: 4, maxRows: 10}" :disabled="isCartEmpty" type="textarea" maxlength="300" show-count v-model:value="description" :theme-overrides="inputThemeOverrides" placeholder="Требования к заказу"/>
                 </div>
                 <table class="table-auto">
                     <tbody class="text-violet-100">

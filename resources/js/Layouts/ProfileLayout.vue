@@ -14,11 +14,6 @@ const buttons = [
         icon: '/images/profile/user.svg'
     },
     {
-        title: 'Общий баланс',
-        route: route('total-balance'),
-        icon: '/images/profile/total-balance.svg'
-    },
-    {
         title: 'Пополнение средств',
         route: route('replenishment'),
         icon: '/images/profile/replenishment.svg'

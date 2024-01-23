@@ -24,11 +24,13 @@ class CreateChannelsTable extends Migration
             $table->bigInteger('no_deletion_price')->default(0);
             $table->boolean('repost_price')->default(false);
             $table->integer('repeat_discount')->default(0); // Repeat discount percentage
+            $table->decimal('male_percentage', 5);
             $table->float('score')->default(0);
             $table->float('rating')->default(0);
             $table->integer('likes_count')->default(0); // Number of likes
             $table->integer('views_count')->default(0); // Number of views
             $table->enum('status', ['pending', 'accepted', 'declined', 'loading'])->default('pending');
+            $table->date('channel_creation_date')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

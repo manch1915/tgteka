@@ -54,7 +54,7 @@ watchEffect(() => {
                 <n-select :theme-overrides="selectThemeOverrides" v-model:value="selectedValue" placeholder="Выберите причину" :options="sort" class="my-4"/>
             </div>
         </div>
-        <button @click.prevent="markAsReadAll" class="px-6 py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl border border-violet-100 transition hover:bg-gray-400">пометить все как прочитанное</button>
+        <button @click.prevent="markAsReadAll" class="px-6 py-2 text-violet-100 transition hover:text-violet-700 underline hover font-bold font-['Open Sans'] leading-normal rounded-3xl ">пометить все как прочитанное</button>
     </div>
     <div v-if="!notificationsStore.loading" class="flex flex-col gap-y-2 mt-6">
         <notifications-card v-for="notification in notificationsStore.notifications.data" :notification="notification.data"/>

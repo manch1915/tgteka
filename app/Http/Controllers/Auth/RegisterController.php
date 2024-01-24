@@ -11,8 +11,8 @@ class RegisterController extends Controller
     public function store(Request $request, CreateNewUser $creator)
     {
         $validatedData = $request->validate([
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'mobile_number' => ['required', 'string', 'min:18', 'max:18', 'unique:users', 'regex:/\+\d\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}/']
+            'username' => ['required', 'string', 'min:5', 'max:16', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users']
         ]);
 
         $creator->create($validatedData);

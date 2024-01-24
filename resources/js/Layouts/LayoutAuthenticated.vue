@@ -17,10 +17,10 @@ import {container} from "jenesius-vue-modal";
 const page = usePage()
 const user = computed(() => page.props.auth.user)
 useMainStore().setUser({
-  name: page.props.auth.user.name,
+  name: page.props.auth.user.username,
   email: page.props.auth.user.email,
   avatar:
-    `https://api.dicebear.com/7.x/initials/svg?seed=${page.props.auth.user.name}`,
+    `https://api.dicebear.com/7.x/initials/svg?seed=${page.props.auth.user.username}`,
 });
 
 const layoutAsidePadding = "xl:pl-60";

@@ -12,19 +12,19 @@ class PersonalDataRequest extends FormRequest
         $uniqueRule = Rule::unique('users')->ignore(auth()->id());
 
         return [
-            'name' => $this->generateNameRule($uniqueRule),
+            'username' => $this->generateNameRule($uniqueRule),
             'mobile_number' => $this->generateMobileNumberRule($uniqueRule)
         ];
     }
 
     private function generateNameRule($uniqueRule): array
     {
-        return ['nullable', 'alpha', 'min:2', 'max:25', $uniqueRule];
+        return ['required' ,'alpha', 'min:5', 'max:16', $uniqueRule];
     }
 
     private function generateMobileNumberRule($uniqueRule): array
     {
-        return ['nullable', 'numeric', 'min:10', $uniqueRule];
+        return ['nullable', 'regex:/^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/', $uniqueRule];
     }
 
     public function authorize(): bool

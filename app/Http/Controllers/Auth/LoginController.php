@@ -40,7 +40,7 @@ class LoginController extends Controller
     {
         $this->validateLoginAttempts($request);
 
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if (Auth::attempt($request->only('username', 'password'))) {
             RateLimiter::clear($this->throttleKey($request));
 
             return $this->handleSuccessfulLogin($request);

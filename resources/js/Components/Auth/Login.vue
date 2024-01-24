@@ -6,7 +6,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { openPasswordRecovery, openRegister } from "@/utilities/authModals.js";
 
 const form = useForm({
-    email: '',
+    username: '',
     password: '',
 });
 
@@ -27,13 +27,13 @@ const submit = () => {
             <div class="pt-10">
                 <TextInput
                     id="email"
-                    v-model="form.email"
-                    type="email"
+                    v-model="form.username"
+                    type="text"
                     class="mt-1 block w-full"
                     required
                     autocomplete="username"
                 />
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError class="mt-2" :message="form.errors.username" />
             </div>
 
             <div class="pt-2">

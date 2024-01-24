@@ -4,7 +4,7 @@ import {useConversationsStore} from "@/stores/ConversationsStore.js";
 const props = defineProps({
     chats: Object,
 })
-const getAvatarUrl = (name) => `https://api.dicebear.com/7.x/initials/svg?seed=${name}`;
+const getAvatarUrl = (username) => `https://api.dicebear.com/7.x/initials/svg?seed=${username}`;
 const conversations = useConversationsStore()
 
 const openChat = (chatId) => {
@@ -17,11 +17,13 @@ const openChat = (chatId) => {
     <div @click.prevent="openChat(chat.id)" class="messenger-user py-2 cursor-pointer" v-for="chat in chats">
         <div class="flex gap-x-3 px-2">
             <div class="avatar">
-                <img :src="getAvatarUrl(chat.user.name)" alt="">
+                <img :src="getAvatarUrl(chat.user.username)" alt="">
             </div>
             <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed overflow-hidden">
                 {{chat.user.name}}
-                <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-snug">{{ chat?.last_message?.message }}</p>
+                <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-snug">
+                    {{ chat?.last_message ? chat.last_message.message : 'пусто' }}
+                </p>
             </div>
         </div>
     </div>

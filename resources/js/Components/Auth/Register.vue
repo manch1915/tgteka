@@ -12,8 +12,8 @@ import { openLogin } from "@/utilities/authModals.js";
 
 const state = reactive({
   form: {
-    email: '',
-    mobile_number: '+7'
+    username: '',
+    email: ''
   },
   errors: {}
 });
@@ -41,33 +41,31 @@ const submit = async () => {
         </template>
 
         <form @submit.prevent="submit" class="flex flex-col gap-y-3.5">
-            <div class="pt-10">
+            <div  class="pt-10">
+                <TextInput
+                    id="email"
+                    v-model="state.form.username"
+                    type="text"
+                    class="mt-1 block w-full"
+                    required
+                    autocomplete="username"
+                    placeholder="Имя пользователя"
+                />
+                <InputError class="mt-2" :message="state.errors.username && state.errors.username[0]" />
+            </div>
+            <div>
                 <TextInput
                     id="email"
                     v-model="state.form.email"
                     type="email"
                     class="mt-1 block w-full"
                     required
-                    autocomplete="username"
+                    autocomplete="email"
                     placeholder="Электронная почта"
                 />
               <InputError class="mt-2" :message="state.errors.email && state.errors.email[0]" />
             </div>
             <div class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">Укажите вашу электронную почту, на этот адрес будет выслан ваш пароль.</div>
-            <div>
-                <TextInput
-                    id="mobile_number"
-                    v-model="state.form.mobile_number"
-                    class="mt-1 block w-full"
-                    required
-                    type="tel"
-                    v-maska
-                    data-maska="+7 (###) ###-##-##"
-                    autocomplete="current-mobile_number"
-                    placeholder="+7 (___) ___-__-__"
-                />
-                <InputError class="mt-2" :message="state.errors.mobile_number && state.errors.mobile_number[0]" />
-            </div>
             <div class="flex items-center gap-x-2">
                 <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
                 <label for="rassilka" class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Я согласен получать Email-рассылку от Название компании</label>

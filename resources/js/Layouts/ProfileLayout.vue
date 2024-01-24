@@ -5,7 +5,7 @@ import ProfileButton from "@/Components/Dashboard/Profile/ProfileButton.vue";
 
 const page = usePage()
 
-const user = computed(() => page.props.auth.user)
+const username = computed(() => page.props.auth.user.username)
 
 const buttons = [
     {
@@ -51,7 +51,7 @@ const buttons = [
         <div class="sm:w-auto w-full">
             <aside class="sm:mr-10 h-auto sm:max-w-xs origin-top-left rounded-tr-2xl rounded-br-2xl rounded-bl-2xl sm:border pb-4 backdrop-blur-2xl">
                 <div class="sm:text-violet-100 text-purple-600 text-lg font-normal font-['Roboto Flex'] leading-relaxed py-6 px-3">
-                    {{ user.email }}
+                    {{ username }}
                 </div>
                 <div class="sm:p-0 px-4">
                     <profile-button v-for="item in buttons" :title="item.title" :routeHref="item.route" :icon="item.icon"/>

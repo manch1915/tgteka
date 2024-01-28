@@ -16,7 +16,7 @@ class TransactionResource extends JsonResource
             'type' => $this->type,
             'amount' => $this->amount,
             'transaction_id' => $this->transaction_id,
-            'status' => $this->status,
+            'status' => __('messages.' . $this->status),
             'payment_method' => $this->payment_method,
             'details' => $this->details,
             'created_at' => DateLocalizationService::localize($this->created_at) . ', ' . $this->created_at->format('H:i'),

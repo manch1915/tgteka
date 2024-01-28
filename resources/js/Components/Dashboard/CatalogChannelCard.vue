@@ -4,7 +4,7 @@ import { datePickerThemeOverrides, selectCatalogThemeOverrides } from "@/themeOv
 import {computed, onMounted, ref, watch} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartRemove} from "@mdi/js";
-import { Link } from "@inertiajs/vue3";
+import {Link, router} from "@inertiajs/vue3";
 import { saveCart, loadCart, isInCart as checkInCart, generateFormatArray } from "@/utilities/cartUtilities.js";
 import { useCartStore } from "@/stores/CartStore.js";
 
@@ -172,7 +172,8 @@ onMounted(() => {
 
 <template>
     <div class="channel_card">
-        <div class="channel_card-container">
+        <div class="channel_card-container cursor-pointer">
+            <Link :href="route('catalog.channels.show', channel.id )" class="block h-full">
             <div class="flex flex-wrap items-center">
                 <div class="flex sm:w-1/2 w-full">
                     <div class="flex flex-col items-center justify-center gap-y-3 grid-element">
@@ -208,6 +209,7 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
+            </Link>
         </div>
         <div class="flex flex-wrap items-center sm:justify-between p-6 unwrap gap-y-2">
             <div class="flex flex-wrap sm:w-auto w-full items-center gap-x-4">

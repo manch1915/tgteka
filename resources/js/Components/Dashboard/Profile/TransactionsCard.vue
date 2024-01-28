@@ -9,15 +9,15 @@ const props = defineProps({
     <div class="wrapper">
         <div class="wrapper_container grid sm:grid-cols-5 grid-cols-1">
             <div class="flex flex-col">
-                <div class="py-6 border sm:rounded-tr-0 rounded-tr-[30px]"><h2 class="title text-center">Дата и время</h2></div>
+                <div class="py-6 border sm:rounded-tr-0 rounded-tr-[30px] sm:rounded-tr-[0px]"><h2 class="title text-center">Дата и время</h2></div>
                 <div class="py-6 border sm:rounded-bl-[30px]"><p class="subtitle text-center">{{transaction.created_at}}</p></div>
             </div>
             <div class="flex flex-col">
-                <div class="py-6 border"><h2 class="title text-center">Движение средств</h2></div>
+                <div class="py-6 border"><h2 class="title text-center">Услуги</h2></div>
                 <div class="py-6 "><p class="subtitle text-center"></p></div>
             </div>
             <div class="flex flex-col">
-                <div class="py-6 border"><h2 class="title text-center">Детали</h2></div>
+                <div class="py-6 border"><h2 class="title text-center">Назначение</h2></div>
                 <div class="py-6"><p class="subtitle text-center">{{transaction.detials}}</p></div>
             </div>
             <div class="flex flex-col">
@@ -26,7 +26,7 @@ const props = defineProps({
             </div>
             <div class="flex flex-col">
                 <div class="py-6 border sm:rounded-tr-[30px]"><h2 class="title text-center">Статус</h2></div>
-                <div class="py-6 border sm:rounded-br-[30px] rounded-b-[30px]"><p class="subtitle text-center">{{transaction.status}}</p></div>
+                <div class="py-6 border sm:rounded-br-[30px] rounded-b-[30px] sm:rounded-b-[0px]"><p class="subtitle text-center">{{transaction.status}}</p></div>
             </div>
         </div>
     </div>

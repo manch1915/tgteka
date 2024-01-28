@@ -3,10 +3,11 @@ import {closeModal, pushModal} from "jenesius-vue-modal";
 import {mdiCheck, mdiClose, mdiContentCopy, mdiEyeOutline, mdiForumOutline} from "@mdi/js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {inputThemeOverrides} from "@/themeOverrides.js";
-import {NButton, NInput, NInputGroup, useMessage} from "naive-ui";
+import {NButton, NImage, NImageGroup, NInput, NInputGroup, useMessage} from "naive-ui";
 import {onMounted, ref} from "vue";
 import CancelOrder from "@/Components/Dashboard/CancelOrder.vue";
 import OrderCard from "@/Components/Dashboard/OrderCard.vue";
+import MainVideoPlayer from "@/Components/Dashboard/MainVideoPlayer.vue";
 
 const props = defineProps({
     order: Object
@@ -49,6 +50,10 @@ const copyToClipboard = (text) => {
             console.error('Could not copy text: ', err);
         });
 }
+
+const openVideoPlayer = function(data) {
+    pushModal(MainVideoPlayer, {url: data.url, image: data.image})
+};
 </script>
 
 <template>
@@ -94,7 +99,20 @@ const copyToClipboard = (text) => {
                         <div class="px-4 sm:p-0">
                             <div class="mt-6 w-full before">
                                 <div class="before_container">
-                                    <img :src="uploadedImageUrl" class="object-cover" alt="" />
+                                    <n-image-group v-if="order.orderPattern.patternMedia.length">
+                                        <transition-group name="fade" tag="div" :class="[order.orderPattern.patternMedia.length <= 2 ? 'grid-cols-1' : '',
+                                                                              order.orderPattern.patternMedia.length === 3 ? 'grid-cols-1 sm:grid-cols-2' : '',
+                                                                              order.orderPattern.patternMedia.length >= 4 && order.orderPattern.patternMedia.length <= 6 ? 'grid-cols-2' : '',
+                                                                              order.orderPattern.patternMedia.length > 6 ? 'grid-cols-3' : '']" class="grid gap-2">
+                                            <div v-for="(image, index) in order.orderPattern.patternMedia" :key="'img-' + index" class="bg-center bg-cover">
+                                                <img class="cursor-pointer" @click.prevent="openVideoPlayer(image)"  v-if="['.mp4', '.ogg', '.webm'].some(ext => image.url.includes(ext))" :src="image.thumbnail_path" alt=""/>
+                                                <n-image v-else :src="image.url" alt="" class="w-full h-full" />
+                                            </div>
+                                        </transition-group>
+                                    </n-image-group>
+                                    <div v-else>
+                                        <img :src="uploadedImageUrl" class="object-cover" alt="" />
+                                    </div>
                                     <div class="break-words pt-2 text-violet-100 text-base font-normal font-['Inter'] leading-tight" v-html="order.orderPattern.body"></div>
                                 </div>
                             </div>

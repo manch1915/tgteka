@@ -3,23 +3,21 @@
 namespace App\Notifications;
 
 use App\Models\Pattern;
-use App\Services\AvatarService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\File;
 use NotificationChannels\Telegram\TelegramFile;
+use NotificationChannels\Telegram\TelegramMessage;
 
 class PatternByBotNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     protected Pattern $pattern;
-    protected AvatarService $avatarService;
 
-    public function __construct(Pattern $pattern, AvatarService $avatarService)
+    public function __construct(Pattern $pattern)
     {
-        $this->avatarService = $avatarService;
         $this->pattern = $pattern;
     }
 
@@ -45,36 +43,14 @@ class PatternByBotNotification extends Notification implements ShouldQueue
     /**
      * @throws \Exception
      */
-    public function toTelegram($notifiable): TelegramFile {
+    public function toTelegram($notifiable): TelegramMessage {
         if (!$notifiable->telegram_user_id) {
             throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
         }
-
-        $avatarUrl = $this->avatarService->getAvatarUrlOfPattern($this->pattern);
-        $path = parse_url($avatarUrl, PHP_URL_PATH);
-        $path = ltrim($path, "/");
-        $content = $this->pattern->body;
-
-        $content = $this->reformatTags($content);
-        $content = $this->stripHtmlAttributes($content);
-
-        $telegramMessage = TelegramFile::create()
+        //todo otpravka patternov cherez bota
+        return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->content($content)
+            ->content('asdsad')
             ->options(['parse_mode' => 'HTML']);
-
-        if ($avatarUrl !== null) {
-            $telegramMessage->file($path, 'photo');
-        }else{
-            $defaultImagePath = 'images/photo.png';
-
-            if (File::exists(public_path($defaultImagePath))) {
-                $telegramMessage->file(public_path($defaultImagePath), 'photo');
-            } else {
-                throw new \Exception("Default image not found: ");
-            }
-        }
-
-        return $telegramMessage;
     }
 }

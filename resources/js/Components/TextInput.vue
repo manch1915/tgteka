@@ -24,7 +24,7 @@ defineExpose({focus: () => input.value.focus()});
         class="auth focus:border-transparent focus:ring-0 rounded-3xl"
         :value="modelValue"
         @input="$emit('update:modelValue', $event.target.value)"
-        type=""
+        type="text"
     >
 </template>
 <style scoped lang="scss">

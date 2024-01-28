@@ -34,7 +34,7 @@ class FetchChannelStatisticsJob implements ShouldQueue
 
         $baseURL = 'https://api.tgstat.ru/';
 
-        $token = '3de0a70af1d9e03800a888742cf07468'; //token
+        $token = 'e3b38be1f953b4118758d333de716a20'; //token
 
         $channel = $this->channel;
 

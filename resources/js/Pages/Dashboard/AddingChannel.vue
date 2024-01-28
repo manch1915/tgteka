@@ -168,7 +168,7 @@ watch(state.type, (newRadio) => {
                         class="w-full py-3"
                         required
                         autocomplete="title"
-                        placeholder="Иванов Иван" />
+                        placeholder="Название" />
                     <span class="text-red-500" v-if="errors.channel_name">{{ errors.channel_name[0] }}</span>
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">

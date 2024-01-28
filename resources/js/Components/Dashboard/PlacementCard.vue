@@ -28,6 +28,11 @@ const formatDateTime = (dateTime, options) => {
     return dateTime.toLocaleString('ru-RU', options);
 };
 
+let createdAt = computed(() => {
+    let date = new Date(props.order.created_at);
+    return date.toLocaleDateString('en-GB'); // 'en-GB' uses day/month/year format
+});
+
 let postDate = computed(() => props.order.post_date);
 
 const [date, time] = postDate.value.split(' ');
@@ -81,7 +86,7 @@ const openReview = () => {
                             <h1 class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">146 774</h1>
                         </div>
                         <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">14/07/2023</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ createdAt }}</p>
                             <h1 class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">#{{order.id}}</h1>
                         </div>
                         <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">

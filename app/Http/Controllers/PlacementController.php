@@ -25,27 +25,32 @@ class PlacementController extends Controller
     {
         return inertia('Dashboard/Placements');
     }
-    public function get($page = 1, $perPage = 10)
+
+    public function get(Request $request, $page = 1, $perPage = 10)
     {
-        $orders = auth()->user()->orders()->with('format', 'channel.topic', 'pattern')
+        $orders = auth()->user()->orders()
+            ->with(['format', 'channel.topic', 'pattern'])
+            ->when($request->input('status'), fn($query, $status) => $query->where('status', $status))
+            ->when($request->has('minPrice'), fn($query, $minPrice) => $query->where('price', '>=', intval($minPrice)))
+            ->when($request->has('maxPrice'), fn($query, $maxPrice) => $query->where('price', '<=', intval($maxPrice)))
+            ->when($request->has(['startDate', 'endDate']), fn($query, $minPrice) => $query->whereBetween('created_at', [
+                Carbon::parse($request->input('startDate')),
+                Carbon::parse($request->input('endDate'))->endOfDay()
+            ]))
             ->orderByDesc('created_at')
             ->paginate($perPage, ['*'], 'page', $page);
 
-        $orders->getCollection()->transform(function ($order) {
-            $order->orderPattern = $order->pattern;
+        $additionalDaysMapping = ['1/24' => 1, '2/48' => 2, '3/72' => 3];
 
-            $additionalDays = match($order->format->name) {
-                '1/24' => 1,
-                '2/48' => 2,
-                '3/72' => 3,
-                default => 1,
-            };
+        $orders->getCollection()->transform(function ($order) use ($additionalDaysMapping) {
+            $order->status = trans('messages.' . $order->status);
 
-            $post_date_end = Carbon::parse($order->post_date)->addDays($additionalDays);
-            $order->post_date_end = $post_date_end->format('Y-m-d H:i:s');
+            $additionalDays = $additionalDaysMapping[$order->format->name] ?? 1;
+            $order->post_date_end = Carbon::parse($order->post_date)->addDays($additionalDays)->format('Y-m-d H:i:s');
 
-            $order->orderPattern->patternMedia = $this->avatarService->getAvatarUrlOfPattern($order->pattern);
             $order->channel->channelAvatar = $this->avatarService->getAvatarUrlOfChannel($order->channel);
+            $order->orderPattern = $order->pattern;
+            $order->orderPattern->patternMedia = $this->avatarService->getAvatarUrlOfPattern($order->pattern);
 
             return $order;
         });

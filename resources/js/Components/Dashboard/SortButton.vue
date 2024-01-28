@@ -23,8 +23,7 @@ const setActiveButton = (title) => {
 
 <style>
 .background{
-        --tw-bg-opacity: 1;
-        background-color: rgb(46 16 101 / var(--tw-bg-opacity));
-
+    --tw-bg-opacity: 1;
+    background-color: rgb(46 16 101 / var(--tw-bg-opacity));
 }
 </style>

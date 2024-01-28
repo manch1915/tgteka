@@ -31,7 +31,7 @@ class OrderController extends Controller
 
     public function get($page = 1, $perPage = 10)
     {
-        $orders = auth()->user()->channelOrders()->with('format', 'channel.topic', 'pattern')
+        $orders = auth()->user()->channelOrders()->with('format', 'channel.topic')
             ->orderByDesc('created_at')
             ->paginate($perPage, ['*'], 'page', $page);
 
@@ -48,7 +48,18 @@ class OrderController extends Controller
             $post_date_end = Carbon::parse($order->post_date)->addDays($additionalDays);
             $order->post_date_end = $post_date_end->format('Y-m-d H:i:s');
 
-            $order->orderPattern->patternMedia = $this->avatarService->getAvatarUrlOfPattern($order->pattern);
+            $patternMedia = $order->pattern
+                ->getMedia('images')
+                ->map(function ($item) {
+                    return [
+                        'url' => $item->getFullUrl(),
+                        'order' => $item->getCustomProperty('order'),
+                        'thumbnail_path' => $item->getCustomProperty('thumbnail_path')
+                    ];
+                });
+
+
+            $order->orderPattern->patternMedia = $patternMedia->sortBy('order')->values();
             $order->channel->channelAvatar = $this->avatarService->getAvatarUrlOfChannel($order->channel);
 
             return $order;
@@ -116,7 +127,7 @@ class OrderController extends Controller
     {
         $pattern = $request->input('pattern');
         $pattern = Pattern::findOrFail($pattern['id']);
-        $patternByBot = new PatternByBotNotification($pattern, $avatarService);
+        $patternByBot = new PatternByBotNotification($pattern);
         auth()->user()->notify($patternByBot);
         return response()->json();
     }

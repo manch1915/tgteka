@@ -26,7 +26,10 @@ const props = defineProps({
             </div>
             <div class="flex flex-col">
                 <div class="py-6 border sm:rounded-tr-[30px]"><h2 class="title text-center">Статус</h2></div>
-                <div class="py-6 border sm:rounded-br-[30px] rounded-b-[30px] sm:rounded-b-[0px]"><p class="subtitle text-center">{{transaction.status}}</p></div>
+                <div class="py-6 border sm:rounded-br-[30px] rounded-b-[30px] sm:rounded-b-[0px]"> <p class="subtitle text-center text-lg"
+                                                                                                      :class="{ '!text-red-500': transaction.status === 'Неуспешный', '!text-green-500': transaction.status === 'законченный' }">
+                    {{ transaction.status }}
+                </p></div>
             </div>
         </div>
     </div>

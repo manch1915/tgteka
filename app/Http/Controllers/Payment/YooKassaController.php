@@ -56,7 +56,7 @@ class YooKassaController extends Controller
                 'user_id' => auth()->id(),
                 'transaction_id' => $response->getId(),
                 'amount' => $request->amount->getValue(),
-                'type' => 'payment'
+                'appointment' => 'replenishment'
             ]);
 
             CheckPaymentStatusJob::dispatch($payment);
@@ -70,54 +70,4 @@ class YooKassaController extends Controller
         return response()->json($response);
     }
 
-    public function createPayout(Request $request)
-    {
-        $user = auth()->user();
-
-        if($user->balance < $request->input('amount')){
-            return response()->json([
-                'message' => 'Insufficient balance',
-            ], 400);
-        }
-
-        $client = new Client();
-        $client->setAuth(config('services.yookassa.client_id'), config('services.yookassa.client_secret'));
-
-        try {
-            $payoutRequest = [
-                'amount' => [
-                    'value' => $request->input('amount'),
-                    'currency' => 'RUB',
-                ],
-                'payout_destination_data' => [
-                    'type' => 'bank_card',
-                    'card' => [
-                        'number' => $request->input('cardNumbers'),
-                    ],
-                ],
-                'description' => 'Payout of ' . $request->input('amount') .  ' RUB',
-                'metadata' => [
-                    'order_id' => '37',
-                    'transaction_id' => '789-456-123',
-                ],
-            ];
-            $idempotenceKey = uniqid('', true);
-            $response = $client->createPayout($payoutRequest, $idempotenceKey);
-
-            $payout = Transaction::create([
-                'user_id' => auth()->id(),
-                'transaction_id' => $response->getId(),
-                'amount' => -$request->input('amount'),
-                'type' => 'payout'
-            ]);
-
-            CheckPayoutStatusJob::dispatch($payout);
-
-            return response()->json(['Payout ID' => $response->getId(), 'Payout Status' => $response->getStatus()]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error in payout creation: ' . $e->getMessage(),
-            ], 500);
-        }
-    }
 }

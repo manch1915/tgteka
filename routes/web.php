@@ -159,11 +159,14 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
 
         Route::get('topics', fn () => inertia('Admin/TopicsView'))->name('topics');
 
+        Route::get('settings', fn () => inertia('Admin/SettingsView'))->name('settings');
+
         Route::prefix('api')->name('api.')->group(function () {
             Route::apiResource('channels', ChannelController::class);
             Route::apiResource('support', App\Http\Controllers\Admin\SupportController::class);
             Route::apiResource('users', App\Http\Controllers\Admin\UserController::class);
             Route::apiResource('callbacks', App\Http\Controllers\Admin\CallbackController::class);
+            Route::apiResource('settings', App\Http\Controllers\Admin\SettingController::class);
         });
     });
 });

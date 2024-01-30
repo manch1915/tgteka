@@ -13,6 +13,7 @@ class CreateChannelsTable extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('url')->unique();
             $table->string('channel_name', 64);
+            $table->string('slug')->unique();
             $table->foreignId('topic_id')->constrained();
             $table->enum('type', ['chat', 'channel']);
             $table->string('language');

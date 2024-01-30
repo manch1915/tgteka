@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends Model
 {
-    protected $fillable = ['id', 'type', 'user_id', 'amount', 'status', 'payment_method', 'details', 'transaction_id'];
+    protected $fillable = ['id', 'service', 'appointment', 'user_id', 'amount', 'status', 'payment_method', 'details', 'transaction_id'];
 
     public function user(): BelongsTo
     {

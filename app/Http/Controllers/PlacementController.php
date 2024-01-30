@@ -33,7 +33,7 @@ class PlacementController extends Controller
             ->when($request->input('status'), fn($query, $status) => $query->where('status', $status))
             ->when($request->has('minPrice'), fn($query, $minPrice) => $query->where('price', '>=', intval($minPrice)))
             ->when($request->has('maxPrice'), fn($query, $maxPrice) => $query->where('price', '<=', intval($maxPrice)))
-            ->when($request->has(['startDate', 'endDate']), fn($query, $minPrice) => $query->whereBetween('created_at', [
+            ->when($request->has(['startDate', 'endDate']), fn($query) => $query->whereBetween('created_at', [
                 Carbon::parse($request->input('startDate')),
                 Carbon::parse($request->input('endDate'))->endOfDay()
             ]))

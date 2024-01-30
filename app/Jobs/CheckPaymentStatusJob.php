@@ -28,7 +28,7 @@ class CheckPaymentStatusJob implements ShouldQueue
     protected Transaction $transaction;
     protected Client $client;
 
-    public $tries = 5;
+    public int $tries = 5;
 
     public function __construct(Transaction $transaction)
     {

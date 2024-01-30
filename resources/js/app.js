@@ -43,7 +43,9 @@ createInertiaApp({
                         default: () =>
                             h(
                                 NMessageProvider,
-                                {},
+                                {
+                                    duration: 6000
+                                },
                                 {
                                     default: () =>
                                         h(App, props)

@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
 
             $table->string('description', 300)->nullable();
-            $table->integer('count');
             $table->bigInteger('price');
             $table->enum('status', ['pending', 'accepted', 'declined', 'check', 'finished'])->default('pending');
             $table->timestamp('post_date')->nullable();

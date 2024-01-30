@@ -2,8 +2,8 @@
 import AppLayout from '@/Layouts/AppLayout.vue'
 import CatalogChannelCard from "@/Components/Dashboard/CatalogChannelCard.vue";
 import {computed, onMounted, ref} from "vue";
-import {NInput, NSelect, NTable, useMessage, useLoadingBar} from "naive-ui";
-import {inputThemeOverrides, selectThemeOverrides, tableThemeOverrides} from "@/themeOverrides.js";
+import {NInput, NSelect, useMessage, useLoadingBar} from "naive-ui";
+import {inputThemeOverrides, selectThemeOverrides} from "@/themeOverrides.js";
 import axios from "axios";
 import {useMainStore} from "@/stores/main.js";
 import {router} from "@inertiajs/vue3";
@@ -98,7 +98,7 @@ onMounted(() => {
                 <div class="channels">
                     <div class="flex flex-col gap-y-4 mb-8">
                         <template v-if="channels" v-for="channel in channels" :key="channel.id">
-                            <CatalogChannelCard @cart-updated="updateChannels" is-cart  :channel="channel" :count-value="channel.count" :format-value="channel.format" :timestamp="channel.timestamp"/>
+                            <CatalogChannelCard @cart-updated="updateChannels" is-cart  :channel="channel" :format-value="channel.format" :timestamp="channel.timestamp"/>
                         </template>
                     </div>
                 </div>

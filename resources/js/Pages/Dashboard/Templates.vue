@@ -4,11 +4,12 @@ import {Link, router} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import axios from "axios";
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
-
+import {useMessage} from "naive-ui";
 
 const isContextMenuOpen = ref(false);
 const contextMenuId = ref(null);
 const patterns = ref([])
+const message = useMessage()
 
 const handleOutsideClick = (event) => {
     if (!event.target.matches(".context, .context *")) {
@@ -39,10 +40,16 @@ const duplicatePattern = async (patternIdToDuplicate) => {
 };
 
 const deletePattern = async (patternIdToDelete) => {
-    await axios.delete(`/pattern/${patternIdToDelete}`);
-    const indexToDelete = patterns.value.data.findIndex((pattern) => pattern.id === patternIdToDelete);
-    if (indexToDelete !== -1) {
-        patterns.value.data.splice(indexToDelete, 1);
+    try {
+        await axios.delete(`/pattern/${patternIdToDelete}`);
+        const indexToDelete = patterns.value.data.findIndex((pattern) => pattern.id === patternIdToDelete);
+        if (indexToDelete !== -1) {
+            patterns.value.data.splice(indexToDelete, 1);
+        }
+    } catch (error) {
+        if (error.response && error.response.status === 409) {
+            message.error(error.response.data.message);
+        }
     }
 };
 

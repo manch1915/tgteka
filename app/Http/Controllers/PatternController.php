@@ -8,6 +8,7 @@ use App\Models\Pattern;
 use App\Models\User;
 use App\Services\AvatarService;
 use App\Services\MediaItemService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -157,8 +158,14 @@ class PatternController extends Controller
 
     public function destroy(Pattern $pattern): JsonResponse
     {
-        $pattern->delete();
+        if ($pattern->orders()->exists()){
+            return response()->json([
+                'success' => false,
+                'message' => 'Вы не можете удалить этот шаблон, поскольку на него ссылается заказ.',
+            ], 409);
+        }
 
+        $pattern->delete();
         return response()->json(null, 204);
     }
 }

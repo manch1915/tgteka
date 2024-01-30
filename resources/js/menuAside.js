@@ -51,6 +51,11 @@ menu: [
     label: "Тематики",
     route: 'admin.topics',
   },
+{
+    label: "Настройки",
+    icon: mdiCog,
+    route: 'admin.settings',
+}
 ],
 },
 ];

@@ -4,6 +4,8 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import {NCheckbox, NInput, NTabPane, NTabs} from "naive-ui";
 import {checkboxThemeOverrides, inputThemeOverrides, nTabSegmentsThemeOverrides} from "@/themeOverrides.js";
 import { reactive, ref } from "vue";
+import { Link } from "@inertiajs/vue3"
+
 const activeButton = ref('self-employed');
 
 const activeTab = ref('bank-card')
@@ -49,9 +51,11 @@ const createPaymentRequest = () => {
                                 <h2 class=" text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Не могу быть самозанятым по личным причинам, что делать?</h2>
                                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Если у Телеграм-канала несколько владельцев или менеджеров, cамозанятость может быть оформлена на любого из них. Такой способ ничем не отличается от вывода на карту одному физическому лицу.</p>
                             </div>
-                            <div class="flex py-4 gap-x-2.5">
-                                <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
-                                <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
+                            <div>
+                                <Link :href="route('transactions', {appointment: 'payout'})" class="h-full flex py-4 gap-x-2.5">
+                                    <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
+                                    <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
+                                </Link>
                             </div>
                             <div>
                                 <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Вывод на банковскую карту для самозанятых</h1>

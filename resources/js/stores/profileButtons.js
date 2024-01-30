@@ -18,7 +18,8 @@ export const useProfileButtons = defineStore('profileButtons', {
         setActiveButton(buttonName){
             this.activeButton = buttonName
         },
-        setActiveButtonByUrl(url) { // Add this
+        setActiveButtonByUrl(url) {
+            url = url.split('?')[0];
             for (const buttonName in this.routes) {
                 if (this.routes[buttonName] === url) {
                     this.activeButton = buttonName

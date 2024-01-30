@@ -1,7 +1,6 @@
 <script setup>
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
-import axios from "axios";
-import {inject, ref, watch} from "vue";
+import {watch} from "vue";
 import {NSkeleton, useLoadingBar} from "naive-ui"
 import CatalogChannelCard from "@/Components/Dashboard/CatalogChannelCard.vue";
 import { useChannelStore } from "@/stores/channelStore.js";

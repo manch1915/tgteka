@@ -32,6 +32,7 @@ const submit = () => {
                     class="mt-1 block w-full"
                     required
                     autocomplete="username"
+                    placeholder="Имя пользователя"
                 />
                 <InputError class="mt-2" :message="form.errors.username" />
             </div>
@@ -44,6 +45,7 @@ const submit = () => {
                     class="mt-1 block w-full"
                     required
                     autocomplete="current-password"
+                    placeholder="Пароль"
                 />
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>

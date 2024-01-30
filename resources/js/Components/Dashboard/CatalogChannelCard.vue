@@ -4,16 +4,12 @@ import { datePickerThemeOverrides, selectCatalogThemeOverrides } from "@/themeOv
 import {computed, onMounted, ref, watch} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartRemove} from "@mdi/js";
-import {Link, router} from "@inertiajs/vue3";
+import {Link} from "@inertiajs/vue3";
 import { saveCart, loadCart, isInCart as checkInCart, generateFormatArray } from "@/utilities/cartUtilities.js";
 import { useCartStore } from "@/stores/CartStore.js";
 
 const props = defineProps({
     channel: Object,
-    countValue: {
-        default: 1,
-        required: false,
-    },
     formatValue: {
         required: false,
     },
@@ -32,7 +28,6 @@ const props = defineProps({
     }
 });
 
-const countValue = ref(props.countValue);
 const cartUpdateKey = ref(0);
 const fav = computed(() => props.channel.isFav);
 const wrap = ref(false);
@@ -53,10 +48,10 @@ const toggleChannelInCart = (channel) => {
     const cart = loadCart();
     const index = cart.findIndex((ch) => ch.id === channel.id);
 
-    if (index > -1 && formatValue.value === cart[index].format && countValue.value === cart[index].count) {
+    if (index > -1 && formatValue.value === cart[index].format) {
         removeCart(cart, index, channel);
     } else {
-        updateCart(cart, channel, countValue.value, formatValue.value, timestamp.value);
+        updateCart(cart, channel, formatValue.value, timestamp.value);
     }
 
     cartStore.cartUpdate++;
@@ -73,8 +68,7 @@ const count = [
 
 const totalPrice = computed(() => {
     const selectedFormat = format.value.find((item) => item.value === formatValue.value);
-    const pricePerUnit = selectedFormat ? props.channel[selectedFormat.value] : 0;
-    return pricePerUnit * countValue.value;
+    return selectedFormat ? props.channel[selectedFormat.value] : 0;
 });
 
 const isInCart = (channel) => {
@@ -99,14 +93,14 @@ const addChannelToFavorites = async (channel) => {
     }
 };
 
-const updateCart = (cart, channel, count, format, time) => {
+const updateCart = (cart, channel, format, time) => {
     const channelIndex = cart.findIndex((ch) => ch.id === channel.id);
 
     if (channelIndex > -1) {
-        cart[channelIndex] = Object.assign({}, channel, { count: count, format: format, timestamp: time });
+        cart[channelIndex] = Object.assign({}, channel, { format: format, timestamp: time });
         message.info(`Канал ${channel.channel_name} было обновлено в корзине.`);
     } else {
-        const channelData = Object.assign({}, channel, { count: count, format: format, timestamp: time });
+        const channelData = Object.assign({}, channel, { format: format, timestamp: time });
         cart.push(channelData);
         message.info(`Канал ${channel.channel_name} был добавлен в корзину.`);
     }
@@ -115,17 +109,11 @@ const updateCart = (cart, channel, count, format, time) => {
     emit("cartUpdated", cart);
 };
 
-watch(countValue, (newValue) => {
-    let cart = loadCart();
-    if (isInCart(props.channel)) {
-        updateCart(cart, props.channel, newValue, formatValue.value, timestamp.value)
-    }
-});
 
 watch(formatValue, (newValue) => {
     let cart = loadCart();
     if (isInCart(props.channel)) {
-        updateCart(cart, props.channel, countValue.value, newValue, timestamp.value)
+        updateCart(cart, props.channel, newValue, timestamp.value)
     }
 });
 const timestamp = ref(props.timestamp);
@@ -133,7 +121,7 @@ const timestamp = ref(props.timestamp);
 watch(timestamp, (newValue) => {
     let cart = loadCart();
     if (isInCart(props.channel)) {
-        updateCart(cart, props.channel, countValue.value, formatValue.value, newValue)
+        updateCart(cart, props.channel, formatValue.value, newValue)
     }
 });
 
@@ -173,7 +161,7 @@ onMounted(() => {
 <template>
     <div class="channel_card">
         <div class="channel_card-container cursor-pointer">
-            <Link :href="route('catalog.channels.show', channel.id )" class="block h-full">
+            <Link :href="route('catalog.channels.show', channel.slug )" class="block h-full">
             <div class="flex flex-wrap items-center">
                 <div class="flex sm:w-1/2 w-full">
                     <div class="flex flex-col items-center justify-center gap-y-3 grid-element">
@@ -217,10 +205,6 @@ onMounted(() => {
                     <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Формат</p>
                     <n-select v-model:value="formatValue" @update-value="emit('cartChanged');" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="format"/>
                 </div>
-                <div class="flex  flex-col items-start gap-y-1">
-                    <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Количество</p>
-                    <n-select v-model:value="countValue" @update-value="emit('cartChanged');" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="count"/>
-                </div>
                 <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">{{ totalPrice }} ₽</h1>
             </div>
             <div v-show="isCart">
@@ -229,7 +213,7 @@ onMounted(() => {
                 </n-config-provider>
             </div>
             <div class="flex items-center justify-between text-violet-100 gap-x-2.5">
-                <Link :href="route('catalog.channels.show', channel.id )" class="text-violet-100 text-xs font-normal font-['Open Sans'] underline leading-none">Подробнее о канале</Link>
+                <Link :href="route('catalog.channels.show', channel.slug )" class="text-violet-100 text-xs font-normal font-['Open Sans'] underline leading-none">Подробнее о канале</Link>
                 <div class="pl-2 cursor-pointer" @click="addChannelToFavorites(channel)">
                     <BaseIcon size="25" :path="fav ? mdiHeart : mdiHeartOutline"/>
                 </div>

@@ -81,8 +81,7 @@ class OrderService
     private function calculateChannelSum(array $channel): float|int
     {
         Channel::findOrFail($channel['id']);
-        $formatPrice = $channel[$channel['format']];
-        return $formatPrice * $channel['count'];
+        return $channel[$channel['format']];
     }
 
     /**
@@ -106,7 +105,6 @@ class OrderService
                 'post_date_end' => $postDateEnd,
                 'channel_id' => $channel['id'],
                 'format_id' => $formatDetails['id'],
-                'count' => $channel['count'],
                 'price' => $price,
             ]);
         }

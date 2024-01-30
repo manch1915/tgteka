@@ -9,7 +9,8 @@ return new class extends Migration {
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['payment', 'payout']);
+            $table->string('appointment', 26);
+            $table->string('service', 26)->nullable();
             $table->decimal('amount', 10 ,2);
             $table->string('transaction_id');
             $table->enum('status', ['pending', 'succeeded', 'failed'])->default('pending');

@@ -66,9 +66,12 @@ class MediaItemService
 
             if ($type == 'video/mp4' || $type == 'video/quicktime') {
                 // Generate Video Thumbnail
+                $ffmpegPath = getenv('FFMPEG_PATH') ?: '/usr/bin/ffmpeg';
+                $ffprobePath = getenv('FFPROBE_PATH') ?: '/usr/bin/ffprobe';
+
                 $ffmpeg = FFMpeg::create([
-                    'ffmpeg.binaries'  => 'C:\ffmpeg\bin\ffmpeg.exe',
-                    'ffprobe.binaries' => 'C:\ffmpeg\bin\ffprobe.exe'
+                    'ffmpeg.binaries'  => $ffmpegPath,
+                    'ffprobe.binaries' => $ffprobePath
                 ]);
 
                 $video = $ffmpeg->open($mediaItem->getPath());

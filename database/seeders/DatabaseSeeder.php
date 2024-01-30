@@ -16,7 +16,9 @@ class DatabaseSeeder extends Seeder
             RoleAndPermissionSeeder::class,
             UserSeeder::class,
             TopicSeeder::class,
-            FormatSeeder::class
+            FormatSeeder::class,
+            SettingSeeder::class,
+            ChannelSeeder::class
         ]);
     }
 }

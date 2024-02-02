@@ -5,8 +5,10 @@ import {computed, reactive, ref} from "vue";
 import { vMaska } from "maska"
 import {router, usePage} from "@inertiajs/vue3";
 import axios from "axios";
-import {NInput, NSelect, useLoadingBar} from "naive-ui";
-import {inputThemeOverrides, selectThemeOverrides} from "@/themeOverrides.js";
+import {NInput, useLoadingBar} from "naive-ui";
+import {inputThemeOverrides} from "@/themeOverrides.js";
+import twoFactorAuthenticationModal from "@/Components/Auth/twoFactorAuthenticationModal.vue"
+import {pushModal} from "jenesius-vue-modal";
 
 const props = defineProps({
     created_at: String,
@@ -38,6 +40,10 @@ const languages = [
         value: 'english',
     },
 ];
+
+const twoFactorAuthentication = () => {
+ pushModal(twoFactorAuthenticationModal)
+}
 
 const submit = async () => {
     loading.start()
@@ -92,6 +98,12 @@ const logout = () => {
                 @click.prevent="submit"
                 class="mt-6 px-6 py-4 bg-purple-600 transition hover:bg-purple-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                 Сохранить данные
+            </button>
+            <br>
+            <button
+                @click.prevent="twoFactorAuthentication"
+                class="mt-6 px-6 py-4 bg-green-600 transition hover:bg-green-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                Включить двухэтапную аутентификацию
             </button>
             <br>
             <button

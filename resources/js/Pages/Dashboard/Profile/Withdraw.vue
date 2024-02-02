@@ -3,8 +3,10 @@ import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import {NCheckbox, NInput, NTabPane, NTabs} from "naive-ui";
 import {checkboxThemeOverrides, inputThemeOverrides, nTabSegmentsThemeOverrides} from "@/themeOverrides.js";
-import { reactive, ref } from "vue";
+import {reactive, ref, watch} from "vue";
 import { Link } from "@inertiajs/vue3"
+import {vMaska} from "maska"
+import { validateCardNumber, luhnCheck, checkCreditCard } from "@/utilities/cardValidator.js";
 
 const activeButton = ref('self-employed');
 
@@ -17,12 +19,18 @@ const bankCard = reactive({
     amount: null,
 })
 
+const bankCardError = ref('')
+
 const createPaymentRequest = () => {
     axios.post(route('create-payout-request'), bankCard)
         .then(r => {
             console.log(r);
         });
 }
+
+watch(() => bankCard.cardNumbers, () => {
+    bankCardError.value = checkCreditCard(bankCard.cardNumbers).message
+})
 
 </script>
 
@@ -119,22 +127,19 @@ const createPaymentRequest = () => {
                                             <p class="text-violet-100 text-lg font-normal font-['Open Sans']">Банковская карта</p>
                                         </div>
                                     </div>
-                                    <div @click.prevent="activeTab = 'yookassa'" class="payment_types-card-wrapper">
-                                        <div class="flex h-full flex-col items-center justify-evenly payment_types-card">
-                                            <img src="/images/yookassa.png" alt="yookassa">
-                                            <p class="text-violet-100 text-lg font-normal font-['Open Sans']">Yookassa</p>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div v-show="activeTab === 'bank-card'" class="mt-5 bank-card sm:w-3/4">
-                                <div class="flex py-4 gap-x-2.5">
-                                    <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
-                                    <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
+                                <div>
+                                    <Link :href="route('transactions', {appointment: 'payout'})" class="h-full flex py-4 gap-x-2.5">
+                                        <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
+                                        <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
+                                    </Link>
                                 </div>
                                 <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Вывод на банковскую карту</h1>
                                 <div class="py-8">
-                                    <n-input class="py-1.5 my-1 sm:!w-3/4" v-model:value="bankCard.cardNumbers" placeholder="420XXXXXXXXХХ000" :theme-overrides="inputThemeOverrides"/>
+                                    <n-input v-maska :input-props="{'data-maska': '#### #### #### ####',}" class="py-1.5 my-1 sm:!w-3/4" v-model:value="bankCard.cardNumbers" placeholder="420X XXXX XXXХ Х000" :theme-overrides="inputThemeOverrides"/>
+                                    <p class="text-red-700">{{ bankCardError }}</p>
                                     <n-input class="py-1.5 my-1 sm:!w-3/4" v-model:value="bankCard.amount" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
                                 </div>
                                 <div class="my-4">
@@ -150,29 +155,6 @@ const createPaymentRequest = () => {
                                 <button @click.prevent="createPaymentRequest" class="sm:w-3/4 w-full my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
                                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">При необходимости вы можете создать несколько заявок или выбрать альтернативный <br/>способ вывода средств.</p>
                             </div>
-                            <div v-show="activeTab === 'yookassa'" class="mt-5 wallets sm:w-3/4">
-                                <div class="flex py-4 gap-x-2.5">
-                                    <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
-                                    <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
-                                </div>
-                                <h1 class="text-violet-100 sm:text-3xl sm:text-left text-center text-xl font-bold font-['Open Sans'] leading-10">Вывод на Yookassa</h1>
-                                <div class="py-8">
-                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="420XXXXXXXXХХ000" :theme-overrides="inputThemeOverrides"/>
-                                    <n-input class="py-1.5 my-1 sm:!w-3/4" placeholder="Сумма, рублей" :theme-overrides="inputThemeOverrides"/>
-                                </div>
-                                <div class="my-4">
-                                    <div class="flex items-center gap-x-2.5">
-                                        <img src="/images/database-import.svg" alt="">
-                                        <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Выведено за текущий месяц: 0₽</p>
-                                    </div>
-                                    <div class="flex items-center gap-x-2.5">
-                                        <img src="/images/information-white.svg" alt="">
-                                        <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">Максимальная сумма одной заявки на вывод составляет 35000 р.</p>
-                                    </div>
-                                </div>
-                                <button class="sm:w-3/4 w-full my-4 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Вывести</button>
-                                <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">При необходимости вы можете создать несколько заявок или выбрать альтернативный <br/>способ вывода средств.</p>
-                            </div>
                         </div>
                     </n-tab-pane>
                     <n-tab-pane name="org">
@@ -185,9 +167,11 @@ const createPaymentRequest = () => {
                                 <div class="text-violet-100 py-2 text-base font-normal font-['Open Sans'] leading-tight">Оставьте заявку на вывод средств в данном разделе, заполнив все поля с реквизитами.</div>
                                 <div class="text-violet-100 py-6 text-base font-normal font-['Open Sans'] leading-tight">В ближайший день вывода для вас будет подготовлен комплект документов необходимых в соответствии <br/>с процедурой оформления, предусмотренной на платформе (такими документами в зависимости от типа налогообложения и основания выплаты могут являться - Договор, Соглашение, Отчет, Акт, Счет). Передача документов происходит посредством нашего специального бота, в который вы предварительно получите приглашение.</div>
                                 <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Выплата средств осуществляется после получения от вас комплекта подписанных документов, оригиналы которых необходимо отправить в срок не позднее 30 дней после каждой выплаты средств.</div>
-                                <div class="flex py-4 gap-x-2.5">
-                                    <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
-                                    <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
+                                <div>
+                                    <Link :href="route('transactions', {appointment: 'payout'})" class="h-full flex py-4 gap-x-2.5">
+                                        <img class="w-6" src="/images/calendar-bold.svg" alt="calendar">
+                                        <p class="text-purple-600 text-lg font-bold font-['Open Sans']">График выводов</p>
+                                    </Link>
                                 </div>
                             </div>
                             <div class="mt-12">

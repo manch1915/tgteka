@@ -14,7 +14,6 @@ use App\Http\Controllers\Profile\NotificationsHistoryController;
 use App\Http\Controllers\Profile\NotificationsSettingController;
 use App\Http\Controllers\Profile\PersonalDataController;
 use App\Http\Controllers\Profile\ReplenishmentController;
-use App\Http\Controllers\Profile\TotalBalanceController;
 use App\Http\Controllers\Profile\TransactionsHistoryController;
 use App\Http\Controllers\Profile\WithdrawController;
 use App\Http\Controllers\SuggestedDateController;
@@ -28,8 +27,6 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get('/', fn () => Inertia::render('Customers'))->name('customers');
     Route::get('/owners', fn () => Inertia::render('Owners'))->name('owners');
 
-    Route::post('/register', [RegisterController::class, 'store'])->name('register');
-    Route::post('/login', [LoginController::class, 'login'])->name('login');
     Route::post('/forgot-password', [LoginController::class, 'forgot'])->name('password.forgot');
     Route::get('/reset-password/{token}', function (string $token) {
         return inertia('PasswordRecover', ['token' => $token]);
@@ -57,8 +54,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    Route::post('create-payment-request', [\App\Http\Controllers\Payment\YooKassaController::class, 'createPayment'])->name('create-payment-request');
-    Route::post('create-payout-request', [\App\Http\Controllers\Payment\YooKassaController::class, 'createPayout'])->name('create-payout-request');
+    Route::post('create-payment-request', [\App\Http\Controllers\Payment\FinanceController::class, 'createYooKassaPayment'])->name('create-payment-request');
+    Route::post('create-payout-request', [\App\Http\Controllers\Payment\FinanceController::class, 'createPayout'])->name('create-payout-request');
+
+    Route::get('/confirm/{token}', [\App\Http\Controllers\Payment\FinanceController::class, 'confirmPayout'])->name('confirm-payout');
 
     Route::prefix('catalog')->name('catalog.')->group(function () {
         Route::resource('channels', \App\Http\Controllers\ChannelController::class);
@@ -161,12 +160,15 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
 
         Route::get('settings', fn () => inertia('Admin/SettingsView'))->name('settings');
 
+        Route::get('payouts', fn () => inertia('Admin/PayoutsView'))->name('payouts');
+
         Route::prefix('api')->name('api.')->group(function () {
             Route::apiResource('channels', ChannelController::class);
             Route::apiResource('support', App\Http\Controllers\Admin\SupportController::class);
             Route::apiResource('users', App\Http\Controllers\Admin\UserController::class);
             Route::apiResource('callbacks', App\Http\Controllers\Admin\CallbackController::class);
             Route::apiResource('settings', App\Http\Controllers\Admin\SettingController::class);
+            Route::apiResource('payouts', App\Http\Controllers\Admin\PayoutController::class);
         });
     });
 });
@@ -174,3 +176,4 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
 Route::prefix('admin/api')->name('admin.api.')->group(function () {
     Route::apiResource('topics', TopicController::class);
 });
+

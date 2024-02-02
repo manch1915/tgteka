@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Payment;
+namespace App\Services;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\CheckPaymentStatusJob;
-use App\Jobs\CheckPayoutStatusJob;
 use App\Models\Transaction;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use YooKassa\Client;
 
-class YooKassaController extends Controller
+class YooKassaService extends Controller
 {
-    public function createPayment(Request $request)
+    public function createPayment(Request $request): JsonResponse
     {
         $client = new Client();
         $client->setAuth(config('services.yookassa.client_id'), config('services.yookassa.client_secret'));

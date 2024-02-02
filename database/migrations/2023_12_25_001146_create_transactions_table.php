@@ -11,9 +11,9 @@ return new class extends Migration {
             $table->id();
             $table->string('appointment', 26);
             $table->string('service', 26)->nullable();
-            $table->decimal('amount', 10 ,2);
+            $table->decimal('amount', 10);
             $table->string('transaction_id');
-            $table->enum('status', ['pending', 'succeeded', 'failed'])->default('pending');
+            $table->enum('status', ['pending', 'succeeded', 'failed', 'in_progress', 'completed', 'rejected', 'created', 'under_review'])->default('pending');
             $table->string('payment_method')->nullable();
             $table->text('details')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();

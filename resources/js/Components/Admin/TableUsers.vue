@@ -117,7 +117,7 @@ const checked = (isChecked, client) => {
             </tr>
             <tr>
                 <td>Имя</td>
-                <td>{{userToShow.name}}</td>
+                <td>{{userToShow.username}}</td>
             </tr>
             <tr>
                 <td>Email</td>
@@ -215,7 +215,7 @@ const checked = (isChecked, client) => {
                 />
             </td>
             <td data-label="Имя">
-                {{ user.name }}
+                {{ user.username }}
             </td>
             <td data-label="Email">
                 {{ user.email }}

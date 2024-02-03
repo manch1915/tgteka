@@ -1,24 +1,19 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue'
 import SortButton from '@/Components/Dashboard/SortButton.vue'
-import { closeModal } from 'jenesius-vue-modal'
+import {closeModal} from 'jenesius-vue-modal'
 import SearchBar from '@/Components/Dashboard/SearchBar.vue'
-import {
-    NCheckbox,
-    NInput,
-    NSelect,
-    NSlider
-} from 'naive-ui'
+import {NCheckbox, NInput, NSelect, NSlider, NSpace} from 'naive-ui'
 import {
     checkboxThemeOverrides,
     inputThemeOverrides,
     selectThemeOverrides,
     sliderThemeOverrides
 } from '@/themeOverrides.js'
-import { ref, provide, computed } from 'vue'
+import {computed, ref} from 'vue'
 import CatalogChannels from '@/Components/Dashboard/CatalogChannels.vue'
-import { useMainStore } from '@/stores/main.js'
-import { useChannelStore } from "@/stores/channelStore.js";
+import {useMainStore} from '@/stores/main.js'
+import {useChannelStore} from "@/stores/channelStore.js";
 
 const SORT_DATA = ['Рейтинг', 'ER', 'Просмотры', 'Подписчики', 'Цена', 'CPМ']
 
@@ -54,6 +49,18 @@ const searchHandler = (value) => {
     }, 500)
 }
 
+const applyFilters = async () =>{
+    await channelStore.fetchChannels(1, channelStore.additionalFilter)
+}
+
+const allowOnlyNumbers = (value) => {
+    return value === '' || /^[0-9]+$/.test(value);
+};
+
+const clearFilters = async () => {
+    channelStore.resetFilters();
+    await channelStore.fetchChannels(1, channelStore.additionalFilter);
+}
 </script>
 
 <template>
@@ -99,29 +106,142 @@ const searchHandler = (value) => {
                         <h2 class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Женская аудитория</h2>
                         <n-slider :theme-overrides="sliderThemeOverrides" :max="90" :format-tooltip="formatTooltipPercent" :show-tooltip="additionalFilter"/>
                     </div>
-                    <div class="py-2">
-                        <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Подписчиков</h2>
-                        <n-input
-                            pair
-                            separator="-"
-                            :placeholder="placeholder"
-                            clearable
-                            :theme-overrides="inputThemeOverrides"
-                        />
+                    <div class="flex justify-between flex-wrap">
+                    <button
+                        :class="{ 'background': channelStore.additionalFilter.peerType === 'channel' }"
+                        class="transition px-5 py-3 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans']"
+                        @click="channelStore.additionalFilter.peerType = 'channel'">Channel</button>
+                    <button
+                        :class="{ 'background': channelStore.additionalFilter.peerType === 'chat' }"
+                        class="transition px-5 py-3 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans']"
+                        @click="channelStore.additionalFilter.peerType = 'chat'">Chat</button>
                     </div>
-                    <div class="py-2">
-                        <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Средний охват поста (24 часа)</h2>
-                        <n-input
-                            pair
-                            separator="-"
-                            :placeholder="placeholder"
-                            clearable
-                            :theme-overrides="inputThemeOverrides"
-                        />
-                    </div>
-                    <button class="my-6 px-6 py-2 w-full bg-purple-600 transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Искать</button>
+                    <n-space vertical size="large" class="mt-6">
+                        <div>
+                            <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Подписчиков</h2>
+                            <n-input
+                                pair
+                                separator="-"
+                                :placeholder="placeholder"
+                                clearable
+                                :theme-overrides="inputThemeOverrides"
+                                :allow-input="allowOnlyNumbers"
+                                v-model:value="channelStore.additionalFilter.participants_count"
+                            />
+                        </div>
+                        <div>
+                            <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Средний охват поста (24 часа)</h2>
+                            <n-input
+                                pair
+                                separator="-"
+                                :placeholder="placeholder"
+                                clearable
+                                :theme-overrides="inputThemeOverrides"
+                                :allow-input="allowOnlyNumbers"
+                                v-model:value="channelStore.additionalFilter.adv_post_reach_24h"
+                            />
+                        </div>
+                        <div>
+                            <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Процент вовлеченности подписчиков (ERR %)</h2>
+                            <n-input
+                                pair
+                                separator="-"
+                                :placeholder="placeholder"
+                                clearable
+                                :theme-overrides="inputThemeOverrides"
+                                :allow-input="allowOnlyNumbers"
+                                v-model:value="channelStore.additionalFilter.err_percent"
+                            />
+                        </div>
+                        <div>
+                            <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Коэффициент вовлеченности подписчиков во взаимодействия с постом (реакция, пересылка, комментарий) </h2>
+                            <n-input
+                                pair
+                                separator="-"
+                                :placeholder="placeholder"
+                                clearable
+                                :theme-overrides="inputThemeOverrides"
+                                :allow-input="allowOnlyNumbers"
+                                v-model:value="channelStore.additionalFilter.er_percent"
+                            />
+                        </div>
+                        <div>
+                            <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Cуммарный дневной охват</h2>
+                            <n-input
+                                pair
+                                separator="-"
+                                :placeholder="placeholder"
+                                clearable
+                                :theme-overrides="inputThemeOverrides"
+                                :allow-input="allowOnlyNumbers"
+                                v-model:value="channelStore.additionalFilter.daily_reach"
+                            />
+                        </div>
+                        <div>
+                            <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Индекс цитирования (ИЦ)</h2>
+                            <n-input
+                                pair
+                                separator="-"
+                                :placeholder="placeholder"
+                                clearable
+                                :theme-overrides="inputThemeOverrides"
+                                :allow-input="allowOnlyNumbers"
+                                v-model:value="channelStore.additionalFilter.ci_index"
+                            />
+                        </div>
+                        <div>
+                            <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Количество упоминаний канала в других каналах</h2>
+                            <n-input
+                                pair
+                                separator="-"
+                                :placeholder="placeholder"
+                                clearable
+                                :theme-overrides="inputThemeOverrides"
+                                :allow-input="allowOnlyNumbers"
+                                v-model:value="channelStore.additionalFilter.mentions_count"
+                            />
+                        </div>
+                        <div>
+                            <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Количество репостов в другие каналы</h2>
+                            <n-input
+                                pair
+                                separator="-"
+                                :placeholder="placeholder"
+                                clearable
+                                :theme-overrides="inputThemeOverrides"
+                                :allow-input="allowOnlyNumbers"
+                                v-model:value="channelStore.additionalFilter.forwards_count"
+                            />
+                        </div>
+                        <div>
+                            <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Количество каналов, упоминающих данный канал</h2>
+                            <n-input
+                                pair
+                                separator="-"
+                                :placeholder="placeholder"
+                                clearable
+                                :theme-overrides="inputThemeOverrides"
+                                :allow-input="allowOnlyNumbers"
+                                v-model:value="channelStore.additionalFilter.mentioning_channels_count"
+                            />
+                        </div>
+                        <div>
+                            <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Общее количество неудаленных публикаций в канале</h2>
+                            <n-input
+                                pair
+                                separator="-"
+                                :placeholder="placeholder"
+                                clearable
+                                :theme-overrides="inputThemeOverrides"
+                                :allow-input="allowOnlyNumbers"
+                                v-model:value="channelStore.additionalFilter.posts_count"
+                            />
+                        </div>
+                    </n-space>
+
+                    <button @click.prevent="applyFilters" class="my-6 px-6 py-2 w-full bg-purple-600 transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Искать</button>
                     <div class="flex justify-center">
-                        <button class="text-violet-100 text-xs font-normal font-['Open Sans'] underline leading-none">Очистить форму</button>
+                        <button @click.prevent="clearFilters" class="text-violet-100 text-xs font-normal font-['Open Sans'] underline leading-none">Очистить форму</button>
                     </div>
                 </div>
                 </transition>

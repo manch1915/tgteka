@@ -50,8 +50,6 @@ class FetchChannelStatisticsJob implements ShouldQueue
                 ]
             ]);
 
-            Log::info($generalStatistics->error);
-
             $this->release(60 * 20);
 
             return;
@@ -64,10 +62,10 @@ class FetchChannelStatisticsJob implements ShouldQueue
         ChannelStatistic::updateOrCreate(
             ['channel_id' => $channel->id],
             [
-                'stats' => json_encode($generalStatistics),
-                'subscribers' => json_encode($subscribers),
-                'avg_posts_reach' => json_encode($avg_posts_reach),
-                'er' => json_encode($er)
+                'stats' => json_encode($generalStatistics->response),
+                'subscribers' => json_encode($subscribers->response ?? []),
+                'avg_posts_reach' => json_encode($avg_posts_reach->response ?? []),
+                'er' => json_encode($er->response ?? [])
             ]
         );
 

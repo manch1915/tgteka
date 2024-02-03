@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Payment;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use App\Notifications\PayoutConfirmNotification;
+use App\Notifications\PayoutCreatedNotification;
 use App\Services\YooKassaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -54,13 +55,13 @@ class FinanceController extends Controller
 
     public function confirmPayout($token)
     {
-        // Retrieve the transaction using the confirmation token
+
         $transactionId = decrypt($token);
         $transaction = Transaction::where('transaction_id', $transactionId)->firstOrFail();
 
-        // Set the transaction status to 'under_review'
         $transaction->update(['status' => 'under_review']);
 
+        $transaction->user->notify(new PayoutCreatedNotification($transactionId));
         // Redirect to a confirmation success page or to home page
         return redirect()->route('withdraw');
     }

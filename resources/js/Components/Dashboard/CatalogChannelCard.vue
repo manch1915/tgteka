@@ -143,19 +143,6 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
     };
 };
 
-const channelStats = ref({})
-
-const fetchChannelStats = async () => {
-    try {
-        const response = await axios.get(route('catalog.channel.stats', props.channel.id))
-        channelStats.value = response.data.response
-    } catch (err) {
-        console.error(err)
-    }
-}
-onMounted(() => {
-    fetchChannelStats(props.channel.id)
-})
 </script>
 
 <template>
@@ -180,13 +167,13 @@ onMounted(() => {
                     <div class="sm:border-x-[1px] h-full w-full border-[#6522D9] flex flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                             <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Подписчики</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ channelStats.participants_count }}</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ channel.statistics.participants_count }}</p>
                         </div>
                     </div>
                     <div class="sm:border-r-[1px] h-full w-full border-[#6522D9] flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                             <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Просмотры</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ channelStats.avg_post_reach}}</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ channel.statistics.avg_post_reach}}</p>
                         </div>
                     </div>
                     <div class="flex h-full w-full flex-col items-center justify-center">

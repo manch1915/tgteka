@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PayoutResource;
 use App\Models\Transaction;
+use App\Notifications\PayoutStatusUpdatedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -20,6 +21,14 @@ class PayoutController extends Controller
         return PayoutResource::collection($transactions);
     }
 
+    public function countStatuses()
+    {
+        $statusCounts = Transaction::selectRaw('status, COUNT(*) as count')
+            ->groupBy('status')->get();
+
+        return $statusCounts->keyBy('status')->toArray();
+    }
+
     public function store(Request $request)
     {
     }
@@ -33,6 +42,9 @@ class PayoutController extends Controller
     {
         $payout->status = $request->status;
         $payout->save();
+
+        $payout->user->notify(new PayoutStatusUpdatedNotification($payout->id,__('messages.' . $request->status),));
+
         return response()->json(['message' => 'Transaction updated successfully'], 200);
     }
 

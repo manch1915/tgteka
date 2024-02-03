@@ -63,37 +63,55 @@ class ChannelController extends Controller
     protected function fetchChannels(Request $request, AvatarService $avatarService)
     {
         $search = $request->input('search');
-        $sort = $request->input('order');
+        $order = $request->input('order');
 
-        $order = $sort == 'subs' || $sort == 'avg_posts_reach' || $sort == 'er' ? 'desc' : 'asc';
+        $sort = $request->input('sort', 'desc');
 
         $channelsQuery = Channel::query();
 
-        $channelsQuery->where('status', 'accepted');
-
-        $index = 'channel_statistics.stats->$."response"';
+        $channelsQuery->where('status', '=', 'accepted');
 
         $channelsQuery
-            ->leftJoin('channel_statistics', 'channels.id', '=', 'channel_statistics.channel_id');
+            ->leftJoin('channel_statistics', 'channels.id', '=', 'channel_statistics.channel_id')
+            ->whereNotNull('channel_statistics.stats');
 
-        if ($sort != null) {
-            $channelsQuery->orderByRaw("CAST(JSON_EXTRACT(channel_statistics.stats, '$.response.".$sort."') as UNSIGNED) ".$order);
+        if ($order != null) {
+            $channelsQuery->whereRaw("JSON_CONTAINS_PATH(channel_statistics.stats, 'one', '$." . $order . "')");
+            $orderDirection = $sort === 'desc' ? 'desc' : 'asc';
+            $channelsQuery->orderByRaw("CAST(JSON_EXTRACT(channel_statistics.stats, '$." . $order . "') as UNSIGNED) " . $orderDirection);
         }
 
         if ($search != null && $search != '') {
             $channelsQuery->where('channel_name', 'like', '%' . $search . '%');
         }
 
+        foreach ($request->input() as $key => $value) {
+            if ($key === 'peerType') {
+                $channelsQuery->where('type', '=', $value);
+            } elseif (str_contains($key, '_min')) {
+                // Handle min value
+                $field = str_replace('_min', '', $key);
+                $channelsQuery->whereRaw("CAST(JSON_EXTRACT(channel_statistics.stats, '$." . $field . "') as UNSIGNED) >= ?", [$value]);
+            } elseif (str_contains($key, '_max')) {
+                // Handle max value
+                $field = str_replace('_max', '', $key);
+                $channelsQuery->whereRaw("CAST(JSON_EXTRACT(channel_statistics.stats, '$." . $field . "') as UNSIGNED) <= ?", [$value]);
+            }
+        }
+
+
         $channels = $channelsQuery->paginate(10);
 
-        $channels->each(function ($channel) use ($avatarService, $request){
+        $channels->each(function ($channel) use ($avatarService, $request) {
             $channel->isFav = $request->user()->hasFavorited($channel);
             $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);
+            $channel->statistics = $channel->stats ? json_decode($channel->stats, true) : [];
             return $channel;
         });
 
         return $channels;
     }
+
 
     public function fetchChannelStatistics($channelId)
     {

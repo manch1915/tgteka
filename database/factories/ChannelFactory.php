@@ -19,7 +19,7 @@ class ChannelFactory extends Factory
             'channel_name' => $this->faker->words(2, true),
             'description' => $this->faker->text(150),
             'subscribers_source' => $this->faker->url,
-            'topic_id' => $this->faker->numberBetween(1, 38),
+            'topic_id' => \App\Models\Topic::inRandomOrder()->first()->id,
             'type' => $this->faker->randomElement(['channel', 'chat']),
             'url' => '@' . $this->faker->words(1, true),
             'language' => $this->faker->randomElement(['english', 'russian']),

@@ -168,7 +168,9 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
             Route::apiResource('users', App\Http\Controllers\Admin\UserController::class);
             Route::apiResource('callbacks', App\Http\Controllers\Admin\CallbackController::class);
             Route::apiResource('settings', App\Http\Controllers\Admin\SettingController::class);
+
             Route::apiResource('payouts', App\Http\Controllers\Admin\PayoutController::class);
+            Route::get('payoutcounts', [App\Http\Controllers\Admin\PayoutController::class, 'countStatuses'])->name('payout.count-statuses');
         });
     });
 });

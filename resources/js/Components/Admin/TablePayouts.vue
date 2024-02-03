@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onMounted, reactive, ref, toRefs, watch} from "vue";
 import { mdiCancel, mdiCheckBold  } from "@mdi/js";
 import TableCheckboxCell from "@/Components/Admin/TableCheckboxCell.vue";
 import BaseLevel from "@/Components/Admin/BaseLevel.vue";
@@ -15,41 +15,47 @@ const message = useMessage();
 
 const items = ref([])
 const statusValue = ref('under_review')
+const statusCounts = ref([]);
 
-const statuses = [
-    {
-        value: 'pending',
-        label: 'в ожидании',
-    },
-    {
-        value: 'succeeded',
-        label: 'законченный',
-    },
-    {
-        value: 'failed',
-        label: 'неуспешный',
-    },
-    {
-        value: 'in_progress',
-        label: 'в прогрессе',
-    },
-    {
-        value: 'completed',
-        label: 'завершенный',
-    },
-    {
-        value: 'rejected',
-        label: 'отклоненный',
-    },
-    {
-        value: 'created',
-        label: 'созданный',
-    },
-    {
-        value: 'under_review',
-        label: 'на рассмотрении',
-    },
-]
+const state = reactive({
+    statuses: [
+        {
+            value: 'pending',
+            label: 'в ожидании',
+        },
+        {
+            value: 'succeeded',
+            label: 'законченный',
+        },
+        {
+            value: 'failed',
+            label: 'неуспешный',
+        },
+        {
+            value: 'in_progress',
+            label: 'в прогрессе',
+        },
+        {
+            value: 'completed',
+            label: 'завершенный',
+        },
+        {
+            value: 'rejected',
+            label: 'отклоненный',
+        },
+        {
+            value: 'created',
+            label: 'созданный',
+        },
+        {
+            value: 'under_review',
+            label: 'на рассмотрении',
+        },
+    ]
+})
+
+const { statuses } = toRefs(state);
+
 const fetchCallbacks = () => {
     axios.get(route('admin.api.payouts.index', {status: statusValue.value}))
         .then(r => {
@@ -57,10 +63,25 @@ const fetchCallbacks = () => {
         })
 }
 
+const fetchStatusCounts = () => {
+    axios.get(route('admin.api.payout.count-statuses')) // updated route here
+        .then(response => {
+            statusCounts.value = response.data;
+        });
+}
+
 watch(()=> statusValue.value, ()=>fetchCallbacks() )
+
+const statusOptions = computed(() => {
+    return statuses.value.map(status => {
+        const count = statusCounts.value[status.value] ? statusCounts.value[status.value].count : 0;
+        return {...status, label: `${status.label} (${count})`};
+    });
+});
 
 onMounted(() => {
     fetchCallbacks()
+    fetchStatusCounts()
 })
 
 const togglePayout = (status, id) => {
@@ -108,14 +129,7 @@ const remove = (arr, cb) => {
 
   return newArr;
 };
-const truncateDescription = (description, wordLimit) => {
-    if (!description) {
-        return ''; // or handle it in a way that makes sense for your application
-    }
 
-    const words = description.split(' ');
-    return words.length > wordLimit ? words.slice(0, wordLimit).join(' ') + '...' : description;
-};
 const checked = (isChecked, client) => {
   if (isChecked) {
     checkedRows.value.push(client);
@@ -132,7 +146,7 @@ const checked = (isChecked, client) => {
     <div class="flex items-center gap-x-2 p-2">
         <p class="text-violet-100 text-lg font-bold font-['Open Sans']">Статус</p>
         <n-config-provider :theme="darkTheme">
-            <n-select v-model:value="statusValue" :options="statuses" class="my-4 w-40"/>
+            <n-select v-model:value="statusValue" :options="statusOptions" class="my-4 w-64"/>
         </n-config-provider>
     </div>
   <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">

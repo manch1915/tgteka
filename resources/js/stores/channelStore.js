@@ -46,19 +46,34 @@ export const useChannelStore = defineStore('channel',{
             const params = new URLSearchParams({
                 page,
                 sort: this.sort,
-                order: this.order,
-                search: this.searchData,
-                channel_creation_date: this.mainFilter.channel_creation_date,
-                male_percentage: this.mainFilter.male_percentage,
-                female_percentage: this.mainFilter.female_percentage
             });
+
+            if(this.order !== '') {
+                params.append('order', this.order);
+            }
+
+            if(this.searchData !== '') {
+                params.append('search', this.searchData);
+            }
+
+            if(this.mainFilter.channel_creation_date > 0) {
+                params.append('channel_creation_date', this.mainFilter.channel_creation_date);
+            }
+
+            if(this.mainFilter.male_percentage > 0) {
+                params.append('male_percentage', this.mainFilter.male_percentage);
+            }
+
+            if(this.mainFilter.female_percentage > 0) {
+                params.append('female_percentage', this.mainFilter.female_percentage);
+            }
 
             if (additionalFilter) {
                 Object.entries(additionalFilter).forEach(([key, value]) => {
                     if (key !== 'peerType' && value[0] !== undefined && value[1] !== undefined && value[0] !== '' && value[1] !== '') {
                         params.append(`${key}_min`, value[0]);
                         params.append(`${key}_max`, value[1]);
-                    } else if (key === 'peerType') {
+                    } else if (key === 'peerType' && value !== '') {
                         params.append('peerType', value);
                     }
                 });

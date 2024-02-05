@@ -19,10 +19,9 @@ const description = ref('')
 const store = useMainStore()
 
 const channelCount = computed(() => channels.value.length);
-const placementCount = computed(() => channels.value.reduce((total, channel) => total + channel.count, 0));
 const totalSum = computed(() => channels.value.reduce((sum, channel) => {
     const pricePerUnit = channel[channel.format] ? channel[channel.format] : 0;
-    return sum + pricePerUnit * channel.count;
+    return sum + pricePerUnit;
 }, 0));
 const updateChannels = (updatedCart) => {
     channels.value = updatedCart;
@@ -90,7 +89,7 @@ onMounted(() => {
 
 <template>
     <AppLayout>
-        <div class="py-20 text-center">
+        <div class="sm:py-20 py-4 text-center">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Корзина</h1>
         </div>
         <div class="grid sm:grid-cols-[3fr_1fr] grid-cols-1 gap-x-4">
@@ -117,10 +116,6 @@ onMounted(() => {
                             <td>{{channelCount}}</td>
                         </tr>
                         <tr>
-                            <th>Размещения</th>
-                            <td>{{placementCount}}</td>
-                        </tr>
-                        <tr>
                             <th>Подписчики</th>
                             <td></td>
                         </tr>
@@ -130,7 +125,7 @@ onMounted(() => {
                         </tr>
                         <tr>
                             <th>Сумма</th>
-                            <th>{{totalSum}}₽</th>
+                            <th>{{totalSum}}&nbsp;₽</th>
                         </tr>
                     </tbody>
                 </table>

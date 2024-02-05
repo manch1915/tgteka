@@ -25,6 +25,7 @@ class CreateChannelsTable extends Migration
             $table->bigInteger('no_deletion_price')->default(0);
             $table->boolean('repost_price')->default(false);
             $table->integer('repeat_discount')->default(0); // Repeat discount percentage
+            $table->integer('cpm')->nullable();
             $table->decimal('male_percentage', 5);
             $table->float('score')->default(0);
             $table->float('rating')->default(0);

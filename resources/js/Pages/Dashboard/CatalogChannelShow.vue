@@ -1,38 +1,36 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import {
-    mdiCartRemove,
-    mdiCartPlus,
-    mdiEyeOutline,
-    mdiHeartOutline,
-    mdiQrcodeScan,
-    mdiStar
-} from '@mdi/js';
+import {mdiCartPlus, mdiCartRemove, mdiEyeOutline, mdiHeartOutline, mdiStar} from '@mdi/js';
 import {NSelect, NTabPane, NTabs, useMessage} from "naive-ui";
 import {nTabSegmentsThemeOverrides, selectThemeOverrides} from "@/themeOverrides.js";
 import {computed, onMounted, ref, watch} from "vue";
 import InfoCard from "@/Components/Dashboard/InfoCard.vue";
-import { saveCart, loadCart, isInCart as checkInCart, generateFormatArray } from "@/utilities/cartUtilities.js";
-import { Chart,Title,Tooltip, Legend, BarElement, LinearScale, CategoryScale , PointElement, LineElement } from 'chart.js';
-import { Line } from 'vue-chartjs'
+import {generateFormatArray, isInCart as checkInCart, loadCart, saveCart} from "@/utilities/cartUtilities.js";
+import {
+    BarElement,
+    CategoryScale,
+    Chart,
+    Legend,
+    LinearScale,
+    LineElement,
+    PointElement,
+    Title,
+    Tooltip
+} from 'chart.js';
+import {Line} from 'vue-chartjs'
 import Reviews from "@/Components/Dashboard/ChannelTab/Reviews.vue";
 import axios from "axios";
 
-Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,PointElement, LineElement);
+Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement);
 const props = defineProps({
     channel: Object,
-    countValue: {
-        default: 1,
-        required: false,
-    },
     formatValue: {
         required: false,
     },
     favorites_count: Number
 });
 
-const countValue = ref(props.countValue);
 const cartUpdateKey = ref(0);
 const fav = ref(false);
 const message = useMessage();
@@ -49,10 +47,10 @@ const toggleChannelInCart = (channel) => {
     const cart = loadCart();
     const index = cart.findIndex((ch) => ch.id === channel.id);
 
-    if (index > -1 && formatValue.value === cart[index].format && countValue.value === cart[index].count) {
+    if (index > -1 && formatValue.value === cart[index].format) {
         removeCart(cart, index, channel);
     } else {
-        updateCart(cart, channel, countValue.value, formatValue.value);
+        updateCart(cart, channel, formatValue.value);
     }
 
     cartUpdateKey.value++;
@@ -70,14 +68,14 @@ const isInCart = (channel) => {
     return checkInCart(channel);
 };
 
-const updateCart = (cart, channel, count, format) => {
+const updateCart = (cart, channel, format) => {
     const channelIndex = cart.findIndex((ch) => ch.id === channel.id);
 
     if (channelIndex > -1) {
-        cart[channelIndex] = Object.assign({}, channel, { count: count, format: format });
+        cart[channelIndex] = Object.assign({}, channel, { format: format });
         message.info(`Канал ${channel.channel_name} было обновлено в корзине.`);
     } else {
-        const channelData = Object.assign({}, channel, { count: count, format: format });
+        const channelData = Object.assign({}, channel, { format: format });
         cart.push(channelData);
         message.info(`Канал ${channel.channel_name} был добавлен в корзину.`);
     }
@@ -86,22 +84,16 @@ const updateCart = (cart, channel, count, format) => {
 };
 const totalPrice = computed(() => {
     const selectedFormat = format.value.find((item) => item.value === formatValue.value);
-    const pricePerUnit = selectedFormat ? props.channel[selectedFormat.value] : 0;
-    return pricePerUnit * countValue.value;
-});
-watch(countValue, (newValue) => {
-    let cart = loadCart();
-    if (isInCart(props.channel)) {
-        updateCart(cart, props.channel, newValue, formatValue.value)
-    }
+    return selectedFormat ? props.channel[selectedFormat.value] : 0;
 });
 
 watch(formatValue, (newValue) => {
     let cart = loadCart();
     if (isInCart(props.channel)) {
-        updateCart(cart, props.channel, countValue.value, newValue)
+        updateCart(cart, props.channel, newValue)
     }
 });
+
 const activeButton = ref('info');
 const explain = ['','1 часа в топе / 24 часа в лент', '2 часа в топе / 48 часа в лент', "3 часа в топе / 72 часа в лент"]
 
@@ -252,20 +244,17 @@ onMounted(() => {
                                 <n-select v-model:value="formatValue" :theme-overrides="selectThemeOverrides" :options="format"/>
                                 <div class="pl-3 pt-2 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ explain[format] }}</div>
                             </div>
-                            <div class="w-60">
-                                <n-select  v-model:value="countValue" :theme-overrides="selectThemeOverrides" :options="count"/>
-                            </div>
                         </div>
                         <div class="flex flex-wrap justify-between pt-8">
                             <h1 class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Стоимость публикации:</h1>
                             <h1 class="text-right text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">{{totalPrice}} ₽</h1>
                         </div>
                         <div class="flex flex-wrap gap-4 pt-4">
-                            <button @click.prevent="toggleChannelInCart(channel)" class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 bg-purple-600 rounded-3xl items-center inline-flex gap-x-2.5">
+                            <button @click.prevent="toggleChannelInCart(channel)" class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 bg-purple-600 transition hover:bg-purple-800 rounded-3xl items-center inline-flex gap-x-2.5">
                                 {{ isInCart(channel) ? 'Удалить из корзины' : 'Добавить в корзину'}}
                                 <BaseIcon size="25" :path="isInCart(channel) ? mdiCartRemove : mdiCartPlus"/>
                             </button>
-                            <button class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 border  rounded-3xl items-center inline-flex gap-x-2.5">Купить по QR <BaseIcon fill="white" size="20" :path="mdiQrcodeScan"/></button>
+<!--                            <button class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 border  rounded-3xl items-center inline-flex gap-x-2.5">Купить по QR <BaseIcon fill="white" size="20" :path="mdiQrcodeScan"/></button>-->
                         </div>
                     </div>
                 </div>
@@ -297,21 +286,21 @@ onMounted(() => {
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Подписчики</h2>
                             <h3 v-if="channelStats.stats" class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ channelStats.stats.participants_count }}</h3>
                         </InfoCard>
-                        <InfoCard>
+                        <InfoCard v-if="channelStats.stats && channelStats.stats.avg_post_reach">
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Просмотры на<br> пост</h2>
                             <h3 v-if="channelStats.stats" class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ channelStats.stats.avg_post_reach }}</h3>
                         </InfoCard>
-                        <InfoCard>
+                        <InfoCard v-if="channelStats.stats && channelStats.stats.er_percent">
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">ER</h2>
                             <h3 v-if="channelStats.stats" class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ channelStats.stats.er_percent }}%</h3>
                         </InfoCard>
-                        <InfoCard>
+                        <InfoCard v-if="channelStats.stats && channelStats.stats.posts_count">
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Публикаций</h2>
-                            <h3 v-if="channelStats.stats" class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ channelStats.stats.posts_count }}</h3>
+                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none">{{ channelStats.stats.posts_count }}</h3>
                         </InfoCard>
-                        <InfoCard>
+                        <InfoCard v-if="channel.cpm && channel">
                             <h2 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">СРМ</h2>
-                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"> ₽</h3>
+                            <h3 class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"> {{channel.cpm}}&nbsp;₽</h3>
                         </InfoCard>
                     </div>
                 </n-tab-pane>
@@ -349,29 +338,7 @@ onMounted(() => {
 .wrapper{
     position: relative;
     overflow: hidden;
-    &::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 60px;
-        bottom: 0;
-        border-radius: 0 75px 75px 75px;
-        background: radial-gradient(
-            278.82% 137.51% at 1.95% 3.59%,
-            rgba(255, 255, 255, 0.26) 0%,
-            rgba(255, 255, 255, 0) 100%
-        );
-        backdrop-filter: blur(21px);
-        transform: rotate(7deg);
-        z-index: -1;
 
-    }
-    @media screen and (max-width: 640px){
-        &::before {
-            display: none;
-        }
-    }
     .card{
         border-radius: 0 75px 75px 75px;
         border: 2px solid #FFFFFF;

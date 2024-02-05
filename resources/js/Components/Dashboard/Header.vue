@@ -121,27 +121,22 @@ const openMessenger = () => {
         </div>
     </header>
     <Transition>
-        <div v-show="burgerActive" :class="{ active: burgerActive }" class="header-nav px-2">
+        <div v-show="burgerActive" :class="{ active: burgerActive }" class="header-nav px-2" style="height: 100vh">
             <div class="flex gap-x-3 pt-8 text-white text-sm font-bold font-['Open Sans'] leading-tight">
-                <button @click.prevent="router.visit(route('customers'))" class="customers-btn w-full py-2">Заказчикам</button>
-                <button @click.prevent="router.visit(route('owners'))" class="owners-btn w-full py-2">Владельцу канала</button>
+                <button @click.prevent="router.visit(route('catalog.channels.index'))" class="customers-btn w-full py-2 border rounded">Каталог</button>
+                <button @click.prevent="router.visit(route('placements'))" class="owners-btn w-full py-2 border rounded">Мои размещения</button>
             </div>
             <div class="justify-start items-center gap-1 inline-flex mt-12">
                 <div class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">Сервисы</div>
-                <img class="w-9" src="/images/arrow-circle-down.svg" alt="" srcset="">
             </div>
             <div class="flex mt-4">
                 <div class="nav-block rounded border p-8 border-violet-100 backdrop-blur-xl">
                     <div class="flex-col justify-start items-start gap-2.5 inline-flex">
-                        <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Каталог каналов</div>
-                        <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Каталог ботов</div>
-                        <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Готовые предложения</div>
-                        <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Аналитика Telegram-каналов</div>
-                    </div>
-                    <div class="flex justify-center">
-                        <button class="text-center px-6 py-4 mt-5 bg-deepblue rounded-full shadow-inner border border-white border-opacity-10 justify-center items-center gap-2.5 inline-flex text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                            Купить размещение
-                        </button>
+                        <Link :href="route('patterns')"><p :class="{ 'active': isActiveRoute('/patterns'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои шаблоны</p></Link>
+                        <Link :href="route('placements')"><p :class="{ 'active': isActiveRoute('/placements'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои размещения</p></Link>
+                        <Link :href="route('catalog.channels.index')"><p :class="{ 'active': isActiveRoute('/catalog/channels'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Каталог каналов</p></Link>
+                        <Link :href="route('channels')"><p :class="{ 'active': isActiveRoute('/channels'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои каналы</p></Link>
+                        <Link :href="route('order.index')"><p :class="{ 'active': isActiveRoute('/orders'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Заявки на размещение</p></Link>
                     </div>
                 </div>
             </div>
@@ -204,6 +199,9 @@ header {
     li.active{
         filter: drop-shadow(0 0 5px rgb(237 233 254));
     }
+}
+p.active{
+    filter: drop-shadow(0 0 5px rgb(237 233 254));
 }
 .interactive{
   div{

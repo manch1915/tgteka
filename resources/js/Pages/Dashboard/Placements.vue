@@ -68,10 +68,10 @@ watch([activeSortButton, value, range], () => {
 
 <template>
     <AppLayout>
-        <div class="py-20 text-center">
+        <div class="sm:py-20 py-4 text-center">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Мои размещения</h1>
-            <div class="flex justify-between items-center gap-x-8 mt-4">
-                <div class="flex gap-x-2">
+            <div class="flex sm:flex-row flex-col justify-between items-center gap-8 mt-4 sm:p-0 p-2">
+                <div class="flex flex-wrap gap-x-2 sm:justify-start justify-around gap-2">
                 <template v-for="sort in SORT_DATA">
                     <button :class="{'background': activeSortButton === sort.title}" @click.prevent="activeSortButton = sort.value" class="transition px-5 py-1 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-sm font-bold font-['Open Sans']">
                         {{sort.title}}

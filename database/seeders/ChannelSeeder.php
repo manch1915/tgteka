@@ -13,11 +13,21 @@ class ChannelSeeder extends Seeder
         $urls = [
             'https://t.me/phpyhtelka',
             'https://t.me/granitnauky',
-            'https://t.me/+B-qE5hUu4DBmMGY6'
+            'https://t.me/+B-qE5hUu4DBmMGY6',
+            'https://t.me/cmd_cv',
+            'https://t.me/+gFCT63NlnfE5YWZi'
         ];
 
-        foreach ($urls as $url) {
-            $channel = Channel::factory()->create(['url' => $url]);
+        $types = [
+            'chat',
+            'channel',
+            'channel',
+            'channel',
+            'channel',
+        ];
+
+        foreach ($urls as $index => $url) {
+            $channel = Channel::factory()->create(['url' => $url, 'type' => $types[$index]]);
             FetchChannelStatisticsJob::dispatch($channel);
         }
     }

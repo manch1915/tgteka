@@ -85,7 +85,7 @@ watch([appointmentVal, statusValue, range], () => {
             <div class="text-center sm:text-left">
                 <p class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">История транзакций</p>
             </div>
-            <div class="my-12 flex items-center content-center sm:justify-between justify-center gap-x-2">
+            <div class="my-12 flex sm:flex-row flex-col sm:p-0 p-2 items-center content-center sm:justify-between justify-center gap-x-2">
                 <div class="flex flex-col gap-x-4 w-full">
                     <div class="flex items-center gap-x-2">
                         <p class="text-violet-100 text-lg font-bold font-['Open Sans']">Назначение</p>

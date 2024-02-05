@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin\ChannelController;
 use App\Http\Controllers\Admin\Controller;
 use App\Http\Controllers\Admin\TopicController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\TelegramController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PatternController;

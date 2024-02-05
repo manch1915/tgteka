@@ -178,8 +178,9 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
                     </div>
                     <div class="flex h-full w-full flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Подписчики</p>
                             <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">CPМ</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">
+                                {{ channel.cpm }}</p>
                         </div>
                     </div>
                 </div>
@@ -188,9 +189,9 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
         </div>
         <div class="flex flex-wrap items-center sm:justify-between p-6 unwrap gap-y-2">
             <div class="flex flex-wrap sm:w-auto w-full items-center gap-x-4">
-                <div class="flex  flex-col items-start gap-y-1">
+                <div class="flex flex-col items-start gap-y-1">
                     <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Формат</p>
-                    <n-select v-model:value="formatValue" @update-value="emit('cartChanged');" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="format"/>
+                    <n-select class="w-24" v-model:value="formatValue" @update-value="emit('cartChanged');" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="format"/>
                 </div>
                 <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">{{ totalPrice }} ₽</h1>
             </div>

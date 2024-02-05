@@ -15,7 +15,7 @@ const getOrders = (page = 1) => {
 
 <template>
     <AppLayout>
-        <div class="py-20 text-center">
+        <div class="sm:py-20 py-4 text-center">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Заявки</h1>
             <div class="flex flex-col gap-y-4 mt-8">
                 <template v-if="ordersStore.orders" v-for="(order, index) in ordersStore.orders.data" :key="index">

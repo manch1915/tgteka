@@ -69,6 +69,13 @@ class FetchChannelStatisticsJob implements ShouldQueue
             ]
         );
 
+        if ($generalStatistics->response->peer_type === 'channel'
+            && property_exists($generalStatistics->response, 'adv_post_reach_12h'))
+        {
+            $channel->cpm = ($channel->format_one_price * 1000)
+                / $generalStatistics->response->adv_post_reach_12h;
+        }
+
         $channel->status = 'accepted';
         $channel->save();
     }

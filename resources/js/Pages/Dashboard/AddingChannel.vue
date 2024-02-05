@@ -16,7 +16,7 @@ import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiFaceMan, mdiFaceWoman} from "@mdi/js";
 
 const discount_check = ref(false);
-const format_one_checkbox = ref(false);
+const format_one_checkbox = ref(true);
 const format_two_checkbox = ref(false);
 const format_three_checkbox = ref(false);
 const no_deletion_checkbox = ref(false);
@@ -28,9 +28,9 @@ const form = reactive({
     channel_name: '',
     description: '',
     topic_id: null,
-    type: '',
+    type: 'channel',
     url: '',
-    language: '',
+    language: 'russian',
     subscribers_source: '',
     repeat_discount: null,
     terms: false,
@@ -80,11 +80,11 @@ const femalePercentage = computed(() => 100 - form.male_percentage);
 
 const languages = [
     {
-        label: 'русский',
+        label: 'Русский',
         value: 'russian',
     },
     {
-        label: 'английский',
+        label: 'Английский',
         value: 'english',
     },
 ];
@@ -449,10 +449,10 @@ watch(state.type, (newRadio) => {
                 </div>
                 <div>
                     <div class="flex sm:flex-row flex-col gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                        <button @click.prevent="uploadChannel" class="rounded-3xl bg-purple-600 px-6 py-3.5">
+                        <button @click.prevent="uploadChannel" class="rounded-3xl bg-purple-600 transition hover:bg-purple-800 px-6 py-3.5">
                             Добавить канал / чат
                         </button>
-                        <button @click.prevent="router.visit(route('channels'))" class="rounded-3xl border border-violet-700 px-6 py-3.5">
+                        <button @click.prevent="router.visit(route('channels'))" class="rounded-3xl border border-violet-700 bg-transparent transition hover:bg-red-500 px-6 py-3.5">
                             Отменить
                         </button>
                     </div>

@@ -13,7 +13,7 @@ export const useChannelStore = defineStore('channel',{
         activeButton: null,
         sortDirection: 'desc',
         additionalFilter: {
-            peerType: 'channel',
+            peerType: '',
             participants_count: [],
             adv_post_reach_24h: [],
             err_percent: [],
@@ -23,44 +23,58 @@ export const useChannelStore = defineStore('channel',{
             mentions_count: [],
             forwards_count: [],
             mentioning_channels_count: [],
-            posts_count: []
+            posts_count: [],
+            dau: [],
+            wau: [],
+            mau: [],
+            online_count_day_time: [],
+            online_count_night_time: [],
+            messages_count_yesterday: [],
+            messages_count_last_week: [],
+            messages_count_last_month: [],
+            messages_count_total: [],
         },
+        mainFilter: {
+            channel_creation_date: 0,
+            male_percentage: 0,
+            female_percentage: 0,
+        }
     }),
 
     actions: {
-        async fetchChannels(page = 1, additionalFilter = null) {
-            this.loading = true
-            // Get URL with all necessary parameters
-            let url = route('catalog.channels.list') + `?page=${page}&sort=${this.sort}`;
-            if (this.searchData.length > 0) {
-                url += `&search=${this.searchData}`;
-            }
-            if (additionalFilter && additionalFilter.peerType) {
-                url += `&peerType=${additionalFilter.peerType}`;
-            }
-            if (this.order.length > 0) {
-                url += `&order=${this.order}`;
-            }
-            if (additionalFilter) {
-                Object.keys(additionalFilter).forEach((key) => {
-                    // Exclude peerType from the URL
-                    if (key === 'peerType') {
-                        return;
-                    }
+        createUrl(page, additionalFilter) {
+            const params = new URLSearchParams({
+                page,
+                sort: this.sort,
+                order: this.order,
+                search: this.searchData,
+                channel_creation_date: this.mainFilter.channel_creation_date,
+                male_percentage: this.mainFilter.male_percentage,
+                female_percentage: this.mainFilter.female_percentage
+            });
 
-                    const min = additionalFilter[key][0];
-                    const max = additionalFilter[key][1];
-                    if (min !== undefined && max !== undefined && min !== '' && max !== '') {
-                        url += `&${key}_min=${min}&${key}_max=${max}`;
+            if (additionalFilter) {
+                Object.entries(additionalFilter).forEach(([key, value]) => {
+                    if (key !== 'peerType' && value[0] !== undefined && value[1] !== undefined && value[0] !== '' && value[1] !== '') {
+                        params.append(`${key}_min`, value[0]);
+                        params.append(`${key}_max`, value[1]);
+                    } else if (key === 'peerType') {
+                        params.append('peerType', value);
                     }
                 });
             }
-            // Fetch data from the API
+
+            return route('catalog.channels.list') + `?${params.toString()}`;
+        },
+        async fetchChannels(page = 1, additionalFilter = null) {
+            this.loading = true
+
+            const url = this.createUrl(page, additionalFilter)
+
             const response = await axios.get(url);
 
-            // Update state with the fetched channels
             this.channels = response.data;
-            this.loading = false
+            this.loading = false;
         },
 
         convertSortTitleToFieldName(title) {
@@ -74,11 +88,11 @@ export const useChannelStore = defineStore('channel',{
                 case 'Подписчики':
                     return 'participants_count';
                 case 'Цена':
-                    return 'price';
-                case 'CPM':
+                    return 'format_one_price';
+                case 'CPМ':
                     return 'cpm';
                 default:
-                    return 'rating';
+                    return '';
             }
         },
 
@@ -96,7 +110,7 @@ export const useChannelStore = defineStore('channel',{
         },
         resetFilters() {
             this.additionalFilter = {
-                peerType: 'channel',
+                peerType: '',
                 participants_count: [],
                 adv_post_reach_24h: [],
                 err_percent: [],
@@ -107,7 +121,22 @@ export const useChannelStore = defineStore('channel',{
                 forwards_count: [],
                 mentioning_channels_count: [],
                 posts_count: [],
+                dau: [],
+                wau: [],
+                mau: [],
+                online_count_day_time: [],
+                online_count_night_time: [],
+                messages_count_yesterday: [],
+                messages_count_last_week: [],
+                messages_count_last_month: [],
+                messages_count_total: [],
             };
+
+            this.mainFilter = {
+                channel_creation_date: 0,
+                male_percentage: 0,
+                female_percentage: 0,
+            }
         }
     },
 });

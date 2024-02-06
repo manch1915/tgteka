@@ -15,11 +15,14 @@ class SupportChatRepository
                 'title' => $title,
             ]);
 
-            SupportMessage::create([
-                'sender_id' => $senderId,
-                'ticket_id' => $createdTicket->id,
-                'message' => $message,
-            ]);
+            if (!empty(trim($message))) {
+                SupportMessage::create([
+                    'sender_id' => $senderId,
+                    'ticket_id' => $createdTicket->id,
+                    'message' => $message,
+                ]);
+            }
+
             return $createdTicket->id;
         } catch (\Exception $e) {
             echo "Error while saving support ticket: " . $e->getMessage() . "\n";
@@ -30,11 +33,13 @@ class SupportChatRepository
     public function saveMessage(int $senderId, int $ticketId, string $message): void
     {
         try {
-            SupportMessage::create([
-                'sender_id' => $senderId,
-                'ticket_id' => $ticketId,
-                'message' => $message,
-            ]);
+            if (!empty(trim($message))) {
+                SupportMessage::create([
+                    'sender_id' => $senderId,
+                    'ticket_id' => $ticketId,
+                    'message' => $message,
+                ]);
+            }
 
         } catch (\Exception $e) {
             echo "Error while saving support message: " . $e->getMessage() . "\n";

@@ -6,7 +6,8 @@ import {onMounted, ref} from "vue";
 const props = defineProps({
     tickets: Number,
     socket: Object,
-    userId: Number
+    userId: Number,
+    ticketTitle: String
 })
 
 const messages = ref(null)
@@ -44,7 +45,7 @@ props.socket.onmessage = function(event) {
         messages.value.push({
             message: data.message,
             sender: {
-                profile_photo_url: `https://ui-avatars.com/api/?name=${data.sender_id}&color=7F9CF5&background=EBF4FF`
+                username: data.sender_id
             },
             created_at: new Date().toISOString()
         });
@@ -56,17 +57,16 @@ props.socket.onmessage = function(event) {
     <div class="container">
     <main>
         <div class="top">
-            <div class="header">
+            <div class="header border-b mb-2 pb-2">
                 <div class="float-right cursor-pointer" @click.prevent="closeModal()">
                     <img src="/images/Icon-close.svg" alt="">
                 </div>
                 <div class="flex flex-col justify-center sm:items-center items-start gap-y-6">
-                    <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Название обращения</h1>
-                    <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">от 16.08.23</p>
+                    <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">{{ ticketTitle }}</h1>
                 </div>
             </div>
             <div class="flex flex-col gap-y-3 overflowing">
-                <MessageBox v-for="message in messages" :text="message.message" :user-avatar="message.sender.profile_photo_url"/>
+                <MessageBox v-for="message in messages" :text="message.message" :user-avatar="message.sender.username" :created_at="message.created_at"/>
             </div>
         </div>
         <div class="footer">
@@ -75,7 +75,7 @@ props.socket.onmessage = function(event) {
                     <button class="conversation-panel__button panel-item btn-icon add-file-button">
                         <img src="/images/file.svg" alt="file">
                     </button>
-                    <input v-model="message" class="conversation-panel__input panel-item" placeholder="Ведите ваше сообщения"/>
+                    <input v-model="message" @keydown.enter.prevent="sendMessage" class="conversation-panel__input panel-item" placeholder="Ведите ваше сообщения"/>
                     <button @click.prevent="sendMessage" class="conversation-panel__button panel-item btn-icon send-message-button">
                         <img src="/images/ic-2.svg" alt="send">
                     </button>

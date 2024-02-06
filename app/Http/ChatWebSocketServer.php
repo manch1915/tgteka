@@ -86,6 +86,7 @@ class ChatWebSocketServer implements MessageComponentInterface
 
     private function sendSupportChatMessage(int $senderId, string $message, string $title, ?int $ticketId): void
     {
+        Log::info('created');
         $message = Censure::replace($message);
         $ticketBackId = $ticketId;
         if ($ticketBackId === null) {

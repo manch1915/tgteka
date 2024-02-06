@@ -44,7 +44,15 @@ class ChannelController extends Controller
 
     public function update(Request $request, Channel $channel)
     {
-        $channel->update($request->all());
+        $inputData = $request->all();
+
+        if(isset($inputData['channel_creation_date'])) {
+            $timestamp = $inputData['channel_creation_date'] / 1000;  // convert from milliseconds to seconds
+            $date = date('Y-m-d', $timestamp);
+            $inputData['channel_creation_date'] = $date;
+        }
+
+        $channel->update($inputData);
 
         if($channel->status === 'loading'){
             FetchChannelStatisticsJob::dispatch($channel);

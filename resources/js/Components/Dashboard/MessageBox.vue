@@ -1,4 +1,6 @@
 <script setup>
+import {computed} from "vue";
+
 const props = defineProps({
     text: String,
     userAvatar: String,
@@ -6,9 +8,11 @@ const props = defineProps({
 })
 
 let createdAtUTC = props.created_at;
-let createdAtDate = new Date(`1970-01-01T${createdAtUTC}:00Z`);
+let createdAtDate = new Date(createdAtUTC);
 let options = { hour: '2-digit', minute: '2-digit', hour12: false };
 let createdAtLocalTimeString = createdAtDate.toLocaleTimeString('en-US', options);
+
+const avatar = computed(() => `https://ui-avatars.com/api/?name=${props.userAvatar}&color=7F9CF5&background=EBF4FF`)
 </script>
 
 <template>
@@ -16,7 +20,7 @@ let createdAtLocalTimeString = createdAtDate.toLocaleTimeString('en-US', options
         <div class="message">
             <div class="flex gap-x-3">
                 <div class="avatar flex flex-col justify-end flex-shrink-0">
-                    <img style="width: 34px; height: 34px; border-radius: 50%" :src="userAvatar" alt="ava">
+                    <img style="width: 34px; height: 34px; border-radius: 50%" :src="avatar" alt="ava">
                 </div>
                 <div class="message__box">
                     <p class="text break-words text-slate-800 text-base font-normal font-['Open Sans'] leading-tight">

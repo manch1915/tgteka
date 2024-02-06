@@ -8,18 +8,20 @@ import {openModal} from "jenesius-vue-modal";
 import ModalAlert from "@/Components/Dashboard/ModalAlert.vue";
 import TicketCard from "@/Components/Dashboard/TicketCard.vue";
 import Messanger from "@/Components/Dashboard/Messanger.vue";
+import {useMessage} from "naive-ui";
 
 const props = defineProps({
     tickets: Object,
     ticketsCount: Number,
 })
 
-const openMessengerModal = (ticketId) =>{
-    //todo messenger
-    openModal(Messanger, {tickets: ticketId, socket:socket, userId: userId.value})
+const openMessengerModal = (ticketId, ticketTitle) =>{
+    openModal(Messanger, {tickets: ticketId, socket:socket, userId: userId.value, ticketTitle: ticketTitle})
 }
 
 const page = usePage()
+
+const message = useMessage()
 
 const userId = computed(() => page.props.auth.user.id)
 
@@ -30,6 +32,12 @@ socket.onmessage = function(event) {
     console.log(`[message] Данные получены с сервера: ${event.data}`);
 };
 const createNewAppeal = () => {
+    if (
+        title.value.trim() === '' && content.value.trim() === ''
+    ){
+        message.error('Заполните \'Тема обращения\' и \'Текст обращения\' ')
+        return
+    }
     socket.send(JSON.stringify({
         title: title.value,
         message: content.value,
@@ -66,7 +74,7 @@ socket.onerror = function(error) {
                         v-model="title"
                     />
                     <TextArea
-                        placeholder="Тема обращения"
+                        placeholder="Текст обращения"
                         rows="4"
                         v-model="content"
                     />
@@ -76,7 +84,7 @@ socket.onerror = function(error) {
                     Отправить
                 </button>
             </div>
-            <div class="flex h-full w-full rounded-3xl bg-opacity-30 p-4 bg-violet-950">
+            <div class="flex w-full rounded-3xl bg-opacity-30 p-4 bg-violet-950">
                 <div v-if="!tickets" class="flex h-full w-full flex-col items-center justify-center">
                     <div class="flex flex-col items-center justify-center gap-y-10">
                         <p class="text-center text-violet-100 text-2xl font-normal font-['Open Sans'] leading-tight">Обращений ещё нет</p>
@@ -87,7 +95,7 @@ socket.onerror = function(error) {
                     <p class="text-violet-100 text-right text-base font-normal font-['Open Sans'] leading-tight">{{ticketsCount}} обращений</p>
 
                     <div class="mt-6 flex h-full flex-col gap-y-4">
-                        <TicketCard v-for="ticket in tickets" :key="ticket.id" :title="ticket.title" :created_at="ticket.localized_date" @click.prevent="openMessengerModal(ticket.id)"/>
+                        <TicketCard v-for="ticket in tickets" :key="ticket.id" :title="ticket.title" :created_at="ticket.localized_date" @click.prevent="openMessengerModal(ticket.id, ticket.title)"/>
                     </div>
                 </div>
             </div>

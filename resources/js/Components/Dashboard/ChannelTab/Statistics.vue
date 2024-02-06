@@ -111,7 +111,7 @@ onMounted(() => {
 });
 
 </script>
-<!--todo statistikaaaa-->
+
 <template>
     <div class="w-full reviews p-6">
         <div class="grid sm:grid-cols-4 grid-cols-2 gap-4 mb-2">

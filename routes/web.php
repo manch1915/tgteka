@@ -26,6 +26,8 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get('/', fn () => Inertia::render('Customers'))->name('customers');
     Route::get('/owners', fn () => Inertia::render('Owners'))->name('owners');
 
+    Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'create'])->name('register');
+
     Route::post('/forgot-password', [LoginController::class, 'forgot'])->name('password.forgot');
     Route::get('/reset-password/{token}', function (string $token) {
         return inertia('PasswordRecover', ['token' => $token]);

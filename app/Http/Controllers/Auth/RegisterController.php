@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
-    public function store(Request $request, CreateNewUser $creator)
+    public function create(Request $request, CreateNewUser $creator)
     {
         $validatedData = $request->validate([
             'username' => ['required', 'string', 'min:5', 'max:16', 'unique:users'],

@@ -20,9 +20,8 @@ class CreateNewUser implements CreatesNewUsers
      *
      * @param  array<string, string>  $input
      */
-        public function create(array $input): array
+        public function create(array $input): void
         {
-
             // Generate a random password
             $password = Str::random(10);
 
@@ -34,9 +33,5 @@ class CreateNewUser implements CreatesNewUsers
             ]);
 
             $user->notify(new WelcomeMessageNotification($user->email, $password));
-
-            return [
-                'user' => $user
-            ];
         }
 }

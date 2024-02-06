@@ -36,7 +36,7 @@ const modalDangerActive = (c) => {
 
 const channelId = ref(null);
 const declineChannel = () => {
-    axios.patch(route('admin.api.channels.update', modalChannel.value.id), {status: 'declined'})
+    axios.patch(route('admin.api.channels.update', modalChannel.value.slug), {status: 'declined'})
         .then(r => {
             console.log(r);
             mainStore.fetchChannels();
@@ -45,7 +45,7 @@ const declineChannel = () => {
 }
 
 const channelAccept = () => {
-    axios.patch(route('admin.api.channels.update', modalChannel.value.id), {status: 'loading', channel_creation_date: timestamp.value})
+    axios.patch(route('admin.api.channels.update', modalChannel.value.slug), {status: 'loading', channel_creation_date: timestamp.value})
         .then(r => {
             console.log(r);
             mainStore.fetchChannels(); // Fetch after accepting a channel

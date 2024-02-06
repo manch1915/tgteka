@@ -24,7 +24,7 @@ const chatId = ref(null);
 const deleteChat = () => {
     console.log(chatId.value)
     axios.delete(route('admin.api.support.destroy', chatId.value))
-        .then(r => console.log(r))
+        .then(() => mainStore.fetchSupportChats())
         .catch(e => console.log(e))
 }
 const deletingChat = (id) => {

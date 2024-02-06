@@ -22,7 +22,7 @@ class SupportController extends Controller
         $messages = SupportTicket::find($request->input('tickets'))
             ->messages()
             ->with(['sender' => function($query) {
-                $query->select('id', 'profile_photo_url');
+                $query->select('id', 'username');
             }])
             ->get();
 

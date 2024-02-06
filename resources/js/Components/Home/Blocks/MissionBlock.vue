@@ -18,7 +18,7 @@ const windowWidth = ref(window.innerWidth)
                         Мы даём им простой инструмент для взаимовыгодного <br> <i class="hacker-icon -mb-2"></i>сотрудничества и открываем новые возможности для роста.
                     </span>
                 </div>
-<!--TODO slider for cards                -->
+
                 <div :class="windowWidth <= 640 ? 'cards w-full' : 'cards flex gap-6 pt-24' ">
                     <slot name="cards">
 

@@ -109,7 +109,7 @@ const props = defineProps({
         max-height: 195px;
         top: 22%;
         left: 60%;
-    /*TODO change icon*/
+
         @media screen and (max-width: 640px) {
             top: 22%;
             left: 20%;

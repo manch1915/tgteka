@@ -1,18 +1,31 @@
 <script setup>
 import {computed} from "vue";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
+import {mdiCheckAll} from "@mdi/js";
 
 const props = defineProps({
     text: String,
     userAvatar: String,
     created_at: String,
+    isTimeString: {
+        default: false,
+        required: false
+    }
 })
 
-let createdAtUTC = props.created_at;
-let createdAtDate = new Date(createdAtUTC);
-let options = { hour: '2-digit', minute: '2-digit', hour12: false };
-let createdAtLocalTimeString = createdAtDate.toLocaleTimeString('en-US', options);
+let createdAtLocalTimeString;
 
-const avatar = computed(() => `https://ui-avatars.com/api/?name=${props.userAvatar}&color=7F9CF5&background=EBF4FF`)
+if (props.isTimeString){
+    createdAtLocalTimeString = props.created_at
+}else{
+    let createdAtUTC = props.created_at;
+    let createdAtDate = new Date(createdAtUTC);
+    let options = { hour: '2-digit', minute: '2-digit', hour12: false };
+    createdAtLocalTimeString = createdAtDate.toLocaleTimeString('en-US', options);
+
+}
+
+const avatar = computed(() => `https://api.dicebear.com/7.x/initials/svg?seed=${props.userAvatar}`)
 </script>
 
 <template>
@@ -29,7 +42,7 @@ const avatar = computed(() => `https://ui-avatars.com/api/?name=${props.userAvat
                     <div class="date float-right">
                         <div class="flex gap-x-0.5">
                             <p class="text-right text-slate-900 text-opacity-40 text-base font-normal font-['Open Sans'] leading-tight">{{createdAtLocalTimeString}}</p>
-                            <img src="/images/vector.svg" alt="vector">
+                            <BaseIcon :path="mdiCheckAll"/>
                         </div>
                     </div>
                 </div>

@@ -25,15 +25,14 @@ const getCurrentTime = () => {
     return `${hours}:${minutes}`;
 };
 
-const generateAvatarURL = (userID) => `https://ui-avatars.com/api/?name=${userID}&color=7F9CF5&background=EBF4FF`;
-
-const addNewMessage = (message, senderID) => {
-    store.addNewMessage(message, generateAvatarURL(senderID), getCurrentTime());
+const addNewMessage = (message, username = page.props.auth.user.username) => {
+    store.addNewMessage(message, username, getCurrentTime());
 };
 
 const processIncomingMessage = (data) => {
+    console.log(data)
     if (data.conversation_id === store.conversation_id) {
-        addNewMessage(data.message, data.sender_id);
+        addNewMessage(data.message, data.username);
     }
 };
 function initWebSocket(userID) {
@@ -60,10 +59,11 @@ const sendMessage = () => {
         auth_id: authenticatedUserID.value,
         conversation_id: store.conversation_id,
         message: inputMessage.value,
+        username: page.props.auth.user.username,
         type: 'personal'
     }));
 
-    addNewMessage(inputMessage.value, authenticatedUserID.value);
+    addNewMessage(inputMessage.value);
 
     inputMessage.value = '';
 };
@@ -86,7 +86,10 @@ const vScrollBottom = {
         el.scrollTop = el.scrollHeight;
     },
 };
-//todo <search-bar @search="handleSearch"/>
+const handleSearch = (search) => {
+    console.log(search)
+    store.getConversations(search);
+}
 </script>
 
 <template>
@@ -106,8 +109,8 @@ const vScrollBottom = {
                 <div>
                     <button :class="{ 'hidden': store.showChat }" @click="goBack" class="back-button"><BaseIcon style="color: #B5BBDB" size="40" :path="mdiArrowLeft"/></button>
                 </div>
-                <div class="flex-grow overflow-y-auto flex flex-col gap-y-3" v-scroll-bottom>
-                    <MessageBox v-for="message in store.conversationsMessages" :text="message.message" :user-avatar="message.user.profile_photo_url" :created_at="message.created_at_time"/>
+                <div class="flex-grow overflow-y-auto flex flex-col gap-y-3 p-2" v-scroll-bottom>
+                    <MessageBox v-for="message in store.conversationsMessages" :text="message.message" :user-avatar="message.user.username" :created_at="message.created_at_time" :is-time-string="true"/>
                 </div>
 
                 <div class="footer">
@@ -116,7 +119,7 @@ const vScrollBottom = {
                             <button class="conversation-panel__button panel-item btn-icon add-file-button">
                                 <img src="/images/file.svg" alt="file">
                             </button>
-                            <input v-model="inputMessage" class="conversation-panel__input panel-item" placeholder="Ведите ваше сообщения"/>
+                            <input v-model="inputMessage" @keydown.enter.prevent="sendMessage" class="conversation-panel__input panel-item" placeholder="Ведите ваше сообщения"/>
                             <button @click.prevent="sendMessage" class="conversation-panel__button panel-item btn-icon send-message-button">
                                 <img src="/images/ic-2.svg" alt="send">
                             </button>

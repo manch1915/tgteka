@@ -21,7 +21,6 @@ class PatternByBotNotification extends Notification
     public function __construct(Pattern $pattern)
     {
         $this->pattern = $pattern;
-        Log::info('PatternByBotNotification instantiated with pattern: '. $this->pattern->id);
     }
 
     public function via($notifiable): array
@@ -77,10 +76,9 @@ class PatternByBotNotification extends Notification
                 'media' => $media['url'],
             ];
         }
-
         $this->sendMediaGroupToTelegram($mediaGroup, $notifiable->telegram_user_id);
 
-        $telegramMessage = TelegramFile::create()
+        $telegramMessage = TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->content($content)
             ->options(['parse_mode' => 'HTML']);

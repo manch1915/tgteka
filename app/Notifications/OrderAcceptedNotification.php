@@ -27,6 +27,7 @@ class OrderAcceptedNotification extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
+            ->subject('Ваш заказ приняли!')
             ->line('Здравствуйте!')
             ->line("Ваш заказ приняли в канале: " . $this->chanelTitle);
     }

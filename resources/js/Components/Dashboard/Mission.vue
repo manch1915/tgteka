@@ -104,8 +104,8 @@ const openVideoPlayer = function(data) {
                                                                               order.orderPattern.patternMedia.length === 3 ? 'grid-cols-1 sm:grid-cols-2' : '',
                                                                               order.orderPattern.patternMedia.length >= 4 && order.orderPattern.patternMedia.length <= 6 ? 'grid-cols-2' : '',
                                                                               order.orderPattern.patternMedia.length > 6 ? 'grid-cols-3' : '']" class="grid gap-2">
-                                            <div v-for="(image, index) in order.orderPattern.patternMedia" :key="'img-' + index" class="bg-center bg-cover">
-                                                <img class="cursor-pointer" @click.prevent="openVideoPlayer(image)"  v-if="['.mp4', '.ogg', '.webm'].some(ext => image.url.includes(ext))" :src="image.thumbnail_path" alt=""/>
+                                            <div v-for="(image, index) in order.orderPattern.patternMedia" :key="'img-' + index" class="bg-center bg-cover w-full">
+                                                <img class="cursor-pointer w-full object-fill" @click.prevent="openVideoPlayer(image)"  v-if="['.mp4', '.ogg', '.webm'].some(ext => image.url.includes(ext))" :src="image.thumbnail_path" alt=""/>
                                                 <n-image v-else :src="image.url" alt="" class="w-full h-full" />
                                             </div>
                                         </transition-group>

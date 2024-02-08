@@ -48,6 +48,7 @@ const getPlacements = async (page = 1) => {
             `?page=${page}` +
             `&status=${activeSortButton.value}` +
             `&minPrice=${value.value[0]}` +
+            `&maxPrice=${value.value[1]}` +
             `&startDate=${new Date(range.value[0]).toJSON()}` +
             `&endDate=${new Date(range.value[1]).toJSON()}`;
 

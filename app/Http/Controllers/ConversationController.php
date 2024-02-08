@@ -4,13 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\Conversation;
 use App\Models\ConversationMessages;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class ConversationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $conversations = auth()->user()->conversations;
+        $search = $request->input('search');
+
+        $conversations = Conversation::where(function ($query) use ($search) {
+            $query->where(function ($query) use ($search) {
+                $query->where('user_one', '!=', auth()->id())
+                    ->orWhere('user_two', '!=', auth()->id());
+            })
+                ->when($search, function ($query) use ($search) {
+                    $query->whereHas('userOne', function ($query) use ($search) {
+                        $query->where('username', 'like', "%$search%");
+                    })
+                        ->orWhereHas('userTwo', function ($query) use ($search) {
+                            $query->where('username', 'like', "%$search%");
+                        });
+                });
+        })
+            ->with('userOne', 'userTwo')
+            ->get();
 
         $formattedConversations = $conversations->map(function (Conversation $conversation) {
             $otherUser = $conversation->userOne->id === auth()->id()
@@ -30,22 +48,10 @@ class ConversationController extends Controller
     public function conversationsMessages($conversationId)
     {
         $conversationMessages = ConversationMessages::where('conversation_id' , $conversationId)
-            ->with('user:id,name,email')
+            ->with('user:id,username,email')
             ->get();
-
-        foreach ($conversationMessages as $message) {
-            $seed = $message->user->name ?? $message->user->email;
-            $message->user->profile_photo_url = $this->getAvatarUrl($seed);
-        }
 
         return response()->json($conversationMessages);
     }
 
-    private function getAvatarUrl($seed) //Make sure the $seed is URL-encoded
-    {
-        if (filter_var($seed, FILTER_VALIDATE_EMAIL)) {
-            $seed = explode('@', $seed)[0];
-        }
-        return "https://api.dicebear.com/7.x/initials/svg?seed={$seed}";
-    }
 }

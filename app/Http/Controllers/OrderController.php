@@ -10,7 +10,7 @@ use App\Notifications\OrderAcceptedNotification;
 use App\Notifications\OrderDeclinedNotification;
 use App\Notifications\OrderSuggestedDateNotification;
 use App\Notifications\PatternByBotNotification;
-use App\Notifications\ToCheckNotification;
+use App\Notifications\OrderToCheckNotification;
 use App\Services\AvatarService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -62,7 +62,7 @@ class OrderController extends Controller
 
             $order->orderPattern->patternMedia = $patternMedia->sortBy('order')->values();
             $order->channel->channelAvatar = $this->avatarService->getAvatarUrlOfChannel($order->channel);
-
+            $order->status = trans('messages.' . $order->status);
             return $order;
         });
 
@@ -119,7 +119,7 @@ class OrderController extends Controller
         $order->status = 'check';
         $order->save();
 
-        $order->user->notify(new ToCheckNotification($validated['post_link']));
+        $order->user->notify(new OrderToCheckNotification($validated['post_link']));
 
         return response()->json($validated);
     }

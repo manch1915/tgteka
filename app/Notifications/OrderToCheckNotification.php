@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class ToCheckNotification extends Notification implements ShouldQueue
+class OrderToCheckNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -27,6 +27,7 @@ class ToCheckNotification extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
+            ->subject('Заявка передана на проверку.')
             ->line('Здравствуйте!')
             ->line("Ваш пост разместили, пожалуйста перейдите по ссылке и проверьте: " . $this->post_link);
     }

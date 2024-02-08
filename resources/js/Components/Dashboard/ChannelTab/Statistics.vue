@@ -13,10 +13,13 @@ import {
     Tooltip
 } from "chart.js";
 import axios from "axios";
+import {useMessage} from "naive-ui";
 
 const props = defineProps({
     channel_id: Number,
 })
+
+const message = useMessage()
 
 Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,PointElement, LineElement);
 Chart.defaults.color = '#EAE0FF';
@@ -102,7 +105,9 @@ const fetchChannelStats = async () => {
         };
     }
     catch (err) {
-        console.error(err)
+        if (err.response.data.error){
+            message.error(err.response.data.error)
+        }
     }
 }
 

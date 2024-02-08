@@ -65,7 +65,7 @@ props.socket.onmessage = function(event) {
                     <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">{{ ticketTitle }}</h1>
                 </div>
             </div>
-            <div class="flex flex-col gap-y-3 overflowing">
+            <div class="flex flex-col gap-y-3 overflowing p-2">
                 <MessageBox v-for="message in messages" :text="message.message" :user-avatar="message.sender.username" :created_at="message.created_at"/>
             </div>
         </div>

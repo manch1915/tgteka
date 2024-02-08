@@ -6,6 +6,7 @@ use App\Models\Channel;
 use App\Models\Conversation;
 use App\Models\Format;
 use App\Models\Order;
+use App\Notifications\OrderCreatedNotification;
 use DateTime;
 use DateTimeZone;
 use Exception;
@@ -97,7 +98,7 @@ class OrderService
             $postDate = new DateTime($channel['timestamp']);
             $postDateEnd = $postDate->modify('+' . $formatDetails['days'] . ' day');
 
-            Order::create([
+            $order = Order::create([
                 'user_id' => Auth::id(),
                 'description' => $request->description,
                 'pattern_id' => $request->pattern_id,
@@ -107,6 +108,10 @@ class OrderService
                 'format_id' => $formatDetails['id'],
                 'price' => $price,
             ]);
+
+            $channelModel = Channel::find($channel['id']);
+
+            $channelModel->user->notify(new OrderCreatedNotification($order));
         }
     }
 

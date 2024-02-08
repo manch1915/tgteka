@@ -78,6 +78,11 @@ class ChannelController extends Controller
     public function fetchChannelStatisticsAll($channelId)
     {
         $channelStatistic = ChannelStatistic::where('channel_id', $channelId)->first(['stats', 'subscribers', 'avg_posts_reach', 'er', 'channel_id']);
+
+        if(null === $channelStatistic) {
+            return response()->json(['error' => 'Статистика канала не найдена'], 404);
+        }
+
         $channel = Channel::find($channelStatistic->channel_id);
 
         $finishedOrdersQuery = $channel->orders()->where('status', 'finished');

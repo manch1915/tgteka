@@ -31,8 +31,8 @@ class PlacementController extends Controller
         $orders = auth()->user()->orders()
             ->with(['format', 'channel.topic', 'pattern'])
             ->when($request->input('status'), fn($query, $status) => $query->where('status', $status))
-            ->when($request->has('minPrice'), fn($query, $minPrice) => $query->where('price', '>=', intval($minPrice)))
-            ->when($request->has('maxPrice'), fn($query, $maxPrice) => $query->where('price', '<=', intval($maxPrice)))
+            ->when($request->input('minPrice'), fn($query, $minPrice) => $query->where('price', '>=', intval($minPrice)))
+            ->when($request->input('maxPrice'), fn($query, $maxPrice) => $query->where('price', '<=', intval($maxPrice)))
             ->when($request->has(['startDate', 'endDate']), fn($query) => $query->whereBetween('created_at', [
                 Carbon::parse($request->input('startDate')),
                 Carbon::parse($request->input('endDate'))->endOfDay()
@@ -54,7 +54,6 @@ class PlacementController extends Controller
 
             return $order;
         });
-
         return $orders;
     }
 

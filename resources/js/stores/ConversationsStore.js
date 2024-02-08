@@ -10,8 +10,11 @@ export const useConversationsStore = defineStore("conversations", {
         showChat: true
     }),
     actions: {
-        async getConversations() {
-            let url = route('conversations');
+        async getConversations(search = "") {
+
+            search = search.trim()
+
+            let url = route('conversations', {search});
             this.loading = true;
 
             const response = await axios.get(url);
@@ -26,9 +29,9 @@ export const useConversationsStore = defineStore("conversations", {
             this.conversationsMessages = response.data;
             this.loading = false;
         },
-        addNewMessage(message, senderProfileURL, createdAt) { // Adjust these parameters as per requirement
+        addNewMessage(message, username, createdAt) { // Adjust these parameters as per requirement
             const user = {
-                profile_photo_url: senderProfileURL,
+                username: username,
             };
 
             const newMessage = {

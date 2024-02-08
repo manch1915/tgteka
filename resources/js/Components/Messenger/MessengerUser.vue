@@ -19,9 +19,9 @@ const openChat = (chatId) => {
             <div class="avatar">
                 <img :src="getAvatarUrl(chat.user.username)" alt="">
             </div>
-            <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed overflow-hidden">
-                {{chat.user.name}}
-                <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-snug">
+            <div class="flex flex-col justify-around overflow-hidden">
+                <p class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">{{chat.user.username}}</p>
+                <p class="text-gray-100 opacity-40 text-sm font-normal font-['Open Sans'] leading-snug">
                     {{ chat?.last_message ? chat.last_message.message : 'пусто' }}
                 </p>
             </div>

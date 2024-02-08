@@ -48,8 +48,8 @@ const accept = async () => {
             console.log(error);
         });
 }
-const canAccept = computed(() => !isLoading.value && !['accepted', 'declined', 'check', 'finished'].includes(props.order.status))
-const canDecline = computed(() => ['pending'].includes(props.order.status))
+const canAccept = computed(() => !isLoading.value && !['принятый', 'отклоненный', 'проверить', 'законченный'].includes(props.order.status))
+const canDecline = computed(() => ['в ожидании'].includes(props.order.status))
 
 
 const formatDateTime = (dateTime, options) => {

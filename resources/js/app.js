@@ -12,6 +12,8 @@ import Emoji from "quill-emoji";
 import {NLoadingBarProvider, NMessageProvider} from "naive-ui";
 import {darkModeKey, styleKey} from "@/config.js";
 import {useStyleStore} from "@/stores/style.js";
+import { i18nVue } from 'laravel-vue-i18n'
+
 
 config({
     scrollLock: false,
@@ -59,6 +61,12 @@ createInertiaApp({
             .use(plugin)
             .use(pinia)
             .use(ZiggyVue)
+            .use(i18nVue, {
+                resolve: async lang => {
+                    const langs = import.meta.glob('../../lang/*.json');
+                    return await langs[`../../lang/${lang}.json`]();
+                }
+            })
             .mount(el)
     },
     progress: {

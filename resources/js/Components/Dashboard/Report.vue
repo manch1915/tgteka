@@ -35,8 +35,8 @@ const sendReport = () => {
                 </div>
                 <div class="sm:w-3/4 mx-auto">
                     <div class="sm:w-1/2 mx-auto">
-                        <n-input :theme-overrides="inputThemeOverrides" v-model:value="reportMessage" placeholder="Текст жалобы" type="textarea"/>
-                        <button @click.prevent="sendReport" class="py-2 w-full mt-6 bg-purple-600 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Отправить</button>
+                        <n-input :theme-overrides="inputThemeOverrides" @keydown.enter.prevent="sendReport" v-model:value="reportMessage" placeholder="Текст жалобы" type="textarea"/>
+                        <button @click.prevent="sendReport" class="py-2 w-full mt-6 bg-purple-600 transition hover:bg-purple-800 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Отправить</button>
                     </div>
                 </div>
             </div>

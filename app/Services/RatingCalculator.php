@@ -6,8 +6,7 @@ use Carbon\Carbon;
 
 class RatingCalculator
 {
-
-    public function calculate($orderItem): void
+    public function calculate(object $orderItem): void
     {
         $channel = $orderItem->channel;
 
@@ -17,32 +16,21 @@ class RatingCalculator
         $channel->save();
     }
 
-    private function calculateRating($orderItem): float
+    private function calculateRating(object $orderItem): float
     {
-
         $start = Carbon::now()->subYear();
-        $orderItems = $orderItem->channel->orderItems()->where('created_at', '>', $start)->where('status', 'accepted')->get();
+
+        $orderItems = $orderItem->channel->orderItems()
+            ->where('created_at', '>', $start)
+            ->where('status', 'accepted')
+            ->get();
 
         $rating = $orderItems->sum(function ($orderItem) {
-            $pointsForOrder = 1;
+            $pointsForOrder = 1.0;
             $total = $orderItem->price * $orderItem->count;
-
             $pointsForVolume = $total / 1000 * 0.1;
-
-            $pointsForRating = 0;
-            if (!is_null($orderItem->client_rating)) {
-                if ($orderItem->client_rating === 5) {
-                    $pointsForRating = 5 * ($total / 10000);
-                } elseif ($orderItem->client_rating === 4) {
-                    $pointsForRating = 4 * ($total / 10000) * 0.5;
-                } elseif ($orderItem->client_rating === 3) {
-                    $pointsForRating = 3 * ($total / 10000) * 0.1;
-                } elseif ($orderItem->client_rating === 2) {
-                    $pointsForRating = 2 * ($total / 10000) * -0.5;
-                } elseif ($orderItem->client_rating === 1) {
-                    $pointsForRating = 1 * ($total / 10000) * -1;
-                }
-            }
+            $clientRating = $orderItem->client_rating ?? 0;
+            $pointsForRating = $this->calculatePointsForRating($clientRating, $total);
 
             return $pointsForOrder + $pointsForVolume + $pointsForRating;
         });
@@ -52,21 +40,30 @@ class RatingCalculator
         return $rating + $bonusScore;
     }
 
-    private function calculateScore($orderItem): float
+    private function calculatePointsForRating(int $rating, float $total): float
     {
+        return match ($rating) {
+            5 => 5 * ($total / 10000),
+            4 => 4 * ($total / 10000) * 0.5,
+            3 => 3 * ($total / 10000) * 0.1,
+            2 => 2 * ($total / 10000) * -0.5,
+            1 => 1 * ($total / 10000) * -1,
+            default => 0,
+        };
+    }
 
+    private function calculateScore(object $orderItem): float
+    {
         $start = Carbon::now()->subYear();
         $orders = $orderItem->channel->orders()->where('created_at', '>', $start)->get();
 
-        $score = $orders->avg('client_rating');
+        $score = $orders->avg('client_rating') ?? 0;
 
         return $score;
     }
 
-    private function calculateBonusScore($channel): float
+    private function calculateBonusScore(object $channel): float
     {
-        $bonusScore = 0;
-
         if (
             $channel->format_one_price !== 0 ||
             $channel->format_two_price !== 0 ||
@@ -74,9 +71,9 @@ class RatingCalculator
             $channel->no_deletion_price !== 0 ||
             $channel->repost_price !== 0
         ) {
-            $bonusScore = 1.0;
+            return 1.0;
         }
 
-        return $bonusScore;
+        return 0;
     }
 }

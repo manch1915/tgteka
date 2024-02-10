@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ReportRequest;
 use App\Http\Requests\ReviewRequest;
+use App\Models\ChannelStatistic;
 use App\Models\Order;
 use App\Models\OrderReport;
 use App\Models\Review;
@@ -12,6 +13,7 @@ use App\Notifications\OrderReportNotification;
 use App\Services\AvatarService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class PlacementController extends Controller
 {
@@ -21,6 +23,7 @@ class PlacementController extends Controller
     {
         $this->avatarService = $avatarService;
     }
+
     public function index()
     {
         return inertia('Dashboard/Placements');
@@ -43,10 +46,16 @@ class PlacementController extends Controller
         $additionalDaysMapping = ['1/24' => 1, '2/48' => 2, '3/72' => 3];
 
         $orders->getCollection()->transform(function ($order) use ($additionalDaysMapping) {
-            $order->status = trans('messages.' . $order->status);
 
             $additionalDays = $additionalDaysMapping[$order->format->name] ?? 1;
             $order->post_date_end = Carbon::parse($order->post_date)->addDays($additionalDays)->format('Y-m-d H:i:s');
+
+            $channelStats = ChannelStatistic::where('channel_id', $order->channel->id)->first(['stats']);
+
+            if ($channelStats) {
+                $order->channel->statistics = json_decode($channelStats->stats, true);
+                $order->channel->participants_count = $order->channel->statistics['participants_count'] ?? null;
+            }
 
             $order->channel->channelAvatar = $this->avatarService->getAvatarUrlOfChannel($order->channel);
             $order->orderPattern = $order->pattern;
@@ -59,15 +68,23 @@ class PlacementController extends Controller
 
     public function sendReport(ReportRequest $request)
     {
-        $validated = $request->validated();
+        try {
+            $validated = $request->validated();
 
-        OrderReport::create([
-            'order_id' => $validated['order_id'],
-            'message' => $validated['report_message']
-        ]);
+            $order = Order::findOrFail($validated['order_id']);
 
-        $order = Order::find($validated['order_id']);
-        $order->channel->user->notify(new OrderReportNotification($validated['report_message']));
+            OrderReport::create([
+                'order_id' => $validated['order_id'],
+                'message' => $validated['report_message']
+            ]);
+
+            $order->channel->user->notify(new OrderReportNotification($validated['report_message']));
+
+
+        } catch (\Exception $e) {
+            Log::error('Unable to send report: ', ['exception' => $e]);
+            return response(['error' => 'Не удается отправить отчет из-за ошибки. Пожалуйста, попробуйте еще раз или обратитесь в службу поддержки, если проблема не устранена.'], 500);
+        }
     }
 
     public function sendReview(ReviewRequest $request)
@@ -86,7 +103,7 @@ class PlacementController extends Controller
             return response(['error' => 'Вы уже оставляли отзыв для этого канала'], 403);
         }
 
-        Review::create([
+        $review = Review::create([
             'channel_id' => $channelId,
             'rating' => $validated['rating'],
             'review_text' => $validated['review_text'],
@@ -94,5 +111,23 @@ class PlacementController extends Controller
         ]);
 
         $order->channel->user->notify(new ChannelReviewNotification($validated['review_text'], $validated['rating'], $order->channel->channel_name));
+
+        return $review;
+    }
+
+    public function acceptOrder(Request $request, Order $order)
+    {
+        try {
+            if ($order->status === 'check') {
+                $order->status = 'checked';
+                $order->save();
+            } else {
+                return response()->json(['error' => 'Статус заказа должен быть проверен, чтобы обновить его до проверено'], 400);
+            }
+            return $order;
+        } catch (\Exception $e) {
+            Log::error('Error while accepting order: ', ['exception' => $e]);
+            return response(['error' => 'При принятии заказа произошла ошибка. Пожалуйста, попробуйте снова.'], 500);
+        }
     }
 }

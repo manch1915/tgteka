@@ -13,19 +13,18 @@ class ChannelController extends Controller
     public function index()
     {
         $channels = Channel::with('topic')->get();
-        $channels->each(function ($channel) {
+        $channels->map(function ($channel) {
             $media = $channel->getMedia('avatars')->last();
-
             if ($media) {
                 $channel->avatar = $media->getUrl();
             } else {
                 $channel->avatar = 'https://api.dicebear.com/7.x/initials/svg?seed=' . $channel->channel_name;
             }
-
+            $channel->save();
             return $channel;
         });
         [$channelsType, $chatsType] = $channels->partition(function ($channel) {
-            return $channel->type == 'channel';
+            return $channel->type === 'channel';
         });
 
         return response()->json([
@@ -45,12 +44,6 @@ class ChannelController extends Controller
     public function update(Request $request, Channel $channel)
     {
         $inputData = $request->all();
-
-        if(isset($inputData['channel_creation_date'])) {
-            $timestamp = $inputData['channel_creation_date'] / 1000;  // convert from milliseconds to seconds
-            $date = date('Y-m-d', $timestamp);
-            $inputData['channel_creation_date'] = $date;
-        }
 
         $channel->update($inputData);
 

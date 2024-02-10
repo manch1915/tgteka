@@ -79,6 +79,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/get', [PlacementController::class, 'get'])->name('placements.get');
         Route::post('/send-report', [PlacementController::class, 'sendReport'])->name('report-send');
         Route::post('/send-review', [PlacementController::class, 'sendReview'])->name('review-send');
+        Route::post('/accept-order/{order}', [PlacementController::class, 'acceptOrder'])->name('accept-order');
     });
 
     Route::get('/patterns', [PatternController::class, 'index'])->name('patterns');

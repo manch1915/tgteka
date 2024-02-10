@@ -2,15 +2,16 @@
 
 namespace App\Services;
 
+use App\Jobs\UpdateFinishedOrdersJob;
 use App\Models\Channel;
 use App\Models\Conversation;
 use App\Models\Format;
 use App\Models\Order;
 use App\Notifications\OrderCreatedNotification;
 use DateTime;
-use DateTimeZone;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class OrderService
@@ -27,8 +28,13 @@ class OrderService
      */
     public function createOrder(Request $request): ?string
     {
+        if (!$request->has('channels')) {
+            return 'Invalid Request. Channels not provided.';
+        }
 
-        $totalSum = $this->calculateTotalSum($request->channels);
+        $channels = $request->channels;
+        $totalSum = $this->calculateTotalSum($channels);;
+
         $user = Auth::user();
 
         $balanceCheck = $this->checkBalanceAndExecuteTransaction($user, $totalSum);
@@ -69,20 +75,34 @@ class OrderService
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function calculateTotalSum(array $channels): float|int
     {
         $totalSum = 0;
         foreach ($channels as $channel) {
-            $totalSum += $this->calculateChannelSum($channel);
+            try {
+                $totalSum += $this->calculateChannelSum($channel);
+            } catch (Exception $e) {
+                logger()->error($e);
+            }
         }
 
         return $totalSum;
     }
 
+    /**
+     * @throws Exception
+     */
     private function calculateChannelSum(array $channel): float|int
     {
+        if (!isset($channel['id'])) {
+            throw new Exception('Invalid channel id provided.');
+        }
+
         Channel::findOrFail($channel['id']);
-        return $channel[$channel['format']];
+        return $channel[$channel['format']] ?? 0;
     }
 
     /**
@@ -93,6 +113,10 @@ class OrderService
         foreach ($channels as $channel) {
             $price = $this->calculateChannelSum($channel);
             $formatDetails = $this->getFormatDetails($channel);
+
+            if (!isset($channel['timestamp'])) {
+                throw new Exception('Invalid timestamp provided.');
+            }
 
             // Add days to post_date
             $postDate = new DateTime($channel['timestamp']);
@@ -111,13 +135,34 @@ class OrderService
 
             $channelModel = Channel::find($channel['id']);
 
-            $channelModel->user->notify(new OrderCreatedNotification($order));
+            if ($channelModel && $channelModel->user) {
+                $channelModel->user->notify(new OrderCreatedNotification($order));
+            }
+
+            $postDateEndCarbon = Carbon::instance($postDateEnd);
+            $delay = $postDateEndCarbon->diffInSeconds(Carbon::now()) + 400;
+
+            logger()->info("Delay calculated for the order {$order->id} is {$delay} seconds");
+            UpdateFinishedOrdersJob::dispatch($order)->delay($delay);
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function getFormatDetails(array $channel): array
     {
+        if (!isset($channel['format']) || !isset(self::FORMAT_NAME[$channel['format']])) {
+            throw new Exception('Invalid format provided.');
+        }
+
         $formatName = self::FORMAT_NAME[$channel['format']];
+
+        // Check if format name contains '/'
+        if (!str_contains($formatName, '/')) {
+            throw new Exception('Invalid format name. It should contain "/".');
+        }
+
         $format = Format::where('name', $formatName)->firstOrFail();
 
         $formatParts = explode('/', $formatName);
@@ -125,4 +170,6 @@ class OrderService
 
         return ['id' => $format->id, 'days' => $days];
     }
+
+
 }

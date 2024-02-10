@@ -5,6 +5,7 @@ return [
     'accepted' => 'принятый',
     'declined' => 'отклоненный',
     'check' => 'проверить',
+    'checked' => 'проверено',
     'finished' => 'законченный',
     'succeeded' => 'законченный',
     'failed' => 'неуспешный',
@@ -13,4 +14,5 @@ return [
     'rejected' => 'отклоненный',
     'created' => 'созданный',
     'under_review' => 'на рассмотрении',
+    'awaiting_check' => 'рассматриваем жалобу',
 ];

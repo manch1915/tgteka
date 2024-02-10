@@ -42,4 +42,14 @@ class Order extends Model
     {
         return $this->hasMany(OrderReport::class);
     }
+
+    public function markAsFinished(): void
+    {
+        $this->update(['status' => 'finished']);
+    }
+
+    public function markAsChecked(): void
+    {
+        $this->update(['status' => 'checked']);
+    }
 }

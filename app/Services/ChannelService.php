@@ -55,18 +55,14 @@ class ChannelService
     protected function applyAdditionalFilters($query, Request $request): void
     {
         foreach ($request->input() as $key => $value) {
-            switch ($key) {
-                case 'peerType':
-                    $query->where('type', '=', $value);
-                    break;
-                case str_contains($key, '_min'):
-                    $field = str_replace('_min', '', $key);
-                    $query->whereRaw("CAST(JSON_EXTRACT(channel_statistics.stats, '$." . $field . "') as UNSIGNED) >= ?", [$value]);
-                    break;
-                case str_contains($key, '_max'):
-                    $field = str_replace('_max', '', $key);
-                    $query->whereRaw("CAST(JSON_EXTRACT(channel_statistics.stats, '$." . $field . "') as UNSIGNED) <= ?", [$value]);
-                    break;
+            if ($key === 'peerType') {
+                $query->where('type', '=', $value);
+            } elseif (str_contains($key, '_min')) {
+                $field = str_replace('_min', '', $key);
+                $query->whereRaw("CAST(JSON_EXTRACT(channel_statistics.stats, '$." . $field . "') as UNSIGNED) >= ?", [$value]);
+            } elseif (str_contains($key, '_max')) {
+                $field = str_replace('_max', '', $key);
+                $query->whereRaw("CAST(JSON_EXTRACT(channel_statistics.stats, '$." . $field . "') as UNSIGNED) <= ?", [$value]);
             }
         }
     }

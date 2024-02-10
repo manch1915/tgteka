@@ -15,7 +15,7 @@ return new class extends Migration {
 
             $table->string('description', 300)->nullable();
             $table->bigInteger('price');
-            $table->enum('status', ['pending', 'accepted', 'declined', 'check', 'finished'])->default('pending');
+            $table->enum('status', ['pending', 'accepted', 'declined', 'check', 'checked', 'finished', 'awaiting_check'])->default('pending');
             $table->timestamp('post_date')->nullable();
             $table->timestamp('post_date_end')->nullable();
             $table->string('decline_reason', 300)->nullable();

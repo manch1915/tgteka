@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ToCheckRequest;
+use App\Jobs\CheckOrderStatusJob;
+use App\Models\ChannelStatistic;
 use App\Models\Order;
 use App\Models\Pattern;
 use App\Models\SuggestedDate;
@@ -49,6 +51,13 @@ class OrderController extends Controller
             $post_date_end = Carbon::parse($order->post_date)->addDays($additionalDays);
             $order->post_date_end = $post_date_end->format('Y-m-d H:i:s');
 
+            $channelStats = ChannelStatistic::where('channel_id', $order->channel->id)->first(['stats']);
+
+            if ($channelStats) {
+                $order->channel->statistics = json_decode($channelStats->stats, true);
+                $order->channel->participants_count = $order->channel->statistics['participants_count'] ?? null;
+            }
+
             $patternMedia = $order->pattern
                 ->getMedia('images')
                 ->map(function ($item) {
@@ -62,7 +71,6 @@ class OrderController extends Controller
 
             $order->orderPattern->patternMedia = $patternMedia->sortBy('order')->values();
             $order->channel->channelAvatar = $this->avatarService->getAvatarUrlOfChannel($order->channel);
-            $order->status = trans('messages.' . $order->status);
             return $order;
         });
 
@@ -78,7 +86,9 @@ class OrderController extends Controller
 
         $orderItem->status = 'accepted';
         $orderItem->save();
+
         $orderItem->user->notify(new OrderAcceptedNotification($orderItem->channel->channel_name));
+
         return response()->json(['message' => 'Заказ успешно принят']);
     }
 
@@ -90,14 +100,13 @@ class OrderController extends Controller
             return response()->json(['message' => 'Заказ не найден'], 404);
         }
 
-        $date = $request->has('suggested_date')
-            ? Carbon::createFromTimestampMs($request->suggested_date)->format('Y-m-d H:i:s')
-            : null;
+        if ($request->has('suggested_date')) {
+        $date = Carbon::createFromTimestampMs($request->suggested_date)->format('Y-m-d H:i:s');
 
-        if ($date) {
-            $suggestedDate = SuggestedDate::updateOrCreate(['order_id' => $orderItem->id], [
-                'suggested_post_date' => $date
-            ]);
+        $suggestedDate = SuggestedDate::updateOrCreate(
+                ['order_id' => $orderItem->id],
+                ['suggested_post_date' => $date]
+            );
             $orderItem->user->notify(new OrderSuggestedDateNotification($date, $suggestedDate->id, $orderItem->id));
         } else {
             SuggestedDate::where('order_id', $orderItem->id)->first()?->delete();
@@ -120,7 +129,7 @@ class OrderController extends Controller
         $order->save();
 
         $order->user->notify(new OrderToCheckNotification($validated['post_link']));
-
+        CheckOrderStatusJob::dispatch($order)->delay(now()->addHours(24));
         return response()->json($validated);
     }
 

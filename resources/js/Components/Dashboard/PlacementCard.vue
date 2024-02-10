@@ -1,7 +1,7 @@
 <script setup>
 import {computed, ref} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import {mdiBug, mdiCheck, mdiForumOutline, mdiForumPlusOutline} from "@mdi/js";
+import {mdiBug, mdiCheck, mdiCheckDecagramOutline, mdiForumOutline, mdiForumPlusOutline} from "@mdi/js";
 import {pushModal} from "jenesius-vue-modal";
 import Report from "@/Components/Dashboard/Report.vue";
 import Review from "@/Components/Dashboard/Review.vue";
@@ -23,6 +23,7 @@ const message = useMessage()
 
 const canReport = computed(() => !isLoading.value && ['accepted', 'check'].includes(props.order.status))
 const canReview = computed(() => !isLoading.value && ['finished'].includes(props.order.status))
+const canAccept = computed(() => !isLoading.value && ['check'].includes(props.order.status))
 
 const formatDateTime = (dateTime, options) => {
     return dateTime.toLocaleString('ru-RU', options);
@@ -66,6 +67,10 @@ const openReview = () => {
   pushModal(Review, {order_id: props.order.id})
 }
 
+const acceptOrder = () => {
+    axios.post(route('accept-order', { order: props.order.id }))
+}
+
 </script>
 
 <template>
@@ -83,7 +88,7 @@ const openReview = () => {
                     <div class="mt-4">
                         <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">
                             <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Подписчики</p>
-                            <h1 class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">146 774</h1>
+                            <h1 class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{order.channel.participants_count}}</h1>
                         </div>
                         <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">
                             <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ createdAt }}</p>
@@ -93,7 +98,8 @@ const openReview = () => {
                            <div class="flex">
                                <div class="flex flex-col items-end">
                                    <p class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Статус заявки</p>
-                                   <div class="text-violet-100 text-base font-bold font-['Poppins'] leading-tight flex items-center gap-x-2"><base-icon size="30" :path="mdiCheck"/>{{order.status}}</div>
+                                   <div class="text-violet-100 text-base font-bold font-['Poppins'] leading-tight flex items-center gap-x-2"><base-icon size="30" :path="mdiCheck"/>
+                                       {{ $t('messages.' + order.status) }}</div>
                                </div>
                            </div>
                         </div>
@@ -127,6 +133,7 @@ const openReview = () => {
         <div class="flex justify-between items-center py-6 unwrap px-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
             <div class="flex gap-x-4">
                 <button v-if="canReport" :disabled="isLoading"  @click.prevent="openReport" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Пожаловаться <BaseIcon size="30" :path="mdiBug"/></button>
+                <button v-if="canAccept" :disabled="isLoading"  @click.prevent="acceptOrder" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Проверено <BaseIcon size="30" :path="mdiCheckDecagramOutline"/></button>
                 <button v-if="canReview" :disabled="isLoading"  @click.prevent="openReview" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Оставить отзыв <BaseIcon size="30" :path="mdiForumPlusOutline"/></button>
              </div>
             <div>

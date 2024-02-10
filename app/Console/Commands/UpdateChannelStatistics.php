@@ -46,6 +46,17 @@ class UpdateChannelStatistics extends Command
                     'er' => json_encode($er)
                 ]
             );
+
+            if ($generalStatistics->response->peer_type === 'channel'
+                && property_exists($generalStatistics->response, 'adv_post_reach_12h')
+                && $generalStatistics->response->adv_post_reach_12h != 0)
+            {
+                $channel->cpm = ($channel->format_one_price * 1000)
+                    / $generalStatistics->response->adv_post_reach_12h;
+            }
+
+            $channel->status = 'accepted';
+            $channel->save();
         }
     }
 }

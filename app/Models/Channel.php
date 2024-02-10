@@ -49,4 +49,13 @@ class Channel extends Model implements HasMedia
         return 'slug';
     }
 
+    public function setChannelCreationDateAttribute($value): void
+    {
+        if (is_numeric($value)) {
+            $value /= 1000;
+            $this->attributes['channel_creation_date'] = date('Y-m-d', $value);
+        } else {
+            $this->attributes['channel_creation_date'] = $value;
+        }
+    }
 }

@@ -53,7 +53,7 @@ const submit = () => {
                 <button type="button" @click.prevent="openPasswordRecovery()" class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight cursor-pointer">Забыли пароль?</button>
             </div>
             <div class="pt-4 w-full">
-                <button type="submit" class="w-full text-center pr-6 py-3.5 bg-purple-600 text-white text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl">
+                <button type="submit" class="w-full text-center pr-6 py-3.5 bg-purple-600 transition hover:bg-purple-800 text-white text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl">
                    Войти
                 </button>
             </div>

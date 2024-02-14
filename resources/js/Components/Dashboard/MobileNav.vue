@@ -1,7 +1,7 @@
 <script setup>
 import { Link, usePage } from "@inertiajs/vue3";
 import { useCartStore } from "@/stores/CartStore.js";
-import { onMounted, reactive, watch } from "vue";
+import {onMounted, reactive, ref, watch} from "vue";
 import { loadCart } from "@/channelHelpers.js";
 import { mdiCart } from "@mdi/js";
 import { NBadge } from "naive-ui";
@@ -13,13 +13,16 @@ const cartStore = useCartStore()
 const page = usePage()
 
 const cart = reactive({ items: [] });
+const unreadNotifications = ref(0);
 
 watch(() => cartStore.cartUpdate, () => {
     cart.items = loadCart();
 });
 
-onMounted(() => {
+onMounted(async () => {
     cart.items = loadCart();
+    const response = await axios.get(route('get.unread-notifications-count'));
+    unreadNotifications.value = response.data;
 })
 
 const openMessenger = () => {
@@ -36,9 +39,11 @@ const openMessenger = () => {
             <Link :href="route('adding-channel')">
                 <img src="/images/pattern.svg" alt="">
             </Link>
-            <Link :href="route('notifications')">
-                <img src="/images/bell.svg" alt="">
-            </Link>
+            <NBadge color="#6522d9" :value="unreadNotifications" :max="15">
+                <Link :href="route('notifications')">
+                    <img src="/images/notification.svg" alt="" class="!w-full !h-full">
+                </Link>
+            </NBadge>
             <Link v-if="cart.items.length > 0" :href="route('cart')">
                 <n-badge  type="info" :value="cart.items.length">
                     <BaseIcon class="text-purple-400" size="25" :path="mdiCart"/>

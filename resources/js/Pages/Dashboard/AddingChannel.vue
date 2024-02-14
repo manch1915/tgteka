@@ -9,7 +9,7 @@ import {
     selectThemeOverrides,
     checkboxToRadioThemeOverrides, sliderGenderThemeOverrides,
 } from '@/themeOverrides.js';
-import {computed, reactive, ref, toRefs, watch} from 'vue';
+import {computed, nextTick, reactive, ref, toRefs, watch} from 'vue';
 import {router, Link} from "@inertiajs/vue3";
 import {useMainStore} from "@/stores/main.js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
@@ -55,6 +55,7 @@ const handleFileUpload = (event) => {
 };
 const loading = useLoadingBar()
 const errors = ref({})
+let errorRefs = reactive({});
 const uploadChannel = () => {
     loading.start()
   axios.post(route('adding-channel.store'), form, {headers: {
@@ -70,6 +71,13 @@ const uploadChannel = () => {
           if (error.response && error.response.data && error.response.data.errors) {
               errors.value = error.response.data.errors;
           }
+
+          nextTick(() => {
+              const firstErrorElement = document.querySelector(".text-red-500");
+              if(firstErrorElement) {
+                  firstErrorElement.scrollIntoView({behavior: "smooth", block: "center"});
+              }
+          });
       })
 }
 
@@ -211,7 +219,7 @@ watch(state.type, (newRadio) => {
                         required
                         autocomplete="channel"
                         placeholder="@channel или https://t.me/dr_amina_pirmanova" />
-                    <span class="text-red-500" v-if="errors.url">{{ errors.url[0] }}</span>
+                    <span class="text-red-500" v-if="errors.url" ref="el => { errorRefs.url = el }">{{ errors.url[0] }}</span>
                 </div>
                 <div class="flex w-full flex-col justify-center gap-y-3 text-center">
                     <h2

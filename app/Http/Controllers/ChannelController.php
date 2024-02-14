@@ -105,6 +105,7 @@ class ChannelController extends Controller
     protected function toggleFavorite(Request $request)
     {
         $channel_id = $request->input('channel_id');
+        logger()->info($channel_id);
         $channel = Channel::find($channel_id);
 
         if (!$channel) {

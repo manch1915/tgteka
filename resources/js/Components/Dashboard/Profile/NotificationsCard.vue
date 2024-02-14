@@ -1,4 +1,6 @@
 <script setup>
+import {Link} from "@inertiajs/vue3"
+
 const props = defineProps({
     notification: Object
 })
@@ -7,7 +9,17 @@ const props = defineProps({
 <template>
     <div class="notification__card-wrapper">
         <div class="notification__card">
-            <p>{{notification.message}}</p>
+            <p>{{ notification.message }}</p>
+
+            <template v-if="notification.type === 'post_placed'">
+                <div class="pt-2">
+                    <a :href="notification.action_url">
+                        <button class="transition px-5 py-1 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-sm font-bold font-['Open Sans']">
+                            {{ notification.action_label }}
+                        </button>
+                    </a>
+                </div>
+            </template>
         </div>
     </div>
 </template>

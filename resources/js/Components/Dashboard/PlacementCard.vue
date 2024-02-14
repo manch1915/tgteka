@@ -1,5 +1,5 @@
 <script setup>
-import {computed, ref} from "vue";
+import {computed, ref, defineEmits} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiBug, mdiCheck, mdiCheckDecagramOutline, mdiForumOutline, mdiForumPlusOutline} from "@mdi/js";
 import {pushModal} from "jenesius-vue-modal";
@@ -21,7 +21,7 @@ const isLoading = ref(false);
 
 const message = useMessage()
 
-const canReport = computed(() => !isLoading.value && ['accepted', 'check'].includes(props.order.status))
+const canReport = computed(() => !isLoading.value && ['accepted', 'check', 'checked'].includes(props.order.status))
 const canReview = computed(() => !isLoading.value && ['finished'].includes(props.order.status))
 const canAccept = computed(() => !isLoading.value && ['check'].includes(props.order.status))
 
@@ -67,8 +67,11 @@ const openReview = () => {
   pushModal(Review, {order_id: props.order.id})
 }
 
+defineEmits(['orderAccepted'])
+
 const acceptOrder = () => {
     axios.post(route('accept-order', { order: props.order.id }))
+    emit('orderAccepted')
 }
 
 </script>

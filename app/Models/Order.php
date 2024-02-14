@@ -52,4 +52,9 @@ class Order extends Model
     {
         $this->update(['status' => 'checked']);
     }
+
+    public function markAsDeclined(): void
+    {
+        $this->update(['status' => 'declined']);
+    }
 }

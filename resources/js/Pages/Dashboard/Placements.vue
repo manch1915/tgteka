@@ -62,6 +62,10 @@ const getPlacements = async (page = 1) => {
 };
 onMounted(() => getPlacements())
 
+const handleOrderAccepted = () => {
+    getPlacements();
+}
+
 watch([activeSortButton, value, range], () => {
     getPlacements()
 })
@@ -93,7 +97,7 @@ watch([activeSortButton, value, range], () => {
             </div>
             <div class="flex flex-col gap-y-4 mt-8">
                 <template v-if="channels" v-for="(order, index) in channels.data" :key="index">
-                    <placement-card :order="order"/>
+                    <placement-card :order="order" @orderAccepted="handleOrderAccepted"/>
                 </template>
             </div>
             <div class="flex justify-center">

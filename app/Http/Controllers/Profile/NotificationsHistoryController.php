@@ -34,4 +34,9 @@ class NotificationsHistoryController extends Controller
     {
         auth()->user()->unreadNotifications->markAsRead();
     }
+
+    public function unreadNotificationsCount()
+    {
+        return response()->json(auth()->user()->unreadNotifications()->count());
+    }
 }

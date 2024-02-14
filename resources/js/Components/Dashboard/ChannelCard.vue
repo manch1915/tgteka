@@ -1,5 +1,5 @@
 <script setup>
-import {router} from "@inertiajs/vue3";
+import {router, Link} from "@inertiajs/vue3";
 import {NBadge, NTabPane, NTabs} from "naive-ui";
 import AboutChannel from "@/Components/Dashboard/ChannelTab/AboutChannel.vue";
 import {nTabThemeOverrides} from "@/themeOverrides.js";
@@ -40,7 +40,7 @@ const wrap = ref(false)
                 </div>
                 <div class="grid-element flex flex-col items-center justify-center">
                     <div class="flex flex-wrap gap-y-3 w-full justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                        <button :disabled="channel.status !== 'accepted'" class="watch flex items-center gap-x-1.5">Канал в каталоге <i class="block eye"></i></button>
+                        <Link :href="route('catalog.channels.index')"><button :disabled="channel.status !== 'accepted'" class="watch flex items-center gap-x-1.5">Канал в каталоге <i class="block eye"></i></button></Link>
                         <button @click.prevent="router.visit(route('channels.edit', channel.id))" class="edit">Редактировать канал</button>
                         <n-badge :value="channel.pending_order_count" type="info" >
                             <button @click.prevent="router.visit(route('order.index'))" class="orders flex items-center text-violet-100 gap-x-1.5">К заявкам <i class="block inkarrow"></i></button>

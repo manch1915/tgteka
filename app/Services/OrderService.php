@@ -143,7 +143,7 @@ class OrderService
             $delay = $postDateEndCarbon->diffInSeconds(Carbon::now()) + 400;
 
             logger()->info("Delay calculated for the order {$order->id} is {$delay} seconds");
-            UpdateFinishedOrdersJob::dispatch($order)->delay($delay);
+            UpdateFinishedOrdersJob::dispatch($order, new BalanceService())->delay($delay);
         }
     }
 

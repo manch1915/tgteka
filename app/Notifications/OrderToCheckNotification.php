@@ -35,7 +35,10 @@ class OrderToCheckNotification extends Notification implements ShouldQueue
     public function toDatabase($notifiable): array
     {
         return [
-            'message' => "Ваш пост разместили, пожалуйста перейдите по ссылке и проверьте: " . $this->post_link,
+            'type' => 'post_placed',
+            'message' => "Ваш пост разместили, перейдите по ссылке чтобы проверить.",
+            'action_url' => $this->post_link,
+            'action_label' => 'Перейти'
         ];
     }
 

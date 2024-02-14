@@ -22,8 +22,14 @@ class CheckOrderStatusJob implements ShouldQueue
 
     public function handle(): void
     {
+        // logic: when order status is 'check'
         if ($this->order->status === 'check'){
             $this->order->markAsChecked();
+        }
+
+        // logic: when order status is 'accepted'
+        if ($this->order->status === 'accepted'){
+            $this->order->markAsDeclined();
         }
     }
 }

@@ -18,13 +18,16 @@ const cartStore = useCartStore()
 const page = usePage()
 
 const cart = reactive({ items: [] });
+const unreadNotifications = ref(0);
 
 watch(() => cartStore.cartUpdate, () => {
     cart.items = loadCart();
 });
 
-onMounted(() => {
+onMounted(async () => {
     cart.items = loadCart();
+    const response = await axios.get(route('get.unread-notifications-count'));
+    unreadNotifications.value = response.data;
 })
 
 const isActiveRoute = (routeUrl) => page.url === routeUrl
@@ -83,10 +86,10 @@ const openMessenger = () => {
                                 <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Общий баланс&nbsp;</p>
                                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"> <animated-number :number="store.userBalance"/>&nbsp;₽</p>
                             </div>
-                            <div @click.prevent="router.visit(route('replenishment'))" class="cursor-pointer replenish pr-2 flex items-center gap-x-1">
+                            <Link :href="route('replenishment')" class="cursor-pointer replenish pr-2 flex items-center gap-x-1">
                                 <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</p>
                                 <div><img src="/images/group.svg" alt=""></div>
-                            </div>
+                            </Link>
                         </div>
                     </div>
                     <div class="hidden sm:flex interactive items-center">
@@ -94,9 +97,11 @@ const openMessenger = () => {
                             <img src="/images/messenger.svg" alt="">
                         </div>
                         <div class="border-r-[1px] px-5 h-8 flex flex-col justify-center">
-                            <Link :href="route('notifications')">
-                                <img src="/images/notification.svg" alt="">
-                            </Link>
+                            <NBadge color="#6522d9" :value="unreadNotifications" :max="15">
+                                <Link :href="route('notifications')">
+                                    <img src="/images/notification.svg" alt="">
+                                </Link>
+                            </NBadge>
                         </div>
                         <div v-if="cart.items.length > 0" class="flex flex-col justify-center h-8 border-r-[1px] px-5">
                             <Link :href="route('cart')" class="flex flex-col items-center">

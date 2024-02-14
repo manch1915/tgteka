@@ -17,7 +17,11 @@ const ordersStore = useOrdersStore()
 const toCheck = () => {
     axios.post(route('to-check-telegram-post'), {post_link: post_link.value, orderId: props.orderId})
         .then(r => console.log(r))
-        .catch(c => console.log(c))
+        .catch(c => {
+            if (c.response.data.message){
+                message.error(c.response.data.message)
+            }
+        })
     ordersStore.getOrders()
     closeModal()
 }

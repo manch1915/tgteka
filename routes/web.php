@@ -105,6 +105,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/history', [NotificationsHistoryController::class, 'index'])->name('notifications');
             Route::get('/get', [NotificationsHistoryController::class, 'getNotifications'])->name('notifications.get');
             Route::post('/mark-as-read-all', [NotificationsHistoryController::class, 'markAsReadAll'])->name('notifications.mark-as-read-all');
+            Route::get('/get/unread-notifications-count', [NotificationsHistoryController::class, 'unreadNotificationsCount'])->name('get.unread-notifications-count');
         });
 
         Route::group(['prefix' => 'transactions'], function () {
@@ -115,6 +116,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('change-password', [ChangePasswordController::class, 'index'])->name('change-password');
         Route::patch('change-password', [ChangePasswordController::class, 'update'])->name('change-password.update');
         Route::post('generate-password', [ChangePasswordController::class, 'generate'])->name('change-password.generate');
+
     });
 
     Route::get('/suggested-date/accept/{id}/{suggestedDate}', [SuggestedDateController::class, 'accept'])->name('suggested-date.accept');

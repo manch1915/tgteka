@@ -88,7 +88,8 @@ class OrderController extends Controller
         $orderItem->save();
 
         $orderItem->user->notify(new OrderAcceptedNotification($orderItem->channel->channel_name));
-
+        $postDate = Carbon::parse($orderItem->post_date);
+        CheckOrderStatusJob::dispatch($orderItem)->delay($postDate->addHours(2));
         return response()->json(['message' => 'Заказ успешно принят']);
     }
 
@@ -124,6 +125,15 @@ class OrderController extends Controller
         $validated = $request->validated();
 
         $order = Order::findOrFail($validated['orderId']);
+
+        // Check if the current date is after the order's post_date
+        $now = \Carbon\Carbon::now();
+        if ($now->lessThan(new \Carbon\Carbon($order->post_date))) {
+            // If current time has not reached post_date yet, return an error response
+            return response()->json([
+                'message' => 'Дата публикации еще не достигнута. Пожалуйста, повторите попытку позже.',
+            ], 400);  // You can adjust the status code and message as needed
+        }
 
         $order->status = 'check';
         $order->save();

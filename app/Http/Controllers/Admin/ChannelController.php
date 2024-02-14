@@ -20,7 +20,6 @@ class ChannelController extends Controller
             } else {
                 $channel->avatar = 'https://api.dicebear.com/7.x/initials/svg?seed=' . $channel->channel_name;
             }
-            $channel->save();
             return $channel;
         });
         [$channelsType, $chatsType] = $channels->partition(function ($channel) {

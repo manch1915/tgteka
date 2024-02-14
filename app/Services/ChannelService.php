@@ -21,6 +21,8 @@ class ChannelService
         $sort = $request->input('sort', 'desc');
 
         $channelsQuery = Channel::query()
+            ->select('channels.*')
+            ->addSelect('channel_statistics.stats')
             ->where('status', '=', 'accepted')
             ->leftJoin('channel_statistics', 'channels.id', '=', 'channel_statistics.channel_id')
             ->whereNotNull('channel_statistics.stats');

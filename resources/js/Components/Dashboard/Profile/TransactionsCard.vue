@@ -14,11 +14,11 @@ const props = defineProps({
             </div>
             <div class="flex flex-col">
                 <div class="py-6 border"><h2 class="title text-center">Услуги</h2></div>
-                <div class="py-6 "><p class="subtitle text-center"></p></div>
+                <div class="py-6 "><p class="subtitle text-center">{{transaction.appointment}}</p></div>
             </div>
             <div class="flex flex-col">
                 <div class="py-6 border"><h2 class="title text-center">Назначение</h2></div>
-                <div class="py-6"><p class="subtitle text-center">{{transaction.detials}}</p></div>
+                <div class="py-6"><p class="subtitle text-center">{{transaction.service}}</p></div>
             </div>
             <div class="flex flex-col">
                 <div class="py-6 border"><h2 class="title text-center">Сумма</h2></div>

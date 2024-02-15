@@ -39,7 +39,12 @@ class YooKassaService extends Controller
 
             // Составляем чек
             $builder->setReceiptEmail(auth()->user()->email);
-            $builder->setReceiptPhone(auth()->user()->mobile_number);
+            $phone = auth()->user()->mobile_number;
+
+            if ($phone) {
+                $formatted_phone = '+' . preg_replace('/\D/', '', $phone);
+                $builder->setReceiptPhone($formatted_phone);
+            }
 
             // Создаем объект запроса
             $request = $builder->build();
@@ -50,13 +55,12 @@ class YooKassaService extends Controller
             $idempotenceKey = uniqid('', true);
             $response = $client->createPayment($request, $idempotenceKey);
 
-
-
             $payment  = Transaction::create([
                 'user_id' => auth()->id(),
                 'transaction_id' => $response->getId(),
+                'service' => 'YooKassa',
                 'amount' => $request->amount->getValue(),
-                'appointment' => 'replenishment'
+                'appointment' => 'Пополнение'
             ]);
 
             CheckPaymentStatusJob::dispatch($payment);

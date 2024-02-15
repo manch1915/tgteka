@@ -20,7 +20,7 @@ class OrderReportNotification extends Notification implements ShouldQueue
 
     public function via($notifiable): array
     {
-        return ['database', 'telegram', 'mail'];
+        return ['database', 'mail', 'telegram'];
     }
 
     public function toMail($notifiable): MailMessage

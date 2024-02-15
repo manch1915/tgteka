@@ -23,7 +23,7 @@ class PayoutStatusUpdatedNotification extends Notification implements ShouldQueu
 
     public function via($notifiable): array
     {
-        return ['database', 'telegram', 'mail'];
+        return ['database', 'mail', 'telegram'];
     }
 
     public function toMail($notifiable): MailMessage

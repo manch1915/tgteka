@@ -23,7 +23,7 @@ class PayoutConfirmNotification extends Notification implements ShouldQueue
 
     public function via($notifiable): array
     {
-        return ['telegram', 'mail'];
+        return ['mail', 'telegram'];
     }
 
     public function toMail($notifiable): MailMessage

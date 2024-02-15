@@ -23,7 +23,7 @@ class WelcomeMessageNotification extends Notification implements ShouldQueue
 
     public function via($notifiable): array
     {
-        return ['database', 'telegram', 'mail'];
+        return ['database', 'mail', 'telegram'];
     }
 
     public function toDatabase($notifiable): array
@@ -39,7 +39,6 @@ class WelcomeMessageNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject("Добро пожаловать на 1-24.market, $this->userName!")
-            ->line("Приветствуем вас на 1-24.market, $this->userName!")
             ->line("Приветствуем вас на 1-24.market, $this->userName!")
             ->line("Благодарим за регистрацию на нашей платформе. Ваш пароль: {$this->password}. Теперь у вас есть возможность покупать и продавать рекламу в Telegram-каналах.")
             ->action('Перейти на биржу рекламы', route('catalog.channels.index'))

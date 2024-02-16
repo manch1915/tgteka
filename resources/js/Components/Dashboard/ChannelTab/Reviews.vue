@@ -20,7 +20,7 @@ onMounted(() => getChannelReviews())
 </script>
 
 <template>
-    <div class="w-full reviews p-6">
+    <div v-if="Object.keys(reviews).length" class="w-full reviews p-6">
         <n-scrollbar :theme-overrides="scrollbarThemeOverrides" class="max-h-96 ">
             <div class="grid sm:grid-cols-2 grid-cols-1 gap-5 px-1">
                 <template v-for="review in reviews">
@@ -28,6 +28,9 @@ onMounted(() => getChannelReviews())
                 </template>
             </div>
         </n-scrollbar>
+    </div>
+    <div v-else>
+        <p class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10">Нет отзывов</p>
     </div>
 </template>
 

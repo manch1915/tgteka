@@ -12,6 +12,7 @@ import { inputThemeOverrides } from "@/themeOverrides.js";
 import TemplateLayout from "@/Layouts/TemplateLayout.vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import MainVideoPlayer from "@/Components/Dashboard/MainVideoPlayer.vue";
+import {Head} from "@inertiajs/vue3";
 
 // Properties Definition
 const props = defineProps({
@@ -135,6 +136,9 @@ content.value = htmlToDelta(content.value);
 </script>
 
 <template>
+    <Head>
+        <title>Редактирование поста</title>
+    </Head>
     <TemplateLayout>
         <template #title>
             <div class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>

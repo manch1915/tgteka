@@ -1,6 +1,8 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {closeModal} from "jenesius-vue-modal";
+import {Head} from "@inertiajs/vue3";
+import {Title} from "chart.js";
 
 closeModal()
 
@@ -11,6 +13,10 @@ const flex = 'flex-col justify-start items-center gap-y-8 flex'
 </script>
 
 <template>
+    <Head>
+        <title>Правила пользования</title>
+    </Head>
+
     <MainLayout>
         <div class="container mx-auto flex flex-col gap-y-10 sm:p-0 p-2">
             <div class="text-center mt-5 text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Правила пользования</div>

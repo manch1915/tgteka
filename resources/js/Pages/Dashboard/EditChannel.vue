@@ -10,7 +10,7 @@ import {
     checkboxToRadioThemeOverrides,
 } from '@/themeOverrides.js';
 import {computed, reactive, ref, toRefs, watch, watchEffect} from 'vue';
-import {Link, router} from "@inertiajs/vue3";
+import {Head, Link, router} from "@inertiajs/vue3";
 import {useMainStore} from "@/stores/main.js";
 
 const props = defineProps({
@@ -139,6 +139,9 @@ watch(state.type, (newRadio) => {
 </script>
 
 <template>
+    <Head>
+        <title>Редактирование канала</title>
+    </Head>
     <AppLayout>
         <div class="mx-auto max-w-2xl text-center">
             <h1 class="py-24 text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">

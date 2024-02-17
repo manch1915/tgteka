@@ -1,11 +1,14 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {closeModal} from "jenesius-vue-modal";
-import { reactive } from "vue";
+import {reactive} from "vue";
 import {inputThemeOverrides} from "@/themeOverrides.js";
 import {NInput} from "naive-ui";
-import {router} from "@inertiajs/vue3";
+import {Head, router} from "@inertiajs/vue3";
+import {Title} from "chart.js";
+
 closeModal()
+
 const props = defineProps({
     token: String,
     ziggy: Object
@@ -26,6 +29,10 @@ const passwordReset = () => {
 }
 </script>
 <template>
+    <Head>
+        <title>Сброс пароля</title>
+    </Head>
+
     <MainLayout>
         <div class="container mx-auto flex flex-col sm:w-1/3 gap-y-10 sm:p-0 p-2">
             <div class="text-center mt-5 text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Сброс пароля</div>

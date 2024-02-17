@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import {checkboxThemeOverrides, inputThemeOverrides} from "@/themeOverrides.js";
 import {NCheckbox, NInput} from "naive-ui";
-import {router, usePage} from "@inertiajs/vue3";
+import {Head, usePage} from "@inertiajs/vue3";
 import {computed} from "vue";
 
 const page = usePage()
@@ -13,6 +13,10 @@ const telegram_username = computed(() => page.props.auth.user.telegram_username)
 </script>
 
 <template>
+    <Head>
+        <title>Настройка уведомлений</title>
+    </Head>
+
     <AppLayout>
         <ProfileLayout>
             <div class="text-center sm:text-left">

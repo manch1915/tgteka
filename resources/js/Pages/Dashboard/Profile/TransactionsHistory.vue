@@ -6,7 +6,7 @@ import Transactions from "@/Components/Dashboard/Profile/Transactions.vue";
 import {onMounted, ref, watch} from "vue";
 import {selectThemeOverrides} from "@/themeOverrides.js";
 import {darkTheme, dateRuRU, NConfigProvider, NDatePicker, NSelect, ruRU, useLoadingBar} from "naive-ui";
-import {usePage} from "@inertiajs/vue3";
+import {Head, usePage} from "@inertiajs/vue3";
 
 const page = usePage();
 const appointmentInUrl = page.props.ziggy.query.appointment;
@@ -80,6 +80,10 @@ watch([appointmentVal, statusValue, range], () => {
 </script>
 
 <template>
+    <Head>
+        <title>История транзакций</title>
+    </Head>
+
     <AppLayout>
         <ProfileLayout>
             <div class="text-center sm:text-left">
@@ -102,7 +106,8 @@ watch([appointmentVal, statusValue, range], () => {
                     </n-config-provider>
                 </div>
             </div>
-            <Transactions :transactions="transactions.data"/>
+            <Transactions v-if="transactions.data && transactions.data.lenght" :transactions="transactions.data"/>
+            <p v-else class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10">Транзакции отсутствуют.</p>
             <div class="flex justify-center">
                 <TailwindPagination @pagination-change-page="getTransactions" :data="transactions"  :limit="3" :active-classes="['bg-blue-950', 'rounded-full', 'shadow-inner', 'border', 'border-white', 'border-opacity-10', 'text-white', 'text-base', 'font-bold', 'font-[\'Open Sans\']', 'leading-tight']" :itemClasses="['border-none', 'text-violet-100', 'text-base', 'font-normal', 'font-[\'Inter\']', 'leading-normal',]" >
                     <template v-slot:prev-nav>

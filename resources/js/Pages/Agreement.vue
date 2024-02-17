@@ -1,11 +1,16 @@
 <script setup>
 import MainLayout from "@/Layouts/MainLayout.vue";
 import {closeModal} from "jenesius-vue-modal";
+import {Head} from "@inertiajs/vue3";
+import {Title} from "chart.js";
 
 closeModal()
 </script>
 
 <template>
+    <Head>
+        <title>Пользовательское соглашение</title>
+    </Head>
     <MainLayout>
         <div class="container mx-auto flex flex-col gap-y-10 sm:p-0 p-2">
             <h1 class="text-violet-100 text-center text-4xl font-bold font-['Open Sans'] leading-10 mt-5">Пользовательское соглашение</h1>

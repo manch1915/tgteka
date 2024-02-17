@@ -69,22 +69,20 @@ const openMessenger = () => {
                         </div>
                     </div>
                     <div class="flex sm:hidden logo  items-center">
-                        <img class="w-6" src="/images/logo.svg" alt="logo">
-                        <div class="text-gray-200 text-xl font-bold font-['Open Sans'] leading-10">logo</div>
+                        <img class="w-16" src="/images/logo.svg" alt="logo">
                     </div>
                 </div>
                 <div class="logo">
-                    <div class="hidden sm:inline-flex px-6 py-3.5 bg-zinc-300 rounded-2xl justify-start items-start gap-2.5 ">
-                        <div class="text-slate-900 text-lg font-bold font-['Open Sans'] leading-normal">ЛОГО</div>
+                    <div class="hidden sm:inline-flex justify-start items-start gap-2.5 ">
+                        <img class="w-36" src="/images/dashboard/logo.svg" alt="logo">
                     </div>
-
                 </div>
                 <nav class="flex gap-x-3">
                     <div class="balance-elements px-6 py-1">
                         <div class="balance flex items-center gap-x-3">
                             <div class="sm:border-r-[1px] pr-2 flex">
                                 <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Общий баланс&nbsp;</p>
-                                <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"> <animated-number :number="store.userBalance"/>&nbsp;₽</p>
+                                <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"> <animated-number :number="parseFloat(store.userBalance)"/>&nbsp;₽</p>
                             </div>
                             <Link :href="route('replenishment')" class="cursor-pointer replenish pr-2 flex items-center gap-x-1">
                                 <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</p>

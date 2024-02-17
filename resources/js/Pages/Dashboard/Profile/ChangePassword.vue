@@ -5,6 +5,7 @@ import { inputThemeOverrides} from "@/themeOverrides.js";
 import {NInput, useLoadingBar} from "naive-ui";
 import {reactive} from "vue";
 import axios from "axios";
+import {Head} from "@inertiajs/vue3";
 
 const form = reactive({
     password: '',
@@ -36,16 +37,20 @@ const submit = async () => {
 const generatePassword = async () => {
     loading.start()
     await axios.post(route('change-password.generate'))
-        .then((res) => {
+        .then(() => {
             loading.finish()
         })
-        .catch(error => {
+        .catch(() => {
             loading.error()
         })
 };
 </script>
 
 <template>
+    <Head>
+        <title>Изменение пароля</title>
+    </Head>
+
     <AppLayout>
         <ProfileLayout>
             <div class="text-center sm:text-left">

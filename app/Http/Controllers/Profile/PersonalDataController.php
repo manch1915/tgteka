@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Profile;
 use App\Services\DateLocalizationService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\PersonalDataRequest;
+use Illuminate\Http\Request;
 
 class PersonalDataController extends Controller
 {
@@ -13,7 +14,8 @@ class PersonalDataController extends Controller
         $localizedCreatedAt = DateLocalizationService::localize(auth()->user()->created_at);
 
         return inertia('Dashboard/Profile/PersonalData', [
-            'created_at' => $localizedCreatedAt
+            'created_at' => $localizedCreatedAt,
+            'user' => auth()->user()
         ]);
     }
 
@@ -23,5 +25,14 @@ class PersonalDataController extends Controller
 
         auth()->user()->update($validated);
         return response()->json($request);
+    }
+
+    public function destroy(Request $request)
+    {
+        $user = auth()->user();
+        $request->session()->invalidate();
+        $user->delete();
+
+        return response()->json(['message' => 'Учетная запись пользователя успешно удалена.']);
     }
 }

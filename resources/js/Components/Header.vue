@@ -35,7 +35,7 @@ onBeforeMount(() => {
     <div v-if="width >= 768" class="header">
         <div class="container mx-auto flex flex-wrap justify-between items-center p-6 nav-menu">
             <div class="logo flex-1">
-                <img src="/images/logo.svg" alt="Application logo">
+                <img class="w-32" src="/images/logo.svg" alt="Application logo">
             </div>
             <nav class="navigation flex-1">
                 <ul class="flex justify-center gap-x-0.5">

@@ -6,26 +6,18 @@ import {ref} from "vue";
 
 const password = ref('')
 const message = useMessage()
+const error = ref('')
+
 const twoFactorAuthentication = () => {
-   axios.post(route('password.confirm'), {password: password.value})
-       .then(r => console.log(r))
-       .catch(e => {
-           if(e.response.data.errors.password){
-               message.error(e.response.data.errors.password[0])
-           }
-       })
-       .finally(() => {
-           twoFactorAuthenticationStep()
-       })
-}
-const twoFactorAuthenticationStep = () => {
-    axios.post(route('two-factor.enable'))
+    axios.post(route('two-factor.enable'), {password: password.value})
         .then(r => {
             message.success('Двухэтапная аутентификация успешно включён')
             closeModal()
         })
         .catch(e => {
-            console.log(e)
+            if (e.response.data.message){
+                error.value = e.response.data.message
+            }
         })
 }
 </script>
@@ -45,7 +37,8 @@ const twoFactorAuthenticationStep = () => {
                 </div>
             </div>
             <div class="content flex flex-col justify-center w-1/3 m-auto">
-                <n-input class="" :theme-overrides="inputThemeOverrides" v-model:value="password" placeholder="Введите ваш пароль"/>
+                <n-input :theme-overrides="inputThemeOverrides" v-model:value="password" placeholder="Введите ваш пароль"/>
+                <span v-if="error" class="block text-red-600">{{error}}</span>
                 <button
                     @click.prevent="twoFactorAuthentication"
                     class="my-6 w-full px-4 py-2 bg-green-600 transition hover:bg-green-900 rounded-full text-violet-100 text-sm font-bold font-['Open Sans'] leading-normal">

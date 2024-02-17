@@ -2,26 +2,27 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import {computed, reactive, ref} from "vue";
-import { vMaska } from "maska"
-import {router, usePage} from "@inertiajs/vue3";
+import {vMaska} from "maska"
+import {Head, router, usePage} from "@inertiajs/vue3";
 import axios from "axios";
-import {NInput, useLoadingBar} from "naive-ui";
+import {NInput, useLoadingBar, useMessage} from "naive-ui";
 import {inputThemeOverrides} from "@/themeOverrides.js";
 import twoFactorAuthenticationModal from "@/Components/Auth/twoFactorAuthenticationModal.vue"
-import {pushModal} from "jenesius-vue-modal";
+import {closeModal, pushModal} from "jenesius-vue-modal";
 
 const props = defineProps({
     created_at: String,
+    user: Object
 })
 
 const page = usePage()
-
-const user = computed(() => page.props.auth.user)
+const message = useMessage()
+const user = computed(() => props.user)
 
 const form = reactive({
-    username: ref(page.props.auth.user.username),
-    telegram_username: ref(page.props.auth.user.telegram_username),
-    mobile_number: ref(page.props.auth.user.mobile_number),
+    username: ref(user.value.username),
+    telegram_username: ref(user.value.telegram_username),
+    mobile_number: ref(user.value.mobile_number),
 });
 
 const errors = reactive({
@@ -41,8 +42,10 @@ const languages = [
     },
 ];
 
+const isTwoFactorEnabled = computed(() => user.value.two_factor_enabled);
+
 const twoFactorAuthentication = () => {
- pushModal(twoFactorAuthenticationModal)
+    pushModal(twoFactorAuthenticationModal)
 }
 
 const submit = async () => {
@@ -71,50 +74,97 @@ const logout = () => {
             router.visit(route('customers'))
         })
 }
-
+const disableTwoFactorAuthentication = () => {
+    axios.post(route('two-factor.disable'))
+        .then(() => {
+            message.success('Двухэтапная аутентификация успешно отключен')
+            closeModal()
+        })
+        .catch(e => {
+            console.log(e)
+        })
+}
+const deleteUser = async () => {
+    const confirmation = window.confirm('Удалить пользователя?')
+    if (confirmation) {
+        loading.start()
+        await axios.delete(route('personal-data.destroy'))
+            .then(() => {
+                loading.finish()
+                window.location.href = '/'
+            })
+            .catch(error => {
+                loading.error()
+                console.error(error)
+            })
+    }
+}
 </script>
 
 <template>
+    <Head>
+        <title>Личные данные</title>
+    </Head>
+
     <AppLayout>
         <ProfileLayout>
             <div class="text-center sm:text-left">
                 <p class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Личные данные</p>
             </div>
-            <div class="sm:px-0 px-4 pt-4 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">дата регистрации:
+            <div class="sm:px-0 px-4 pt-4 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">дата
+                регистрации:
                 {{ created_at }}
             </div>
             <div class="mt-12 flex flex-col gap-y-6 px-4 sm:px-0">
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Имя пользователя</p>
-                <n-input v-model:value="form.username" class="py-1.5 my-1 sm:!w-1/2" placeholder="Имя пользователя" :theme-overrides="inputThemeOverrides"/>
+                <n-input v-model:value="form.username" class="py-1.5 my-1 sm:!w-1/2" placeholder="Имя пользователя"
+                         :theme-overrides="inputThemeOverrides"/>
                 <span class="text-red-500" v-if="errors.username">{{ errors.username[0] }}</span>
+
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Telegram-аккаунт</p>
-                <a :href="route('telegram-redirect')" class="sm:!w-2/4 block text-center w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal bg-purple-600 rounded-3xl py-2">Подключить Телеграм аккаунт</a>
+                <a :href="route('telegram-redirect')"
+                   class="sm:!w-2/4 block text-center w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal bg-purple-600 transition hover:bg-purple-800 rounded-3xl py-2">Подключить
+                    Телеграм аккаунт</a>
+
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Телефон</p>
-                <n-input v-maska :input-props="{'data-maska': '+7 (###) ###-##-##',}" v-model:value="form.mobile_number" class="py-1.5 my-1 sm:!w-1/2" placeholder="+7 (___) ___-__-__" :theme-overrides="inputThemeOverrides"/>
+                <n-input v-maska :input-props="{'data-maska': '+7 (###) ###-##-##',}" v-model:value="form.mobile_number"
+                         class="py-1.5 my-1 sm:!w-1/2" placeholder="+7 (___) ___-__-__"
+                         :theme-overrides="inputThemeOverrides"/>
                 <span class="text-red-500" v-if="errors.mobile_number">{{ errors.mobile_number[0] }}</span>
             </div>
             <div class="px-4 sm:px-0">
-            <button
-                @click.prevent="submit"
-                class="mt-6 px-6 py-4 bg-purple-600 transition hover:bg-purple-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                Сохранить данные
-            </button>
-            <br>
-            <button
-                @click.prevent="twoFactorAuthentication"
-                class="mt-6 px-6 py-4 bg-green-600 transition hover:bg-green-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                Включить двухэтапную аутентификацию
-            </button>
-            <br>
-            <button
-                @click.prevent="logout"
-                class="mt-6 px-6 py-4 bg-transparent transition hover:bg-red-800 border border-red-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                Выйти
-            </button>
-            <br/>
-            <button class="mt-12 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">
-                Удалить профиль
-            </button>
+                <button
+                    @click.prevent="submit"
+                    class="mt-6 px-6 py-4 bg-purple-600 transition hover:bg-purple-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                    Сохранить данные
+                </button>
+                <br>
+                <button
+                    @click.prevent="twoFactorAuthentication"
+                    :disabled="isTwoFactorEnabled"
+                    class="mt-6 px-6 py-4 bg-green-600 transition hover:bg-green-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                >
+                    {{
+                        isTwoFactorEnabled ? 'Двухэтапная аутентификация включена' : 'Включить двухэтапную аутентификацию'
+                    }}
+                </button>
+                <button @click.prevent="disableTwoFactorAuthentication"
+                        class="block mt-6 px-6 py-4 bg-red-600 transition hover:bg-red-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                        v-if="isTwoFactorEnabled">
+                    Отключить двухэтапную аутентификацию
+                </button>
+                <br>
+                <button
+                    @click.prevent="logout"
+                    class="mt-6 px-6 py-4 bg-transparent transition hover:bg-red-800 border border-red-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                    Выйти
+                </button>
+                <br/>
+                <button
+                    @click.prevent="deleteUser"
+                    class="mt-12 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">
+                    Удалить профиль
+                </button>
             </div>
         </ProfileLayout>
     </AppLayout>

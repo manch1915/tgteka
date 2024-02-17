@@ -38,12 +38,28 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'username' => 'required|string',
+            'password' => ['required', 'string', 'min:8'],
+        ]);
+
         $this->validateLoginAttempts($request);
 
         if (Auth::attempt($request->only('username', 'password'))) {
             RateLimiter::clear($this->throttleKey($request));
 
-            return $this->handleSuccessfulLogin($request);
+            $user = $this->handleSuccessfulLogin($request);
+
+            if ($user->two_factor_enabled) {
+                $request->session()->put('login.user', $user->id);
+                $request->session()->put('login.expires_at', now()->addMinutes(10));
+
+                $user->generateTwoFactorCode();
+
+                return redirect()->route('two-factor.index');
+            }
+
+            return $user;
         }
 
         return $this->handleFailedLogin($request);
@@ -69,7 +85,7 @@ class LoginController extends Controller
         RateLimiter::hit($this->throttleKey($request), 5 * 60);
 
         throw ValidationException::withMessages([
-            'email' => [trans('auth.failed')],
+            'username' => [trans('auth.failed')],
         ]);
     }
 

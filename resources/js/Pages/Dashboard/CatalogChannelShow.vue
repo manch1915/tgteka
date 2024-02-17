@@ -21,6 +21,7 @@ import {
 import {Line} from 'vue-chartjs'
 import Reviews from "@/Components/Dashboard/ChannelTab/Reviews.vue";
 import axios from "axios";
+import {Head} from "@inertiajs/vue3";
 
 Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement);
 const props = defineProps({
@@ -210,6 +211,9 @@ onMounted(() => {
 </script>
 
 <template>
+    <Head>
+        <title>{{channel.channel_name}}</title>
+    </Head>
     <AppLayout>
          <div>
             <div class="wrapper w-full sm:my-24 my-8 sm:p-0 p-2">

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\Controller;
 use App\Http\Controllers\Admin\TopicController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\TelegramController;
+use App\Http\Controllers\Auth\TwoFactor;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PatternController;
 use App\Http\Controllers\PlacementController;
@@ -27,12 +28,19 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get('/owners', fn () => Inertia::render('Owners'))->name('owners');
 
     Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'create'])->name('register');
+    Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login.post');
 
     Route::post('/forgot-password', [LoginController::class, 'forgot'])->name('password.forgot');
     Route::get('/reset-password/{token}', function (string $token) {
         return inertia('PasswordRecover', ['token' => $token]);
-    })->name('password.reset');
+    })->name('password.reset')->middleware('validate.password_reset_token');
     Route::post('/reset-password', [LoginController::class, 'update'])->name('password.update');
+
+});
+
+Route::middleware(['two.factor'])->group(function () {
+    Route::get('/verify-two-factor', fn() => Inertia::render('TwoFactor'))->name('two-factor.index');
+    Route::post('/verify-two-factor', [\App\Http\Controllers\Auth\TwoFactor::class, 'verifyTwoFactor'])->name('two-factor.verify');
 });
 
 Route::group(['prefix' => 'auth'], function (){
@@ -51,9 +59,12 @@ Route::get('/rules', fn () => inertia('Rules'))->name('rules');
 
 Route::post('/order/callback', [\App\Http\Controllers\CallbackController::class, 'handleCallback'])->name('order.callback')->middleware('throttle:2,10');;
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:sanctum', 'two.factor'])->group(function () {
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    Route::post('/enable-two-factor', [TwoFactor::class, 'enableTwoFactor'])->name('two-factor.enable');
+    Route::post('/disable-two-factor', [TwoFactor::class, 'disableTwoFactor'])->name('two-factor.disable');
 
     Route::post('create-payment-request', [\App\Http\Controllers\Payment\FinanceController::class, 'createYooKassaPayment'])->name('create-payment-request');
     Route::post('create-payout-request', [\App\Http\Controllers\Payment\FinanceController::class, 'createPayout'])->name('create-payout-request');
@@ -97,6 +108,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::group(['prefix' => 'profile'], function () {
         Route::get('personal-data', [PersonalDataController::class, 'index'])->name('personal-data');
         Route::patch('personal-data', [PersonalDataController::class, 'update'])->name('personal-data.store');
+        Route::delete('personal-data', [PersonalDataController::class, 'destroy'])->name('personal-data.destroy');
+
         Route::get('replenishment', [ReplenishmentController::class, 'index'])->name('replenishment');
         Route::get('withdraw', [WithdrawController::class, 'index'])->name('withdraw');
         Route::get('notifications-setting', [NotificationsSettingController::class, 'index'])->name('notifications-setting');

@@ -10,6 +10,8 @@ import TemplateLayout from "@/Layouts/TemplateLayout.vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import { options } from "@/utilities/templateUtilities.js";
 import { inputThemeOverrides } from "@/themeOverrides.js";
+import {Head} from "@inertiajs/vue3";
+import {Title} from "chart.js";
 
 const props = defineProps({
     patternCount: Number,
@@ -114,6 +116,10 @@ onUnmounted(() => {
 </script>
 
 <template>
+    <Head>
+        <title>Мои шаблоны</title>
+    </Head>
+
     <TemplateLayout>
         <template #title>
             <div class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">Мои шаблоны</div>

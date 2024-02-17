@@ -4,9 +4,9 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import {NCheckbox, NInput, NTabPane, NTabs} from "naive-ui";
 import {checkboxThemeOverrides, inputThemeOverrides, nTabSegmentsThemeOverrides} from "@/themeOverrides.js";
 import {reactive, ref, watch} from "vue";
-import { Link } from "@inertiajs/vue3"
+import {Head, Link} from "@inertiajs/vue3"
 import {vMaska} from "maska"
-import { validateCardNumber, luhnCheck, checkCreditCard } from "@/utilities/cardValidator.js";
+import {checkCreditCard } from "@/utilities/cardValidator.js";
 
 const activeButton = ref('self-employed');
 
@@ -35,6 +35,10 @@ watch(() => bankCard.cardNumbers, () => {
 </script>
 
 <template>
+    <Head>
+        <title>Вывод средств</title>
+    </Head>
+
     <AppLayout>
         <ProfileLayout>
             <div class="text-center sm:text-left">

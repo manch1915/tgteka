@@ -5,18 +5,34 @@ import {NCheckbox, NInput, NTabPane, NTabs} from "naive-ui";
 import {checkboxThemeOverrides, inputThemeOverrides, nTabSegmentsThemeOverrides} from "@/themeOverrides.js";
 import {ref} from "vue";
 import {vMaska} from "maska";
+import {Head} from "@inertiajs/vue3";
 
 const activeButton = ref('add-payment-method');
 
 const amount = ref();
 const initialValue = ref(0);
+const error = ref('');
+
+let myWindow;
 const createPaymentRequest = () => {
-  let myWindow = window.open('about:blank', "_blank");
-  axios.post(route('create-payment-request'), {amount: initialValue.value})
-      .then(r => {
-          myWindow.location.href = r.data[0]
-          myWindow.focus()
-      });
+    myWindow = window.open('about:blank', "_blank");
+
+    axios.post(route('create-payment-request'), {amount: initialValue.value})
+        .then(response => {
+            if (response.data) {
+                error.value = ''; // Clear any previous error message
+                myWindow.location.href = response.data[0]
+                myWindow.focus()
+            } else {
+                myWindow.close();
+            }
+        }).catch(errorResponse => {
+        // Provided that the server returns an error message in "message" field
+        if (errorResponse.response && errorResponse.response.data.message) {
+            error.value = errorResponse.response.data.message;
+        }
+        myWindow.close();
+    })
 }
 
 const options = {
@@ -38,6 +54,9 @@ const options = {
 </script>
 
 <template>
+    <Head>
+        <title>Пополнение средств</title>
+    </Head>
     <AppLayout>
         <ProfileLayout>
             <div class="text-center sm:text-left">
@@ -51,6 +70,7 @@ const options = {
                         </template>
                         <div>
                             <n-input v-maska:[options]  v-model:value="amount" class="py-1.5 my-1 sm:!w-3/4" placeholder="Укажите сумму в рублях" :theme-overrides="inputThemeOverrides"/>
+                            <span class="block text-red-500" v-if="error">{{ error }}</span>
                             <div class="flex flex-col">
                                 <button @click.prevent="createPaymentRequest" class="sm:w-3/4 w-full my-2 bg-purple-600 rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</button>
                             </div>

@@ -14,6 +14,8 @@ import SloganBlock from "@/Components/Home/Blocks/SloganBlock.vue";
 import Slider from "@/Components/Home/Slider.vue";
 import {SwiperSlide} from "swiper/vue";
 import {ref} from "vue";
+import {Head} from "@inertiajs/vue3";
+import {Title} from "chart.js";
 
 const headers = ["Добавляете канал в каталог", "Получаете заказы и размещаете посты", "Получаете оплату"]
 const texts = ["В среднем модерация занимает 24 часа ", "Оповещения о новых размещениях приходят на E-mail и в Telegram-бота",
@@ -22,6 +24,10 @@ const windowWidth = ref(window.innerWidth)
 </script>
 
 <template>
+    <Head>
+        <title>Владельцу канала</title>
+    </Head>
+
     <MainLayout>
         <SloganBlock
             header="Постоянный поток заказов на размещения в Telegram-канале или боте"

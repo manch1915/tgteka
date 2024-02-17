@@ -1,6 +1,6 @@
 <script setup>
 import {ref, onBeforeMount, onBeforeUnmount, onMounted} from 'vue';
-import {Link, router} from "@inertiajs/vue3";
+import {Head, Link, router} from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import axios from "axios";
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
@@ -64,6 +64,9 @@ onMounted(() => getPatterns())
 </script>
 
 <template>
+    <Head>
+        <title>Мои шаблоны</title>
+    </Head>
     <AppLayout>
         <div class="sm:mt-28 mt-10">
             <div :class="patterns.data && patterns.data.length === 0 ? 'text-center mb-12' : 'text-left mb-12'">

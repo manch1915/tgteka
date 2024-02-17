@@ -6,7 +6,9 @@ import Footer from "@/Components/Home/Footer.vue";
 </script>
 <template>
     <Header/>
-    <slot/>
+    <div class="min-h-[600px]">
+        <slot/>
+    </div>
     <Footer/>
     <container/>
 

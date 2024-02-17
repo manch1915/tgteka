@@ -6,7 +6,8 @@ import {NInput, NSelect, useMessage, useLoadingBar} from "naive-ui";
 import {inputThemeOverrides, selectThemeOverrides} from "@/themeOverrides.js";
 import axios from "axios";
 import {useMainStore} from "@/stores/main.js";
-import {router} from "@inertiajs/vue3";
+import {router, Link, Head} from "@inertiajs/vue3";
+import {Title} from "chart.js";
 
 const loadCart = () => {
     return JSON.parse(localStorage.getItem('cart')) || [];
@@ -67,9 +68,6 @@ const orderPosts = () => {
 const message = useMessage()
 
 onMounted(() => {
-    if (isCartEmpty.value) {
-        router.visit(route('catalog.channels.index'))
-    }
     axios.get(route('user-patterns'))
         .then(response => {
             const patterns = response.data;
@@ -88,6 +86,9 @@ onMounted(() => {
 </script>
 
 <template>
+    <Head>
+        <title>Корзина</title>
+    </Head>
     <AppLayout>
         <div class="sm:py-20 py-4 text-center">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Корзина</h1>
@@ -95,10 +96,18 @@ onMounted(() => {
         <div class="grid sm:grid-cols-[3fr_1fr] grid-cols-1 gap-x-4">
             <div class="sm:order-1 order-2">
                 <div class="channels">
-                    <div class="flex flex-col gap-y-4 mb-8">
-                        <template v-if="channels" v-for="channel in channels" :key="channel.id">
+                    <div class="flex flex-col gap-y-4 mt-8">
+                        <template v-if="!isCartEmpty" v-for="channel in channels" :key="channel.id">
                             <CatalogChannelCard @cart-updated="updateChannels" is-cart  :channel="channel" :format-value="channel.format" :timestamp="channel.timestamp"/>
                         </template>
+                        <div v-else class="flex justify-center flex-col items-center">
+                            <p class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10">В корзине пусто.</p>
+                            <div class="mt-12">
+                                <Link :href="route('catalog.channels.index')">
+                                    <button class="text-violet-100 px-6 py-4 bg-purple-600 transition hover:bg-purple-800 rounded-full">Перейти в каталог</button>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

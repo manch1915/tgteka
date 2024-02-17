@@ -16,6 +16,7 @@ import {useMainStore} from '@/stores/main.js'
 import {useChannelStore} from "@/stores/channelStore.js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiArrowLeftBold, mdiArrowRight} from "@mdi/js";
+import {Head} from "@inertiajs/vue3";
 
 const SORT_DATA = ['Рейтинг', 'ER', 'Просмотры', 'Подписчики', 'Цена', 'CPМ']
 
@@ -85,6 +86,9 @@ const activate = (place) => {
 </script>
 
 <template>
+    <Head>
+        <title>Каталог Telegram-каналов</title>
+    </Head>
     <AppLayout>
         <n-config-provider :theme="darkTheme" >
         <n-drawer v-model:show="active" close-on-esc width="100%" :placement="placement" :theme-overrides="{color: '#070C29'}">
@@ -389,10 +393,7 @@ const activate = (place) => {
                 </div>
                 <div class="pb-6">
                     <SearchBar @search="searchHandler" class="py-2"/>
-                    <div class="flex items-center gap-x-2">
-                        <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
-                        <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Искать также в описании</p>
-                    </div>
+
                 </div>
                 <div class="hidden py-[23px] sm:block">
                     <h2 class="pb-3 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Тематики</h2>

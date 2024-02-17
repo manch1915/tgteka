@@ -23,7 +23,8 @@ class TelegramController
             ]);
             $notification = new TelegramBotActivatedNotification();
             auth()->user()->notify($notification);
-        }else{
+        }
+        else {
             $user = User::where('telegram_user_id', $telegramUser->getId())->first();
             if ($user) {
                 auth()->login($user);
@@ -32,6 +33,7 @@ class TelegramController
                 return redirect()->route('owners');
             }
         }
+
         return redirect()->route('notifications-setting')->with('Telegram connected successfully');
     }
 }

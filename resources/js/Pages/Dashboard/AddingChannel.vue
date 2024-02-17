@@ -10,10 +10,11 @@ import {
     checkboxToRadioThemeOverrides, sliderGenderThemeOverrides,
 } from '@/themeOverrides.js';
 import {computed, nextTick, reactive, ref, toRefs, watch} from 'vue';
-import {router, Link} from "@inertiajs/vue3";
+import {router, Link, Head} from "@inertiajs/vue3";
 import {useMainStore} from "@/stores/main.js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiFaceMan, mdiFaceWoman} from "@mdi/js";
+import {Title} from "chart.js";
 
 const discount_check = ref(false);
 const format_one_checkbox = ref(true);
@@ -137,6 +138,9 @@ watch(state.type, (newRadio) => {
 </script>
 
 <template>
+    <Head>
+        <title>Добавление канала / чата</title>
+    </Head>
     <AppLayout>
         <div class="mx-auto max-w-2xl text-center">
             <h1 class="py-24 text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">

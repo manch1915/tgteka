@@ -11,8 +11,10 @@ class Topic extends Model
     use HasFactory;
 
     protected $fillable = ['title'];
+
     public function channels(): HasMany
     {
         return $this->hasMany(Channel::class);
     }
+
 }

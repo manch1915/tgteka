@@ -17,6 +17,8 @@ import Feedback from "@/Components/Home/Feedback.vue";
 import Slider from "@/Components/Home/Slider.vue";
 import { SwiperSlide} from 'swiper/vue';
 import {ref} from "vue";
+import {Head} from "@inertiajs/vue3";
+import {Title} from "chart.js";
 
 const headers = ["Регистрируйте аккаунт", "Выберите подходящие каналы в каталоге", "Пополните баланс удобным способом:", "Создайте размещение с картинкой и ссылкой:", "Владелец канала публикует пост и присылает ссылку на проверку:", "Вы можете скачать отчет по итогу размещения:"]
 const texts = ["Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc ",
@@ -77,6 +79,10 @@ const windowWidth = ref(window.innerWidth)
 </script>
 
 <template>
+    <Head>
+        <title>Заказчикам</title>
+    </Head>
+
     <MainLayout>
         <SloganBlock
             header="Нативные размещения в Телеграм: проверенные вручную каналы и боты"

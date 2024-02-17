@@ -4,6 +4,7 @@ import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import {useNotificationStore} from "@/stores/NotificationsStore.js";
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
 import Notifications from "@/Components/Dashboard/Profile/Notifications.vue";
+import {Head} from "@inertiajs/vue3";
 
 const notificationsStore = useNotificationStore()
 notificationsStore.getNotifications()
@@ -11,6 +12,10 @@ notificationsStore.getNotifications()
 </script>
 
 <template>
+    <Head>
+        <title>История уведомлений</title>
+    </Head>
+
     <AppLayout>
         <ProfileLayout>
             <div class="text-center sm:text-left">

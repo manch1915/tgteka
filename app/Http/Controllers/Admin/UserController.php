@@ -33,7 +33,7 @@ class UserController extends Controller
         } else {
             $user->assignRole($moderatorRole);
         }
-        return response()->json(['status' => 'Role updated successfully']);
+        return response()->json(['status' => 'Роль успешно обновлена']);
     }
 
     public function destroy(User $user)

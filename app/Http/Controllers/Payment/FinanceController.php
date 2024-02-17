@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use App\Models\Transaction;
 use App\Notifications\PayoutConfirmNotification;
 use App\Notifications\PayoutCreatedNotification;
@@ -21,6 +22,12 @@ class FinanceController extends Controller
 
     public function createYooKassaPayment(Request $request)
     {
+        $min_amount = Setting::where('key', 'replenishment_min_amount')->first()->value;
+
+        $request->validate([
+            'amount' => ['required', 'numeric', 'min:'.$min_amount],
+        ]);
+
         return $this->yooKassaService->createPayment($request);
     }
 
@@ -46,7 +53,6 @@ class FinanceController extends Controller
         ]);
 
         $encryptedTransactionId = encrypt($transactionId);
-
 
         $confirmLink = route('confirm-payout', $encryptedTransactionId);
 

@@ -23,6 +23,10 @@ return new class extends Migration
             $table->string('password');
             $table->foreignUuid('referral_id')->nullable()->constrained()->cascadeOnDelete();
             $table->rememberToken();
+            $table->string('two_factor_code')->nullable();
+            $table->dateTime('two_factor_expires_at')->nullable();
+            $table->boolean('two_factor_enabled')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

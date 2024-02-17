@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import UserChannels from "@/Components/Dashboard/UserChannels.vue";
-import {router} from "@inertiajs/vue3";
+import {Head, router} from "@inertiajs/vue3";
 import {ref} from "vue";
 
 let emptyChannels = ref(false);
@@ -13,6 +13,9 @@ const handleEmptyChannels = (isEmpty) => {
 </script>
 
 <template>
+    <Head>
+        <title>Мои каналы</title>
+    </Head>
     <AppLayout>
         <div class="flex items-center pt-[80px] text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
             <h1 class="flex-grow text-center text-4xl leading-10">Мои каналы</h1>

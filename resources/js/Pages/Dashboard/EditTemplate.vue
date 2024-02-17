@@ -67,11 +67,37 @@ const htmlToDelta = function(html) {
     return delta;
 };
 const handleFileUpload = function(event) {
-    const files = event.target.files;
-    if (images.value.length + files.length > 10) {
-        message.error("Вы не можете загрузить более 10 изображений.", {duration: 1000 * 10});
+    const files = Array.from(event.target.files);
+
+    const isGifExist = images.value.some(image => image.file && image.file.type === 'image/gif');
+    const gifFiles = files.filter(file => file.type === 'image/gif');
+    const isGifUpload = gifFiles.length > 0;
+
+    if (isGifUpload) {
+        if (gifFiles.length > 1 || files.length > 1) {
+            message.error("Вы можете загрузить только один GIF-файл без каких-либо других типов файлов.", {duration: 1000 * 10});
+            return;
+        }
+    } else if (images.value.length + files.length > 10) {
+        message.error("Русский: Вы не можете загрузить более 10 файлов.", {duration: 1000 * 10});
         return;
     }
+
+    if (isGifUpload && images.value.length > 0) {
+        message.error("Вы не можете загрузить GIF вместе с другими изображениями / видео. Очистите все и повторите попытку.", {duration: 1000 * 10});
+        return;
+    }
+
+    if (isGifExist && files.length > 0) {
+        message.error("Вы не можете загрузить другое изображение / видео вместе с GIF-файлом. Очистите все и повторите попытку.", {duration: 1000 * 10});
+        return;
+    }
+
+    if (!isGifUpload && (images.value.length + files.length > 10)) {
+        message.error("Вы не можете загрузить более 10 изображений / видео.", {duration: 1000 * 10});
+        return;
+    }
+
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const reader = new FileReader();

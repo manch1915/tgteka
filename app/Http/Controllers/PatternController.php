@@ -165,7 +165,10 @@ class PatternController extends Controller
             ], 409);
         }
 
+        $pattern->clearMediaCollection();
+
         $pattern->delete();
+
         return response()->json(null, 204);
     }
 }

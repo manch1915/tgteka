@@ -59,7 +59,7 @@ class LoginController extends Controller
                 return redirect()->route('two-factor.index');
             }
 
-            return $user;
+            return redirect()->route('catalog.channels.index');
         }
 
         return $this->handleFailedLogin($request);

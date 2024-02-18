@@ -46,19 +46,4 @@ class WelcomeMessageNotification extends Notification implements ShouldQueue
             ->line('Команда 1-24.market');
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function toTelegram($notifiable): TelegramMessage
-    {
-        if (!$notifiable->telegram_user_id) {
-            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
-        }
-        return TelegramMessage::create()
-            ->to($notifiable->telegram_user_id)
-            ->content(sprintf(
-                "Приветствуем вас на 1-24.market, %s! Благодарим за регистрацию на нашей платформе. Теперь у вас есть возможность покупать и продавать рекламу в Telegram-каналах.\nС наилучшими пожеланиями, Команда 1-24.market",
-                $this->userName))
-            ->button('Перейти на биржу рекламы', route('catalog.channels.index'));
-    }
 }

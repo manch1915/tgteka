@@ -35,6 +35,7 @@ class User extends Authenticatable
         'balance',
         'email_verified_at',
         'referral_id',
+        'password',
         'two_factor_expires_at',
         'two_factor_enabled',
         'two_factor_code',

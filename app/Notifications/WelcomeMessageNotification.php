@@ -23,7 +23,7 @@ class WelcomeMessageNotification extends Notification implements ShouldQueue
 
     public function via($notifiable): array
     {
-        return ['database', 'mail', 'telegram'];
+        return ['mail', 'database', 'telegram'];
     }
 
     public function toDatabase($notifiable): array

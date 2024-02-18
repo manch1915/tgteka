@@ -32,6 +32,6 @@ class CreateNewUser implements CreatesNewUsers
                 'password' => Hash::make($password),
             ]);
 
-            $user->notify(new WelcomeMessageNotification($user->email, $password));
+            $user->notify(new WelcomeMessageNotification($user->username, $password));
         }
 }

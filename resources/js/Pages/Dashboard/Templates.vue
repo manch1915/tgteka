@@ -36,7 +36,7 @@ const navigateToEditPattern = (patternID) => {
 
 const duplicatePattern = async (patternIdToDuplicate) => {
     const {data} = await axios.post(`/pattern/${patternIdToDuplicate}/duplicate`);
-    patterns.value.data.push(data);
+    message.success(data.message)
 };
 
 const deletePattern = async (patternIdToDelete) => {

@@ -57,7 +57,7 @@ const openVideoPlayer = function(data) {
 </script>
 
 <template>
-    <div class="scrollbar container overflow-y-auto h-full">
+    <div class="mission-scrollbar container overflow-y-auto h-full">
         <main>
             <div class="top">
                 <div class="header">
@@ -72,11 +72,11 @@ const openVideoPlayer = function(data) {
                 <div class="mt-8 grid gap-x-4">
                     <div>
                         <div class="flex justify-between py-4">
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Срок публикации: <span class="text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">В ближайшее время</span></p>
-                            <h1 class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Время публикации: --</h1>
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Срок публикации: <span class="text-opacity-60 text-sm font-normal font-['Open Sans'] leading-tight">В ближайшее время</span></p>
+                            <h1 class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Время публикации: --</h1>
                         </div>
                         <div class="flex justify-between border-y-2 border-violet-100 border-opacity-40 py-4">
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Формат размещения <span class="text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">{{order.format.name}}</span></p>
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Формат размещения <span class="text-opacity-60 text-sm font-normal font-['Open Sans'] leading-tight">{{order.format.name}}</span></p>
                         </div>
                         <template v-for="list in listOfLinks">
                             <div class="py-4">
@@ -252,5 +252,26 @@ main{
         background: #176073;
         padding: 20px;
     }
+}
+.mission-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(156, 163, 175) rgb(249, 250, 251);
+}
+
+.mission-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.mission-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-50;
+}
+
+.mission-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 rounded;
+}
+
+.mission-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500;
 }
 </style>

@@ -41,16 +41,20 @@ class ChannelController extends Controller
             $channel->increment('views_count');
             session()->put("viewed_channel.{$channel->id}", true);
         }
-        return inertia('Dashboard/CatalogChannelShow', ['channel' => $this->getChannelWithAvatarAndTopic($channel, $avatarService), 'favorites_count' => $channel->favoritesCount] );
+        return inertia('Dashboard/CatalogChannelShow', ['channel' => $this->getChannelWithAvatarAndTopic($channel, $avatarService), 'favorites_count' => $channel->favorites()->count()] );
     }
 
+    /**
+     * @throws \Exception
+     */
     public function orderPosts(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'channels' => 'required',
             'pattern_id' => 'required',
             'description' => 'required',
         ]);
+
         $response = $this->orderService->createOrder($request);
 
         if (is_string($response)) {
@@ -80,7 +84,7 @@ class ChannelController extends Controller
         $channelStatistic = ChannelStatistic::where('channel_id', $channelId)->first(['stats', 'subscribers', 'avg_posts_reach', 'er', 'channel_id']);
 
         if(null === $channelStatistic) {
-            return response()->json(['error' => 'Статистика канала не найдена'], 404);
+            return response()->json(['error' => 'Статистика канала будет загружён только после одобрения канала администраторами'], 404);
         }
 
         $channel = Channel::find($channelStatistic->channel_id);
@@ -96,7 +100,8 @@ class ChannelController extends Controller
             'avg_posts_reach' => json_decode($channelStatistic->avg_posts_reach, true),
             'er' => json_decode($channelStatistic->er, true),
             'finished_orders_count' => $finishedOrdersCount,
-            'finished_orders_price_sum' => $finishedOrdersPriceSum
+            'finished_orders_price_sum' => $finishedOrdersPriceSum,
+            'channel' => $channel
         ];
 
         return response()->json($decodedData);

@@ -111,7 +111,7 @@ const deleteUser = async () => {
             <div class="text-center sm:text-left">
                 <p class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Личные данные</p>
             </div>
-            <div class="sm:px-0 px-4 pt-4 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">дата
+            <div class="sm:px-0 px-4 pt-4 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">дата
                 регистрации:
                 {{ created_at }}
             </div>
@@ -123,7 +123,7 @@ const deleteUser = async () => {
 
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Telegram-аккаунт</p>
                 <a :href="route('telegram-redirect')"
-                   class="sm:!w-2/4 block text-center w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal bg-purple-600 transition hover:bg-purple-800 rounded-3xl py-2">Подключить
+                   class="sm:!w-2/4 block text-center w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal border bg-transparent transition hover:bg-purple-600 rounded-3xl py-2">Подключить
                     Телеграм аккаунт</a>
 
                 <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Телефон</p>
@@ -135,14 +135,14 @@ const deleteUser = async () => {
             <div class="px-4 sm:px-0">
                 <button
                     @click.prevent="submit"
-                    class="mt-6 px-6 py-4 bg-purple-600 transition hover:bg-purple-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                    class="mt-6 px-6 py-4 border bg-transparent transition hover:bg-purple-600 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                     Сохранить данные
                 </button>
                 <br>
                 <button
                     @click.prevent="twoFactorAuthentication"
                     :disabled="isTwoFactorEnabled"
-                    class="mt-6 px-6 py-4 bg-green-600 transition hover:bg-green-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    class="mt-6 px-6 py-4 bg-transparent border transition hover:bg-green-600 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
                 >
                     {{
                         isTwoFactorEnabled ? 'Двухэтапная аутентификация включена' : 'Включить двухэтапную аутентификацию'
@@ -162,7 +162,7 @@ const deleteUser = async () => {
                 <br/>
                 <button
                     @click.prevent="deleteUser"
-                    class="mt-12 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">
+                    class="mt-12 text-violet-100 border text-sm font-normal font-['Open Sans'] leading-tight border-red-600 transition hover:bg-red-600 rounded-full px-6 py-2">
                     Удалить профиль
                 </button>
             </div>

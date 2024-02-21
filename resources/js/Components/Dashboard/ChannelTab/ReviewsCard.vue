@@ -26,7 +26,7 @@ const formatDate = computed(() => {
                 <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ review.review_text }}</p>
             </div>
             <div class="flex justify-between pt-4">
-                <p class="w-36 text-violet-100 text-xs font-normal font-['Poppins'] leading-none">{{ formatDate }}</p>
+                <p class="w-36 text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">{{ formatDate }}</p>
                 <n-rate :value="review.rating" readonly/>
             </div>
         </div>

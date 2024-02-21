@@ -2,7 +2,7 @@
 import {useNotificationStore} from "@/stores/NotificationsStore.js";
 import NotificationsCard from "@/Components/Dashboard/Profile/NotificationsCard.vue";
 import {selectThemeOverrides} from "@/themeOverrides.js";
-import {darkTheme, NConfigProvider, NSelect, NSkeleton} from "naive-ui";
+import {NSelect, NSkeleton} from "naive-ui";
 import {ref, watchEffect} from "vue";
 
 const notificationsStore = useNotificationStore()
@@ -60,13 +60,11 @@ watchEffect(() => {
         <notifications-card v-for="notification in notificationsStore.notifications.data" :notification="notification.data"/>
     </div>
     <div v-if="notificationsStore.loading">
-    <n-config-provider :theme="darkTheme">
         <div class="flex flex-col gap-y-2 mt-6">
             <template v-for="i in 10">
                 <n-skeleton height="70px" :sharp="false"/>
             </template>
         </div>
-    </n-config-provider>
     </div>
 
 </template>

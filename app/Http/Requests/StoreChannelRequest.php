@@ -16,7 +16,6 @@ class StoreChannelRequest extends FormRequest
             'topic_id'           => 'required',
             'type'               => 'required|in:channel,chat',
             'url'                => ['required', 'regex:/^@(?:[a-z0-9\_]+)$|^(https\:\/\/t\.me\/[a-zA-Z0-9\_\+\-]+)$/i', 'unique:channels,url'],
-            'language'           => 'required|in:english,russian',
             'repeat_discount'    => 'nullable|in:0,10,20,30,50',
             'male_percentage'    => 'integer|required',
             'terms'              => 'accepted',

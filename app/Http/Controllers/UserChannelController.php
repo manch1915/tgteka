@@ -43,39 +43,21 @@ class UserChannelController extends Controller
         return inertia('Dashboard/AddingChannel');
     }
 
-    /**
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
-     */
     public function store(StoreChannelRequest $request)
     {
         $validated = $request->validated();
         $validated['user_id'] = auth()->id();
 
-        unset($validated['avatar'], $validated['terms']);
-        $channel = Channel::create($validated);
+        unset($validated['terms']);
 
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar');
-            $channel->addMedia($avatar)->toMediaCollection('avatars');
-        }
+        Channel::create($validated);
 
         return response()->json('success');
     }
 
-    /**
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
-     */
     public function update(UpdateChannelRequest $request, Channel $channel)
     {
         $validated = $request->validated();
-
-        if($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar');
-            $channel->addMedia($avatar)->toMediaCollection('avatars');
-            unset($validated['avatar']);
-        }
 
         unset($validated['terms']);
         $channel->update($validated);
@@ -83,14 +65,11 @@ class UserChannelController extends Controller
         return response()->json($channel);
     }
 
-    public function edit(Channel $channel, AvatarService $avatarService)
+    public function edit(Channel $channel)
     {
-        $channelAvatar = $avatarService->getAvatarUrlOfChannel($channel);
-
         return inertia('Dashboard/EditChannel', [
             'channelId' => $channel->id,
-            'channel' => $channel,
-            'channelAvatar' => $channelAvatar,
+            'channel' => $channel
         ]);
     }
 }

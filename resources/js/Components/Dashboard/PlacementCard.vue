@@ -90,18 +90,18 @@ const acceptOrder = () => {
                     </div>
                     <div class="mt-4">
                         <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Подписчики</p>
-                            <h1 class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{order.channel.participants_count}}</h1>
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Подписчики</p>
+                            <h1 class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">{{order.channel.participants_count}}</h1>
                         </div>
                         <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ createdAt }}</p>
-                            <h1 class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">#{{order.id}}</h1>
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ createdAt }}</p>
+                            <h1 class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">#{{order.id}}</h1>
                         </div>
                         <div class="flex justify-between border-t-2 border-violet-100 border-opacity-40 py-4">
                            <div class="flex">
                                <div class="flex flex-col items-end">
-                                   <p class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Статус заявки</p>
-                                   <div class="text-violet-100 text-base font-bold font-['Poppins'] leading-tight flex items-center gap-x-2"><base-icon size="30" :path="mdiCheck"/>
+                                   <p class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">Статус заявки</p>
+                                   <div class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight flex items-center gap-x-2"><base-icon size="30" :path="mdiCheck"/>
                                        {{ $t('messages.' + order.status) }}</div>
                                </div>
                            </div>
@@ -112,20 +112,20 @@ const acceptOrder = () => {
                   <div class="p-0.5 wrapper">
                       <div class="flex flex-col content-center justify-between px-2 py-4 text-start wrapper_container">
                           <div class="flex flex-col gap-y-1 py-1">
-                              <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Формат</div>
-                              <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{order.format.name}}</div>
+                              <div class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">Формат</div>
+                              <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">{{order.format.name}}</div>
                           </div>
                           <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
-                              <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">День публикации</div>
-                              <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{pubDay}}</div>
+                              <div class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">День публикации</div>
+                              <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">{{pubDay}}</div>
                           </div>
                           <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
-                              <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Время публикации (UTC +3)</div>
-                              <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{pubTime}}</div>
+                              <div class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">Время публикации (UTC +3)</div>
+                              <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">{{pubTime}}</div>
                           </div>
                           <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
-                              <div class="text-violet-100 text-xs font-normal font-['Poppins'] leading-none">Цена</div>
-                              <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">{{order.price}}&nbsp;₽</div>
+                              <div class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">Цена</div>
+                              <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">{{order.price}}&nbsp;₽</div>
                           </div>
                       </div>
                   </div>

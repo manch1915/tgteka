@@ -11,7 +11,6 @@ const toUp = () => {
                 <div class="flex flex-col justify-between gap-12">
                     <div class="logo flex items-center">
                         <img src="/images/logo.svg" alt="logo">
-                        <div class="text-gray-200 text-3xl font-bold font-['Open Sans'] leading-10">logo</div>
                     </div>
                     <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
                         © 2023 tgteka.ru
@@ -38,13 +37,13 @@ const toUp = () => {
                         <div class="icons flex justify-between gap-4">
                             <div class="icon flex flex-col items-center">
                                 <img class="glow_icon" src="/images/telegram.svg" alt="telegram">
-                                <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">
+                                <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
                                     Telegram
                                 </div>
                             </div>
                             <div class="icon flex flex-col items-center">
                                 <img class="glow_icon" src="/images/message.svg" alt="message">
-                                <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">
+                                <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
                                     Почта
                                 </div>
                             </div>
@@ -64,7 +63,9 @@ const toUp = () => {
                 </div>
             </div>
         </div>
-        <img src="/images/linesanime.svg" alt="lines">
+        <div class="container mx-auto">
+            <img src="/images/linesanime.svg" alt="lines">
+        </div>
         <div class="container mx-auto pt-12">
             <div class="flex justify-between ">
                 <div class="flex flex-wrap gap-12">

@@ -43,11 +43,8 @@ onMounted(async () => {
     try {
         await getChannels();
         if (channels.value.data.length === 0){
-            console.log('empty')
             emit('isEmptyChannels', true);
         } else {
-            console.log('empty')
-
             emit('isEmptyChannels', false);
         }
     } catch (error) {

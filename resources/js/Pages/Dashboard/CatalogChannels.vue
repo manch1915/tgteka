@@ -3,9 +3,8 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import SortButton from '@/Components/Dashboard/SortButton.vue'
 import {closeModal} from 'jenesius-vue-modal'
 import SearchBar from '@/Components/Dashboard/SearchBar.vue'
-import {NCheckbox, NConfigProvider,darkTheme, NDrawer, NDrawerContent, NInput, NSelect, NSlider, NSpace} from 'naive-ui'
+import {NDrawer, NDrawerContent, NInput, NSelect, NSlider, NSpace} from 'naive-ui'
 import {
-    checkboxThemeOverrides,
     inputThemeOverrides,
     selectThemeOverrides,
     sliderThemeOverrides
@@ -15,7 +14,7 @@ import CatalogChannels from '@/Components/Dashboard/CatalogChannels.vue'
 import {useMainStore} from '@/stores/main.js'
 import {useChannelStore} from "@/stores/channelStore.js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import {mdiArrowLeftBold, mdiArrowRight} from "@mdi/js";
+import {mdiArrowLeftBold} from "@mdi/js";
 import {Head} from "@inertiajs/vue3";
 
 const SORT_DATA = ['Рейтинг', 'ER', 'Просмотры', 'Подписчики', 'Цена', 'CPМ']
@@ -90,7 +89,6 @@ const activate = (place) => {
         <title>Каталог Telegram-каналов</title>
     </Head>
     <AppLayout>
-        <n-config-provider :theme="darkTheme" >
         <n-drawer v-model:show="active" close-on-esc width="100%" :placement="placement" :theme-overrides="{color: '#070C29'}">
             <n-drawer-content>
                 <template #header>
@@ -375,7 +373,6 @@ const activate = (place) => {
                 </div>
             </n-drawer-content>
         </n-drawer>
-        </n-config-provider>
         <div class="sm:py-20 py-10 text-center">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Каталог Telegram-каналов</h1>
             <p class="sm:hidden text-center block total pt-4 text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal">Всего каналов {{count}}</p>

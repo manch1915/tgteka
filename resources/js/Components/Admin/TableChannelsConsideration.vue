@@ -8,8 +8,8 @@ import BaseLevel from "@/Components/Admin/BaseLevel.vue";
 import BaseButtons from "@/Components/Admin/BaseButtons.vue";
 import BaseButton from "@/Components/Admin/BaseButton.vue";
 import UserAvatar from "@/Components/Admin/UserAvatar.vue";
-import {darkTheme, dateRuRU, NConfigProvider, NDatePicker, NInput, ruRU} from "naive-ui";
-import {datePickerThemeOverrides, inputThemeOverrides} from "@/themeOverrides.js";
+import {NDatePicker} from "naive-ui";
+import {datePickerThemeOverrides} from "@/themeOverrides.js";
 
 defineProps({
   checkable: Boolean,
@@ -122,9 +122,7 @@ const checked = (isChecked, client) => {
         <p>Без удаления: {{ modalChannel.no_deletion_price }}</p>
         <p>Язык: {{ modalChannel.language }}</p>
         <p>male_percentage: {{ modalChannel.male_percentage }}%</p>
-        <n-config-provider :locale="ruRU" :date-locale="dateRuRU" :theme="darkTheme">
-            <n-date-picker :theme-overrides="datePickerThemeOverrides" v-model:value="timestamp" type="date"/>
-        </n-config-provider>
+        <n-date-picker :theme-overrides="datePickerThemeOverrides" v-model:value="timestamp" type="date"/>
         <p v-if="modalChannel.topic">Категория: {{ modalChannel.topic.title }}</p>
     </CardBoxModal>
 

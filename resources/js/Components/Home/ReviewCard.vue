@@ -9,10 +9,10 @@
       отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
     </div>
     <div
-        class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">
+        class="pt-4 text-violet-100 text-opacity-60 text-sm font-normal font-['Open Sans'] leading-tight">
       Анжелика Трофимова
     </div>
-    <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Poppins'] leading-tight">26
+    <div class="text-violet-100 text-opacity-60 text-sm font-normal font-['Open Sans'] leading-tight">26
       мая 2021
     </div>
   </div>

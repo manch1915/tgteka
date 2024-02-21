@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Pattern;
 use FFMpeg\Coordinate\TimeCode;
 use FFMpeg\FFMpeg;
+use Illuminate\Http\JsonResponse;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -30,7 +31,7 @@ class MediaItemService
      * @throws FileDoesNotExist
      * @throws FileIsTooBig
      */
-    private function processUrlMediaItem(string $url, int $order, $existingMediaItems, Pattern $pattern): void
+    public function processUrlMediaItem(string $url, int $order, $existingMediaItems, Pattern $pattern): void
     {
         $existingImage = $existingMediaItems->first(fn($media) => $url === $media->getFullUrl());
 
@@ -42,6 +43,27 @@ class MediaItemService
         } else {
             $existingImage->setCustomProperty('order', $order);
             $existingImage->save();
+        }
+    }
+
+    /**
+     * @throws FileCannotBeAdded
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    public function copyAndProcessUrlMediaItem(string $url, int $order, $existingMediaItems, Pattern $pattern)
+    {
+        $existingImage = $existingMediaItems->first(fn($media) => $url === $media->getFullUrl());
+
+        if (!$existingImage) {
+            return $pattern
+                ->addMediaFromUrl($url)
+                ->withCustomProperties(['order' => $order])
+                ->toMediaCollection('images');
+        } else {
+            $existingImage->setCustomProperty('order', $order);
+            $existingImage->save();
+            return $existingImage;
         }
     }
 
@@ -66,9 +88,9 @@ class MediaItemService
 
             if ($type == 'video/mp4' || $type == 'video/quicktime') {
                 // Generate Video Thumbnail
-                $ffmpegPath = getenv('FFMPEG_PATH');
-                $ffprobePath = getenv('FFPROBE_PATH');
-
+                $ffmpegPath = config('ffmpeg.ffmpeg.binaries');
+                $ffprobePath = config('ffmpeg.ffprobe.binaries');
+                logger()->info($ffmpegPath . $ffprobePath);
                 $ffmpeg = FFMpeg::create([
                     'ffmpeg.binaries'  => $ffmpegPath,
                     'ffprobe.binaries' => $ffprobePath
@@ -103,6 +125,36 @@ class MediaItemService
 
             $incomingHashes[] = $existingImage->getCustomProperty('hash');
         }
+    }
+
+    /**
+     * @throws FileCannotBeAdded
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    public function duplicate(Pattern $pattern): Pattern
+    {
+        $newPattern = $pattern->replicate();
+        $newPattern->save();
+
+        $existingMediaItems = $pattern->getMedia('images');
+
+        foreach ($existingMediaItems as $mediaItem) {
+            $order = $mediaItem->getCustomProperty('order');
+            $hash = $mediaItem->getCustomProperty('hash');
+            $url = $mediaItem->getFullUrl();
+
+            $this->processUrlMediaItem($url, $order, $newPattern->getMedia('images'), $newPattern);
+            if ($mediaItem->mime_type == 'video/mp4' || $mediaItem->mime_type == 'video/quicktime') {
+
+                $thumbUrl = $mediaItem->getCustomProperty('thumbnail_path');
+                $this->processUrlMediaItem($thumbUrl, $order, $newPattern->getMedia('images'), $newPattern);
+            }
+        }
+
+        $newPattern->localized_created_at = \App\Services\DateLocalizationService::localize($newPattern->created_at);
+
+        return $newPattern;
     }
 
     public function clearDeprecatedMedia($mediaItem, array $mediaData, array $incomingHashes): void

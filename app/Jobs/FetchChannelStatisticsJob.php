@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Jobs;
 
 use App\Models\Channel;
@@ -11,74 +10,117 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class
-FetchChannelStatisticsJob implements ShouldQueue
+class FetchChannelStatisticsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected Channel $channel;
 
+    protected Client $client;
+
+    private string $token = 'e3b38be1f953b4118758d333de716a20';
+
+    private string $baseURL = 'https://api.tgstat.ru/';
+
     public function __construct(Channel $channel)
     {
         $this->channel = $channel;
+        $this->client = new Client();
+    }
+
+    public function handle(): void
+    {
+        try {
+            $generalStatistics = $this->fetchGeneralStatistics();
+
+            if (!$generalStatistics) return;
+
+            $this->updateChannelStatistics($generalStatistics);
+            $this->updateChannelDetails($generalStatistics);
+        } catch (\GuzzleHttp\Exception\GuzzleException $e) {
+
+            $this->channel->status = 'loading';
+            $this->channel->save();
+
+            $this->release();
+
+            return;
+        }
     }
 
     /**
      * @throws GuzzleException
      */
-    public function handle(): void
+    private function fetchGeneralStatistics()
     {
-
-        $client = new Client();
-
-        $baseURL = 'https://api.tgstat.ru/';
-
-        $token = 'e3b38be1f953b4118758d333de716a20'; //token
-
-        $channel = $this->channel;
-
-        $generalStatisticsResponse = $client->request('GET', $baseURL.'channels/stat', ['query' => ['token' => $token, 'channelId' => $channel->url]]);
+        $generalStatisticsResponse = $this->client->request('GET', $this->baseURL.'channels/stat', ['query' => ['token' => $this->token, 'channelId' => $this->channel->url]]);
         $generalStatistics = json_decode($generalStatisticsResponse->getBody()->getContents());
 
         if ($generalStatistics->status === "error") {
-
-            $client->request('POST', $baseURL.'channels/add', [
-                'json' => [
-                    'token' => $token,
-                    'channelName' => $channel->url,
-                ]
-            ]);
-
+            $this->client->request('POST', $this->baseURL.'channels/add', ['json' => ['token' => $this->token, 'channelName' => $this->channel->url]]);
             $this->release(60 * 20);
-
-            return;
+            return false;
         }
 
-        $subscribers = json_decode($client->request('GET', $baseURL.'channels/subscribers', ['query' => ['token' => $token, 'channelId' => $channel->url]])->getBody()->getContents());
-        $avg_posts_reach = json_decode($client->request('GET', $baseURL.'channels/avg-posts-reach', ['query' => ['token' => $token, 'channelId' => $channel->url]])->getBody()->getContents());
-        $er = json_decode($client->request('GET', $baseURL.'channels/er', ['query' => ['token' => $token, 'channelId' => $channel->url]])->getBody()->getContents());
+        return $generalStatistics;
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    private function updateChannelStatistics($generalStatistics): void
+    {
+        // request subscriber, avg_posts_reach and engagementRate
+        $subscribers = $this->fetchData('channels/subscribers');
+        $avg_posts_reach = $this->fetchData('channels/avg-posts-reach');
+        $engagementRate = $this->fetchData('channels/er'); // renamed from 'er'
 
         ChannelStatistic::updateOrCreate(
-            ['channel_id' => $channel->id],
+            ['channel_id' => $this->channel->id],
             [
                 'stats' => json_encode($generalStatistics->response),
                 'subscribers' => json_encode($subscribers->response ?? []),
                 'avg_posts_reach' => json_encode($avg_posts_reach->response ?? []),
-                'er' => json_encode($er->response ?? [])
+                'er' => json_encode($engagementRate->response ?? []) // renamed from 'er'
             ]
         );
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    private function fetchData($endpoint)
+    {
+        $response = $this->client->request('GET', $this->baseURL.$endpoint, ['query' => ['token' => $this->token, 'channelId' => $this->channel->url]]);
+        return json_decode($response->getBody()->getContents());
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    private function updateChannelDetails($generalStatistics): void
+    {
+        $channelDetailsResponse = $this->client->request('GET', $this->baseURL.'channels/get', ['query' => ['token' => $this->token, 'channelId' => $this->channel->url]]);
+        $channelDetails = json_decode($channelDetailsResponse->getBody()->getContents());
+
+        if(property_exists($channelDetails->response, 'image640')) {
+            $this->channel->avatar = $channelDetails->response->image640;
+        }
+
+        if(property_exists($channelDetails->response, 'language')) {
+            $this->channel->language = $channelDetails->response->language;
+        }
 
         if ($generalStatistics->response->peer_type === 'channel'
             && property_exists($generalStatistics->response, 'adv_post_reach_12h')
             && $generalStatistics->response->adv_post_reach_12h != 0)
         {
-            $channel->cpm = ($channel->format_one_price * 1000)
+            $this->channel->cpm = ($this->channel->format_one_price * 1000)
                 / $generalStatistics->response->adv_post_reach_12h;
         }
 
-        $channel->status = 'accepted';
-        $channel->save();
+        $this->channel->status = 'accepted';
+        $this->channel->save();
     }
 }

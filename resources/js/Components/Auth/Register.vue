@@ -67,8 +67,8 @@ const submit = async () => {
             </div>
             <div class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">Укажите вашу электронную почту, на этот адрес будет выслан ваш пароль.</div>
             <div class="flex items-center gap-x-2">
-                <n-checkbox :theme-overrides="checkboxThemeOverrides"/>
-                <label for="rassilka" class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Я согласен получать Email-рассылку от Название компании</label>
+                <n-checkbox checked :theme-overrides="checkboxThemeOverrides"/>
+                <label class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Я согласен получать Email-рассылку от Название компании</label>
             </div>
             <div class="w-full">
                 <button class="w-full text-center pr-6 py-3.5 bg-purple-600 transition hover:bg-purple-800 text-white text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl">

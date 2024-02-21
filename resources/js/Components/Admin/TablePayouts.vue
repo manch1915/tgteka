@@ -5,7 +5,7 @@ import TableCheckboxCell from "@/Components/Admin/TableCheckboxCell.vue";
 import BaseLevel from "@/Components/Admin/BaseLevel.vue";
 import BaseButtons from "@/Components/Admin/BaseButtons.vue";
 import BaseButton from "@/Components/Admin/BaseButton.vue";
-import {NConfigProvider, NSelect, useMessage, darkTheme} from "naive-ui";
+import {NSelect, useMessage} from "naive-ui";
 
 defineProps({
   checkable: Boolean,
@@ -145,9 +145,7 @@ const checked = (isChecked, client) => {
 <template>
     <div class="flex items-center gap-x-2 p-2">
         <p class="text-violet-100 text-lg font-bold font-['Open Sans']">Статус</p>
-        <n-config-provider :theme="darkTheme">
-            <n-select v-model:value="statusValue" :options="statusOptions" class="my-4 w-64"/>
-        </n-config-provider>
+        <n-select v-model:value="statusValue" :options="statusOptions" class="my-4 w-64"/>
     </div>
   <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
     <span

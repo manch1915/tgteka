@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePatternRequest;
 use App\Http\Requests\UpdatePatternRequest;
+use App\Jobs\DuplicatePatternJob;
 use App\Models\Pattern;
 use App\Models\User;
 use App\Services\AvatarService;
@@ -119,21 +120,11 @@ class PatternController extends Controller
         return response()->json($patternMedia->sortBy('order')->values());
     }
 
-
-    /**
-     * @throws FileDoesNotExist
-     * @throws FileIsTooBig
-     */
     public function duplicate(Pattern $pattern): JsonResponse
     {
-        $newPattern = $pattern->replicate();
-        $newPattern->save();
+        DuplicatePatternJob::dispatch($pattern);
 
-        $pattern->getMedia('images')->each(fn($media) => $newPattern->addMedia($media->getPath())->toMediaCollection('images'));
-
-        $newPattern->localized_created_at = \App\Services\DateLocalizationService::localize($newPattern->created_at);
-
-        return response()->json($newPattern);
+        return response()->json(['message' => 'Началось дублирование шаблона']);
     }
 
     public function edit(Pattern $pattern)

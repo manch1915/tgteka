@@ -30,7 +30,7 @@ class OrderCreatedNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Новая заявка на размещение рекламы в вашем канале')
             ->line('Уважаемый(ая) ' . $notifiable->username . ',')
-            ->line('Поступила новая заявка на размещение рекламы для канала ' . $this->order->channel->name . ':')
+            ->line('Поступила новая заявка на размещение рекламы для канала ' . $this->order->channel->channel_name . ':')
             ->line('- Стоимость заявки: ' . $this->order->price)
             ->line('- Формат размещения: ' . $this->order->format->name)
             ->line('- Комментарий: ' . $this->order->description)
@@ -44,7 +44,9 @@ class OrderCreatedNotification extends Notification implements ShouldQueue
     public function toDatabase($notifiable): array
     {
         return [
-            'message' => 'Поступила новая заявка на размещение рекламы для канала ' . $this->order->channel->name,
+            'message' => 'Поступила новая заявка на размещение рекламы для канала ' . $this->order->channel->channel_name,
+            'action_url' => route('order.index'),
+            'action_label' => 'Перейти'
         ];
     }
 

@@ -21,7 +21,7 @@ const wrap = ref(false)
             <div class="grid">
                 <div class="flex grid-element flex-col items-center justify-center gap-y-3">
                     <div :class="{'bg-yellow-400 point': channel.status === 'pending', 'bg-green-400 point': channel.status === 'accepted', 'bg-red-400 point': channel.status === 'declined'}"></div>
-                    <div class="flex rating text-white text-sm font-normal gap-x-2 font-['Poppins'] leading-tight">
+                    <div class="flex rating text-white text-sm font-normal gap-x-2 font-['Open Sans'] leading-tight">
                         <img src="/images/gavat.svg" alt="">
                         <p>{{channel.rating}}</p>
                     </div>
@@ -35,7 +35,7 @@ const wrap = ref(false)
                         <p class="rate_catalog inline text-violet-100 text-sm font-normal font-['Open Sans']">#{{channel.id}} в каталоге</p>
                         </div>
                         <h1 class="text-white text-xl font-bold font-['Open Sans'] leading-relaxed">{{channel.channel_name}}</h1>
-                        <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Poppins'] break-all leading-tight">{{channel.description}}</p>
+                        <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Open Sans'] break-all leading-tight">{{channel.description}}</p>
                     </div>
                 </div>
                 <div class="grid-element flex flex-col items-center justify-center">
@@ -59,7 +59,7 @@ const wrap = ref(false)
                           О канале
                         </div>
                       </template>
-                       <AboutChannel/>
+                       <AboutChannel :description="channel.description"/>
                     </n-tab-pane>
                     <n-tab-pane name="the beatles" tab="Отзывы">
                       <template #tab>
@@ -86,11 +86,14 @@ const wrap = ref(false)
         </div>
 
         <div class="flex justify-center py-6 unwrap">
-            <button @click.prevent="wrap = !wrap" class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal flex">Развернуть <i class="block arrow-down"></i></button>
+            <button @click.prevent="wrap = !wrap" class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal flex">
+                {{ wrap ? 'Свернуть' : 'Развернуть' }}
+                <i class="transform transition-transform ease-in-out duration-500 block arrow-down" :class="{ 'rotate-180': wrap }"></i>
+            </button>
         </div>
     </div>
 </template>
-
+է
 <style scoped lang="scss">
 .expand-leave-active,
 .expand-enter-active {

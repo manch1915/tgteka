@@ -236,9 +236,9 @@ onMounted(() => {
                                 <div class="text-base font-normal font-['Open Sans'] leading-tight flex items-center gap-x-1"><BaseIcon :path="mdiEyeOutline" size="25"/>{{channel.views_count}}</div>
                                 <div class="text-base font-normal font-['Open Sans'] leading-tight flex items-center gap-x-1"><BaseIcon :path="mdiHeartOutline"  size="25"/>{{favorites_count}}</div>
                             </div>
-                            <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Язык:<span class="font-normal pl-2">{{ channel.language }}</span></div>
-                            <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Категория:<span class="font-normal pl-2">{{ channel.topic.title }}</span></div>
-                            <div class="text-violet-100 text-sm font-bold font-['Poppins'] leading-tight">Вид ссылки:<span class="font-normal pl-2">Приватный канал</span></div>
+                            <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Язык:<span class="font-normal pl-2">{{ channel.language }}</span></div>
+                            <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Категория:<span class="font-normal pl-2">{{ channel.topic.title }}</span></div>
+                            <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Вид ссылки:<span class="font-normal pl-2">Приватный канал</span></div>
                         </div>
                     </div>
                     <div class="sm:w-1/2">
@@ -246,7 +246,7 @@ onMounted(() => {
                         <div class="flex flex-wrap gap-x-14 w-full">
                             <div class="w-60">
                                 <n-select v-model:value="formatValue" :theme-overrides="selectThemeOverrides" :options="format"/>
-                                <div class="pl-3 pt-2 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ explain[format] }}</div>
+                                <div class="pl-3 pt-2 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ explain[format] }}</div>
                             </div>
                         </div>
                         <div class="flex flex-wrap justify-between pt-8">

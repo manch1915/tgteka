@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
 import {onMounted, ref, watch} from "vue";
 import PlacementCard from "@/Components/Dashboard/PlacementCard.vue";
-import {darkTheme, dateRuRU, NConfigProvider, NDatePicker, NSlider, ruRU, useLoadingBar} from "naive-ui";
+import {NDatePicker, NSlider, useLoadingBar} from "naive-ui";
 import {Head, Link} from "@inertiajs/vue3";
 
 const placements = ref([])
@@ -99,9 +99,7 @@ watch([activeSortButton, value, range], () => {
                         <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-10">-</p>
                         <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-10">{{value[1]}} руб.</p>
                     </div>
-                    <n-config-provider :locale="ruRU" :date-locale="dateRuRU" :theme="darkTheme">
-                        <n-date-picker v-model:value="range" type="daterange" clearable />
-                    </n-config-provider>
+                    <n-date-picker v-model:value="range" type="daterange" clearable />
                 </div>
             </div>
             <div class="flex flex-col gap-y-4 mt-8">

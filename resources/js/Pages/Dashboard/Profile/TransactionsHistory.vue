@@ -5,7 +5,7 @@ import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vu
 import Transactions from "@/Components/Dashboard/Profile/Transactions.vue";
 import {onMounted, ref, watch} from "vue";
 import {selectThemeOverrides} from "@/themeOverrides.js";
-import {darkTheme, dateRuRU, NConfigProvider, NDatePicker, NSelect, ruRU, useLoadingBar} from "naive-ui";
+import { NDatePicker, NSelect, useLoadingBar} from "naive-ui";
 import {Head, usePage} from "@inertiajs/vue3";
 
 const page = usePage();
@@ -101,9 +101,7 @@ watch([appointmentVal, statusValue, range], () => {
                     </div>
                 </div>
                 <div class="w-full">
-                    <n-config-provider :locale="ruRU" :date-locale="dateRuRU" :theme="darkTheme">
-                        <n-date-picker v-model:value="range" type="daterange" clearable />
-                    </n-config-provider>
+                    <n-date-picker v-model:value="range" type="daterange" clearable />
                 </div>
             </div>
             <Transactions v-if="transactions.data && transactions.data.lenght" :transactions="transactions.data"/>

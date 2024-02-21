@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="flex flex-col items-center justify-between gap-y-4 py-6 sm:flex-row">
-                    <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Шаблон сохраняется автоматически</div>
+                    <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Шаблон сохраняется автоматически</div>
                     <slot name="clear-all" />
                 </div>
                 <hr>

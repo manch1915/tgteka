@@ -1,11 +1,16 @@
 <script setup>
-
 import {NProgress} from "naive-ui";
+
+defineProps({
+    rating: String,
+    description: String
+})
+
 </script>
 
 <template>
     <div class="w-full about p-6">
-        <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-relaxed">Авторитет и известность автора. Живая и активная аудитория. Посты о красоте и здоровье, косметологии и уходе за кожей и волосами, эстетической медицине и пластической хирургии, дерматологии и трихологии.</p>
+        <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-relaxed">{{description}}</p>
         <div class="about_card">
             <div class="about_card-header grid grid-cols-2 justify-center text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                 <div class="flex justify-center py-5 border-b border-r border-violet-100 border-opacity-40">

@@ -32,7 +32,18 @@ class OrderService
             return 'Invalid Request. Channels not provided.';
         }
 
-        $channels = $request->channels;
+        $channelIds = array_column($request->channels, 'id');
+
+        $channelsFromDB = Channel::with('user')->whereIn('id', $channelIds)->get()->keyBy('id');
+
+        $channels = array_map(function($channelInput) use ($channelsFromDB) {
+            $channelDbData = $channelsFromDB[$channelInput['id']];
+            // return object with additional properties
+            $channelDbData->format = $channelInput['format'];
+            $channelDbData->timestamp = $channelInput['timestamp'];
+            return $channelDbData;
+        }, $request->channels);
+
         $totalSum = $this->calculateTotalSum($channels);;
 
         $user = Auth::user();
@@ -43,9 +54,9 @@ class OrderService
             return $balanceCheck;
         }
 
-        $this->createOrderRecord($request, $request->channels);
+        $this->createOrderRecord($request, $channels);
 
-        $uniqueUserIds = collect($request->channels)->pluck('user_id')->unique()->toArray();
+        $uniqueUserIds = collect($channels)->pluck('user_id')->unique()->toArray();
 
         foreach ($uniqueUserIds as $userTwoId) {
             $existingConversation = Conversation::where(function ($query) use ($user, $userTwoId) {
@@ -78,7 +89,7 @@ class OrderService
     /**
      * @throws Exception
      */
-    private function calculateTotalSum(array $channels): float|int
+    private function calculateTotalSum($channels): float|int
     {
         $totalSum = 0;
         foreach ($channels as $channel) {
@@ -95,48 +106,43 @@ class OrderService
     /**
      * @throws Exception
      */
-    private function calculateChannelSum(array $channel): float|int
+    private function calculateChannelSum($channel): float|int
     {
-        if (!isset($channel['id'])) {
-            throw new Exception('Invalid channel id provided.');
-        }
-
-        Channel::findOrFail($channel['id']);
-        return $channel[$channel['format']] ?? 0;
+        Channel::findOrFail($channel->id);
+        return $channel->{$channel->format} ?? 0;
     }
 
     /**
      * @throws Exception
      */
-    private function createOrderRecord(Request $request, array $channels): void
+    private function createOrderRecord(Request $request, $channels): void
     {
         foreach ($channels as $channel) {
             $price = $this->calculateChannelSum($channel);
             $formatDetails = $this->getFormatDetails($channel);
 
-            if (!isset($channel['timestamp'])) {
+            if (!isset($channel->timestamp)) {
                 throw new Exception('Invalid timestamp provided.');
             }
 
             // Add days to post_date
-            $postDate = new DateTime($channel['timestamp']);
+            $postDate = new DateTime($channel->timestamp);
             $postDateEnd = $postDate->modify('+' . $formatDetails['days'] . ' day');
 
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'description' => $request->description,
                 'pattern_id' => $request->pattern_id,
-                'post_date' => $channel['timestamp'],
+                'post_date' => $channel->timestamp,
                 'post_date_end' => $postDateEnd,
-                'channel_id' => $channel['id'],
+                'channel_id' => $channel->id,
                 'format_id' => $formatDetails['id'],
                 'price' => $price,
             ]);
 
-            $channelModel = Channel::find($channel['id']);
 
-            if ($channelModel && $channelModel->user) {
-                $channelModel->user->notify(new OrderCreatedNotification($order));
+            if ($channel && $channel->user) {
+                $channel->user->notify(new OrderCreatedNotification($order));
             }
 
             $postDateEndCarbon = Carbon::instance($postDateEnd);
@@ -150,13 +156,13 @@ class OrderService
     /**
      * @throws Exception
      */
-    private function getFormatDetails(array $channel): array
+    private function getFormatDetails(Channel $channel): array
     {
-        if (!isset($channel['format']) || !isset(self::FORMAT_NAME[$channel['format']])) {
+        if (!isset($channel->format) || !isset(self::FORMAT_NAME[$channel->format])) {
             throw new Exception('Invalid format provided.');
         }
 
-        $formatName = self::FORMAT_NAME[$channel['format']];
+        $formatName = self::FORMAT_NAME[$channel->format];
 
         // Check if format name contains '/'
         if (!str_contains($formatName, '/')) {

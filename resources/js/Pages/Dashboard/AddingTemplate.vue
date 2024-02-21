@@ -86,17 +86,17 @@ const handleFileUpload = function(event) {
     }
 
     if (!isGifUpload && (images.value.length + files.length > 10)) {
-        message.error("Вы не можете загрузить более 10 изображений / видео.", {duration: 1000 * 10});
+        message.error("Вы не можете загрузить более 10 изображений / видео.");
         return;
     }
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
 
-        if (file.size <= 5 * 1024 * 1024) {
+        if (file.size <= 60 * 1024 * 1024) {
             images.value.push({displayImage: URL.createObjectURL(file), file: file});
         } else {
-            message.error("Размер файла не должен превышать 5MB.", {duration: 1000 * 10});
+            message.error("Размер файла не должен превышать 60MB.");
         }
     }
 };
@@ -132,6 +132,14 @@ const patchPattern = async function() {
     } finally {
         loading.finish();
     }
+};
+
+const clearAll = function() {
+    htmlContent.value = ''
+    uploadedImageUrl.value = '/images/photo.png'
+    file.value = null
+    editorMethods.value.setContents([])
+    images.value = []
 };
 
 // Watches
@@ -176,14 +184,14 @@ onUnmounted(() => {
             <QuillEditor v-model:content="content" :options="options" theme="snow" :class="{'empty-editor': isEmptyEditor}"  class="text-violet-100 ql-container ql-snow" @ready="onEditorReady" placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.  Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации.Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
         </template>
         <template #clear-all>
-            <button class="text-purple-600 text-sm font-normal font-['Poppins'] leading-tight">Очистить всё</button>
+            <button @click.prevent="clearAll" class="text-purple-600 text-sm font-normal font-['Open Sans'] leading-tight">Очистить всё</button>
         </template>
         <template #file-upload>
             <div class="flex flex-col gap-y-8">
                 <div class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Медиафайлы</div>
-                <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Прикрепите файл</div>
+                <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Прикрепите файл</div>
                 <div>
-                    <label class="cursor-pointer transition px-6 py-2 bg-blue-950 animation hover:bg-transparent rounded-full shadow-inner border border-white border-opacity-10 text-violet-100 text-sm font-normal font-['Poppins'] leading-tight custom-file-upload">
+                    <label class="cursor-pointer transition px-6 py-2 bg-blue-950 animation hover:bg-transparent rounded-full shadow-inner border border-white border-opacity-10 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight custom-file-upload">
                         <input type="file" multiple class="hidden" accept="image/*,video/*" @change="handleFileUpload($event)" />
                         Загрузить файл
                     </label>

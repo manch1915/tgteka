@@ -1,5 +1,5 @@
 <script setup>
-import {NSelect, NInput, useMessage, NDatePicker, NConfigProvider, darkTheme, useLoadingBar} from "naive-ui";
+import {NSelect, NInput, useMessage, NDatePicker, useLoadingBar} from "naive-ui";
 import {closeModal} from "jenesius-vue-modal";
 import {inputThemeOverrides, selectThemeOverrides} from "@/themeOverrides.js";
 import {computed, ref} from "vue";
@@ -101,9 +101,7 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
                 <div class="w-1/2 mx-auto">
                     <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight text-center my-8">Выберите причину отказа от проекта</p>
                     <n-select :theme-overrides="selectThemeOverrides" v-model:value="selectedValue" placeholder="Выберите причину" :options="options" class="my-4"/>
-                    <n-config-provider :theme="darkTheme">
-                        <n-date-picker v-show="dateSelect" v-model:value="timestamp" type="datetime" :is-date-disabled="disablePastDates" :is-time-disabled="disableMinutesAndSeconds"/>
-                    </n-config-provider>
+                    <n-date-picker v-show="dateSelect" v-model:value="timestamp" type="datetime" :is-date-disabled="disablePastDates" :is-time-disabled="disableMinutesAndSeconds"/>>
                     <n-input v-show="other" v-model:value="otherBody" :theme-overrides="inputThemeOverrides" placeholder="Другое"/>
                     <button @click.prevent="decline" class="w-full py-2 my-2 bg-purple-600 animation hover:bg-purple-800 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Подтвердить</button>
                 </div>

@@ -22,16 +22,12 @@ const format_two_checkbox = ref(false);
 const format_three_checkbox = ref(false);
 const no_deletion_checkbox = ref(false);
 
-const file = ref(null)
-
 const form = reactive({
-    avatar: null,
     channel_name: '',
     description: '',
     topic_id: null,
     type: 'channel',
     url: '',
-    language: 'russian',
     subscribers_source: '',
     repeat_discount: null,
     terms: false,
@@ -41,22 +37,11 @@ const form = reactive({
     no_deletion_price: 0,
     male_percentage: 30,
 });
-const handleFileUpload = (event) => {
-    form.avatar = event.target.files[0];
 
-    if (!form.avatar) {
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        file.value = e.target.result;
-    };
-    reader.readAsDataURL(form.avatar);
-};
 const loading = useLoadingBar()
 const errors = ref({})
 let errorRefs = reactive({});
+
 const uploadChannel = () => {
     loading.start()
   axios.post(route('adding-channel.store'), form, {headers: {
@@ -85,18 +70,6 @@ const uploadChannel = () => {
 const malePercentage = computed(() => form.male_percentage);
 const femalePercentage = computed(() => 100 - form.male_percentage);
 
-
-
-const languages = [
-    {
-        label: 'Русский',
-        value: 'russian',
-    },
-    {
-        label: 'Английский',
-        value: 'english',
-    },
-];
 const store = useMainStore();
 store.fetchTopics();
 
@@ -106,6 +79,7 @@ const channelSubjects = computed(() =>
         value: topic.id,
     }))
 );
+
 const discountData = [
     {
         label: '10%',
@@ -146,27 +120,6 @@ watch(state.type, (newRadio) => {
             <h1 class="py-24 text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">
                 Добавление канала / чата
             </h1>
-            <div class="mb-16 flex flex-col justify-center items-center sm:px-24 px-4 gap-2.5 sm:flex-row">
-                <div v-show="file" class="avatar">
-                    <img :src="file" alt="" />
-                </div>
-                <div class="flex flex-1 w-full flex-col items-center">
-                    <label class="cursor-pointer w-full px-6 py-3.5 bg-purple-600 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal custom-file-upload">
-                        <input
-                            type="file"
-                            class="hidden"
-                            accept="image/jpeg, image/png, image/jpg"
-                            @change="handleFileUpload($event)" />
-                        Загрузить фото канала/ чата
-                    </label>
-                    <p
-                        class="sm:text-start text-center pt-5 text-violet-100 text-opacity-40 text-base font-normal font-['Inter'] leading-tight">
-                        Формат изображения jpg, jpeg, png, не менее 140*140рх,не более
-                        2800*2024рх
-                    </p>
-                </div>
-            </div>
-            <span class="text-red-500" v-if="errors.avatar">{{ errors.avatar[0] }}</span>
             <div class="flex flex-col gap-y-16 sm:px-0 px-4">
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
@@ -270,17 +223,6 @@ watch(state.type, (newRadio) => {
                             <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">{{ femalePercentage }}%</p>
                         </div>
                     </div>
-                </div>
-                <div class="flex w-full flex-col gap-y-3 text-start">
-                    <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                        Язык
-                    </h2>
-                    <n-select
-                        :theme-overrides="selectThemeOverrides"
-                        v-model:value="form.language"
-                        :options="languages" />
-                    <span class="text-red-500" v-if="errors.language">{{ errors.language[0] }}</span>
                 </div>
             </div>
         </div>
@@ -460,15 +402,7 @@ watch(state.type, (newRadio) => {
                     <span class="text-red-500" v-if="errors.repeat_discount">{{ errors.repeat_discount[0] }}</span>
                 </div>
                 <div>
-                    <div class="flex sm:flex-row flex-col gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                        <button @click.prevent="uploadChannel" class="rounded-3xl bg-purple-600 transition hover:bg-purple-800 px-6 py-3.5">
-                            Добавить канал / чат
-                        </button>
-                        <button @click.prevent="router.visit(route('channels'))" class="rounded-3xl border border-violet-700 bg-transparent transition hover:bg-red-500 px-6 py-3.5">
-                            Отменить
-                        </button>
-                    </div>
-                    <div class="mt-12">
+                    <div>
                         <n-checkbox
                             :theme-overrides="checkboxThemeOverrides"
                             v-model:checked="form.terms"
@@ -480,6 +414,14 @@ watch(state.type, (newRadio) => {
                             </div>
                         </n-checkbox>
                         <span class="text-red-500" v-if="errors.terms">{{ errors.terms[0] }}</span>
+                    </div>
+                    <div class="flex sm:flex-row flex-col mt-12 gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        <button @click.prevent="uploadChannel" class="rounded-3xl bg-purple-600 transition hover:bg-purple-800 px-6 py-3.5">
+                            Добавить канал / чат
+                        </button>
+                        <button @click.prevent="router.visit(route('channels'))" class="rounded-3xl border border-violet-700 bg-transparent transition hover:bg-red-500 px-6 py-3.5">
+                            Отменить
+                        </button>
                     </div>
                 </div>
             </div>

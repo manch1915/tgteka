@@ -17,6 +17,19 @@ export const inputThemeOverrides = {
     caretColor: 'rgba(135, 41, 255, 1)',
 };
 
+export const textareaThemeOverrides = {
+    borderRadius: '5px',
+    placeholderColor: '#EAE0FF99',
+    color: '#0D143A',
+    colorDisabled: '#0D143A',
+    textColor: '#FFFFFF',
+    colorFocus: '#0D143A',
+    border: '1px solid #6522D9',
+    borderHover: '1px solid #6522D9',
+    borderDisabled: '1px solid #6522D9',
+    borderFocus: '1px solid #6522D9',
+    caretColor: 'rgba(135, 41, 255, 1)',
+};
 
 export const datePickerThemeOverrides = {
     peers: {

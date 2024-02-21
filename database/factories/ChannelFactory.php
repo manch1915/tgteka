@@ -22,7 +22,6 @@ class ChannelFactory extends Factory
             'topic_id' => \App\Models\Topic::inRandomOrder()->first()->id,
             'type' => $this->faker->randomElement(['channel', 'chat']),
             'url' => '@' . $this->faker->words(1, true),
-            'language' => $this->faker->randomElement(['english', 'russian']),
             'repeat_discount' => $this->faker->randomElement([0, 10, 20, 30, 50]),
             'male_percentage' => $this->faker->numberBetween(0, 100),
             'format_one_price' => $this->faker->numberBetween(1, 1000),

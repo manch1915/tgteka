@@ -1,7 +1,7 @@
 <script setup>
-import {darkTheme, NSelect, NConfigProvider, NDatePicker , useMessage, ruRU, dateRuRU} from "naive-ui";
+import {NSelect, NDatePicker , useMessage} from "naive-ui";
 import { datePickerThemeOverrides, selectCatalogThemeOverrides } from "@/themeOverrides.js";
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartRemove} from "@mdi/js";
 import {Link} from "@inertiajs/vue3";
@@ -10,9 +10,6 @@ import { useCartStore } from "@/stores/CartStore.js";
 
 const props = defineProps({
     channel: Object,
-    formatValue: {
-        required: false,
-    },
     timestamp: {
         default: () => {
             const date = new Date();
@@ -32,8 +29,9 @@ const cartUpdateKey = ref(0);
 const fav = computed(() => props.channel.isFav);
 const wrap = ref(false);
 const message = useMessage();
+
 const format = computed(() => generateFormatArray(props.channel));
-const formatValue = ref(format.value[0]?.value || null);
+const formatValue = ref(props.channel.format || format.value[0]?.value);
 
 const emit = defineEmits(["cartChanged", "cartUpdated"]);
 const cartStore = useCartStore()
@@ -159,27 +157,27 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
                     <div class="flex-1 grid-element">
                         <div class="flex flex-col justify-between gap-y-2">
                             <h1 class="text-white text-xl font-bold font-['Open Sans'] leading-relaxed">{{channel.channel_name}}</h1>
-                            <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Poppins'] break-all leading-tight">{{channel.description}}</p>
+                            <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Open Sans'] break-all leading-tight">{{channel.description}}</p>
                         </div>
                     </div>
                 </div>
                 <div class="flex h-full sm:border-none border-t border-[#6522D9] p-4 sm:w-1/2 w-full items-stretch justify-evenly">
                     <div class="sm:border-x-[1px] h-full w-full border-[#6522D9] flex flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Подписчики</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ channel.statistics.participants_count }}</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Подписчики</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ channel.statistics.participants_count }}</p>
                         </div>
                     </div>
                     <div class="sm:border-r-[1px] h-full w-full border-[#6522D9] flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Просмотры</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">{{ channel.statistics.avg_post_reach}}</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Просмотры</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ channel.statistics.avg_post_reach}}</p>
                         </div>
                     </div>
                     <div class="flex h-full w-full flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">CPМ</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">CPМ</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
                                 {{ channel.cpm }}</p>
                         </div>
                     </div>
@@ -190,15 +188,13 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
         <div class="flex flex-wrap items-center sm:justify-between p-6 unwrap gap-y-2">
             <div class="flex flex-wrap sm:w-auto w-full items-center gap-x-4">
                 <div class="flex flex-col items-start gap-y-1">
-                    <p class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Формат</p>
+                    <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Формат</p>
                     <n-select class="w-24" v-model:value="formatValue" @update-value="emit('cartChanged');" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="format"/>
                 </div>
                 <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">{{ totalPrice }} ₽</h1>
             </div>
             <div v-show="isCart">
-                <n-config-provider :locale="ruRU" :date-locale="dateRuRU" :theme="darkTheme">
-                    <n-date-picker :theme-overrides="datePickerThemeOverrides" v-model:value="timestamp" default-time="12:00:00" type="datetime" :is-date-disabled="disablePastDates" :is-time-disabled="disableMinutesAndSeconds"/>
-                </n-config-provider>
+                <n-date-picker :theme-overrides="datePickerThemeOverrides" v-model:value="timestamp" default-time="12:00:00" type="datetime" :is-date-disabled="disablePastDates" :is-time-disabled="disableMinutesAndSeconds"/>
             </div>
             <div class="flex items-center justify-between text-violet-100 gap-x-2.5">
                 <Link :href="route('catalog.channels.show', channel.slug )" class="text-violet-100 text-xs font-normal font-['Open Sans'] underline leading-none">Подробнее о канале</Link>

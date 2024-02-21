@@ -11,13 +11,13 @@ const props = defineProps({
         <div class="notification__card">
             <p>{{ notification.message }}</p>
 
-            <template v-if="notification.type === 'post_placed'">
+            <template v-if="notification.action_url">
                 <div class="pt-2">
-                    <a :href="notification.action_url">
+                    <Link :href="notification.action_url">
                         <button class="transition px-5 py-1 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-sm font-bold font-['Open Sans']">
                             {{ notification.action_label }}
                         </button>
-                    </a>
+                    </Link>
                 </div>
             </template>
         </div>
@@ -37,7 +37,7 @@ const props = defineProps({
     }
     p{
         color: var(--White, #EAE0FF);
-        font-family: Poppins;
+        font-family: Open Sans,serif;
         font-size: 14px;
         font-style: normal;
         font-weight: 400;

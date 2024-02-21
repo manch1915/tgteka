@@ -15,7 +15,7 @@ class Channel extends Model implements HasMedia
 {
     use HasFactory, Favoriteable, InteractsWithMedia;
 
-    protected $fillable = ['user_id', 'url', 'channel_name', 'slug', 'topic_id', 'type', 'language', 'description', 'subscribers_source', 'format_one_price', 'format_two_price', 'format_three_price', 'no_deletion_price', 'repost_price', 'repeat_discount', 'cpm', 'male_percentage', 'score', 'rating', 'likes_count', 'views_count', 'status', 'channel_creation_date', 'deleted_at', 'registerMediaConversionsUsingModelInstance'];
+    protected $fillable = ['user_id', 'url', 'channel_name', 'avatar', 'language' ,'slug', 'topic_id', 'type', 'description', 'subscribers_source', 'format_one_price', 'format_two_price', 'format_three_price', 'no_deletion_price', 'repost_price', 'repeat_discount', 'cpm', 'male_percentage', 'score', 'rating', 'likes_count', 'views_count', 'status', 'channel_creation_date', 'deleted_at', 'registerMediaConversionsUsingModelInstance'];
 
     public function user(): BelongsTo
     {

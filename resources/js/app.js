@@ -9,7 +9,7 @@ import { config } from 'jenesius-vue-modal'
 import {createPinia} from "pinia";
 import {Quill} from "@vueup/vue-quill";
 import Emoji from "quill-emoji";
-import {NLoadingBarProvider, NMessageProvider} from "naive-ui";
+import {NLoadingBarProvider, NMessageProvider, NConfigProvider, ruRU, dateRuRU, darkTheme} from "naive-ui";
 import {darkModeKey, styleKey} from "@/config.js";
 import {useStyleStore} from "@/stores/style.js";
 import { i18nVue } from 'laravel-vue-i18n'
@@ -29,34 +29,46 @@ createInertiaApp({
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
         const RootComponent = {
-            components: { App, NLoadingBarProvider, NMessageProvider },
+            components: { App, NLoadingBarProvider, NMessageProvider, NConfigProvider },
             render() {
                 return h(
-                    NLoadingBarProvider,
+                    NConfigProvider,
                     {
-                        loadingBarStyle: {
-                            loading: {
-                                backgroundColor: '#7f4fc5',
-                                height: '3px'
-                            }
-                        }
+                        locale: ruRU,
+                        'date-locale': dateRuRU, // Use quotes for hyphenated props
+                        theme: darkTheme,
                     },
                     {
                         default: () =>
                             h(
-                                NMessageProvider,
+                                NLoadingBarProvider,
                                 {
-                                    duration: 6000
+                                    loadingBarStyle: {
+                                        loading: {
+                                            backgroundColor: '#7f4fc5',
+                                            height: '3px'
+                                        }
+                                    }
                                 },
                                 {
                                     default: () =>
-                                        h(App, props)
+                                        h(
+                                            NMessageProvider,
+                                            {
+                                                duration: 6000
+                                            },
+                                            {
+                                                default: () =>
+                                                    h(App, props)
+                                            }
+                                        )
                                 }
                             )
                     }
                 );
             },
         };
+
         return createApp(RootComponent)
             .use(plugin)
             .use(pinia)

@@ -21,7 +21,7 @@ const props = defineProps({
 
 const message = useMessage()
 
-Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale,PointElement, LineElement);
+Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement);
 Chart.defaults.color = '#EAE0FF';
 Chart.defaults.borderColor = '#E6E6E6';
 
@@ -122,7 +122,7 @@ onMounted(() => {
         <div class="grid sm:grid-cols-4 grid-cols-2 gap-4 mb-2">
             <div class="item text-center !py-10">
                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Рейтинг</p>
-                <p class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">504.6</p>
+                <p v-if="channelStats.channel" class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">{{channelStats.channel.rating || 0}}</p>
             </div>
             <div class="item text-center !py-10">
                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Выполнено заявок</p>

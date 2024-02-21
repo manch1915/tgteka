@@ -3,21 +3,29 @@ import AppLayout from '@/Layouts/AppLayout.vue'
 import CatalogChannelCard from "@/Components/Dashboard/CatalogChannelCard.vue";
 import {computed, onMounted, ref} from "vue";
 import {NInput, NSelect, useMessage, useLoadingBar} from "naive-ui";
-import {inputThemeOverrides, selectThemeOverrides} from "@/themeOverrides.js";
+import { selectThemeOverrides, textareaThemeOverrides} from "@/themeOverrides.js";
 import axios from "axios";
 import {useMainStore} from "@/stores/main.js";
 import {router, Link, Head} from "@inertiajs/vue3";
 import {Title} from "chart.js";
 
+const loading = useLoadingBar()
+
 const loadCart = () => {
     return JSON.parse(localStorage.getItem('cart')) || [];
 };
+
 const isCartEmpty = computed(() => channels.value.length === 0);
+
 const channels = ref(loadCart())
 const userPatterns = ref([])
 const userPattern = ref(null)
 const description = ref('')
+
 const store = useMainStore()
+
+const totalParticipants = computed(() => channels.value.reduce((sum, channel) => (sum + (channel.statistics ? channel.statistics.participants_count : 0)), 0));
+const totalPostReach = computed(() => channels.value.reduce((sum, channel) => (sum + (channel.statistics ? channel.statistics.avg_post_reach : 0)), 0));
 
 const channelCount = computed(() => channels.value.length);
 const totalSum = computed(() => channels.value.reduce((sum, channel) => {
@@ -28,7 +36,6 @@ const updateChannels = (updatedCart) => {
     channels.value = updatedCart;
 };
 
-const loading = useLoadingBar()
 const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     const year = date.getFullYear();
@@ -44,8 +51,9 @@ const formatDate = (timestamp) => {
 const orderPosts = () => {
     loading.start()
     const formattedChannels = channels.value.map(channel => ({
-        ...channel,
-        timestamp: formatDate(channel.timestamp),
+        id: channel.id,
+        format: channel.format,
+        timestamp: formatDate(channel.timestamp)
     }));
     axios.post(route('catalog.channels.orderPosts'), {
         channels: formattedChannels,
@@ -53,7 +61,6 @@ const orderPosts = () => {
         description: description.value
     })
         .then(response => {
-            console.log(response)
             store.subtractFromUserBalance(response.data)
             localStorage.removeItem('cart')
             loading.finish()
@@ -82,6 +89,15 @@ onMounted(() => {
         })
         .catch(error => console.error(error));
 })
+const formattedTotalSum = computed(() => {
+    const value = totalSum.value
+    return new Intl.NumberFormat('ru-RU', {
+        style: 'currency',
+        currency: 'RUB',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(value);
+});
 
 </script>
 
@@ -98,7 +114,7 @@ onMounted(() => {
                 <div class="channels">
                     <div class="flex flex-col gap-y-4 mt-8">
                         <template v-if="!isCartEmpty" v-for="channel in channels" :key="channel.id">
-                            <CatalogChannelCard @cart-updated="updateChannels" is-cart  :channel="channel" :format-value="channel.format" :timestamp="channel.timestamp"/>
+                            <CatalogChannelCard @cart-updated="updateChannels" is-cart  :channel="channel" :timestamp="channel.timestamp"/>
                         </template>
                         <div v-else class="flex justify-center flex-col items-center">
                             <p class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10">В корзине пусто.</p>
@@ -116,7 +132,7 @@ onMounted(() => {
                     <n-select :disabled="isCartEmpty"  placeholder="Шаблоны" v-model:value="userPattern" :options="userPatterns" :theme-overrides="selectThemeOverrides"/>
                 </div>
                 <div class="my-2">
-                    <n-input :autosize="{minRows: 4, maxRows: 10}" :disabled="isCartEmpty" type="textarea" maxlength="300" show-count v-model:value="description" :theme-overrides="inputThemeOverrides" placeholder="Требования к заказу"/>
+                    <n-input :autosize="{minRows: 4, maxRows: 10}" :disabled="isCartEmpty" type="textarea" maxlength="300" show-count v-model:value="description" :theme-overrides="textareaThemeOverrides" placeholder="Требования к заказу"/>
                 </div>
                 <table class="table-auto">
                     <tbody class="text-violet-100">
@@ -126,15 +142,15 @@ onMounted(() => {
                         </tr>
                         <tr>
                             <th>Подписчики</th>
-                            <td></td>
+                            <td>{{ totalParticipants }}</td>
                         </tr>
                         <tr>
                             <th>Просмотры</th>
-                            <td></td>
+                            <td>{{ totalPostReach }}</td>
                         </tr>
                         <tr>
                             <th>Сумма</th>
-                            <th>{{totalSum}}&nbsp;₽</th>
+                            <th>{{formattedTotalSum}}</th>
                         </tr>
                     </tbody>
                 </table>

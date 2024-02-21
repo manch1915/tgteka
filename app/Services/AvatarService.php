@@ -9,8 +9,11 @@ class AvatarService
 {
     public function getAvatarUrlOfChannel(Channel $channel): string
     {
-        return $this->getMediaUrl('avatars', $channel) ??
-            'https://api.dicebear.com/7.x/initials/svg?seed=' . $channel->channel_name;
+        if ($channel->avatar !== null) {
+            return $channel->avatar;
+        }
+
+        return 'https://api.dicebear.com/7.x/initials/svg?seed=' . $channel->channel_name . '&backgroundColor=8e24aa';
     }
 
     public function getAvatarUrlOfPattern(Pattern $pattern): ?string

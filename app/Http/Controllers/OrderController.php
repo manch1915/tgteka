@@ -34,7 +34,8 @@ class OrderController extends Controller
 
     public function get($page = 1, $perPage = 10)
     {
-        $orders = auth()->user()->channelOrders()->with('format', 'channel.topic')
+        $orders = auth()->user()->channelOrders()
+            ->with('format', 'channel.topic', 'pattern')
             ->orderByDesc('created_at')
             ->paginate($perPage, ['*'], 'page', $page);
 

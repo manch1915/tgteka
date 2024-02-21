@@ -112,11 +112,11 @@ onBeforeMount(() => {
         <div class="flex gap-x-4 mt-5">
             <div class="flex flex-col justify-center items-center">
             <img class="glow_icon" src="/images/telegram.svg" alt="telegram">
-            <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Telegram</div>
+            <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Telegram</div>
             </div>
             <div class="flex flex-col justify-center items-center">
             <img class="glow_icon" src="/images/message.svg" alt="message">
-            <div class="text-violet-100 text-sm font-normal font-['Poppins'] leading-tight">Почта</div>
+            <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Почта</div>
             </div>
         </div>
     </div>

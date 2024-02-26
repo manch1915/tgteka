@@ -11,7 +11,6 @@ class ChannelSeeder extends Seeder
     public function run(): void
     {
         $urls = [
-            'https://t.me/phpyhtelka',
             'https://t.me/granitnauky',
             'https://t.me/+B-qE5hUu4DBmMGY6',
             'https://t.me/cmd_cv',
@@ -19,7 +18,6 @@ class ChannelSeeder extends Seeder
         ];
 
         $types = [
-            'chat',
             'channel',
             'channel',
             'channel',

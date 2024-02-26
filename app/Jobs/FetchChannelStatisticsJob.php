@@ -26,11 +26,12 @@ class FetchChannelStatisticsJob implements ShouldQueue
     public function __construct(Channel $channel)
     {
         $this->channel = $channel;
-        $this->client = new Client();
     }
 
     public function handle(): void
     {
+        $this->client = new Client();
+
         try {
             $generalStatistics = $this->fetchGeneralStatistics();
 
@@ -39,7 +40,10 @@ class FetchChannelStatisticsJob implements ShouldQueue
             $this->updateChannelStatistics($generalStatistics);
             $this->updateChannelDetails($generalStatistics);
         } catch (\GuzzleHttp\Exception\GuzzleException $e) {
-
+            logger('Fetching general statistics failed', [
+                'exception' => $e->getMessage(),
+                'channel' => $this->channel->id,
+            ]);
             $this->channel->status = 'loading';
             $this->channel->save();
 

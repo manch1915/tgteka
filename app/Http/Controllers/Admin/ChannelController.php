@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Console\Commands\UpdateChannelStatistics;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ChannelUpdateRequest;
 use App\Jobs\FetchChannelStatisticsJob;
 use App\Models\Channel;
 use Illuminate\Http\Request;
@@ -38,11 +38,17 @@ class ChannelController extends Controller
 
     public function show(Channel $channel)
     {
+
     }
 
-    public function update(Request $request, Channel $channel)
+    public function edit(Channel $channel)
     {
-        $inputData = $request->all();
+        return inertia('Admin/TablesShow', ['channel' => $channel]);
+    }
+
+    public function update(ChannelUpdateRequest $request, Channel $channel)
+    {
+        $inputData = $request->validated();
 
         $channel->update($inputData);
 

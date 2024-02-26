@@ -68,7 +68,7 @@ const orderPosts = () => {
         })
         .catch(c => {
             loading.error()
-            message.error(c.response.data.error)
+            message.error(c.response.data.message)
         })
 }
 

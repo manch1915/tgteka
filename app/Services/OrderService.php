@@ -29,12 +29,20 @@ class OrderService
     public function createOrder(Request $request): ?string
     {
         if (!$request->has('channels')) {
-            return 'Invalid Request. Channels not provided.';
+            return 'Неверный запрос. Каналы не предоставлены.';
         }
 
         $channelIds = array_column($request->channels, 'id');
 
         $channelsFromDB = Channel::with('user')->whereIn('id', $channelIds)->get()->keyBy('id');
+
+        $user = Auth::user();
+
+        foreach ($channelsFromDB as $channel) {
+            if ($channel->user_id == $user->id) {
+                return 'Вы не можете создать заказ в своем собственном канале.';
+            }
+        }
 
         $channels = array_map(function($channelInput) use ($channelsFromDB) {
             $channelDbData = $channelsFromDB[$channelInput['id']];
@@ -45,8 +53,6 @@ class OrderService
         }, $request->channels);
 
         $totalSum = $this->calculateTotalSum($channels);;
-
-        $user = Auth::user();
 
         $balanceCheck = $this->checkBalanceAndExecuteTransaction($user, $totalSum);
 
@@ -121,10 +127,6 @@ class OrderService
             $price = $this->calculateChannelSum($channel);
             $formatDetails = $this->getFormatDetails($channel);
 
-            if (!isset($channel->timestamp)) {
-                throw new Exception('Invalid timestamp provided.');
-            }
-
             // Add days to post_date
             $postDate = new DateTime($channel->timestamp);
             $postDateEnd = $postDate->modify('+' . $formatDetails['days'] . ' day');
@@ -148,7 +150,6 @@ class OrderService
             $postDateEndCarbon = Carbon::instance($postDateEnd);
             $delay = $postDateEndCarbon->diffInSeconds(Carbon::now()) + 400;
 
-            logger()->info("Delay calculated for the order {$order->id} is {$delay} seconds");
             UpdateFinishedOrdersJob::dispatch($order, new BalanceService())->delay($delay);
         }
     }

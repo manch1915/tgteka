@@ -8,7 +8,6 @@ import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/Components/Admin/SectionTitleLineWithButton.vue";
 import TableChannels from "@/Components/Admin/TableChannels.vue";
 import TableChannelsConsideration from "@/Components/Admin/TableChannelsConsideration.vue";
-import TableChatsConsideration from "@/Components/Admin/TableChatsConsideration.vue";
 
 </script>
 
@@ -25,12 +24,6 @@ import TableChatsConsideration from "@/Components/Admin/TableChatsConsideration.
 
       <CardBox class="mb-6" has-table>
         <TableChannelsConsideration/>
-      </CardBox>
-
-      <SectionTitleLineWithButton :icon="mdiTableBorder" title="Чаты на рассмотрение" main/>
-
-      <CardBox class="mb-6" has-table>
-        <TableChatsConsideration/>
       </CardBox>
 
     </SectionMain>

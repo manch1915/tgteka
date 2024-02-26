@@ -180,7 +180,8 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
         Route::get('payouts', fn () => inertia('Admin/PayoutsView'))->name('payouts');
 
         Route::prefix('api')->name('api.')->group(function () {
-            Route::apiResource('channels', ChannelController::class);
+            Route::Resource('channels', ChannelController::class);
+
             Route::apiResource('support', App\Http\Controllers\Admin\SupportController::class);
             Route::apiResource('users', App\Http\Controllers\Admin\UserController::class);
             Route::apiResource('callbacks', App\Http\Controllers\Admin\CallbackController::class);
@@ -193,6 +194,6 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
 });
 
 Route::prefix('admin/api')->name('admin.api.')->group(function () {
-    Route::apiResource('topics', TopicController::class);
+    Route::Resource('topics', TopicController::class);
 });
 

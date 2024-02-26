@@ -8,6 +8,7 @@ import BaseLevel from "@/Components/Admin/BaseLevel.vue";
 import BaseButtons from "@/Components/Admin/BaseButtons.vue";
 import BaseButton from "@/Components/Admin/BaseButton.vue";
 import UserAvatar from "@/Components/Admin/UserAvatar.vue";
+import {router} from "@inertiajs/vue3";
 
 defineProps({
   checkable: Boolean,
@@ -90,10 +91,6 @@ const checked = (isChecked, client) => {
 </script>
 
 <template>
-  <CardBoxModal v-model="isModalActive" title="Sample modal">
-    <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-    <p>This is sample modal</p>
-  </CardBoxModal>
 
   <CardBoxModal
     v-model="isModalDangerActive"
@@ -138,7 +135,7 @@ const checked = (isChecked, client) => {
               color="info"
               :icon="mdiEye"
               small
-              @click="isModalActive = true"
+              @click="router.visit(route('admin.api.topics.edit', topic.id))"
             />
             <BaseButton
               color="danger"

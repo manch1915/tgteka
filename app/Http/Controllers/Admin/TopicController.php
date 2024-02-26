@@ -30,14 +30,32 @@ class TopicController extends Controller
 
     public function edit(Topic $topic)
     {
+        return inertia('Admin/TopicsShow', ['id' => $topic->id, 'title' => $topic->title]);
     }
 
     public function update(Request $request, Topic $topic)
     {
+        $topic->update($request->validate(['title' => 'required|string|max:24']));
+        return response()->json($topic);
     }
 
     public function destroy(Topic $topic)
     {
-        return $topic->delete();
+        try {
+            $topic->delete();
+            return response()->json(['success' => 'Topic deleted successfully']);
+        } catch (\Exception $e) {
+
+            if($e instanceof \Illuminate\Database\QueryException) {
+
+                if($e->getCode() == 23000) {
+                    return response()->json([
+                        'error' => 'Не удалось удалить тему, так как она используется в одном или нескольких каналах.'
+                    ], 403);
+                }
+            }
+
+            return response()->json(['error' => 'An error occurred while trying to delete the topic.'], 500);
+        }
     }
 }

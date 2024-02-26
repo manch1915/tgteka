@@ -58,7 +58,7 @@ class ChannelController extends Controller
         $response = $this->orderService->createOrder($request);
 
         if (is_string($response)) {
-            return response()->json(['error' => $response], 400);
+            return response()->json(['message' => $response], 400);
         }
 
         return response()->json(['message' => 'Order placed successfully', 'totalSum' => $response], 200);

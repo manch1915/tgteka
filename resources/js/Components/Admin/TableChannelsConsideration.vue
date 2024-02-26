@@ -10,6 +10,7 @@ import BaseButton from "@/Components/Admin/BaseButton.vue";
 import UserAvatar from "@/Components/Admin/UserAvatar.vue";
 import {NDatePicker} from "naive-ui";
 import {datePickerThemeOverrides} from "@/themeOverrides.js";
+import {router} from "@inertiajs/vue3";
 
 defineProps({
   checkable: Boolean,
@@ -19,16 +20,10 @@ const mainStore = useMainStore();
 mainStore.fetchChannels()
 const items = computed(() => Object.values(mainStore.channels).filter(channel => channel.status === 'pending'));
 
-const isModalActive = ref(false);
 const isModalDangerActive = ref(false);
 
 const timestamp = ref()
 
-const modalChannel = ref({})
-const modalChannelActive = (c) => {
-    isModalActive.value = true
-    modalChannel.value = c
-}
 const modalDangerActive = (c) => {
     isModalDangerActive.value = true
     modalChannel.value = c
@@ -112,19 +107,6 @@ const checked = (isChecked, client) => {
 </script>
 
 <template>
-    <CardBoxModal button-label="Одобрить канал" @confirm="channelAccept" button="success" has-cancel v-model="isModalActive" title="Просмотр канала">
-        <a class="text-blue-800" :href="modalChannel.url">Ссылка: {{ modalChannel.channel_name }}</a>
-        <p>Описание канала: {{ modalChannel.description }}</p>
-        <p>Источник подписчиков: {{ modalChannel.subscribers_source }}</p>
-        <p>1/24: {{ modalChannel.format_one_price }}</p>
-        <p>2/48: {{ modalChannel.format_two_price }}</p>
-        <p>3/72: {{ modalChannel.format_three_price }}</p>
-        <p>Без удаления: {{ modalChannel.no_deletion_price }}</p>
-        <p>Язык: {{ modalChannel.language }}</p>
-        <p>male_percentage: {{ modalChannel.male_percentage }}%</p>
-        <n-date-picker :theme-overrides="datePickerThemeOverrides" v-model:value="timestamp" type="date"/>
-        <p v-if="modalChannel.topic">Категория: {{ modalChannel.topic.title }}</p>
-    </CardBoxModal>
 
   <CardBoxModal
     v-model="isModalDangerActive"
@@ -186,7 +168,7 @@ const checked = (isChecked, client) => {
               color="success"
               :icon="mdiCheckBold"
               small
-              @click="modalChannelActive(channel)"
+              @click="router.visit(route('admin.api.channels.edit', channel.slug))"
             />
             <BaseButton
               color="danger"

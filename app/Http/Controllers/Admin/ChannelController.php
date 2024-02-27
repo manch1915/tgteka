@@ -62,6 +62,6 @@ class ChannelController extends Controller
     public function destroy(Channel $channel)
     {
         $channel->delete();
-        return response()->json();
+        return response()->json(null, 204);
     }
 }

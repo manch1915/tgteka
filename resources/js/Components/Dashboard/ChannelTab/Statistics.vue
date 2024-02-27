@@ -20,6 +20,7 @@ const props = defineProps({
 })
 
 const message = useMessage()
+const isError = ref(true)
 
 Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement);
 Chart.defaults.color = '#EAE0FF';
@@ -69,7 +70,7 @@ const fetchChannelStats = async () => {
     try {
         const response = await axios.get(route('catalog.channel.stats.all', props.channel_id))
         channelStats.value = response.data;
-
+        isError.value = false
         chartDataSubs.value = {
             labels: channelStats.value.subscribers.reverse().map(item => {
                 let date = new Date(item.period);
@@ -106,6 +107,7 @@ const fetchChannelStats = async () => {
     }
     catch (err) {
         if (err.response.data.error){
+
             message.error(err.response.data.error)
         }
     }
@@ -118,7 +120,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="w-full reviews p-6">
+    <div v-if="!isError" class="w-full reviews p-6">
         <div class="grid sm:grid-cols-4 grid-cols-2 gap-4 mb-2">
             <div class="item text-center !py-10">
                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Рейтинг</p>
@@ -176,13 +178,16 @@ onMounted(() => {
             </div>
         </div>
     </div>
+    <div v-else>
+        <p class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10">Статистика канала будет загружён только после одобрения канала администраторами</p>
+    </div>
 </template>
 
 <style scoped lang="scss">
 .reviews{
-    border-radius: 0px 30px 30px 30px;
+    border-radius: 0 30px 30px 30px;
     background: #5A5F77;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
     .item{
         border-radius: 10px;
         background:  #0D143A;

@@ -31,7 +31,7 @@ class CallbackController extends Controller
         $callback->status = $status;
         $callback->save();
 
-        return response()->json(['message' => 'Статус успешно обновлен.'], 200);
+        return response()->json(['message' => 'Статус успешно обновлен.']);
     }
 
     public function destroy(Callback $callback)

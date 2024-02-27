@@ -31,6 +31,7 @@ const getChannels = async (page = 1, search = '') => {
     await axios.get(url)
         .then(response => {
             loading.finish()
+            console.log(response)
             channels.value = response.data
         })
 }

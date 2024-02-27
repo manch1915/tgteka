@@ -19,13 +19,15 @@ class FetchChannelStatisticsJob implements ShouldQueue
 
     protected Client $client;
 
-    private string $token = 'e3b38be1f953b4118758d333de716a20';
+    private string $token;
 
-    private string $baseURL = 'https://api.tgstat.ru/';
+    private string $baseURL;
 
     public function __construct(Channel $channel)
     {
         $this->channel = $channel;
+        $this->token = config('app.api_token');
+        $this->baseURL = config('app.api_base_url');
     }
 
     public function handle(): void

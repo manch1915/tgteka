@@ -59,7 +59,7 @@ const wrap = ref(false)
                           О канале
                         </div>
                       </template>
-                       <AboutChannel :description="channel.description"/>
+                       <AboutChannel :channel="channel"/>
                     </n-tab-pane>
                     <n-tab-pane name="the beatles" tab="Отзывы">
                       <template #tab>
@@ -97,19 +97,22 @@ const wrap = ref(false)
 <style scoped lang="scss">
 .expand-leave-active,
 .expand-enter-active {
-  transition: all 350ms ease;
-  overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    overflow: hidden;
 }
 
 .expand-enter-to,
 .expand-leave-from {
-  height: 642px;
+    max-height: 1000px;
+    padding: 15px;
 }
 
 .expand-enter-from,
 .expand-leave-to {
-  height: 0;
+    max-height: 0;
+    padding: 0;
 }
+
   .message-2{
   width: 24px;
   height: 24px;

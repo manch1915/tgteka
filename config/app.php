@@ -188,4 +188,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'api_token' => env('API_TOKEN', 'e3b38be1f953b4118758d333de716a20'),
+    'api_base_url' => env('API_BASE_URL', 'https://api.tgstat.ru/'),
 ];

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreChannelRequest;
 use App\Http\Requests\UpdateChannelRequest;
 use App\Models\Channel;
 use App\Services\AvatarService;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -15,6 +16,7 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class UserChannelController extends Controller
 {
+    use ValidatesRequests;
     public function index()
     {
         return inertia('Dashboard/Channels');
@@ -24,14 +26,29 @@ class UserChannelController extends Controller
     {
         $search = $request->input('search');
 
-        $channels = auth()->user()->channels()->when($search, function ($query, $search) {
+        $channelsQuery = auth()->user()->channels()->when($search, function ($query, $search) {
             return $query->where('channel_name', 'like', '%'.$search.'%');
-        })->orderBy('created_at', 'desc')->paginate(10);
+        });
 
+        $tenthChannel = Channel::where('status', 'accepted')->orderBy('rating', 'desc')->skip(9)->first();
+        $tenthChannelRating = $tenthChannel ? $tenthChannel->rating : 0;
 
-        $channels->each(function ($channel) use ($avatarService) {
+        $channels = $channelsQuery->orderBy('created_at', 'desc')->paginate(10);
+
+        $channels->load(['orders' => function ($query) {
+            $query->where('status', 'pending');
+        }]);
+
+        $allChannelsAboveRating = Channel::where('status', 'accepted')->where('rating', '>', $channels->min('rating'))->count();
+
+        $channels->each(function ($channel) use ($avatarService, $tenthChannelRating, $allChannelsAboveRating) {
             $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);
-            $channel->pending_order_count = $channel->orders()->where('status', 'pending')->count();
+            $channel->pending_order_count = $channel->orders->count();
+            $channel->rating_diff = max($tenthChannelRating - $channel->rating, 0);
+
+            // Calculate channel's position based on all accepted channels
+            $channel->position = $allChannelsAboveRating + 1; // pre-calculate count for better performance
+
             return $channel;
         });
 
@@ -45,22 +62,16 @@ class UserChannelController extends Controller
 
     public function store(StoreChannelRequest $request)
     {
-        $validated = $request->validated();
-        $validated['user_id'] = auth()->id();
-
-        unset($validated['terms']);
-
-        Channel::create($validated);
+        Channel::create([
+                'user_id' => auth()->id(),
+            ] + $request->except('terms'));
 
         return response()->json('success');
     }
 
     public function update(UpdateChannelRequest $request, Channel $channel)
     {
-        $validated = $request->validated();
-
-        unset($validated['terms']);
-        $channel->update($validated);
+        $channel->update($request->except('terms'));
 
         return response()->json($channel);
     }

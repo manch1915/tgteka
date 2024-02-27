@@ -32,6 +32,10 @@ class ChannelController extends Controller
 
     public function favorite(Request $request)
     {
+        $request->validate([
+            'channel_id' => 'required|exists:channels,id',
+        ]);
+
         return response()->json($this->toggleFavorite($request), ResponseAlias::HTTP_OK);
     }
 

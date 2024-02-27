@@ -29,16 +29,16 @@ onMounted(() => getChannelReviews())
             </div>
         </n-scrollbar>
     </div>
-    <div v-else>
+    <div class="py-4 mb-16" v-else>
         <p class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10">Нет отзывов</p>
     </div>
 </template>
 
 <style scoped lang="scss">
 .reviews{
-    border-radius: 0px 30px 30px 30px;
+    border-radius: 0 30px 30px 30px;
     background: #5A5F77;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 
 }
 </style>

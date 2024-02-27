@@ -18,8 +18,11 @@ const handleEmptyChannels = (isEmpty) => {
     </Head>
     <AppLayout>
         <div class="flex items-center pt-[80px] text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-            <h1 class="flex-grow text-center text-4xl leading-10">Мои каналы</h1>
-            <button v-if="!emptyChannels" @click.prevent="router.visit(route('adding-channel'))" class="orders flex items-center gap-x-1.5">Добавить канал</button>
+            <div class="flex-1"></div>
+            <h1 class="flex-1 text-center text-4xl leading-10">Мои каналы</h1>
+            <div class="flex-1 flex justify-end">
+                <button v-if="!emptyChannels" @click.prevent="router.visit(route('adding-channel'))" class="orders flex items-center gap-x-1.5">Добавить канал</button>
+            </div>
         </div>
         <div v-if="emptyChannels" class="flex mt-16 justify-center min-h-[20rem]">
             <div>

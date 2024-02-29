@@ -2,11 +2,13 @@
 import {computed} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiCheckAll} from "@mdi/js";
+import {NImage} from "naive-ui";
 
 const props = defineProps({
     text: String,
     userAvatar: String,
     created_at: String,
+    isImage: Boolean,
     isTimeString: {
         default: false,
         required: false
@@ -36,7 +38,11 @@ const avatar = computed(() => `https://api.dicebear.com/7.x/initials/svg?seed=${
                     <img style="width: 34px; height: 34px; border-radius: 50%" :src="avatar" alt="ava">
                 </div>
                 <div class="message__box">
-                    <p class="text break-words text-slate-800 text-base font-normal font-['Open Sans'] leading-tight">
+                    <!-- Render image if 'isImage' true -->
+                    <n-image v-if="isImage" :src="text" class="message-image"  alt=""/>
+
+                    <!-- Render text if 'isImage' false -->
+                    <p v-else class="text break-words text-slate-800 text-base font-normal font-['Open Sans'] leading-tight">
                         {{text}}
                     </p>
                     <div class="date float-right">
@@ -81,5 +87,8 @@ const avatar = computed(() => `https://api.dicebear.com/7.x/initials/svg?seed=${
         bottom: 0px; /* Changed from top to bottom */
         left: -10px;
     }
+}
+.message-image{
+    width: 36rem;
 }
 </style>

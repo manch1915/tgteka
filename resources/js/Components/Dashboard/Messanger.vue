@@ -14,30 +14,46 @@ const messages = ref(null)
 const message = ref('')
 const getMessages =  async () => {
     await axios.post(route('get-messages-by-ticket-id'), {tickets: props.tickets}).then(res => {
-        console.log(res.data)
-        messages.value = res.data
-    })
+        messages.value = res.data;
+    });
 }
 
 onMounted(()=> getMessages())
-const sendMessage = () => {
-  props.socket.send(JSON.stringify({
-      title: '',
-      message: message.value,
-      sender_id: props.userId,
-      ticket_id: props.tickets,
-      type: 'support'
-  }));
 
-  messages.value.push({
-      message: message.value,
-      sender: {
-          profile_photo_url: `https://ui-avatars.com/api/?name=${props.userId}&color=7F9CF5&background=EBF4FF`
-      },
-      created_at:"+055809-07-05T06:33:20.000000Z"
-  })
-    message.value = ''
+const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        const base64Image = reader.result;
+        sendMessage(base64Image, 'image'); // Send image as base64 to server, and specify it is an 'image'
+    };
+
+    reader.readAsDataURL(file);
 }
+
+
+const sendMessage = (messageContent, messageType='text') => {
+    props.socket.send(JSON.stringify({
+        title: '',
+        message: messageContent,
+        sender_id: props.userId,
+        ticket_id: props.tickets,
+        type: 'support_message',
+        content_type: messageType // New field 'content_type' to specify the type of content that is being sent
+    }));
+
+    messages.value.push({
+        message: messageContent,
+        sender: {
+            profile_photo_url: `https://ui-avatars.com/api/?name=${props.userId}&color=7F9CF5&background=EBF4FF`
+        },
+        created_at:"+055809-07-05T06:33:20.000000Z",
+        content_type: messageType
+    });
+    message.value = '';
+}
+
 props.socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
 
@@ -47,7 +63,8 @@ props.socket.onmessage = function(event) {
             sender: {
                 username: data.sender_id
             },
-            created_at: new Date().toISOString()
+            created_at: new Date().toISOString(),
+            content_type: data.content_type
         });
     }
 };
@@ -66,17 +83,20 @@ props.socket.onmessage = function(event) {
                 </div>
             </div>
             <div class="flex flex-col gap-y-3 overflowing p-2">
-                <MessageBox v-for="message in messages" :text="message.message" :user-avatar="message.sender.username" :created_at="message.created_at"/>
+                <MessageBox v-for="message in messages" :isImage="message.content_type === 'image' || !message.message" :text="message.message" :user-avatar="message.sender.username" :created_at="message.created_at"/>
             </div>
         </div>
         <div class="footer">
             <div class="conversation-panel">
                 <div class="conversation-panel__container">
-                    <button class="conversation-panel__button panel-item btn-icon add-file-button">
-                        <img src="/images/file.svg" alt="file">
-                    </button>
-                    <input v-model="message" @keydown.enter.prevent="sendMessage" class="conversation-panel__input panel-item" placeholder="Ведите ваше сообщения"/>
-                    <button @click.prevent="sendMessage" class="conversation-panel__button panel-item btn-icon send-message-button">
+                    <label class="file-uploader">
+                        <input type="file"  @change="handleFileUpload" style="display: none;" />
+                        <div class="conversation-panel__button panel-item btn-icon add-file-button">
+                            <img src="/images/file.svg"  alt="file">
+                        </div>
+                    </label>
+                    <input v-model="message" @keydown.enter.prevent="sendMessage(message)" class="conversation-panel__input panel-item" placeholder="Ведите ваше сообщения"/>
+                    <button @click.prevent="sendMessage(message)" class="conversation-panel__button panel-item btn-icon send-message-button">
                         <img src="/images/ic-2.svg" alt="send">
                     </button>
                 </div>

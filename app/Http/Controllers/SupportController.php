@@ -26,6 +26,13 @@ class SupportController extends Controller
             }])
             ->get();
 
+        // For each message, get the URL for the first item in the 'support_message_images' media collection
+        foreach ($messages as $message) {
+            $image = $message->getFirstMedia('support_message_images');
+            $message->content_type = ($image) ? 'image' : 'text';
+            $message->message = ($image) ? $image->getUrl() : $message->message;
+        }
+
         return response()->json($messages);
     }
 }

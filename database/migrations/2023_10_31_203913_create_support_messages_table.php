@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('ticket_id');
             $table->unsignedBigInteger('sender_id');
-            $table->text('message');
+            $table->text('message')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('ticket_id')->references('id')->on('support_tickets')->onDelete('cascade');

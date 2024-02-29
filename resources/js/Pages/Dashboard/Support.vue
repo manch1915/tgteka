@@ -25,7 +25,7 @@ const message = useMessage()
 
 const userId = computed(() => page.props.auth.user.id)
 
-const socket = new WebSocket(`wss://${import.meta.env.VITE_APP_WEBSOCKETS_IP}:1915/?userid=${userId.value}`);
+const socket = new WebSocket(`ws://${import.meta.env.VITE_APP_WEBSOCKETS_IP}:1915/?userid=${userId.value}`);
 const title = ref('');
 const content = ref('');
 socket.onmessage = function(event) {
@@ -43,7 +43,8 @@ const createNewAppeal = () => {
         message: content.value,
         sender_id: userId.value,
         ticket_id: null,
-        type: 'support'
+        type: 'support_message',
+        content_type: 'text',
     }));
 
     openModal(ModalAlert)
@@ -79,8 +80,7 @@ socket.onerror = function(error) {
                         v-model="content"
                     />
                 </div>
-                <p class="my-4 text-violet-100 text-opacity-40 text-base font-normal font-['Inter'] leading-tight">Формат изображения jpg, jpeg, png, <br/>не менее 140*140рх,не более 1600*1024рх</p>
-                <button @click.prevent="createNewAppeal" class="flex justify-center w-full py-4 bg-purple-600 transition hover:bg-purple-800 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                <button @click.prevent="createNewAppeal" class="flex my-2 justify-center w-full py-4 bg-purple-600 transition hover:bg-purple-800 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                     Отправить
                 </button>
             </div>

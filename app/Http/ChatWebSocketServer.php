@@ -9,6 +9,8 @@ use App\Models\Conversation;
 use App\Models\Moderator;
 use App\Models\SupportTicket;
 use App\Services\Censure;
+use App\Services\WebSocketMessageProviders\WebSocketMessageProvider;
+use Exception;
 use Illuminate\Support\Facades\Log;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
@@ -77,71 +79,12 @@ class ChatWebSocketServer implements MessageComponentInterface
     private function handleChatMessage(array $data): void
     {
         $type = $data['type'] ?? 'chat';
-        if($type === 'support') {
-            $this->sendSupportChatMessage($data['sender_id'], $data['message'], $data['title'], $data['ticket_id']);
-        } else {
-            $this->sendPersonalChatMessage($data['auth_id'], $data['message'], $data['conversation_id'], $data['username'] );
+        try {
+            $messageProvider = WebSocketMessageProvider::factory($type, $this->personalChatRepository, $this->supportChatRepository, $this->messageFactory);
+            $messageProvider->sendMessage($data, $this->userConnections);
+        } catch (Exception $e) {
+            error_log("WebSocketMessageProvider error: " . $e->getMessage());
         }
     }
 
-    private function sendSupportChatMessage(int $senderId, string $message, string $title, ?int $ticketId): void
-    {
-        $message = Censure::replace($message);
-        $ticketBackId = $ticketId;
-        if ($ticketBackId === null) {
-            $ticketBackId = $this->supportChatRepository->saveTicket($senderId, $title, $message);
-        } else {
-            $this->supportChatRepository->saveMessage($senderId, $ticketId, $message);
-        }
-
-        // Get the SupportTicket model using the ticket id
-        $supportTicket = SupportTicket::find($ticketBackId);
-
-        $messageObject = $this->messageFactory->createSupportChatMessage($senderId, $ticketBackId, $message);
-
-        $moderators = Moderator::all()->pluck('user_id')->toArray();
-
-        if (in_array($senderId, $moderators)) {
-            if (isset($this->userConnections[$supportTicket->sender_id])) {
-                $this->userConnections[$supportTicket->sender_id]->send(json_encode($messageObject));
-            }
-        } else {
-            foreach($moderators as $moderatorId) {
-                if (isset($this->userConnections[$moderatorId])) {
-                    $this->userConnections[$moderatorId]->send(json_encode($messageObject));
-                }
-            }
-        }
-    }
-
-    private function sendPersonalChatMessage(int $user_id, string $message, $conversation_id, string $username): void
-    {
-        $conversation = Conversation::findOrFail($conversation_id);
-
-        $recipientId = ($conversation->user_one === $user_id) ? $conversation->user_two : $conversation->user_one;
-
-        $message = Censure::replace($message);
-
-        $messageObject = $this->messageFactory->createPersonalChatMessage($user_id, $message, $conversation_id, $username);
-
-        $this->personalChatRepository->save($user_id, $conversation_id, $message);
-
-        if (!isset($this->userConnections[$recipientId])) {
-            return;
-        }
-
-        $this->userConnections[$recipientId]->send(json_encode($messageObject));
-    }
-
-    private function findAndRemoveUserConnection(ConnectionInterface $conn): ?int
-    {
-        foreach ($this->userConnections as $userId => $connection) {
-            if ($connection !== $conn) {
-                continue;
-            }
-            unset($this->userConnections[$userId]);
-            return $userId;
-        }
-        return null;
-    }
 }

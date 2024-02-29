@@ -13,12 +13,13 @@ class MessageFactory
             'username' => $username,
         ];
     }
-    public function createSupportChatMessage(int $senderId, int $ticketId, string $message): array
+    public function createSupportChatMessage(int $senderId, int $ticketId, string $message, string $contentType): array
     {
         return [
             'sender_id' => $senderId,
             'ticket_id' => $ticketId,
-            'message' => $message
+            'message' => $message,
+            'content_type' => $contentType
         ];
     }
 }

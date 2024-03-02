@@ -2,16 +2,18 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import TextInput from '@/Components/TextInput.vue';
 import TextArea from '@/Components/TextArea.vue';
-import {NCheckbox, NSelect, NSwitch, useLoadingBar} from 'naive-ui';
+import {NCheckbox, NSelect, NSlider, NSwitch, useLoadingBar} from 'naive-ui';
 import {
     switchThemeOverrides,
     checkboxThemeOverrides,
     selectThemeOverrides,
-    checkboxToRadioThemeOverrides,
+    checkboxToRadioThemeOverrides, sliderGenderThemeOverrides,
 } from '@/themeOverrides.js';
-import {computed, reactive, ref, toRefs, watch, watchEffect} from 'vue';
+import {computed, nextTick, reactive, ref, toRefs, watch, watchEffect} from 'vue';
 import {Head, Link, router} from "@inertiajs/vue3";
 import {useMainStore} from "@/stores/main.js";
+import {mdiFaceMan, mdiFaceWoman} from "@mdi/js";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 
 const props = defineProps({
     channelId: [Number, null],
@@ -28,7 +30,7 @@ const form = reactive({
     channel_name: '',
     description: '',
     topic_id: null,
-    type: '',
+    // type: '',
     url: '',
     subscribers_source: '',
     repeat_discount: null,
@@ -37,6 +39,7 @@ const form = reactive({
     format_two_price: 0,
     format_three_price: 0,
     no_deletion_price: 0,
+    male_percentage: 30,
     '_method': 'patch'
 });
 
@@ -48,9 +51,11 @@ watchEffect(() => {
 
 const loading = useLoadingBar()
 const errors = ref({})
+let errorRefs = reactive({});
+
 const uploadChannel = () => {
     loading.start()
-  axios.post(route('channels.update', props.channel.id), form)
+  axios.post(route('channels.update', props.channel.slug), form)
       .then(() => {
           loading.finish()
           router.visit(route('channels'))
@@ -61,8 +66,18 @@ const uploadChannel = () => {
           if (error.response && error.response.data && error.response.data.errors) {
               errors.value = error.response.data.errors;
           }
+
+          nextTick(() => {
+              const firstErrorElement = document.querySelector(".text-red-500");
+              if(firstErrorElement) {
+                  firstErrorElement.scrollIntoView({behavior: "smooth", block: "center"});
+              }
+          });
       })
 }
+
+const malePercentage = computed(() => form.male_percentage);
+const femalePercentage = computed(() => 100 - form.male_percentage);
 
 const store = useMainStore();
 store.fetchTopics();
@@ -171,33 +186,21 @@ watch(state.type, (newRadio) => {
                         placeholder="@channel или https://t.me/dr_amina_pirmanova" />
                     <span class="text-red-500" v-if="errors.url">{{ errors.url[0] }}</span>
                 </div>
-                <div class="flex w-full flex-col justify-center gap-y-3 text-center">
+                <div class="w-full text-start">
                     <h2
                         class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                        Вы добавляете
+                        Соотношение полов, %
                     </h2>
-                    <div class="flex flex-col items-start justify-start gap-y-2">
-                        <n-checkbox
-                            @click.prevent="form.type = 'channel'"
-                            :checked="form.type === 'channel'"
-                            :theme-overrides="checkboxToRadioThemeOverrides"
-                            value="channel"
-                            class="flex items-center justify-center"
-                        ><p class="text-violet-100 text-sm font-normal font-['Inter']">
-                            Канал
-                        </p>
-                        </n-checkbox>
-                        <n-checkbox
-                            @click.prevent="form.type = 'chat'"
-                            :checked="form.type === 'chat'"
-                            :theme-overrides="checkboxToRadioThemeOverrides"
-                            value="chat"
-                            class="flex items-center justify-center"
-                        ><p class="text-violet-100 text-sm font-normal font-['Inter']">
-                            Группу/ чат
-                        </p>
-                        </n-checkbox>
-                        <span class="text-red-500" v-if="errors.type">{{ errors.type[0] }}</span>
+                    <n-slider class="my-4" v-model:value="form.male_percentage" :tooltip="false" :step="10" :theme-overrides="sliderGenderThemeOverrides"/>
+                    <div class="flex justify-between items-center">
+                        <div class="border rounded p-4 flex items-center gap-x-1.5">
+                            <BaseIcon class="text-[#3259d2]" size="25" :path="mdiFaceMan"/>
+                            <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">{{ malePercentage }}%</p>
+                        </div>
+                        <div class="border rounded p-4 flex items-center gap-x-1.5">
+                            <BaseIcon class="text-[#dc78d8]" size="25" :path="mdiFaceWoman"/>
+                            <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">{{ femalePercentage }}%</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -385,7 +388,7 @@ watch(state.type, (newRadio) => {
                     <span class="text-red-500" v-if="errors.repeat_discount">{{ errors.repeat_discount[0] }}</span>
                 </div>
                 <div>
-                    <div class="mt-12">
+                    <div>
                         <n-checkbox
                             :theme-overrides="checkboxThemeOverrides"
                             v-model:checked="form.terms"
@@ -399,7 +402,7 @@ watch(state.type, (newRadio) => {
                         <span class="text-red-500" v-if="errors.terms">{{ errors.terms[0] }}</span>
                     </div>
                     <div
-                        class="flex sm:flex-row flex-col gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="flex mt-12 sm:flex-row flex-col gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                         <button @click.prevent="uploadChannel" class="rounded-3xl bg-purple-600 px-6 py-3.5">
                             Добавить канал / чат
                         </button>

@@ -111,17 +111,7 @@ const activate = (place) => {
                         <h2 class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Женская аудитория</h2>
                         <n-slider v-model:value="channelStore.mainFilter.female_percentage" :theme-overrides="sliderThemeOverrides" :max="90" :format-tooltip="formatTooltipPercent" :show-tooltip="additionalFilter"/>
                     </div>
-                    <div class="flex justify-between flex-wrap">
-                        <button
-                            :class="{ 'background': channelStore.additionalFilter.peerType === 'channel' }"
-                            class="transition px-5 py-3 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans']"
-                            @click="togglePeerType('channel')">Каналы</button>
-                        <button
-                            :class="{ 'background': channelStore.additionalFilter.peerType === 'chat' }"
-                            class="transition px-5 py-3 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans']"
-                            @click="togglePeerType('chat')">Чаты</button>
-                    </div>
-                    <n-space v-if="channelStore.additionalFilter.peerType === 'channel'" vertical size="large" class="mt-6">
+                    <n-space vertical size="large" class="mt-6">
                         <div>
                             <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Подписчиков</h2>
                             <n-input
@@ -411,17 +401,7 @@ const activate = (place) => {
                         <h2 class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Женская аудитория</h2>
                         <n-slider v-model:value="channelStore.mainFilter.female_percentage" :theme-overrides="sliderThemeOverrides" :max="90" :format-tooltip="formatTooltipPercent" :show-tooltip="additionalFilter"/>
                     </div>
-                    <div class="flex justify-between flex-wrap">
-                    <button
-                        :class="{ 'background': channelStore.additionalFilter.peerType === 'channel' }"
-                        class="transition px-5 py-3 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans']"
-                        @click="togglePeerType('channel')">Каналы</button>
-                    <button
-                        :class="{ 'background': channelStore.additionalFilter.peerType === 'chat' }"
-                        class="transition px-5 py-3 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans']"
-                        @click="togglePeerType('chat')">Чаты</button>
-                    </div>
-                    <n-space v-if="channelStore.additionalFilter.peerType === 'channel'" vertical size="large" class="mt-6">
+                    <n-space vertical size="large" class="mt-6">
                         <div>
                             <h2 class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Подписчиков</h2>
                             <n-input

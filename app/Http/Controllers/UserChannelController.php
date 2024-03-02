@@ -33,13 +33,20 @@ class UserChannelController extends Controller
         $tenthChannel = Channel::where('status', 'accepted')->orderBy('rating', 'desc')->skip(9)->first();
         $tenthChannelRating = $tenthChannel ? $tenthChannel->rating : 0;
 
-        $channels = $channelsQuery->orderBy('created_at', 'desc')->paginate(10);
-
-        $channels->load(['orders' => function ($query) {
+        $channels = $channelsQuery->with(['orders' => function ($query) {
             $query->where('status', 'pending');
-        }]);
+        }])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
-        $allChannelsAboveRating = Channel::where('status', 'accepted')->where('rating', '>', $channels->min('rating'))->count();
+        $allChannelsAboveRating = Channel::where('status', 'accepted')
+            ->where(function ($query) use ($channels) {
+                $minRating = $channels->min('rating');
+                if ($minRating !== null) {
+                    $query->where('rating', '>', $minRating);
+                }
+            })
+            ->count();
 
         $channels->each(function ($channel) use ($avatarService, $tenthChannelRating, $allChannelsAboveRating) {
             $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);
@@ -71,7 +78,13 @@ class UserChannelController extends Controller
 
     public function update(UpdateChannelRequest $request, Channel $channel)
     {
-        $channel->update($request->except('terms'));
+        $validated = $request->validated();
+
+        unset($validated['terms']);
+
+        $validated['status'] = 'pending';
+
+        $channel->update($validated);
 
         return response()->json($channel);
     }

@@ -26,7 +26,7 @@ const form = reactive({
     channel_name: '',
     description: '',
     topic_id: null,
-    type: 'channel',
+    // type: 'channel',
     url: '',
     subscribers_source: '',
     repeat_discount: null,
@@ -178,7 +178,7 @@ watch(state.type, (newRadio) => {
                         placeholder="@channel или https://t.me/dr_amina_pirmanova" />
                     <span class="text-red-500" v-if="errors.url" ref="el => { errorRefs.url = el }">{{ errors.url[0] }}</span>
                 </div>
-                <div class="flex w-full flex-col justify-center gap-y-3 text-center">
+<!--                <div class="flex w-full flex-col justify-center gap-y-3 text-center">
                     <h2
                         class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                         Вы добавляете
@@ -206,7 +206,7 @@ watch(state.type, (newRadio) => {
                         </n-checkbox>
                         <span class="text-red-500" v-if="errors.type">{{ errors.type[0] }}</span>
                     </div>
-                </div>
+                </div>-->
                 <div class="w-full text-start">
                     <h2
                         class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
@@ -402,7 +402,7 @@ watch(state.type, (newRadio) => {
                     <span class="text-red-500" v-if="errors.repeat_discount">{{ errors.repeat_discount[0] }}</span>
                 </div>
                 <div>
-                    <div>
+                    <div class="mt-12">
                         <n-checkbox
                             :theme-overrides="checkboxThemeOverrides"
                             v-model:checked="form.terms"

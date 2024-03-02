@@ -1,11 +1,12 @@
 <script setup>
 import {router, Link} from "@inertiajs/vue3";
-import {NBadge, NTabPane, NTabs} from "naive-ui";
+import {NBadge, NPopover, NTabPane, NTabs} from "naive-ui";
 import AboutChannel from "@/Components/Dashboard/ChannelTab/AboutChannel.vue";
 import {nTabThemeOverrides} from "@/themeOverrides.js";
 import {ref} from "vue";
 import Reviews from "@/Components/Dashboard/ChannelTab/Reviews.vue";
 import Statistics from "@/Components/Dashboard/ChannelTab/Statistics.vue";
+import {trans} from "laravel-vue-i18n";
 
 const props = defineProps({
     channel: Object
@@ -20,7 +21,16 @@ const wrap = ref(false)
         <div class="channel_card-container">
             <div class="grid">
                 <div class="flex grid-element flex-col items-center justify-center gap-y-3">
-                    <div :class="{'bg-yellow-400 point': channel.status === 'pending', 'bg-green-400 point': channel.status === 'accepted', 'bg-red-400 point': channel.status === 'declined'}"></div>
+                    <n-popover trigger="hover">
+                        <template #trigger>
+                            <div
+                                :class="{'bg-yellow-400 point': channel.status === 'pending',
+                    'bg-green-400 point': channel.status === 'accepted',
+                    'bg-red-400 point': channel.status === 'declined'}">
+                            </div>
+                        </template>
+                        <span>{{ $t('messages.' + channel.status) }}</span>
+                    </n-popover>
                     <div class="flex rating text-white text-sm font-normal gap-x-2 font-['Open Sans'] leading-tight">
                         <img src="/images/gavat.svg" alt="">
                         <p>{{channel.rating}}</p>
@@ -28,7 +38,7 @@ const wrap = ref(false)
                     <div class="avatar">
                         <img :src="channel.avatar" alt="avatar">
                     </div>
-                </div>{{    }}
+                </div>
                 <div class="grid-element">
                     <div class="flex flex-col gap-y-2 justify-between">
                         <div>
@@ -41,7 +51,7 @@ const wrap = ref(false)
                 <div class="grid-element flex flex-col items-center justify-center">
                     <div class="flex flex-wrap gap-y-3 w-full justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                         <Link :href="route('catalog.channels.index')"><button :disabled="channel.status !== 'accepted'" class="watch flex items-center gap-x-1.5">Канал в каталоге <i class="block eye"></i></button></Link>
-                        <button @click.prevent="router.visit(route('channels.edit', channel.id))" class="edit">Редактировать канал</button>
+                        <button @click.prevent="router.visit(route('channels.edit', channel.slug))" class="edit">Редактировать канал</button>
                         <n-badge :value="channel.pending_order_count" type="info" >
                             <button @click.prevent="router.visit(route('order.index'))" class="orders flex items-center text-violet-100 gap-x-1.5">К заявкам <i class="block inkarrow"></i></button>
                         </n-badge>

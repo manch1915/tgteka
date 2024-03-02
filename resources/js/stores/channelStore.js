@@ -13,7 +13,7 @@ export const useChannelStore = defineStore('channel',{
         activeButton: null,
         sortDirection: 'desc',
         additionalFilter: {
-            peerType: '',
+            peerType: 'channel',
             participants_count: [],
             adv_post_reach_24h: [],
             err_percent: [],

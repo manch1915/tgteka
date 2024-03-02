@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import TextArea from "@/Components/TextArea.vue";
 import {computed, ref} from "vue";
-import {usePage} from "@inertiajs/vue3";
+import {usePage,Head} from "@inertiajs/vue3";
 import {openModal} from "jenesius-vue-modal";
 import ModalAlert from "@/Components/Dashboard/ModalAlert.vue";
 import TicketCard from "@/Components/Dashboard/TicketCard.vue";
@@ -64,6 +64,9 @@ socket.onerror = function(error) {
 </script>
 
 <template>
+    <Head>
+        <title>Поддержка</title>
+    </Head>
     <AppLayout>
         <div class="mt-12 grid support_grid">
             <div class="sm:p-6">

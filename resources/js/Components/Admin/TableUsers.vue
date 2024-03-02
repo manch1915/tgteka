@@ -22,9 +22,11 @@ const fetchUsers = () => {
             items.value = r.data.data
         })
 }
+
 onMounted(() => {
     fetchUsers()
 })
+
 const isModalActive = ref(false);
 const isModalAdminActive = ref(false);
 
@@ -35,6 +37,7 @@ const deleteUser = () => {
         .then(r => message.info(r.data))
         .catch(e => console.log(e))
 }
+
 const changeUserRole = () => {
     axios.put(route('admin.api.users.update', userToShow.value.id))
         .then(r => {
@@ -43,6 +46,7 @@ const changeUserRole = () => {
         })
         .catch(e => console.log(e))
 }
+
 const deletingUser = (id) => {
     isModalDangerActive.value = true
     userId.value = id

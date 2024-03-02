@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->text('message')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('ticket_id')->references('id')->on('support_tickets')->onDelete('cascade');
-            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('ticket_id')->references('id')->on('support_tickets')->cascadeOnDelete();
+            $table->foreign('sender_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

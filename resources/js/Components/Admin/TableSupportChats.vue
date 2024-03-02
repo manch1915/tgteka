@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import { useMainStore } from "@/stores/main";
-import { mdiEye, mdiTrashCan } from "@mdi/js";
+import {mdiArrowLeftBold, mdiEye, mdiTrashCan} from "@mdi/js";
 import CardBoxModal from "@/Components/Admin/CardBoxModal.vue";
 import TableCheckboxCell from "@/Components/Admin/TableCheckboxCell.vue";
 import BaseLevel from "@/Components/Admin/BaseLevel.vue";
@@ -10,6 +10,8 @@ import BaseButton from "@/Components/Admin/BaseButton.vue";
 import {openModal} from "jenesius-vue-modal";
 import Messanger from "@/Components/Dashboard/Messanger.vue";
 import {usePage} from "@inertiajs/vue3";
+import {NDrawer, NDrawerContent} from "naive-ui";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 
 defineProps({
   checkable: Boolean,
@@ -86,13 +88,29 @@ const socket = new WebSocket(`wss://${import.meta.env.VITE_APP_WEBSOCKETS_IP}:19
 socket.onerror = function(error) {
     console.log(error);
 };
+const active = ref(false)
+const ticketsId = ref(null)
+
 const openMessengerModal = (ticketId) =>{
-    openModal(Messanger, {tickets: ticketId, socket:socket, userId: userId.value})
+    active.value = true
+    ticketsId.value = ticketId
 }
 </script>
 
 <template>
-
+    <n-drawer v-model:show="active" close-on-esc width="100%" :theme-overrides="{color: '#070C29'}">
+        <n-drawer-content>
+            <template #header>
+                <div @click.prevent="active = false" class="flex cursor-pointer">
+                    <base-icon :path="mdiArrowLeftBold" size="24"/>
+                    <p class="text-violet-100 text-lg font-bold font-['Open Sans']">Чат</p>
+                </div>
+            </template>
+            <div class="w-full flex justify-center">
+                <Messanger :tickets="ticketsId" :socket="socket" :user-id="userId"></Messanger>
+            </div>
+        </n-drawer-content>
+    </n-drawer>
   <CardBoxModal
     v-model="isModalDangerActive"
     title="Пожалуйста подтвердите"

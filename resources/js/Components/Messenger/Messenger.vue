@@ -60,7 +60,8 @@ const sendMessage = () => {
         conversation_id: store.conversation_id,
         message: inputMessage.value,
         username: page.props.auth.user.username,
-        type: 'personal'
+        type: 'chat_message',
+        content_type: 'text',
     }));
 
     addNewMessage(inputMessage.value);

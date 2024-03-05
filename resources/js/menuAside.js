@@ -3,7 +3,7 @@ import {
     mdiTable,
     mdiMessage,
     mdiMessageText,
-    mdiForum, mdiCog, mdiTextLong, mdiAccount, mdiPhone, mdiCreditCardOutline,
+    mdiForum, mdiCog, mdiTextLong, mdiAccount, mdiPhone, mdiCreditCardOutline, mdiBug, mdiBugOutline,
 } from "@mdi/js";
 
 export default [
@@ -33,13 +33,14 @@ export default [
     icon: mdiCreditCardOutline,
   },
   {
+    route: 'admin.reports',
+    label: "Жалобы",
+    icon: mdiBugOutline,
+  },
+  {
     label: "Чаты",
     icon: mdiForum,
     menu: [
-      {
-        icon: mdiMessageText,
-        label: "пользователи",
-      },
       {
         icon: mdiMessage,
         label: "поддержка",

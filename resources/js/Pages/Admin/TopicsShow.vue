@@ -29,7 +29,7 @@ const message = useMessage()
 const updateTopic = () => {
     axios.patch(route('admin.api.topics.update', props.id), form)
         .then(r => {
-            message.info('Topic updated')
+            message.info('Тема обновлена')
             router.visit(route('admin.topics'))
         })
 }

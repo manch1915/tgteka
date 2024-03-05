@@ -124,6 +124,7 @@ const patchPattern = async function() {
 
     try {
         const response = await axios.post(route('pattern.update', patternId), formData, config);
+        message.success('Шаблон успешно сохранен!');
         loading.finish();
         console.log(response);
     } catch (error) {
@@ -305,6 +306,9 @@ onUnmounted(() => {
     background: url('/images/background.jpg') center;
     background-size: cover;
     border-radius: 20px;
+    @media screen and (max-width: 1024px){
+        padding: 10px;
+    }
     .before_container{
         border-radius: 20px;
         background: #176073;

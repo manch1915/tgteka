@@ -11,8 +11,9 @@ const activeSortButton = ref('')
 const value = ref([0, 1500])
 const range = ref([118313526e4, Date.now()])
 const isLoading = ref(true)
-
+const maxPrice = ref(1500)
 const loading = useLoadingBar()
+const hasAnyOrder = ref(true)
 
 const SORT_DATA = [
     {
@@ -56,7 +57,11 @@ const getPlacements = async (page = 1) => {
             `&endDate=${new Date(range.value[1]).toJSON()}`;
 
         await axios.get(url)
-            .then(response => placements.value = response.data)
+            .then(response => {
+                placements.value = response.data.orders
+                maxPrice.value = response.data.max_price
+                hasAnyOrder.value = response.data.hasAnyOrder;
+            })
             .catch(err => console.log(err))
             .finally(() => {
                 loading.finish()
@@ -84,7 +89,7 @@ watch([activeSortButton, value, range], () => {
     <AppLayout>
         <div class="sm:py-20 py-4 text-center">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Мои размещения</h1>
-            <div v-if="placements && placements.data && placements.data.length > 0" class="flex sm:flex-row flex-col justify-between items-center gap-8 mt-4 sm:p-0 p-2">
+            <div v-if="hasAnyOrder" class="flex sm:flex-row flex-col justify-between items-center gap-8 mt-4 sm:p-0 p-2">
                 <div class="flex flex-wrap gap-x-2 sm:justify-start justify-around gap-2">
                 <template v-for="sort in SORT_DATA">
                     <button :class="{'background': activeSortButton === sort.title}" @click.prevent="activeSortButton = sort.value" class="transition px-5 py-1 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-sm font-bold font-['Open Sans']">
@@ -93,7 +98,7 @@ watch([activeSortButton, value, range], () => {
                 </template>
                 </div>
                 <div class="w-full">
-                    <n-slider v-model:value="value" range :step="1" :max="50000" :format-tooltip="formatTooltip"/>
+                    <n-slider v-model:value="value" range :step="1" :max="maxPrice" :format-tooltip="formatTooltip"/>
                     <div class="flex justify-between">
                         <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-10">{{value[0]}} руб.</p>
                         <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-10">-</p>

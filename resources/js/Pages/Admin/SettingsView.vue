@@ -38,7 +38,7 @@ const updateSetting = (setting) => {
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiTableBorder" title="Настройки" main/>
         <template v-for="(setting, index) in settings" :key="index">
-            <FormField :label="setting.key">
+            <FormField label="Минимальная сумма пополнения">
                 <FormControl v-model="setting.value" :icon="mdiCardText" />
                 <BaseButton @click.prevent="updateSetting(setting)" color="yellow" label="Update"/>
             </FormField>

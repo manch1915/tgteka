@@ -31,7 +31,9 @@ class PlacementController extends Controller
 
     public function get(Request $request, $page = 1, $perPage = 10)
     {
-        $orders = auth()->user()->orders()
+        $userOrders = auth()->user()->orders();
+
+        $orders = (clone $userOrders)
             ->with(['format', 'channel.topic', 'pattern'])
             ->when($request->input('status'), fn($query, $status) => $query->where('status', $status))
             ->when($request->input('minPrice'), fn($query, $minPrice) => $query->where('price', '>=', intval($minPrice)))
@@ -42,6 +44,9 @@ class PlacementController extends Controller
             ]))
             ->orderByDesc('created_at')
             ->paginate($perPage, ['*'], 'page', $page);
+
+        $maxPrice = $userOrders->max('price');
+        $hasAnyOrder = $userOrders->exists();
 
         $additionalDaysMapping = ['1/24' => 1, '2/48' => 2, '3/72' => 3];
 
@@ -63,7 +68,8 @@ class PlacementController extends Controller
 
             return $order;
         });
-        return $orders;
+
+       return response()->json(['orders' =>$orders, 'max_price' => $maxPrice, 'hasAnyOrder' => $hasAnyOrder]);
     }
 
     public function sendReport(ReportRequest $request)
@@ -73,14 +79,19 @@ class PlacementController extends Controller
 
             $order = Order::findOrFail($validated['order_id']);
 
+            $reportExists = OrderReport::where('order_id', $validated['order_id'])->exists();
+
+            if($reportExists) {
+                return response(['message' => 'Вы уже отправили жалобу на этот заказ. Пожалуйста, подождите, пока администраторы проверят вашу жалобу.'], 400);
+            }
+
             OrderReport::create([
                 'order_id' => $validated['order_id'],
                 'message' => $validated['report_message']
             ]);
 
             $order->channel->user->notify(new OrderReportNotification($validated['report_message']));
-
-
+            return response(['message' => 'Мы получили вашу жалобу.'], 200);
         } catch (\Exception $e) {
             Log::error('Unable to send report: ', ['exception' => $e]);
             return response(['error' => 'Не удается отправить отчет из-за ошибки. Пожалуйста, попробуйте еще раз или обратитесь в службу поддержки, если проблема не устранена.'], 500);

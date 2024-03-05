@@ -179,6 +179,8 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
 
         Route::get('payouts', fn () => inertia('Admin/PayoutsView'))->name('payouts');
 
+        Route::get('reports', fn () => inertia('Admin/ReportsView'))->name('reports');
+
         Route::prefix('api')->name('api.')->group(function () {
             Route::Resource('channels', ChannelController::class);
 
@@ -195,5 +197,5 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
 
 Route::prefix('admin/api')->name('admin.api.')->group(function () {
     Route::Resource('topics', TopicController::class);
+    Route::Resource('reports', \App\Http\Controllers\Admin\OrderReportController::class);
 });
-

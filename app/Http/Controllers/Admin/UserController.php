@@ -12,7 +12,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::withCount([ 'channels', 'orders', 'patterns'])->get();
 
         return UserResource::collection($users);
     }

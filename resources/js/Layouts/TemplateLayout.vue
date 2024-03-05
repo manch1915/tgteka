@@ -6,7 +6,7 @@
             </div>
             <slot name="subtitle"/>
             <div class="rounded-tr-3xl rounded-br-3xl rounded-bl-3xl border-2 border-white p-8 backdrop-blur-3xl blok">
-                <div class="grid grid-cols-1 gap-x-1.5 lg:grid-cols-2 lg:gap-x-2 xl:(grid-cols-3 gap-x-4)">
+                <div class="grid layout-grid gap-x-1.5">
                     <div class="h-full">
                         <h2 class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed mb-5">
                             <slot name="post-title"/>
@@ -21,6 +21,8 @@
                         </div>
                     </div>
                 </div>
+
+
                 <div class="flex flex-col items-center justify-between gap-y-4 py-6 sm:flex-row">
                     <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Шаблон сохраняется
                         автоматически
@@ -51,6 +53,12 @@ import AppLayout from "@/Layouts/AppLayout.vue";
     a {
         color: #0059ff;
         text-decoration: underline;
+    }
+}
+.layout-grid{
+    grid-template-columns: 8fr 4fr;
+    @media screen and (max-width: 1024px) {
+        grid-template-columns: 1fr;
     }
 }
 </style>

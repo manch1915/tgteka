@@ -17,7 +17,6 @@ class UserResource extends JsonResource
             'mobile_number' => $this->mobile_number,
             'telegram_username' => $this->telegram_username,
             'balance' => $this->balance,
-            'channel_orders_count' => $this->channel_orders_count,
             'channels_count' => $this->channels_count,
             'orders_count' => $this->orders_count,
             'patterns_count' => $this->patterns_count,

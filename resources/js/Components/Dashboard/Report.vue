@@ -14,8 +14,16 @@ const reportMessage = ref('')
 
 const sendReport = () => {
     axios.post(route('report-send'), {report_message: reportMessage.value, order_id: props.order_id})
-        .then(r => console.log(r))
-        .catch(c => console.log(c))
+        .then(r =>{
+            if (r.response.data.message){
+                message.error(c.response.data.message);
+            }
+        })
+        .catch(c => {
+            if (c.response.data.message){
+                message.error(c.response.data.message);
+            }
+        })
     closeModal()
 }
 

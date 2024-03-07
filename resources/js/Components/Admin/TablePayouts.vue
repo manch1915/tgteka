@@ -220,7 +220,7 @@ const checked = (isChecked, client) => {
               color="danger"
               :icon="mdiCancel"
               small
-              @click="togglePayout('declined' ,transaction.id)"
+              @click="togglePayout('rejected' ,transaction.id)"
             />
           </BaseButtons>
         </td>

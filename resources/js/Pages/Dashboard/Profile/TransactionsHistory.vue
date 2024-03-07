@@ -104,7 +104,7 @@ watch([appointmentVal, statusValue, range], () => {
                     <n-date-picker v-model:value="range" type="daterange" clearable />
                 </div>
             </div>
-            <Transactions v-if="transactions.data && transactions.data.lenght" :transactions="transactions.data"/>
+            <Transactions v-if="transactions.data && transactions.data.length" :transactions="transactions.data"/>
             <p v-else class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10">Транзакции отсутствуют.</p>
             <div class="flex justify-center">
                 <TailwindPagination @pagination-change-page="getTransactions" :data="transactions"  :limit="3" :active-classes="['bg-blue-950', 'rounded-full', 'shadow-inner', 'border', 'border-white', 'border-opacity-10', 'text-white', 'text-base', 'font-bold', 'font-[\'Open Sans\']', 'leading-tight']" :itemClasses="['border-none', 'text-violet-100', 'text-base', 'font-normal', 'font-[\'Inter\']', 'leading-normal',]" >

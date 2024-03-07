@@ -38,6 +38,16 @@ class FinanceController extends Controller
             'amount' => 'required'
         ]);
 
+        $user = auth()->user();
+        $pendingPayouts = Transaction::where('user_id', $user->id)
+            ->whereIn('status', ['created', 'under_review'])
+            ->where('appointment', 'Вывод')
+            ->sum('amount');
+
+        if ($user->balance < ($pendingPayouts + $request->amount)) {
+            return response()->json(["message" => "Недостаточный баланс для этой операции"], 400);
+        }
+
         do {
             $transactionId = 'TXN-' . Str::upper(Str::random(10));
         } while (Transaction::where('transaction_id', $transactionId)->exists());
@@ -67,8 +77,12 @@ class FinanceController extends Controller
 
         $transaction->update(['status' => 'under_review']);
 
+        $user = $transaction->user;
+        $user->balance -= $transaction->amount;
+        $user->save();
+
         $transaction->user->notify(new PayoutCreatedNotification($transactionId));
-        // Redirect to a confirmation success page or to home page
+
         return redirect()->route('withdraw');
     }
 }

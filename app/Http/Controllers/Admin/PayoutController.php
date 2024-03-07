@@ -14,9 +14,15 @@ class PayoutController extends Controller
     public function index(Request $request)
     {
         if ($request->status) {
-            $transactions = Transaction::where('status', $request->status)->paginate(10);
+            $transactions = Transaction::with('user')
+                ->where('status', $request->status)
+                ->where('appointment', 'Вывод')
+                ->paginate(10);
         } else {
-            $transactions = Transaction::where('status', 'under_review')->paginate(10);
+            $transactions = Transaction::with('user')
+                ->where('status', 'under_review')
+                ->where('appointment', 'Вывод')
+                ->paginate(10);
         }
         return PayoutResource::collection($transactions);
     }
@@ -24,6 +30,7 @@ class PayoutController extends Controller
     public function countStatuses()
     {
         $statusCounts = Transaction::selectRaw('status, COUNT(*) as count')
+            ->where('appointment', 'Вывод')
             ->groupBy('status')->get();
 
         return $statusCounts->keyBy('status')->toArray();
@@ -40,12 +47,17 @@ class PayoutController extends Controller
 
     public function update(Request $request, Transaction $payout)
     {
+        if($request->status === 'rejected') {
+            $payout->user->balance += $payout->amount;
+            $payout->user->save();
+        }
+
         $payout->status = $request->status;
         $payout->save();
 
         $payout->user->notify(new PayoutStatusUpdatedNotification($payout->id,__('messages.' . $request->status),));
 
-        return response()->json(['message' => 'Transaction updated successfully'], 200);
+        return response()->json(['message' => 'Транзакция успешно обновлена'], 200);
     }
 
     public function destroy(Transaction $transaction)

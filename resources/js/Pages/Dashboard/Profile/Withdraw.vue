@@ -1,7 +1,7 @@
 <script setup>
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {NCheckbox, NInput, NTabPane, NTabs} from "naive-ui";
+import {NCheckbox, NInput, NTabPane, NTabs, useMessage} from "naive-ui";
 import {checkboxThemeOverrides, inputThemeOverrides, nTabSegmentsThemeOverrides} from "@/themeOverrides.js";
 import {reactive, ref, watch} from "vue";
 import {Head, Link} from "@inertiajs/vue3"
@@ -14,6 +14,8 @@ const activeTab = ref('bank-card')
 
 const read = ref(false)
 
+const message = useMessage()
+
 const bankCard = reactive({
     cardNumbers: null,
     amount: null,
@@ -24,8 +26,12 @@ const bankCardError = ref('')
 const createPaymentRequest = () => {
     axios.post(route('create-payout-request'), bankCard)
         .then(r => {
-            console.log(r);
-        });
+            message.info('Ваш запрос на выплату создан, подтвердите его, перейдя по ссылке, отправленной на вашу почту');
+        }).catch(error => {
+            if(error.response.data.message){
+                message.error(error.response.data.message);
+            }
+    });
 }
 
 watch(() => bankCard.cardNumbers, () => {

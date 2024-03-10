@@ -2,18 +2,30 @@
 import { useForm} from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import InputError from '@/Components/InputError.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { openPasswordRecovery, openRegister } from "@/utilities/authModals.js";
+import { NInput } from 'naive-ui'
+import {inputThemeOverrides} from "@/themeOverrides.js";
+import {ref} from "vue";
 
 const form = useForm({
     username: '',
     password: '',
 });
 
+const errors = ref({username: null, password: null})
+
+const validateForm = () => {
+    errors.value.username = form.username.length < 1 ? 'Username is required' : null;
+    errors.value.password = form.password.length < 1 ? 'Password is required' : null;
+}
+
 const submit = () => {
-    form.post(route('login.post'), {
-        onFinish: () => form.reset('password'),
-    });
+    validateForm();
+    if (!(errors.value.username || errors.value.password)) {
+        form.post(route('login.post'), {
+            onFinish: () => form.reset('password'),
+        });
+    }
 };
 </script>
 
@@ -25,27 +37,27 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div class="pt-10">
-                <TextInput
+                <NInput
                     id="email"
-                    v-model="form.username"
+                    v-model:value="form.username"
                     type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="username"
                     placeholder="Имя пользователя"
+                    :status="form.username ? 'success' : 'error'"
+                    :theme-overrides="inputThemeOverrides"
+                    class="py-1.5 my-1 sm:!w-full"
                 />
                 <InputError class="mt-2" :message="form.errors.username" />
             </div>
 
             <div class="pt-2">
-                <TextInput
+                <NInput
                     id="password"
-                    v-model="form.password"
+                    v-model:value="form.password"
                     type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="current-password"
                     placeholder="Пароль"
+                    :status="form.password ? 'success' : 'error'"
+                    :theme-overrides="inputThemeOverrides"
+                    class="py-1.5 my-1 sm:!w-full"
                 />
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>

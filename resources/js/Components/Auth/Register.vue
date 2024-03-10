@@ -4,8 +4,8 @@ import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
 import {reactive} from "vue";
 import {Link} from "@inertiajs/vue3";
-import {NCheckbox, useLoadingBar, useMessage} from "naive-ui";
-import {checkboxThemeOverrides} from "@/themeOverrides.js";
+import {NCheckbox, NInput, useLoadingBar, useMessage} from "naive-ui";
+import {checkboxThemeOverrides, inputThemeOverrides} from "@/themeOverrides.js";
 import {closeModal} from "jenesius-vue-modal";
 import { vMaska } from "maska"
 import { openLogin } from "@/utilities/authModals.js";
@@ -19,19 +19,36 @@ const state = reactive({
 });
 const loading = useLoadingBar()
 const message = useMessage()
+
+function validateForm() {
+    let isValid = true;
+    if (!state.form.username) {
+        isValid = false;
+    }
+
+    if (!state.form.email) {
+        isValid = false;
+    }
+
+    return isValid;
+}
+
 const submit = async () => {
-    loading.start()
-    await axios.post(route('register'), state.form)
-        .then(res => {
-            loading.finish()
-            message.info('Мы отправили ваш пароль на ваш e-mail')
-            closeModal()
-        })
-        .catch(error => {
-            loading.error()
-            state.errors = error.response.data.errors || {}
-        })
+    if (validateForm()) {
+        loading.start()
+        await axios.post(route('register'), state.form)
+            .then(res => {
+                loading.finish()
+                message.info('Мы отправили ваш пароль на ваш e-mail')
+                closeModal()
+            })
+            .catch(error => {
+                loading.error()
+                state.errors = error.response.data.errors || {}
+            })
+    }
 };
+
 </script>
 
 <template>
@@ -42,26 +59,26 @@ const submit = async () => {
 
         <form @submit.prevent="submit" class="flex flex-col gap-y-3.5">
             <div  class="pt-10">
-                <TextInput
-                    id="email"
-                    v-model="state.form.username"
+                <NInput
+                    id="username"
+                    v-model:value="state.form.username"
                     type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="username"
                     placeholder="Имя пользователя"
+                    :status="state.form.username ? 'success' : 'error'"
+                    :theme-overrides="inputThemeOverrides"
+                    class="py-1.5 my-1 sm:!w-full"
                 />
                 <InputError class="mt-2" :message="state.errors.username && state.errors.username[0]" />
             </div>
             <div>
-                <TextInput
+                <NInput
                     id="email"
-                    v-model="state.form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="email"
+                    v-model:value="state.form.email"
+                    type="text"
                     placeholder="Электронная почта"
+                    :status="state.form.email ? 'success' : 'error'"
+                    :theme-overrides="inputThemeOverrides"
+                    class="py-1.5 my-1 sm:!w-full"
                 />
               <InputError class="mt-2" :message="state.errors.email && state.errors.email[0]" />
             </div>

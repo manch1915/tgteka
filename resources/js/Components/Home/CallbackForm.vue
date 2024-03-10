@@ -55,18 +55,24 @@ const orderCallback = () => {
     <div class="sm:p-0 p-2">
         <div class="consultation__block sm:p-16 p-4 mt-14">
             <div class="form flex flex-col text-violet-100 justify-center gap-y-4">
-                <input v-model="form.name" type="text" placeholder="Имя">
-                <div class="error-message">{{ form.errors.name }}</div>
-                <input v-model="form.mobile_number" v-maska data-maska="+7 (###) ###-##-##" type="text" placeholder="+7(___) - ___ - __ - __">
-                <div class="error-message">{{ form.errors.mobile_number }}</div>
-                <div class="form__checkbox flex items-center gap-x-2">
-                    <n-checkbox v-model:checked="form.terms" :theme-overrides="checkboxThemeOverrides"/>
-                    <label class="terms text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
-                        Нажимая на кнопку «Отправить» я соглашаюсь с
-                        <Link :href="route('rules')" class="underline">
-                            Правилами пользования Сервисом
-                        </Link>
-                    </label>
+                <div>
+                    <input class="w-full" v-model="form.name" type="text" placeholder="Имя">
+                    <div class="error-message">{{ form.errors.name }}</div>
+                </div>
+                <div>
+                    <input class="w-full" v-model="form.mobile_number" v-maska data-maska="+7 (###) ###-##-##" type="text" placeholder="+7(___) - ___ - __ - __">
+                    <div class="error-message">{{ form.errors.mobile_number }}</div>
+                </div>
+                <div>
+                    <div class="form__checkbox flex items-center gap-x-2">
+                        <n-checkbox v-model:checked="form.terms" :theme-overrides="checkboxThemeOverrides"/>
+                        <label class="terms text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
+                            Нажимая на кнопку «Отправить» я соглашаюсь с
+                            <Link :href="route('rules')" class="underline">
+                                Правилами пользования Сервисом
+                            </Link>
+                        </label>
+                    </div>
                     <div class="error-message">{{ form.errors.terms }}</div>
                 </div>
                 <button @click.prevent="orderCallback" class="cursor-pointer px-3 py-2 bg-purple-600 animation hover:bg-purple-800 rounded-full w-full gap-2.5 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
@@ -107,6 +113,7 @@ const orderCallback = () => {
     }
 }
 .error-message {
+    display: block;
     color: red;
     font-size: .8rem;
 }

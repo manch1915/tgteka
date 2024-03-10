@@ -79,9 +79,12 @@ const togglePeerType = (peerType) => {
 const active = ref(false);
 const placement = ref("right");
 const activate = (place) => {
-    active.value = true;
-    placement.value = place;
+    if (window.matchMedia('(max-width: 640px)').matches) {
+        active.value = true;
+        placement.value = place;
+    }
 };
+
 </script>
 
 <template>

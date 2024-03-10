@@ -13,6 +13,7 @@ import TemplateLayout from "@/Layouts/TemplateLayout.vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import MainVideoPlayer from "@/Components/Dashboard/MainVideoPlayer.vue";
 import {Head} from "@inertiajs/vue3";
+import { options } from "@/utilities/templateUtilities.js";
 
 // Properties Definition
 const props = defineProps({
@@ -21,18 +22,6 @@ const props = defineProps({
     patternMedia: [Array, null],
     patternName: [String, null]
 })
-
-// Quill Options
-const options = {
-    modules: {
-        toolbar: {
-            container: [
-                ['bold', 'italic', 'underline', 'emoji'],
-                ['link'],
-            ],
-        }
-    }
-}
 
 // API and Helpers
 const draggable = defineComponent(VueDraggableNext)
@@ -216,7 +205,7 @@ content.value = htmlToDelta(content.value);
                                 <video :src="image.url" autoplay loop muted class="absolute top-0 left-0 object-cover w-full h-full"></video>
                             </template>
                             <template v-else>
-                                <n-image :src="image.url" alt="" class="absolute top-0 left-0 object-cover w-full h-full" />
+                                <n-image object-fit="cover" :src="image.url" alt="" class="absolute top-0 left-0 object-cover w-full h-full" />
                             </template>
                             <div @click="deleteImage(index)" class="cursor-pointer absolute bottom-0 right-0 rounded m-1 bg-gray-700 bg-opacity-80">
                                 <BaseIcon class="p-1 text-white" :path="mdiDelete"/>
@@ -235,12 +224,12 @@ content.value = htmlToDelta(content.value);
                                   class="grid gap-2">
                     <div v-for="(image, index) in images" :key="'img-' + index" class="bg-center bg-cover">
                             <template v-if="image.file">
-                                <n-image v-if="image.file.type.includes('image/')" :src="image.url" alt="" class="w-full h-full" />
+                                <n-image object-fit="cover" v-if="image.file.type.includes('image/')" :src="image.url" alt="" class="w-full h-full" />
                                 <video v-else-if="image.file.type.includes('video/')" :src="image.url" loop muted class="w-full h-full" />
                             </template>
                             <template v-else-if="image.url">
                                 <img class="cursor-pointer" @click.prevent="openVideoPlayer(image)"  v-if="['.mp4', '.ogg', '.webm'].some(ext => image.url.includes(ext))" :src="image.thumbnail_path" alt=""/>
-                                <n-image v-else :src="image.url" alt="" class="w-full h-full" />
+                                <n-image object-fit="cover" v-else :src="image.url" alt="" class="w-full h-full" />
                             </template>
                     </div>
                 </transition-group>

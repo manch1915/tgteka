@@ -4,7 +4,7 @@ import {Line} from "vue-chartjs";
 import {
     BarElement,
     CategoryScale,
-    Chart,
+    Chart, DatasetController,
     Legend,
     LinearScale,
     LineElement,
@@ -25,6 +25,26 @@ const isError = ref(true)
 Chart.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, PointElement, LineElement);
 Chart.defaults.color = '#EAE0FF';
 Chart.defaults.borderColor = '#E6E6E6';
+const applyShadowEffect = (ctx) => {
+    const _stroke = ctx.stroke;
+    ctx.stroke = function () {
+        ctx.save();
+        ctx.shadowColor = '#8729FF';
+        ctx.shadowBlur = 6;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 2;
+        _stroke.apply(this, arguments);
+        ctx.restore();
+    };
+};
+
+const extendDatasetController = () => {
+    const originalDraw = DatasetController.prototype.draw;
+    DatasetController.prototype.draw = function() {
+        originalDraw.apply(this, arguments);
+        applyShadowEffect(this.chart.ctx);
+    };
+};
 
 const channelStats = ref({})
 
@@ -112,9 +132,26 @@ const fetchChannelStats = async () => {
         }
     }
 }
-
+const chartOptionsNoLabels = {
+    scales: {
+        x: {
+            // ...
+        },
+        y: {
+            grid: {
+                display: true, // Set to true to show only horizontal grid lines
+            },
+        },
+    },
+    plugins: {
+        legend: {
+            display: false, // Set to false to hide dataset labels
+        },
+    },
+};
 onMounted(() => {
     fetchChannelStats();
+    extendDatasetController();
 });
 
 </script>
@@ -126,13 +163,17 @@ onMounted(() => {
                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Рейтинг</p>
                 <p v-if="channelStats.channel" class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">{{channelStats.channel.rating || 0}}</p>
             </div>
+
+            <div class="item text-center !py-10">
+                <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Оценка отзывов</p>
+                <p v-if="channelStats.channel" class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">{{channelStats.channel.rating || 0}}</p>
+            </div>
+
             <div class="item text-center !py-10">
                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Выполнено заявок</p>
                 <p class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">{{channelStats.finished_orders_count}}</p>
             </div>
-            <div class="item">
 
-            </div>
             <div class="item item text-center !py-10">
                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Денег заработано</p>
                 <p class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">{{channelStats.finished_orders_price_sum}}</p>
@@ -143,7 +184,7 @@ onMounted(() => {
                 <div class="grid sm:grid-cols-2 grid-cols-1">
                     <div>
                         <h1 class="text-center text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">Подписчики</h1>
-                        <Line :data="chartDataSubs"/>
+                        <Line :data="chartDataSubs" :options="chartOptionsNoLabels"/>
                     </div>
                     <div>
                         <div v-if="channelStats.stats">
@@ -156,7 +197,7 @@ onMounted(() => {
                 <div class="grid sm:grid-cols-2 grid-cols-1">
                     <div>
                         <h1 class="text-center text-violet-100 sm:text-xl text-lg font-normal font-['Open Sans'] leading-relaxed">Охват </h1>
-                        <Line :data="chartDataAvg"/>
+                        <Line :data="chartDataAvg" :options="chartOptionsNoLabels"/>
                     </div>
                     <div>
                         <div v-if="channelStats.stats">
@@ -169,7 +210,7 @@ onMounted(() => {
                 <div class="grid sm:grid-cols-2 grid-cols-1">
                     <div>
                         <h1 class="text-center text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">ER% — вовлеченность по взаимодействиям</h1>
-                        <Line :data="chartDataER"/>
+                        <Line :data="chartDataER" :options="chartOptionsNoLabels"/>
                     </div>
                     <div>
 

@@ -29,7 +29,7 @@ class PayoutStatusUpdatedNotification extends Notification implements ShouldQueu
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('У заявки на вывод ' . $this->payoutId . ' обновился статус')
+            ->subject('У заявки на вывод #' . $this->payoutId . ' обновился статус')
             ->line('Уважаемый(ая) ' . $notifiable->username . ',')
             ->line('Мы рассмотрели вашу заявку на вывод и присвоили ей статус: ' . $this->status)
             ->line('Если у вас есть вопросы, вы можете написать нам в чат.')

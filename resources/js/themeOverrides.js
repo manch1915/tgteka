@@ -18,7 +18,7 @@ export const inputThemeOverrides = {
 };
 
 export const textareaThemeOverrides = {
-    borderRadius: '5px',
+    borderRadius: '21px',
     placeholderColor: '#EAE0FF99',
     color: '#0D143A',
     colorDisabled: '#0D143A',

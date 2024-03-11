@@ -2,7 +2,7 @@
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import InputError from '@/Components/InputError.vue';
 import TextInput from '@/Components/TextInput.vue';
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
 import {Link} from "@inertiajs/vue3";
 import {NCheckbox, NInput, useLoadingBar, useMessage} from "naive-ui";
 import {checkboxThemeOverrides, inputThemeOverrides} from "@/themeOverrides.js";
@@ -17,6 +17,9 @@ const state = reactive({
   },
   errors: {}
 });
+
+const checkbox = ref(true)
+
 const loading = useLoadingBar()
 const message = useMessage()
 
@@ -84,7 +87,7 @@ const submit = async () => {
             </div>
             <div class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">Укажите вашу электронную почту, на этот адрес будет выслан ваш пароль.</div>
             <div class="flex items-center gap-x-2">
-                <n-checkbox checked :theme-overrides="checkboxThemeOverrides"/>
+                <n-checkbox v-model:checked="checkbox" :theme-overrides="checkboxThemeOverrides"/>
                 <label class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Я согласен получать Email-рассылку от Название компании</label>
             </div>
             <div class="w-full">

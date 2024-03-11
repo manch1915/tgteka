@@ -10,7 +10,7 @@ import {generateFormatArray, isInCart as checkInCart, loadCart, saveCart} from "
 import {
     BarElement,
     CategoryScale,
-    Chart,
+    Chart, DatasetController,
     Legend,
     LinearScale,
     LineElement,
@@ -98,26 +98,43 @@ watch(formatValue, (newValue) => {
 const activeButton = ref('info');
 const explain = ['','1 часа в топе / 24 часа в лент', '2 часа в топе / 48 часа в лент', "3 часа в топе / 72 часа в лент"]
 
-let glowEffectApplied = ref(false);
-
-const applyGlowEffect = () => {
-    let draw = Chart.controllers.line.prototype.draw;
-    Chart.controllers.line.prototype.draw = function() {
-        let chart = this.chart;
-        let ctx = chart.ctx;
-        let _stroke = ctx.stroke;
-        ctx.stroke = function() {
-            ctx.save();
-            ctx.shadowColor = '#8729FF';
-            ctx.shadowBlur = 15;
-            _stroke.apply(this, arguments);
-            ctx.restore();
-        };
-        draw.apply(this, arguments);
-        ctx.stroke = _stroke;
+const applyShadowEffect = (ctx) => {
+    const _stroke = ctx.stroke;
+    ctx.stroke = function () {
+        ctx.save();
+        ctx.shadowColor = '#8729FF';
+        ctx.shadowBlur = 6;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 2;
+        _stroke.apply(this, arguments);
+        ctx.restore();
     };
+};
 
-    glowEffectApplied.value = true;
+const extendDatasetController = () => {
+    const originalDraw = DatasetController.prototype.draw;
+    DatasetController.prototype.draw = function() {
+        originalDraw.apply(this, arguments);
+        applyShadowEffect(this.chart.ctx);
+    };
+};
+
+const chartOptionsNoLabels = {
+    scales: {
+        x: {
+            // ...
+        },
+        y: {
+            grid: {
+                display: true, // Set to true to show only horizontal grid lines
+            },
+        },
+    },
+    plugins: {
+        legend: {
+            display: false, // Set to false to hide dataset labels
+        },
+    },
 };
 
 const channelStats = ref({})
@@ -207,6 +224,7 @@ const getChannelOrdersCount = () => {
 onMounted(() => {
     fetchChannelStats();
     getChannelOrdersCount();
+    extendDatasetController();
 });
 </script>
 
@@ -315,15 +333,15 @@ onMounted(() => {
                     <div class="grid sm:grid-cols-2 grid-cols-1 gap-y-10 px-2">
                         <div>
                             <h1 class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"> График с текущим количеством подписчиков</h1>
-                            <Line :data="chartDataSubs"/>
+                            <Line :data="chartDataSubs" :options="chartOptionsNoLabels"/>
                         </div>
                         <div>
                             <h1 class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Охват за 24 часа</h1>
-                            <Line :data="chartDataAvg"/>
+                            <Line :data="chartDataAvg" :options="chartOptionsNoLabels"/>
                         </div>
                         <div>
                             <h1 class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">ER% — вовлеченность по взаимодействиям</h1>
-                            <Line :data="chartDataER"/>
+                            <Line :data="chartDataER" :options="chartOptionsNoLabels"/>
                         </div>
                     </div>
                 </n-tab-pane>

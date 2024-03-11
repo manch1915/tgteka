@@ -82,7 +82,7 @@ export const useMainStore = defineStore("main", {
         },
         fetchSupportChats() {
             axios.get(route('admin.api.support.index'))
-                .then(r => this.supportChats = r.data)
+                .then(r => this.supportChats = r.data.data)
         },
         fetchTopics() {
             axios.get(route('admin.api.topics.index'))

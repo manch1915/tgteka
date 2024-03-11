@@ -268,7 +268,7 @@ const checked = (isChecked, client) => {
                     @click="currentPage = page"
                 />
             </BaseButtons>
-            <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
+            <small>Страница {{ currentPageHuman }} из {{ numPages }}</small>
         </BaseLevel>
     </div>
 </template>

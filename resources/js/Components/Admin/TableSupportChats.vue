@@ -136,7 +136,7 @@ const openMessengerModal = (ticketId) =>{
       <tr>
         <th v-if="checkable" />
         <th>Название</th>
-        <th>created_at</th>
+        <th>Создан</th>
         <th />
       </tr>
     </thead>
@@ -149,7 +149,7 @@ const openMessengerModal = (ticketId) =>{
         <td data-label="Title">
           {{ chat.title }}
         </td>
-        <td data-label="created_at">
+        <td data-label="создан">
           {{ chat.created_at }}
         </td>
         <td class="before:hidden lg:w-1 whitespace-nowrap">
@@ -184,7 +184,7 @@ const openMessengerModal = (ticketId) =>{
           @click="currentPage = page"
         />
       </BaseButtons>
-      <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
+      <small>Страница {{ currentPageHuman }} из {{ numPages }}</small>
     </BaseLevel>
   </div>
 </template>

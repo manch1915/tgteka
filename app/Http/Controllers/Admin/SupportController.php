@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SupportTicketResource;
 use App\Models\SupportMessage;
 use App\Models\SupportTicket;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class SupportController extends Controller
     {
         $supportChats = SupportTicket::all();
 
-        return response()->json($supportChats);
+        return SupportTicketResource::collection($supportChats);
     }
 
     public function store(Request $request)

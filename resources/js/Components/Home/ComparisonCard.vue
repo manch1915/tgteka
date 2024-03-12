@@ -27,9 +27,9 @@ const props = defineProps({
         </div>
         <div v-if="props.item.showSaveTimeMoney" class="flex justify-end">
             <div>
-            <span class="text-violet-100 text-2xl font-bold leading-loose">x</span>
-            <span class="text-violet-100 text-4xl font-bold leading-10">2</span>
-            <span class="text-violet-100 text-2xl font-bold leading-loose"> сэкономить <br/>время и деньги</span>
+            <span class="text-violet-100 text-2xl font-bold">x</span>
+            <span class="text-violet-100 text-4xl font-bold">2</span>
+            <span class="text-violet-100 text-2xl font-bold"> сэкономить <br/>время и деньги</span>
             </div>
         </div>
     </div>

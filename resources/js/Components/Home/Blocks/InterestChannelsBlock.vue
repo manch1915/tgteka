@@ -1,5 +1,5 @@
 <template>
-  <div class="interestChannels">
+  <div class="interestChannels p-2">
     <div class="container mx-auto ">
       <div class="interestChannels__header sm:mb-36 sm:mt-0 mb-12">
         <h1 class="text-center text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">
@@ -7,8 +7,8 @@
         </h1>
       </div>
       <div class="interestChannels__categories">
-        <div class="sm:flex justify-between hidden">
-          <div class="flex flex-col gap-6">
+        <div class="lg:flex justify-between hidden gap-2">
+          <div class="flex flex-col gap-6 self-start">
             <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">
               Все каналы в нашем каталоге отсортированы <br> по категориям, вот некоторые из них
             </div>
@@ -20,19 +20,19 @@
               </div>
             </div>
           </div>
-          <div class="flex justify-between gap-4 flex-wrap">
+          <div class="grid h-auto grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 justify-center sm:gap-4 gap-1">
             <InterestChannelsCard/>
             <InterestChannelsCard/>
             <InterestChannelsCard/>
             <InterestChannelsCard/>
           </div>
         </div>
-        <div :class="windowWidth <= 640 ? 'channels w-full grid grid-cols-1 justify-between gap-9' : 'channels grid grid-cols-3 justify-between gap-9'">
+        <div :class="windowWidth <= 1024 ? 'channels w-full grid grid-cols-1 justify-between gap-9' : 'channels grid grid-cols-3 justify-between gap-9'">
           <slot name="cards">
 
           </slot>
         </div>
-        <div class="text-center py-20 sm:block hidden">
+        <div class="text-center py-20 lg:block hidden">
             <div class="gotocatalog transition-all">
                 <button class="transition-all text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                     Перейти в полный каталог
@@ -40,7 +40,7 @@
             </div>
 
         </div>
-          <div class="block justify-between sm:hidden">
+          <div class="block justify-between lg:hidden">
               <div class="flex flex-col gap-6">
                   <div class="text-center text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                       Все каналы в нашем каталоге отсортированы по категориям, вот<br> некоторые из них

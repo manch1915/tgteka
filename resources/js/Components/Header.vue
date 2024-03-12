@@ -62,7 +62,7 @@ onBeforeMount(() => {
     </div>
     <div v-else class="header">
         <div class="container mx-auto flex flex-wrap justify-between items-center p-3 nav-menu">
-            <div class="flex  gap-x-4 items-center z-[4]">
+            <div class="flex gap-x-4 items-center z-[4]">
                 <div @click.prevent="toggleBurger" class="burger-icon p-2">
                     <div id="nav-icon3" :class="{ open: burgerActive }">
                         <span></span>
@@ -72,7 +72,7 @@ onBeforeMount(() => {
                     </div>
                 </div>
                 <div class="logo flex-1">
-                    <img class="w-8" src="/images/logo.svg" alt="Application logo">
+                    <img class="w-16" src="/images/logo.svg" alt="Application logo">
                 </div>
             </div>
             <div @click.prevent="openRegister">

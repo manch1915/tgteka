@@ -5,7 +5,7 @@ const toUp = () => {
 </script>
 
 <template>
-    <footer class="pb-4">
+    <footer class="pb-4 p-2">
         <div class="container mx-auto mt-96">
             <div class="info flex flex-wrap justify-between py-12">
                 <div class="flex flex-col justify-between gap-12">

@@ -161,7 +161,7 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
                         </div>
                     </div>
                 </div>
-                <div class="flex h-full sm:border-none border-t border-[#6522D9] p-4 sm:w-1/2 w-full items-stretch justify-evenly">
+                <div class="grid grid-cols-3 h-full sm:border-none border-t border-[#6522D9] p-4 sm:w-1/2 w-full items-stretch justify-evenly">
                     <div class="sm:border-x-[1px] h-full w-full border-[#6522D9] flex flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                             <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Подписчики</p>

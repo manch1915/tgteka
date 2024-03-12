@@ -389,7 +389,7 @@ const activate = (place) => {
                     <h2 class="pb-3 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Тематики</h2>
                     <n-select :options="channelSubjects" :theme-overrides="selectThemeOverrides" placeholder="Все тематики"/>
                 </div>
-                <button @click.prevent="additionalFilter = !additionalFilter" class="hidden sm:block px-6 py-3.5 w-full bg-purple-600 transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Дополнительный фильтр</button>
+                <button @click.prevent="additionalFilter = !additionalFilter" class="hidden sm:block px-6 py-3.5 w-full bg-purple-600 transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 sm:text-sm break-all text-lg font-bold font-['Open Sans'] leading-normal">Дополнительный фильтр</button>
                 <transition>
                 <div v-show="additionalFilter" class="additional_filter">
                     <div class="py-2">
@@ -658,7 +658,7 @@ const activate = (place) => {
             </div>
             <div class="channels">
                 <div class="hidden sm:block total text-right text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal">Всего каналов {{count}}</div>
-                <div class="hidden gap-x-3 filter_buttons sm:flex">
+                <div class="hidden gap-3 filter_buttons sm:flex flex-wrap">
                     <SortButton v-for="title in SORT_DATA" :title="title"/>
                 </div>
                 <CatalogChannels/>

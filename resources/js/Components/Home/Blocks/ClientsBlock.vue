@@ -2,7 +2,7 @@
 
 </script>
 <template>
-    <div class="clients overflow-hidden">
+    <div class="clients overflow-hidden p-2">
         <div class="container mx-auto">
             <slot name="clients-header"></slot>
             <div class="pt-32">

@@ -372,7 +372,7 @@ const activate = (place) => {
         </div>
         <div class="grid catalog">
             <div class="w-full pr-0 filter sm:pr-10">
-                <div class="sm:block flex justify-between gap-x-12">
+                <div class="sm:block flex justify-between gap-x-12 flex-wrap">
                     <div @click.prevent="activate('right')" class="flex cursor-pointer items-center justify-start pb-[24px] gap-x-2.5 sm:justify-between sm:gap-x-0">
                         <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Фильтр</h1>
                         <img src="/images/setting.svg" alt="setting">

@@ -65,11 +65,11 @@ const openVideoPlayer = function(data) {
                         <img src="/images/Icon-close.svg" alt="">
                     </div>
                     <div class="flex flex-col items-start justify-center gap-y-6 sm:items-center mb-8">
-                        <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Посмотреть задание</h1>
+                        <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10 sm:text-lg text-base">Посмотреть задание</h1>
                     </div>
                 </div>
                 <order-card :order="order" :is-card="false"/>
-                <div class="mt-8 grid gap-x-4">
+                <div class="mt-8 grid lg:grid-cols-2 grid-cols-1 gap-x-4">
                     <div>
                         <div class="flex justify-between py-4">
                             <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Срок публикации: <span class="text-opacity-60 text-sm font-normal font-['Open Sans'] leading-tight">В ближайшее время</span></p>
@@ -136,10 +136,8 @@ main{
     padding: 65px;
     border-radius: 30px;
     background: rgba(7, 12, 41, 1);
-
     @media screen and (max-width: 640px){
         padding: 10px;
-        height: 70vh;
     }
     .overflowing{
         overflow-y: auto;
@@ -150,6 +148,9 @@ main{
     }
     .grid{
         grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+        @media screen and (max-width: 768px){
+            grid-template-columns: 1fr;
+        }
     }
 }
 .message-2{

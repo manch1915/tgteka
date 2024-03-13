@@ -70,6 +70,9 @@ body {
 .segment .n-tabs-tab__label{
     width: 100% !important;
     padding-right: 10px;
+    @media screen and (max-width: 640px) {
+        padding: 0;
+    }
 }
 @media screen and (max-width: 640px){
     .n-tabs-rail{

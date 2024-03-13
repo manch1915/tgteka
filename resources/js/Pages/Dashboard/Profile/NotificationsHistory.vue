@@ -19,7 +19,7 @@ notificationsStore.getNotifications()
     <AppLayout>
         <ProfileLayout>
             <div class="text-center sm:text-left">
-                <p class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">История уведомлений</p>
+                <p class="text-violet-100 sm:text-4xl text-xl font-bold font-['Open Sans'] leading-10">История уведомлений</p>
             </div>
             <Notifications/>
             <div class="flex justify-center">

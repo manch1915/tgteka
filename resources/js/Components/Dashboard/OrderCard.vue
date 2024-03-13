@@ -126,7 +126,7 @@ const openMessenger = () => {
                         </div>
                     </div>
                 </div>
-                <div class="p-4">
+                <div class="sm:p-4 p-1">
                   <div class="p-0.5 wrapper">
                       <div class="flex flex-col content-center justify-between px-2 py-4 text-start wrapper_container">
                           <div class="flex flex-col gap-y-1 py-1">
@@ -166,14 +166,14 @@ const openMessenger = () => {
             </div>
         </div>
 
-        <div class="flex justify-between items-center py-6 unwrap px-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+        <div class="flex justify-between items-center sm:py-6 py-3 unwrap sm:px-4 px-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
             <div class="flex flex-wrap gap-4">
-                <button v-if="canAccept" :disabled="isLoading"  @click.prevent="accept" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
-                <button v-if="isCard" @click.prevent="openMission" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Посмотреть задание <BaseIcon size="30" :path="mdiEyeOutline"/></button>
-                <button v-if="canDecline" @click.prevent="decline" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 px-6 transition py-3.5 hover:bg-gray-400">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
+                <button v-if="canAccept" :disabled="isLoading"  @click.prevent="accept" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 sm:px-6 px-2 transition sm:py-3.5 py-3 hover:bg-gray-400 sm:text-lg text-base">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
+                <button v-if="isCard" @click.prevent="openMission" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 sm:px-6 px-2 transition sm:py-3.5 py-3 hover:bg-gray-400 sm:text-lg text-base">Посмотреть задание <BaseIcon size="30" :path="mdiEyeOutline"/></button>
+                <button v-if="canDecline" @click.prevent="decline" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 sm:px-6 px-2 transition sm:py-3.5 py-3 hover:bg-gray-400 sm:text-lg text-base">Отклонить <BaseIcon size="30" :path="mdiClose"/></button>
             </div>
             <div>
-                <button @click.prevent="openMessenger" class="flex items-center gap-x-2 px-6 py-3.5">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>
+                <button @click.prevent="openMessenger" class="flex items-center gap-x-2 sm:px-6 px-2 sm:py-3.5 py-3 sm:text-lg text-base">Чат заявки <BaseIcon size="30" :path="mdiForumOutline"/></button>
             </div>
         </div>
     </div>

@@ -105,16 +105,16 @@ socket.onerror = function(error) {
         </div>
         <hr class="mt-40">
         <div class="mt-40 px-12 contacts">
-            <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Контакты</h1>
-            <div class="mt-20 grid grid-cols-2 items-center justify-start">
+            <h1 class="text-violet-100 lg:text-4xl text-xl  font-bold font-['Open Sans'] leading-10">Контакты</h1>
+            <div class="mt-20 grid sm:grid-cols-2 grid-cols-1 items-center justify-start">
                 <div class="flex flex-col gap-y-2">
-                    <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Позвонить:</h1>
+                    <h1 class="text-violet-100 lg:text-4xl text-xl font-bold font-['Open Sans'] leading-10">Позвонить:</h1>
                     <p class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">Отдел продаж</p>
                     <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">8 (800) 707-63-15</p>
                     <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">+7 (495) 818-62-50</p>
                 </div>
                 <div class="flex flex-col gap-y-2">
-                    <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">Написать:</h1>
+                    <h1 class="text-violet-100 lg:text-4xl text-xl font-bold font-['Open Sans'] leading-10">Написать:</h1>
                     <p class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">Бот</p>
                     <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">@telegamain_bot</p>
                     <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">@telegain</p>

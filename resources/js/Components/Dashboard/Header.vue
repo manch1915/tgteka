@@ -74,46 +74,46 @@ const openMessenger = () => {
                 </div>
                 <div class="logo">
                     <div class="hidden sm:inline-flex justify-start items-start gap-2.5 ">
-                        <img class="w-36" src="/images/dashboard/logo.svg" alt="logo">
+                        <img class="w-16 md:w-24 lg:w-36" src="/images/dashboard/logo.svg" alt="logo">
                     </div>
                 </div>
-                <nav class="flex gap-x-3">
+                <nav class="flex sm:gap-x-3 gap-x-0">
                     <div class="balance-elements px-6 py-1">
-                        <div class="balance flex items-center gap-x-3">
-                            <div class="sm:border-r-[1px] pr-2 flex">
-                                <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Общий баланс&nbsp;</p>
-                                <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"> <animated-number :number="parseFloat(store.userBalance)"/>&nbsp;₽</p>
+                        <div class="balance flex items-center sm:gap-x-3 gap-x-0">
+                            <div class="sm:border-r-[1px] pr-2 flex items-center">
+                                <p class="sm:block hidden text-violet-100 text-xs lg:text-lg font-bold font-['Open Sans'] leading-normal">Общий баланс&nbsp;</p>
+                                <p class="text-violet-100 sm:text-xl md:text-xs lg:text-lg text-lg font-bold font-['Open Sans'] leading-normal"> <animated-number :number="parseFloat(store.userBalance)"/>&nbsp;₽</p>
                             </div>
                             <Link :href="route('replenishment')" class="cursor-pointer replenish pr-2 flex items-center gap-x-1">
-                                <p class="sm:block hidden text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</p>
-                                <div><img src="/images/group.svg" alt=""></div>
+                                <p class="sm:block hidden text-violet-100 text-xs lg:text-lg font-bold font-['Open Sans'] leading-normal">Пополнить</p>
+                                <div class="w-4 sm:w-6 lg:w-6"><img class="w-6" src="/images/group.svg" alt=""></div>
                             </Link>
                         </div>
                     </div>
                     <div class="hidden sm:flex interactive items-center">
-                        <div @click.prevent="openMessenger" class="h-8 border-r-[1px] px-5 flex flex-col justify-center">
+                        <div @click.prevent="openMessenger" class="h-8 border-r-[1px] px-2 md:px-4 lg:px-5 flex flex-col justify-center">
                             <img src="/images/messenger.svg" alt="">
                         </div>
-                        <div class="border-r-[1px] px-5 h-8 flex flex-col justify-center">
+                        <div class="border-r-[1px] px-2 md:px-4 lg:px-5 h-8 flex flex-col justify-center">
                             <NBadge color="#6522d9" :value="unreadNotifications" :max="15">
                                 <Link :href="route('notifications')">
                                     <img src="/images/notification.svg" alt="">
                                 </Link>
                             </NBadge>
                         </div>
-                        <div v-if="cart.items.length > 0" class="flex flex-col justify-center h-8 border-r-[1px] px-5">
+                        <div v-if="cart.items.length > 0" class="flex flex-col justify-center h-8 border-r-[1px] px-2 md:px-4 lg:px-5">
                             <Link :href="route('cart')" class="flex flex-col items-center">
                                 <n-badge type="info" :value="cart.items.length">
                                     <BaseIcon class="text-purple-400" size="30" :path="mdiCart"/>
                                 </n-badge>
                             </Link>
                         </div>
-                        <div class="px-5 h-8 border-r-[1px] flex flex-col justify-center">
+                        <div class="px-2 md:px-4 lg:px-5 h-8 border-r-[1px] flex flex-col justify-center">
                           <Link :href="route('support')" class="flex flex-col items-center">
                               <BaseIcon class="text-purple-400" size="30" :path="mdiFaceAgent"/>
                           </Link>
                         </div>
-                        <div class="px-5 h-8 flex flex-col justify-center">
+                        <div class="px-2 md:px-4 lg:px-5 h-8 flex flex-col justify-center">
                           <Link :href="route('personal-data')">
                             <img src="/images/person.svg" alt="">
                           </Link>
@@ -163,11 +163,11 @@ const openMessenger = () => {
         <div class="container mx-auto">
         <div class="py-10">
             <ul class="flex gap-x-5 justify-center">
-                <Link :href="route('patterns')"><li :class="{ 'active': isActiveRoute('/patterns'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои шаблоны</li></Link>
-                <Link :href="route('placements')"><li :class="{ 'active': isActiveRoute('/placements'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои размещения</li></Link>
-                <Link :href="route('catalog.channels.index')"><li :class="{ 'active': isActiveRoute('/catalog/channels'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Каталог каналов</li></Link>
-                <Link :href="route('channels')"><li :class="{ 'active': isActiveRoute('/channels'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои каналы</li></Link>
-                <Link :href="route('order.index')"><li :class="{ 'active': isActiveRoute('/orders'), 'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Заявки на размещение</li></Link>
+                <Link :href="route('patterns')"><li :class="{ 'active': isActiveRoute('/patterns'), 'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои шаблоны</li></Link>
+                <Link :href="route('placements')"><li :class="{ 'active': isActiveRoute('/placements'), 'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои размещения</li></Link>
+                <Link :href="route('catalog.channels.index')"><li :class="{ 'active': isActiveRoute('/catalog/channels'), 'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Каталог каналов</li></Link>
+                <Link :href="route('channels')"><li :class="{ 'active': isActiveRoute('/channels'), 'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Мои каналы</li></Link>
+                <Link :href="route('order.index')"><li :class="{ 'active': isActiveRoute('/orders'), 'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans leading-normal cursor-pointer': true }">Заявки на размещение</li></Link>
             </ul>
         </div>
         </div>
@@ -182,6 +182,10 @@ header {
 
     }
     .balance-elements {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
         border-radius: 100px;
         border: 1px solid rgba(255, 255, 255, 0.10);
         background: #171961;

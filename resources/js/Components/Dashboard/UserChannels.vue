@@ -55,7 +55,7 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div v-if="channels.data && channels.data.length" class="w-full py-16">
+    <div v-if="channels.data && channels.data.length" class="w-full sm:py-16 py-8">
         <search-bar @search="handleSearch"/>
     </div>
     <div v-if="channels.data && channels.data.length" class="flex gap-2 flex-wrap">

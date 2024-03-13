@@ -230,31 +230,3 @@ $font-OpenSans: Open Sans;
     backdrop-filter: blur(13px);
 }
 </style>
-<style>
-$border-color: rgb(23 37 84);
-
-.bg-blue-950{
-    background: #171961;
-}
-
-.border-color {
-    border-color: $border-color;
-}
-
-.wrapper{
-    position: relative;
-    &::before {
-        content: "";
-        position: absolute;
-        left: 24px;
-        right: 0;
-        top: 0;
-        bottom: -25px;
-        border-radius: 0 40px 40px 40px;
-        background: $gradient-background;
-        backdrop-filter: blur(21px);
-        transform: rotate(10deg);
-        z-index: -1;
-    }
-}
-</style>

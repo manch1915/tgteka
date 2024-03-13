@@ -22,10 +22,10 @@ let isSmallScreen = window.innerWidth <= 768;
                 </div>
             </div>
             <div class="content">
-                <div class="conversations m-2 mt-0 mr-0 py-2" :class="{ 'hidden': !conversations.showChat && isSmallScreen }">
+                <div class="conversations sm:m-2 mt-0 mr-0 sm:py-2" :class="{ 'hidden': !conversations.showChat && isSmallScreen }">
                     <slot name="conversations"/>
                 </div>
-                <div class="message m-2 mt-0 ml-0 rounded-br-2xl" :class="{ 'hidden': conversations.showChat && isSmallScreen }">
+                <div class="message sm:m-2 mt-0 ml-0 rounded-br-2xl" :class="{ 'hidden': conversations.showChat && isSmallScreen }">
                     <slot name="conversation_messages"/>
                 </div>
             </div>
@@ -39,7 +39,9 @@ let isSmallScreen = window.innerWidth <= 768;
     border: 1px solid #6522D9;
     background: #070C29;
     border-radius: 0 20px 20px 20px;
-
+    @media screen and (max-width: 640px){
+        height: 82vh;
+    }
 }
 .top{
     padding: 20px 65px;
@@ -62,11 +64,14 @@ let isSmallScreen = window.innerWidth <= 768;
     @media screen and (max-width: 768px){
         flex-basis: 100%;
     }
-
+    border-radius: 0 20px 0 20px;
+    @media screen and (max-width: 768px){
+        border-radius: 0 20px 20px 20px;
+    }
 }
 .conversations{
     background: #0D143A;
-    border-radius: 0 20px 0 20px;
+
 }
 .messenger_close{
     transition: all .5s;

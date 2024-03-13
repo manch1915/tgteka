@@ -33,6 +33,7 @@ onBeforeMount(() => {
                     'text-left',
                     'transition',
                 ]"
+                    class="lg:text-lg text-sm"
                 >
                     {{ title }}
                 </button>

@@ -45,8 +45,8 @@ watchEffect(() => {
 </script>
 
 <template>
-    <div class="my-12 flex flex-wrap items-center content-center sm:justify-between justify-center">
-        <div class="flex gap-x-4">
+    <div class="sm:my-12 my-6 flex flex-wrap items-center content-center sm:justify-between justify-center">
+        <div class="flex gap-x-4 flex-wrap justify-center">
             <div class="w-44">
                 <n-select :theme-overrides="selectThemeOverrides" v-model:value="orderVal" :options="order" class="my-4"/>
             </div>

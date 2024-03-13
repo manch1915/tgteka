@@ -184,9 +184,12 @@ const wrap = ref(false)
             padding: 20px;
             &:not(:last-child) {
                 border-right: 1px solid #6522D9;
+                @media screen and (max-width: 640px){
+                    border: none;
+                }
             }
         }
-        grid-template-columns: 1fr 3fr 7fr;
+        grid-template-columns: 2fr 3fr 6fr;
         @media screen and (max-width: 640px){
             grid-template-columns: 1fr;
         }

@@ -1,71 +1,80 @@
 <template>
-  <div class="interestChannels p-2">
-    <div class="container mx-auto ">
-      <div class="interestChannels__header sm:mb-36 sm:mt-0 mb-12">
-        <h1 class="text-center text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">
-          Интересные каналы из нашего каталога
-        </h1>
-      </div>
-      <div class="interestChannels__categories">
-        <div class="lg:flex justify-between hidden gap-2">
-          <div class="flex flex-col gap-6 self-start">
-            <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">
-              Все каналы в нашем каталоге отсортированы <br> по категориям, вот некоторые из них
-            </div>
-            <div>
-              <div class="interestChannels__categories-button">
-                <div class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                  Посмотреть остальные
+    <div class="interestChannels_top"></div>
+    <div class="interestChannels interestChannels_mid relative">
+        <div class="absolute top-0 left-0 w-full">
+            <div class="container mx-auto ">
+                <div class="interestChannels__header sm:mb-36 sm:mt-0 mb-12">
+                    <h1 class="text-center text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">
+                        Интересные каналы из нашего каталога
+                    </h1>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div class="grid h-auto grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 justify-center sm:gap-4 gap-1">
-            <InterestChannelsCard/>
-            <InterestChannelsCard/>
-            <InterestChannelsCard/>
-            <InterestChannelsCard/>
-          </div>
-        </div>
-        <div :class="windowWidth <= 1024 ? 'channels w-full grid grid-cols-1 justify-between gap-9' : 'channels grid grid-cols-3 justify-between gap-9'">
-          <slot name="cards">
+                <div class="interestChannels__categories">
+                    <div class="lg:flex justify-between hidden gap-2">
+                        <div class="flex flex-col gap-6 self-start">
+                            <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">
+                                Все каналы в нашем каталоге отсортированы <br> по категориям, вот некоторые из них
+                            </div>
+                            <div>
+                                <div class="interestChannels__categories-button">
+                                    <div class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                                        Посмотреть остальные
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div
+                            class="grid h-auto grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 justify-center sm:gap-4 gap-1">
+                            <InterestChannelsCard/>
+                            <InterestChannelsCard/>
+                            <InterestChannelsCard/>
+                            <InterestChannelsCard/>
+                        </div>
+                    </div>
+                    <div
+                        :class="windowWidth <= 1024 ? 'channels w-full grid grid-cols-1 justify-between gap-9' : 'channels grid grid-cols-3 justify-between gap-9'">
+                        <slot name="cards">
 
-          </slot>
-        </div>
-        <div class="text-center py-20 lg:block hidden">
-            <div class="gotocatalog transition-all">
-                <button class="transition-all text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                    Перейти в полный каталог
-                </button>
-            </div>
+                        </slot>
+                    </div>
+                    <div class="text-center py-20 lg:block hidden">
+                        <div class="gotocatalog transition-all">
+                            <button
+                                class="transition-all text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                                Перейти в полный каталог
+                            </button>
+                        </div>
 
+                    </div>
+                    <div class="block justify-between lg:hidden">
+                        <div class="flex flex-col gap-6">
+                            <div
+                                class="text-center text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
+                                Все каналы в нашем каталоге отсортированы по категориям, вот<br> некоторые из них
+                            </div>
+                        </div>
+                        <div class="flex justify-between gap-4">
+                            <slider :interactive="false" slides="4" :freemode="true">
+                                <template v-slot:slider>
+                                    <swiper-slide v-for="n in 4" :key="n">
+                                        <div class="flex justify-center py-14">
+                                            <InterestChannelsCard/>
+                                        </div>
+                                    </swiper-slide>
+                                </template>
+                            </slider>
+                        </div>
+                        <div class="py-8">
+                            <button
+                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal interestChannels__categories-button">
+                                Посмотреть остальные
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-          <div class="block justify-between lg:hidden">
-              <div class="flex flex-col gap-6">
-                  <div class="text-center text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
-                      Все каналы в нашем каталоге отсортированы по категориям, вот<br> некоторые из них
-                  </div>
-              </div>
-              <div class="flex justify-between gap-4">
-                  <slider :interactive="false" slides="4" :freemode="true">
-                      <template v-slot:slider>
-                          <swiper-slide v-for="n in 4" :key="n">
-                              <div class="flex justify-center py-14">
-                                  <InterestChannelsCard/>
-                              </div>
-                          </swiper-slide>
-                      </template>
-                  </slider>
-              </div>
-              <div class="py-8">
-                  <button class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal interestChannels__categories-button">
-                          Посмотреть остальные
-                  </button>
-              </div>
-          </div>
-      </div>
     </div>
-  </div>
+    <div class="interestChannels_bottom"></div>
 </template>
 <script setup>
 import InterestChannelsCard from "@/Components/Home/InterestChannelsCard.vue";
@@ -75,16 +84,106 @@ import {SwiperSlide} from "swiper/vue";
 const windowWidth = ref(window.innerWidth)
 </script>
 <style scoped lang="scss">
+// Define Sass variables for breakpoints and corresponding heights
+$breakpoints: (
+    '1920': 20,
+    '1600': 25,
+    '1440': 28,
+    '1366': 30,
+    '1280': 32,
+    '1024': 35,
+    '960': 37,
+    '800': 40,
+    '768': 42,
+    '600': 50,
+    '480': 60,
+    '425': 65,
+    '375': 70,
+    '360': 75,
+    '320': 80
+);
+$breakpoints_bottom: (
+    '1670': 70,
+    '1570': 80,
+    '1480': 85,
+    '1440': 90,
+    '1366': 95,
+    '1280': 110,
+    '1160': 120,
+    '1024': 120,
+    '960': 120,
+    '840': 130,
+    '780': 140,
+    '720': 150,
+    '670': 160,
+    '540': 170,
+    '510': 180,
+    '470': 200,
+    '450': 220,
+    '410': 240,
+    '380': 250
+);
 
-.interestChannels {
+.interestChannels_top {
     background: url("/images/interestChannelsBackground.svg") no-repeat center;
-    background-position-y: 40%;
     background-size: cover;
-    padding-top: 400px;
-    @media screen and (max-width: 640px) {
-        background-position-y: -120px;
+    background-position-y: calc(200px - 50vw);
+    width: 100%;
+    height: calc(#{map-get($breakpoints, '1440')}vw); // Initial height
 
+    // Calculate height based on viewport width
+    @each $bp, $height in $breakpoints {
+        @media (max-width: #{$bp}px) {
+            height: calc(#{$height}vw);
+        }
     }
+}
+
+.interestChannels_mid {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
+    position: relative;
+    top: 0; /* Adjust this value to position the overlay */
+    left: 0;
+    width: 100%;
+    height: calc(100% - 200px); /* Adjust this value to cover the gap between top and bottom */
+}
+
+.interestChannels_mid::before,
+.interestChannels_mid::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px; /* Adjust this value to control the size of the glow */
+    background: linear-gradient(45deg, #2f2ca4, #202075);
+    filter: blur(13px); /* Apply a blur effect to enhance the glow */
+}
+
+.interestChannels_mid::before {
+    top: -10px;
+}
+
+.interestChannels_mid::after {
+    bottom: -10px;
+}
+.interestChannels_bottom{
+    background: url("/images/interestChannelsBackground.svg") no-repeat center;
+    background-size: cover;
+    background-position-y: calc(-137px - 50vw);
+    width: 100%;
+    height: calc(#{map-get($breakpoints_bottom, '1440')}vw); // Initial height
+
+    // Calculate height based on viewport width
+    @each $bp, $height in $breakpoints_bottom {
+        @media (max-width: #{$bp}px) {
+            height: calc(#{$height}vw);
+        }
+    }
+
+}
+.interestChannels {
+
     .interestChannels__categories-button {
         display: block;
         padding: 10px 20px;

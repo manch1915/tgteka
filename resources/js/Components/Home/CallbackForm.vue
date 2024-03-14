@@ -99,7 +99,7 @@ const orderCallback = () => {
         }
     }
     &:after{
-        content: '';
+
         position: absolute;
         right: -30%;
         bottom: -7%;

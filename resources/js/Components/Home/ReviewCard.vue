@@ -1,7 +1,3 @@
-<script setup>
-
-</script>
-
 <template>
   <div class="block">
     <div class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Текст

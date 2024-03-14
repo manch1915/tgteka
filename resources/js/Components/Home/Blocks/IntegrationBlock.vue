@@ -32,6 +32,7 @@
     width: 100%;
     height: 500%;
     background: url("/images/planeInter.svg") no-repeat center;
+    background-size: 76vw;
   }
 }
 

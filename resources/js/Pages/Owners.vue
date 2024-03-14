@@ -63,7 +63,7 @@ const windowWidth = ref(window.innerWidth)
                 />
             </template>
         </HowItWorksBlock>
-        <div class="py-44">
+        <div class="py-12 md:py-44">
             <IntegrationBackground/>
         </div>
         <ClientsBlock>
@@ -74,9 +74,11 @@ const windowWidth = ref(window.innerWidth)
                 <clients-slider/>
             </template>
             <template v-slot:clients-footer>
-                <faq/>
             </template>
+
         </ClientsBlock>
+        <faq/>
+
         <TechnicalIssues/>
     </MainLayout>
 </template>

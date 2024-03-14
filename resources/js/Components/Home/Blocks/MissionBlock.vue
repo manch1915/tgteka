@@ -19,7 +19,7 @@ const windowWidth = ref(window.innerWidth)
                     </span>
                 </div>
 
-                <div :class="windowWidth <= 640 ? 'cards w-full' : 'cards flex gap-6 pt-24' ">
+                <div :class="windowWidth <= 640 ? 'cards w-full' : 'cards flex gap-6 pt-24 flex-wrap justify-center' ">
                     <slot name="cards">
 
                     </slot>

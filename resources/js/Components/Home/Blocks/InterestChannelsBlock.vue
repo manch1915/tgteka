@@ -9,7 +9,7 @@
                     </h1>
                 </div>
                 <div class="interestChannels__categories">
-                    <div class="lg:flex justify-between hidden gap-2">
+                    <div class="lg:flex px-2 justify-between hidden gap-2">
                         <div class="flex flex-col gap-6 self-start">
                             <div class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">
                                 Все каналы в нашем каталоге отсортированы <br> по категориям, вот некоторые из них

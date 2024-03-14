@@ -7,7 +7,7 @@
         <div class="absolute top-0 left-0 w-full">
         <div class="container mx-auto">
             <slot name="clients-header"></slot>
-            <div class="pt-32">
+            <div class="pt-32 px-2">
                 <slot name="slider">
 
                 </slot>

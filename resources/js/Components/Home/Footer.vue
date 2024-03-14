@@ -5,7 +5,8 @@ const toUp = () => {
 </script>
 
 <template>
-    <footer class="pb-4 p-2">
+    <footer >
+        <div class="pb-4 p-2">
         <div class="container mx-auto mt-96">
             <div class="info flex flex-wrap justify-between py-12">
                 <div class="flex flex-col justify-between gap-12">
@@ -63,102 +64,105 @@ const toUp = () => {
                 </div>
             </div>
         </div>
-        <div class="container mx-auto">
+        </div>
+        <div class="w-full">
             <img src="/images/linesanime.svg" alt="lines">
         </div>
-        <div class="container mx-auto pt-12">
-            <div class="flex justify-between ">
-                <div class="flex flex-wrap gap-12">
-                    <div class="list">
-                        <h1 class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Продукты</h1>
-                        <ul>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Каталог Telegram-каналов
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Каталог Telegram-ботов
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Каталог горящих предложений
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Аналитика Telegram-каналов
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Готовые предложения
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
-                                горящих предложений
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
-                                нотификаций
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Официальная платформа
-                            </li>
-                        </ul>
+        <div class="pb-4 p-2">
+            <div class="container mx-auto pt-12">
+                <div class="flex justify-between ">
+                    <div class="flex flex-wrap gap-12">
+                        <div class="list">
+                            <h1 class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Продукты</h1>
+                            <ul>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Каталог Telegram-каналов
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Каталог Telegram-ботов
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Каталог горящих предложений
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Аналитика Telegram-каналов
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Готовые предложения
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
+                                    горящих предложений
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
+                                    нотификаций
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Официальная платформа
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="list">
+                            <h1 class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Сервисы</h1>
+                            <ul>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Блог
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Наш
+                                    Telegram-канал
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Партнерская программа
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Владельцам каналов
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Отзывы о Название компании
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
+                                    горящих предложений
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
+                                    нотификаций
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Официальная платформа
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="list">
+                            <h1 class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Помощь</h1>
+                            <ul>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    FAQ
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
+                                    поддержки
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
+                                    Напишите нам
+                                </li>
+                                <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
+                                    нотификаций
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="list">
-                        <h1 class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Сервисы</h1>
-                        <ul>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Блог
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Наш
-                                Telegram-канал
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Партнерская программа
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Владельцам каналов
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Отзывы о Название компании
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
-                                горящих предложений
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
-                                нотификаций
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Официальная платформа
-                            </li>
-                        </ul>
+                    <div @click.prevent="toUp" class="up cursor-pointer sm:flex hidden flex-col items-center gap-1">
+                        <img class="transition w-20" src="/images/arrow-circle-down.svg" alt="arrow">
+                        <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Наверх</div>
                     </div>
-                    <div class="list">
-                        <h1 class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose">Помощь</h1>
-                        <ul>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                FAQ
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
-                                поддержки
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">
-                                Напишите нам
-                            </li>
-                            <li class="py-1 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Бот
-                                нотификаций
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div @click.prevent="toUp" class="up cursor-pointer sm:flex hidden flex-col items-center gap-1">
-                    <img class="transition w-20" src="/images/arrow-circle-down.svg" alt="arrow">
-                    <div class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Наверх</div>
                 </div>
             </div>
-        </div>
-        <img class="py-6" src="/images/vector-line.svg" alt="lines">
-        <div class="sm:block hidden container mx-auto">
-            <div class="banks flex justify-end">
-                <div class="flex flex-wrap gap-2">
-                <img src="/images/yumoney.svg" alt="">
-                <img src="/images/visa.svg" alt="">
-                <img src="/images/master-cart.svg" alt="">
-                <img src="/images/mir.svg" alt="">
+            <img class="py-6" src="/images/vector-line.svg" alt="lines">
+            <div class="sm:block hidden container mx-auto">
+                <div class="banks flex justify-end">
+                    <div class="flex flex-wrap gap-2">
+                    <img src="/images/yumoney.svg" alt="">
+                    <img src="/images/visa.svg" alt="">
+                    <img src="/images/master-cart.svg" alt="">
+                    <img src="/images/mir.svg" alt="">
+                    </div>
                 </div>
             </div>
         </div>

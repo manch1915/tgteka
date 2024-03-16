@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div class="body p-6">
+    <div class="body p-6 pb-10 ">
         <div class="body__head flex justify-start gap-6 items-center">
             <div class="body__profile pl-3">
                 <img src="https://via.placeholder.com/108x108" alt="" class="rounded-full">
@@ -17,7 +17,7 @@
                         995 подписчиков
                     </div>
                     <div
-                        class="mt-4 px-11 py-1.5 rounded-3xl border border-violet-100 justify-start items-start gap-2.5 inline-flex">
+                        class="mt-4 sm:px-11 px-2 py-1.5 rounded-3xl border border-violet-100 justify-start items-start gap-2.5 inline-flex">
                         <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">1/24 — 12 500
                             руб.
                         </div>
@@ -63,7 +63,7 @@
     backdrop-filter: blur(21px);
     box-sizing: border-box;
     overflow: hidden;
-    @media screen and (max-width: 640px) {
+    @media screen and (max-width: 1024px) {
         margin-top: 20px;
     }
 }

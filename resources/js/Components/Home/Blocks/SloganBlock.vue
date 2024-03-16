@@ -19,10 +19,10 @@ const props = defineProps({
     <div class="container mx-auto main__block  max-w-4xl">
       <div class="flex flex-col items-center justify-center gap-10">
         <div>
-          <div class="drop-shadow-md sm:text-5xl text-3xl sm:p-0 px-2 font-bold text-paleblue text-center">{{props.header}}</div>
+          <div class="drop-shadow-md sm:text-5xl text-xl sm:p-0 px-2 font-bold text-paleblue text-center">{{props.header}}</div>
         </div>
         <p class="text-lg text-paleblue text-center">{{props.paragraph}}</p>
-        <button @click.prevent="openRegister()" class="main_button text-lg font-bold text-paleblue text-center">Купить размещение</button>
+        <button @click.prevent="openRegister()" class="main_button sm:text-lg text-base font-bold text-paleblue text-center">Купить размещение</button>
       </div>
     </div>
   </main>

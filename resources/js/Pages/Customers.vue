@@ -16,7 +16,7 @@ import ClientsHeader from "@/Components/Home/ClientsHeader.vue";
 import Feedback from "@/Components/Home/Feedback.vue";
 import Slider from "@/Components/Home/Slider.vue";
 import { SwiperSlide} from 'swiper/vue';
-import {ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {Head} from "@inertiajs/vue3";
 import {Title} from "chart.js";
 
@@ -75,7 +75,19 @@ const compareItems = [
     }
 ];
 const windowWidth = ref(window.innerWidth)
+const updateWidth = () => {
+    windowWidth.value = window.innerWidth;
+};
 
+onMounted(() => {
+    // Add the updateWidth function as a window resize listener
+    window.addEventListener('resize', updateWidth);
+});
+
+onUnmounted(() => {
+    // Remove listener when component is unmounted
+    window.removeEventListener('resize', updateWidth);
+});
 </script>
 
 <template>
@@ -137,10 +149,10 @@ const windowWidth = ref(window.innerWidth)
                 </template>
             </template>
         </InterestChannelsBlock>
-        <IntegrationBackground/>
+        <IntegrationBackground class="margin-top"/>
         <IntegrationBlock>
             <template v-slot:comparePairs>
-                <ComparisonCard v-for=" (item, i) in compareItems" :item="item" :key="i"/>
+                <ComparisonCard :background="i" v-for=" (item, i) in compareItems" :item="item" :key="i"/>
             </template>
         </IntegrationBlock>
         <ClientsBlock>

@@ -1,6 +1,6 @@
 <script setup>
 import { Link, router, usePage } from "@inertiajs/vue3";
-import { onBeforeMount, ref, watch } from "vue";
+import {onBeforeMount, onMounted, onUnmounted, ref, watch} from "vue";
 import { useHomeButtons } from "@/stores/homeButtons.js";
 import { openLogin, openRegister } from "@/utilities/authModals.js";
 
@@ -14,8 +14,20 @@ const toggleBurger = () => {
         document.body.style.overflow = '';
     }
 }
-const width = window.innerWidth
+const width = ref(window.innerWidth)
+const updateWidth = () => {
+    width.value = window.innerWidth;
+};
 
+onMounted(() => {
+    // Add the updateWidth function as a window resize listener
+    window.addEventListener('resize', updateWidth);
+});
+
+onUnmounted(() => {
+    // Remove listener when component is unmounted
+    window.removeEventListener('resize', updateWidth);
+});
 const homeButtons = useHomeButtons();
 const page = usePage();
 const profileButtonTitle = ref(homeButtons.activeButton);
@@ -29,6 +41,11 @@ watch(
 onBeforeMount(() => {
     homeButtons.setActiveButtonByUrl(page.url);
 });
+
+const clearBodyOverflow = () => {
+    document.body.style.overflow = '';
+};
+
 </script>
 
 <template>
@@ -42,7 +59,7 @@ onBeforeMount(() => {
                     <Link :href="route('customers')">
                         <li class="text-paleblue font-bold py-1 px-4 cursor-pointer" :class="profileButtonTitle === 'Заказчикам' ? 'background' : ''">Заказчикам</li>
                     </Link>
-                    <Link :href="route('owners')">
+                    <Link :on-start="clearBodyOverflow" :href="route('owners')">
                         <li class="text-paleblue font-bold py-1 px-4 cursor-pointer whitespace-nowrap" :class="profileButtonTitle === 'Владельцу канала' ? 'background' : ''">Владельцу канала</li>
                     </Link>
 <!--                    <li class="text-paleblue select-none font-bold py-1 px-4 cursor-pointer flex gap-1">Сервисы <i class="arrow-circle-down"></i></li>-->

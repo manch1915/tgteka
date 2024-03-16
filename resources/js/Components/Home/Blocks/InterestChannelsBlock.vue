@@ -2,8 +2,8 @@
     <div class="interestChannels_top"></div>
     <div class="interestChannels interestChannels_mid relative">
         <div class="absolute top-0 left-0 w-full">
-            <div class="container mx-auto ">
-                <div class="interestChannels__header sm:mb-36 sm:mt-0 mb-12">
+            <div class="container mx-auto sm:px-0 px-3">
+                <div class="interestChannels__header sm:mt-0 lg:mb-24 mb-2">
                     <h1 class="text-center text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">
                         Интересные каналы из нашего каталога
                     </h1>
@@ -22,12 +22,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div
-                            class="grid h-auto grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 justify-center sm:gap-4 gap-1">
-                            <InterestChannelsCard/>
-                            <InterestChannelsCard/>
-                            <InterestChannelsCard/>
-                            <InterestChannelsCard/>
+                        <div class="grid h-auto grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 justify-center sm:gap-4 gap-1">
+                            <InterestChannelsCard p="Криптовалюта и Блокчейн"/>
+                            <InterestChannelsCard p="Кулинария"/>
+                            <InterestChannelsCard p="Спорт"/>
+                            <InterestChannelsCard p="Путешествия"/>
                         </div>
                     </div>
                     <div
@@ -53,11 +52,11 @@
                             </div>
                         </div>
                         <div class="flex justify-between gap-4">
-                            <slider :interactive="false" slides="4" :freemode="true">
+                            <slider :interactive="false" slides="4" :freemode="true" :slidesPerView="2" >
                                 <template v-slot:slider>
                                     <swiper-slide v-for="n in 4" :key="n">
                                         <div class="flex justify-center py-14">
-                                            <InterestChannelsCard/>
+                                            <InterestChannelsCard p="Криптовалюта и Блокчейн"/>
                                         </div>
                                     </swiper-slide>
                                 </template>
@@ -78,10 +77,25 @@
 </template>
 <script setup>
 import InterestChannelsCard from "@/Components/Home/InterestChannelsCard.vue";
-import {ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import Slider from "@/Components/Home/Slider.vue";
 import {SwiperSlide} from "swiper/vue";
+
 const windowWidth = ref(window.innerWidth)
+
+const updateWidth = () => {
+    windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+    // Add the updateWidth function as a window resize listener
+    window.addEventListener('resize', updateWidth);
+});
+
+onUnmounted(() => {
+    // Remove listener when component is unmounted
+    window.removeEventListener('resize', updateWidth);
+});
 </script>
 <style scoped lang="scss">
 // Define Sass variables for breakpoints and corresponding heights
@@ -212,7 +226,7 @@ $breakpoints_bottom: (
             width: 100%;
             height: 500%;
             background: url("/images/plane.svg") no-repeat center;
-
+            background-size: 55vw;
             @media screen and (max-width: 640px) {
                 display: none;
             }

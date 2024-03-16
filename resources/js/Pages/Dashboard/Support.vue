@@ -106,7 +106,7 @@ socket.onerror = function(error) {
         <hr class="mt-40">
         <div class="mt-40 px-12 contacts">
             <h1 class="text-violet-100 lg:text-4xl text-xl  font-bold font-['Open Sans'] leading-10">Контакты</h1>
-            <div class="mt-20 grid sm:grid-cols-2 grid-cols-1 items-center justify-start">
+            <div class="mt-20 grid grid-cols-1 items-center justify-start sm:grid-cols-2">
                 <div class="flex flex-col gap-y-2">
                     <h1 class="text-violet-100 lg:text-4xl text-xl font-bold font-['Open Sans'] leading-10">Позвонить:</h1>
                     <p class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed">Отдел продаж</p>
@@ -125,6 +125,7 @@ socket.onerror = function(error) {
 </template>
 
 <style scoped lang="scss">
+
 .support_grid {
     grid-template-columns: 4fr 6fr;
     @media screen and (max-width: 640px){

@@ -1,20 +1,24 @@
 <script setup>
-
+const props = defineProps({
+    p: String
+})
 </script>
 
 <template>
-    <div class="category rounded md:rounded-xl lg:rounded-2xl xl:rounded-3xl self-start">
-        <div class="text-center px-3 py-3 sm:px-4 sm:py-4 md:px-5 md:py-5 lg:px-6 lg:py-6 xl:px-10 xl:py-11 text-violet-100 lg:text-base xl:text-lg font-bold font-['Open Sans'] leading-normal">Криптовалюта <br/>и Блокчейн</div>
+    <div class="category rounded md:rounded-xl lg:rounded-2xl xl:rounded-3xl self-start flex-col">
+        <div class="text-center px-3 py-3 sm:px-4 sm:py-4 md:px-5 md:py-5 lg:px-6 lg:py-6 xl:px-10 xl:py-11 text-violet-100 lg:text-base xl:text-lg font-bold font-['Open Sans'] leading-normal">{{p}}</div>
     </div>
 </template>
 
 <style lang="scss" scoped>
 .category {
     position: relative;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     background: linear-gradient(45deg, #24247A, #535393);
     backdrop-filter: blur(21px);
-
+    height: 100px;
     &:before {
         content: "";
         position: absolute;

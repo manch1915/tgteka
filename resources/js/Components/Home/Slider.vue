@@ -1,19 +1,23 @@
 <script setup>
 import {Swiper, SwiperSlide} from 'swiper/vue';
-import {Autoplay, Navigation, Pagination} from 'swiper/modules';
+import {Autoplay, FreeMode, Navigation, Pagination} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
-import {ref} from "vue";
+import {computed, ref} from "vue";
 
 const props = defineProps({
     interactive: Boolean,
     slides: Number | String,
     freemode: {
         default: false
+    },
+    slidesPerView: {
+        type: [Number, String],
+        default: 1
     }
 })
-
+const spaceBetween = computed(() => props.slidesPerView > 1 ? 60 : 0);
 let activeIndex = ref(1);
 const onSlideChange = (swiper) => {
     activeIndex.value = swiper.realIndex + 1;
@@ -37,7 +41,7 @@ const goToSlide = (index) => {
     }
 };
 
-const modules = [Navigation, Pagination, Autoplay]
+const modules = [Navigation, Pagination, Autoplay, FreeMode]
 </script>
 
 <template>
@@ -54,7 +58,7 @@ const modules = [Navigation, Pagination, Autoplay]
             </div>
         </div>
         <div class="w-full">
-            <swiper :autoplay="{delay: 2000}" :free-mode="freemode" :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right'}" :pagination= "pagination"  @slide-change="onSlideChange"  :modules="modules" loop slides-per-view="1">
+            <swiper :autoplay="{delay: 2000}" :free-mode="freemode" :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right'}" :pagination= "pagination"  @slide-change="onSlideChange"  :modules="modules" loop :slides-per-view="slidesPerView" :space-between="spaceBetween">
                 <slot name="slider"/>
             </swiper>
         </div>

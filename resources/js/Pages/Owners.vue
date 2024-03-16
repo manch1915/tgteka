@@ -13,7 +13,7 @@ import TechnicalIssues from "@/Components/Home/Blocks/TechnicalIssues.vue";
 import SloganBlock from "@/Components/Home/Blocks/SloganBlock.vue";
 import Slider from "@/Components/Home/Slider.vue";
 import {SwiperSlide} from "swiper/vue";
-import {ref} from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
 import {Head} from "@inertiajs/vue3";
 import {Title} from "chart.js";
 
@@ -21,6 +21,20 @@ const headers = ["Добавляете канал в каталог", "Полу�
 const texts = ["В среднем модерация занимает 24 часа ", "Оповещения о новых размещениях приходят на E-mail и в Telegram-бота",
     "Вы сможете выводить средства от 1 000 рублей три раза в неделю"];
 const windowWidth = ref(window.innerWidth)
+
+const updateWidth = () => {
+    windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+    // Add the updateWidth function as a window resize listener
+    window.addEventListener('resize', updateWidth);
+});
+
+onUnmounted(() => {
+    // Remove listener when component is unmounted
+    window.removeEventListener('resize', updateWidth);
+});
 </script>
 
 <template>
@@ -63,7 +77,7 @@ const windowWidth = ref(window.innerWidth)
                 />
             </template>
         </HowItWorksBlock>
-        <div class="py-12 md:py-44">
+        <div class="py-12 md:pt-24">
             <IntegrationBackground/>
         </div>
         <ClientsBlock>

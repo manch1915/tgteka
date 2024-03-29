@@ -1,20 +1,21 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue';
-import TextInput from '@/Components/TextInput.vue';
-import TextArea from '@/Components/TextArea.vue';
-import {NCheckbox, NSelect, NSlider, NSwitch, useLoadingBar} from 'naive-ui';
+import AppLayout from "@/Layouts/AppLayout.vue";
+import TextInput from "@/Components/TextInput.vue";
+import TextArea from "@/Components/TextArea.vue";
+import { NCheckbox, NSelect, NSlider, NSwitch, useLoadingBar } from "naive-ui";
 import {
     switchThemeOverrides,
     checkboxThemeOverrides,
     selectThemeOverrides,
-    checkboxToRadioThemeOverrides, sliderGenderThemeOverrides,
-} from '@/themeOverrides.js';
-import {computed, nextTick, reactive, ref, toRefs, watch} from 'vue';
-import {router, Link, Head} from "@inertiajs/vue3";
-import {useMainStore} from "@/stores/main.js";
+    checkboxToRadioThemeOverrides,
+    sliderGenderThemeOverrides,
+} from "@/themeOverrides.js";
+import { computed, nextTick, reactive, ref, toRefs, watch } from "vue";
+import { router, Link, Head } from "@inertiajs/vue3";
+import { useMainStore } from "@/stores/main.js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import {mdiFaceMan, mdiFaceWoman} from "@mdi/js";
-import {Title} from "chart.js";
+import { mdiFaceMan, mdiFaceWoman } from "@mdi/js";
+import { Title } from "chart.js";
 
 const discount_check = ref(false);
 const format_one_checkbox = ref(true);
@@ -23,12 +24,12 @@ const format_three_checkbox = ref(false);
 const no_deletion_checkbox = ref(false);
 
 const form = reactive({
-    channel_name: '',
-    description: '',
+    channel_name: "",
+    description: "",
     topic_id: null,
     // type: 'channel',
-    url: '',
-    subscribers_source: '',
+    url: "",
+    subscribers_source: "",
     repeat_discount: null,
     terms: false,
     format_one_price: 0,
@@ -38,34 +39,45 @@ const form = reactive({
     male_percentage: 30,
 });
 
-const loading = useLoadingBar()
-const errors = ref({})
+const loading = useLoadingBar();
+const errors = ref({});
 let errorRefs = reactive({});
 
 const uploadChannel = () => {
-    loading.start()
-  axios.post(route('adding-channel.store'), form, {headers: {
-          'Content-Type': 'multipart/form-data'
-      }})
-      .then(res => {
-          loading.finish()
-          router.visit(route('channels'))
-      })
-      .catch(error => {
-          loading.error()
-          errors.value = {}
-          if (error.response && error.response.data && error.response.data.errors) {
-              errors.value = error.response.data.errors;
-          }
+    loading.start();
+    axios
+        .post(route("adding-channel.store"), form, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+        .then((res) => {
+            loading.finish();
+            router.visit(route("channels"));
+        })
+        .catch((error) => {
+            loading.error();
+            errors.value = {};
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.errors
+            ) {
+                errors.value = error.response.data.errors;
+            }
 
-          nextTick(() => {
-              const firstErrorElement = document.querySelector(".text-red-500");
-              if(firstErrorElement) {
-                  firstErrorElement.scrollIntoView({behavior: "smooth", block: "center"});
-              }
-          });
-      })
-}
+            nextTick(() => {
+                const firstErrorElement =
+                    document.querySelector(".text-red-500");
+                if (firstErrorElement) {
+                    firstErrorElement.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                    });
+                }
+            });
+        });
+};
 
 const malePercentage = computed(() => form.male_percentage);
 const femalePercentage = computed(() => 100 - form.male_percentage);
@@ -74,7 +86,7 @@ const store = useMainStore();
 store.fetchTopics();
 
 const channelSubjects = computed(() =>
-    store.topics.map(topic => ({
+    store.topics.map((topic) => ({
         label: topic.title,
         value: topic.id,
     }))
@@ -82,20 +94,20 @@ const channelSubjects = computed(() =>
 
 const discountData = [
     {
-        label: '10%',
-        value: '10',
+        label: "10%",
+        value: "10",
     },
     {
-        label: '20%',
-        value: '20',
+        label: "20%",
+        value: "20",
     },
     {
-        label: '30%',
-        value: '30',
+        label: "30%",
+        value: "30",
     },
     {
-        label: '50%',
-        value: '50',
+        label: "50%",
+        value: "50",
     },
 ];
 const handleUpdateChecked = (value) => {
@@ -103,10 +115,10 @@ const handleUpdateChecked = (value) => {
 };
 const state = toRefs(form);
 watch(state.type, (newRadio) => {
-    if (newRadio === 'channel') {
-        form.type = 'channel';
-    } else if (newRadio === 'chat') {
-        form.type = 'chat';
+    if (newRadio === "channel") {
+        form.type = "channel";
+    } else if (newRadio === "chat") {
+        form.type = "chat";
     }
 });
 </script>
@@ -117,13 +129,16 @@ watch(state.type, (newRadio) => {
     </Head>
     <AppLayout>
         <div class="mx-auto max-w-2xl text-center">
-            <h1 class="py-24 text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">
+            <h1
+                class="py-24 text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10"
+            >
                 Добавление канала / чата
             </h1>
             <div class="flex flex-col gap-y-16 sm:px-0 px-4">
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    >
                         Название канала/чата
                     </h2>
                     <text-input
@@ -133,12 +148,16 @@ watch(state.type, (newRadio) => {
                         class="w-full py-3"
                         required
                         autocomplete="title"
-                        placeholder="Название" />
-                    <span class="text-red-500" v-if="errors.channel_name">{{ errors.channel_name[0] }}</span>
+                        placeholder="Название"
+                    />
+                    <span class="text-red-500" v-if="errors.channel_name">{{
+                        errors.channel_name[0]
+                    }}</span>
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    >
                         Описание канала/чата
                     </h2>
                     <text-area
@@ -148,24 +167,32 @@ watch(state.type, (newRadio) => {
                         class="w-full py-3"
                         required
                         autocomplete="description"
-                        placeholder="Опишите особенности вашего канала, которые выделяют вас в каталоге. Не указывать личные контакты или ссылки на другие сайты." />
-                    <span class="text-red-500" v-if="errors.description">{{ errors.description[0] }}</span>
+                        placeholder="Опишите особенности вашего канала, которые выделяют вас в каталоге. Не указывать личные контакты или ссылки на другие сайты."
+                    />
+                    <span class="text-red-500" v-if="errors.description">{{
+                        errors.description[0]
+                    }}</span>
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    >
                         Тематика канала/чата
                     </h2>
                     <n-select
                         placeholder="выберите тему канала/чата"
                         :theme-overrides="selectThemeOverrides"
                         v-model:value="form.topic_id"
-                        :options="channelSubjects" />
-                    <span class="text-red-500" v-if="errors.topic_id">{{ errors.topic_id[0] }}</span>
+                        :options="channelSubjects"
+                    />
+                    <span class="text-red-500" v-if="errors.topic_id">{{
+                        errors.topic_id[0]
+                    }}</span>
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    >
                         Ссылка на канал/чат
                     </h2>
                     <text-input
@@ -175,10 +202,16 @@ watch(state.type, (newRadio) => {
                         class="w-full py-3"
                         required
                         autocomplete="channel"
-                        placeholder="@channel или https://t.me/dr_amina_pirmanova" />
-                    <span class="text-red-500" v-if="errors.url" ref="el => { errorRefs.url = el }">{{ errors.url[0] }}</span>
+                        placeholder="@channel или https://t.me/dr_amina_pirmanova"
+                    />
+                    <span
+                        class="text-red-500"
+                        v-if="errors.url"
+                        ref="el => { errorRefs.url = el }"
+                        >{{ errors.url[0] }}</span
+                    >
                 </div>
-<!--                <div class="flex w-full flex-col justify-center gap-y-3 text-center">
+                <!--                <div class="flex w-full flex-col justify-center gap-y-3 text-center">
                     <h2
                         class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                         Вы добавляете
@@ -209,18 +242,45 @@ watch(state.type, (newRadio) => {
                 </div>-->
                 <div class="w-full text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    >
                         Соотношение полов, %
                     </h2>
-                    <n-slider class="my-4" v-model:value="form.male_percentage" :tooltip="false" :step="10" :theme-overrides="sliderGenderThemeOverrides"/>
+                    <n-slider
+                        class="my-4"
+                        v-model:value="form.male_percentage"
+                        :tooltip="false"
+                        :step="10"
+                        :theme-overrides="sliderGenderThemeOverrides"
+                    />
                     <div class="flex justify-between items-center">
-                        <div class="border rounded p-4 flex items-center gap-x-1.5">
-                            <BaseIcon class="text-[#3259d2]" size="25" :path="mdiFaceMan"/>
-                            <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">{{ malePercentage }}%</p>
+                        <div
+                            class="border rounded p-4 flex items-center gap-x-1.5"
+                        >
+                            <BaseIcon
+                                class="text-[#3259d2]"
+                                size="25"
+                                :path="mdiFaceMan"
+                            />
+                            <p
+                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                            >
+                                {{ malePercentage }}%
+                            </p>
                         </div>
-                        <div class="border rounded p-4 flex items-center gap-x-1.5">
-                            <BaseIcon class="text-[#dc78d8]" size="25" :path="mdiFaceWoman"/>
-                            <p class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">{{ femalePercentage }}%</p>
+                        <div
+                            class="border rounded p-4 flex items-center gap-x-1.5"
+                        >
+                            <BaseIcon
+                                class="text-[#dc78d8]"
+                                size="25"
+                                :path="mdiFaceWoman"
+                            />
+                            <p
+                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                            >
+                                {{ femalePercentage }}%
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -230,10 +290,13 @@ watch(state.type, (newRadio) => {
             <div class="format__header">
                 <div class="flex flex-col items-start justify-start gap-7">
                     <h3
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    >
                         Формат размещения
                     </h3>
-                    <p class="text-violet-100 text-opacity-60 text-base font-normal font-['Inter'] leading-tight">
+                    <p
+                        class="text-violet-100 text-opacity-60 text-base font-normal font-['Inter'] leading-tight"
+                    >
                         Что такое форматы и как назначить им цену?
                         <span class="underline">Читать инструкцию<br /></span>
                         Обращаем внимание, формат 1/24 — обязательный.
@@ -247,25 +310,35 @@ watch(state.type, (newRadio) => {
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="format_one_checkbox"
-                                class="flex items-center justify-center" />
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
+                                class="flex items-center justify-center"
+                            />
+                            <h2
+                                class="text-violet-100 text-2xl font-bold font-['Inter']"
+                            >
                                 1/24
                             </h2>
                         </div>
                         <div>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
-                                Стоимость за 24 часа в ленте и 1 час в топе, минимум 400 руб.
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal"
+                            >
+                                Стоимость за 24 часа в ленте и 1 час в топе,
+                                минимум 400 руб.
                             </p>
                         </div>
                         <div class="flex items-center justify-end gap-x-2">
                             <input
                                 v-model="form.format_one_price"
-                                @input="format_one_checkbox = form.format_one_price.trim() !== ''"
+                                @input="
+                                    format_one_checkbox =
+                                        form.format_one_price.trim() !== ''
+                                "
                                 type="text"
-                                class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
+                                class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0"
+                            />
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal"
+                            >
                                 руб.
                             </p>
                         </div>
@@ -277,25 +350,34 @@ watch(state.type, (newRadio) => {
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="format_two_checkbox"
-                                class="flex items-center justify-center" />
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
+                                class="flex items-center justify-center"
+                            />
+                            <h2
+                                class="text-violet-100 text-2xl font-bold font-['Inter']"
+                            >
                                 2/48
                             </h2>
                         </div>
                         <div>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal"
+                            >
                                 Стоимость за 48 часов в ленте и 2 часа в топе
                             </p>
                         </div>
                         <div class="flex items-center justify-end gap-x-2">
                             <input
                                 v-model="form.format_two_price"
-                                @input="format_two_checkbox = form.format_two_price.trim() !== ''"
+                                @input="
+                                    format_two_checkbox =
+                                        form.format_two_price.trim() !== ''
+                                "
                                 type="text"
-                                class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
+                                class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0"
+                            />
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal"
+                            >
                                 руб.
                             </p>
                         </div>
@@ -307,25 +389,34 @@ watch(state.type, (newRadio) => {
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="format_three_checkbox"
-                                class="flex items-center justify-center" />
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
+                                class="flex items-center justify-center"
+                            />
+                            <h2
+                                class="text-violet-100 text-2xl font-bold font-['Inter']"
+                            >
                                 3/72
                             </h2>
                         </div>
                         <div>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal"
+                            >
                                 Стоимость за 72 часов в ленте и 3 часа в топе
                             </p>
                         </div>
                         <div class="flex items-center justify-end gap-x-2">
                             <input
                                 v-model="form.format_three_price"
-                                @input="format_three_checkbox = form.format_three_price.trim() !== ''"
+                                @input="
+                                    format_three_checkbox =
+                                        form.format_three_price.trim() !== ''
+                                "
                                 type="text"
-                                class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
+                                class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0"
+                            />
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal"
+                            >
                                 руб.
                             </p>
                         </div>
@@ -337,24 +428,34 @@ watch(state.type, (newRadio) => {
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="no_deletion_checkbox"
-                                class="flex items-center justify-center" />
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
+                                class="flex items-center justify-center"
+                            />
+                            <h2
+                                class="text-violet-100 text-2xl font-bold font-['Inter']"
+                            >
                                 3/без удаления
                             </h2>
                         </div>
                         <div>
-                            <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                            <p
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal"
+                            >
                                 Стоимость за пост без удаления и 3 часа в топе
                             </p>
                         </div>
                         <div class="flex items-center justify-end gap-x-2">
                             <input
                                 v-model="form.no_deletion_price"
-                                @input="no_deletion_checkbox = form.no_deletion_price.trim() !== ''"
+                                @input="
+                                    no_deletion_checkbox =
+                                        form.no_deletion_price.trim() !== ''
+                                "
                                 type="text"
-                                class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
+                                class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0"
+                            />
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal"
+                            >
                                 руб.
                             </p>
                         </div>
@@ -366,7 +467,9 @@ watch(state.type, (newRadio) => {
             <div class="flex flex-col gap-y-16">
                 <div>
                     <div class="flex w-full flex-col gap-y-3">
-                        <h2 class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        <h2
+                            class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                        >
                             Источник подписчиков
                         </h2>
                         <text-area
@@ -376,50 +479,75 @@ watch(state.type, (newRadio) => {
                             class="w-full py-3"
                             required
                             autocomplete="subscribers_source"
-                            placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации." />
-                        <span class="text-red-500" v-if="errors.subscribers_source">{{ errors.subscribers_source[0] }}</span>
+                            placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации."
+                        />
+                        <span
+                            class="text-red-500"
+                            v-if="errors.subscribers_source"
+                            >{{ errors.subscribers_source[0] }}</span
+                        >
                     </div>
                 </div>
                 <div class="flex flex-col gap-y-8">
                     <div class="flex items-center justify-center gap-x-2.5">
                         <h2
-                            class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                            class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                        >
                             Скидка на повторный заказ
                         </h2>
                         <n-switch
                             v-model:value="discount_check"
-                            :theme-overrides="switchThemeOverrides" />
+                            :theme-overrides="switchThemeOverrides"
+                        />
                     </div>
                     <p
-                        class="text-violet-100 text-opacity-40 text-base font-normal font-['Inter'] leading-tight">
-                        Если заказчик повторно купит у вас интеграцию, он получит скидку
-                        автоматически
+                        class="text-violet-100 text-opacity-40 text-base font-normal font-['Inter'] leading-tight"
+                    >
+                        Если заказчик повторно купит у вас интеграцию, он
+                        получит скидку автоматически
                     </p>
                     <n-select
                         :theme-overrides="selectThemeOverrides"
                         v-model:value="form.repeat_discount"
-                        :options="discountData" />
-                    <span class="text-red-500" v-if="errors.repeat_discount">{{ errors.repeat_discount[0] }}</span>
+                        :options="discountData"
+                    />
+                    <span class="text-red-500" v-if="errors.repeat_discount">{{
+                        errors.repeat_discount[0]
+                    }}</span>
                 </div>
                 <div>
                     <div class="mt-12">
                         <n-checkbox
                             :theme-overrides="checkboxThemeOverrides"
                             v-model:checked="form.terms"
-                            class="flex items-center justify-center">
+                            class="flex items-center justify-center"
+                        >
                             <div
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal"
+                            >
                                 Ознакомлен с
-                                <Link :href="route('rules')" class="underline">Правилами пользования Сервисом</Link>
+                                <Link :href="route('rules')" class="underline"
+                                    >Правилами пользования Сервисом</Link
+                                >
                             </div>
                         </n-checkbox>
-                        <span class="text-red-500" v-if="errors.terms">{{ errors.terms[0] }}</span>
+                        <span class="text-red-500" v-if="errors.terms">{{
+                            errors.terms[0]
+                        }}</span>
                     </div>
-                    <div class="flex sm:flex-row flex-col mt-12 gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                        <button @click.prevent="uploadChannel" class="rounded-3xl bg-purple-600 transition hover:bg-purple-800 px-6 py-3.5">
+                    <div
+                        class="flex sm:flex-row flex-col mt-12 gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    >
+                        <button
+                            @click.prevent="uploadChannel"
+                            class="rounded-3xl btn_gradient-purple transition hover:bg-purple-800 px-6 py-3.5"
+                        >
                             Добавить канал / чат
                         </button>
-                        <button @click.prevent="router.visit(route('channels'))" class="rounded-3xl border border-violet-700 bg-transparent transition hover:bg-red-500 px-6 py-3.5">
+                        <button
+                            @click.prevent="router.visit(route('channels'))"
+                            class="rounded-3xl border border-violet-700 bg-transparent transition hover:bg-red-500 px-6 py-3.5"
+                        >
                             Отменить
                         </button>
                     </div>
@@ -440,12 +568,12 @@ watch(state.type, (newRadio) => {
         border-radius: 50%;
     }
 }
-.format__grid{
+.format__grid {
     display: grid;
     justify-items: start;
     row-gap: 1rem;
     grid-template-columns: 2fr 6fr 2fr;
-    @media screen and (max-width: 640px){
+    @media screen and (max-width: 640px) {
         grid-template-columns: 1fr;
     }
 }

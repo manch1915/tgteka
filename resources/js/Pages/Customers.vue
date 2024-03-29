@@ -15,78 +15,89 @@ import IntegrationBackground from "@/Components/Home/Blocks/IntegrationBackgroun
 import ClientsHeader from "@/Components/Home/ClientsHeader.vue";
 import Feedback from "@/Components/Home/Feedback.vue";
 import Slider from "@/Components/Home/Slider.vue";
-import { SwiperSlide} from 'swiper/vue';
-import {onMounted, onUnmounted, ref} from "vue";
-import {Head} from "@inertiajs/vue3";
-import {Title} from "chart.js";
+import { SwiperSlide } from "swiper/vue";
+import { onMounted, onUnmounted, ref } from "vue";
+import { Head } from "@inertiajs/vue3";
+import { Title } from "chart.js";
 
-const headers = ["Регистрируйте аккаунт", "Выберите подходящие каналы в каталоге", "Пополните баланс удобным способом:", "Создайте размещение с картинкой и ссылкой:", "Владелец канала публикует пост и присылает ссылку на проверку:", "Вы можете скачать отчет по итогу размещения:"]
-const texts = ["Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc ",
+const headers = [
+    "Регистрируйте аккаунт",
+    "Выберите подходящие каналы в каталоге",
+    "Пополните баланс удобным способом:",
+    "Создайте размещение с картинкой и ссылкой:",
+    "Владелец канала публикует пост и присылает ссылку на проверку:",
+    "Вы можете скачать отчет по итогу размещения:",
+];
+const texts = [
+    "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc ",
+    "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc",
     "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc",
     "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc",
+    "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc",
     "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc",
-    "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc",
-    "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc"];
+];
 
 const compareItems = [
     {
-        header: 'Самостоятельное размещение напрямую',
-        listText: ['Найти каталог Телеграм-каналов через Google', 'Проверить каналы на живых подписчиков',
-            'Написать каждому админу, чтобы узнать стоимость интеграции',
-            'Оплатить размещение каждому админу',
-            'Написать посты для интеграции',
-            'Отправить пост каждому админу',
-            'Контролировать выход поста в каждом канале'],
+        header: "Самостоятельное размещение напрямую",
+        listText: [
+            "Найти каталог Телеграм-каналов через Google",
+            "Проверить каналы на живых подписчиков",
+            "Написать каждому админу, чтобы узнать стоимость интеграции",
+            "Оплатить размещение каждому админу",
+            "Написать посты для интеграции",
+            "Отправить пост каждому админу",
+            "Контролировать выход поста в каждом канале",
+        ],
         icons: [
             {
-                class: 'blue',
-                text: 'ручной процесс',
+                class: "blue",
+                text: "ручной процесс",
             },
             {
-                class: 'blue',
-                text: 'нет гарантий'
-            }
+                class: "blue",
+                text: "нет гарантий",
+            },
         ],
         hasButton: false,
-        showSaveTimeMoney: false
+        showSaveTimeMoney: false,
     },
     {
-        header: 'Автоматическое размещение с TGteka.ru',
-        listText:
-        [
-            'Зарегистрируйтесь на платформе',
-            'Выберите подходящие каналы из каталога в один клик или купите размещение под ключ',
-            'Создайте интеграцию',
-            'Запустите нативную интеграцию',
-            'Получите оповещение о каждом размещении'
+        header: "Автоматическое размещение с TGteka.ru",
+        listText: [
+            "Зарегистрируйтесь на платформе",
+            "Выберите подходящие каналы из каталога в один клик или купите размещение под ключ",
+            "Создайте интеграцию",
+            "Запустите нативную интеграцию",
+            "Получите оповещение о каждом размещении",
         ],
         icons: [
             {
-                class: 'white',
-                text: 'автоматический процесс',
+                class: "white",
+                text: "автоматический процесс",
             },
             {
-                class: 'white',
-                text: 'есть гарантии'
-            }
+                class: "white",
+                text: "есть гарантии",
+            },
         ],
         hasButton: true,
-        showSaveTimeMoney: true
-    }
+        showSaveTimeMoney: true,
+    },
 ];
-const windowWidth = ref(window.innerWidth)
+const windowWidth = ref(window.innerWidth);
 const updateWidth = () => {
     windowWidth.value = window.innerWidth;
 };
 
 onMounted(() => {
     // Add the updateWidth function as a window resize listener
-    window.addEventListener('resize', updateWidth);
+    window.addEventListener("resize", updateWidth);
 });
 
 onUnmounted(() => {
     // Remove listener when component is unmounted
-    window.removeEventListener('resize', updateWidth);
+    window.removeEventListener("resize", updateWidth);
 });
 </script>
 
@@ -97,24 +108,24 @@ onUnmounted(() => {
 
     <MainLayout>
         <SloganBlock
-            header="Нативные размещения в Телеграм: проверенные вручную каналы и боты"
-            paragraph="Нативные размещения в Телеграм: проверенные вручную каналы и боты"
+            header="Нативные размещения в&nbsp;Телеграм: проверенные вручную каналы&nbsp;и&nbsp;боты"
+            paragraph="Нативные размещения в&nbsp;Телеграм: проверенные вручную каналы&nbsp;и&nbsp;боты"
         />
         <MissionBlock>
             <template v-slot:cards>
                 <template v-if="windowWidth <= 640">
-                <slider :interactive="false">
-                    <template v-slot:slider>
-                        <template v-for="i in 3" :key="i">
-                        <swiper-slide class="py-20">
-                            <book-card class="flex justify-center"/>
-                        </swiper-slide>
+                    <slider :interactive="false">
+                        <template v-slot:slider>
+                            <template v-for="i in 3" :key="i">
+                                <swiper-slide class="py-20">
+                                    <book-card class="flex justify-center" />
+                                </swiper-slide>
+                            </template>
                         </template>
-                    </template>
-                </slider>
+                    </slider>
                 </template>
                 <template v-else>
-                    <book-card v-for="i in 3"/>
+                    <book-card v-for="i in 3" />
                 </template>
             </template>
         </MissionBlock>
@@ -123,9 +134,9 @@ onUnmounted(() => {
             <template v-slot:points>
                 <point-card
                     v-for="i in 6"
-                    :reversed="(i < 4)"
-                    :header="headers[i-1]"
-                    :paragraph="texts[i-1]"
+                    :reversed="i < 4"
+                    :header="headers[i - 1]"
+                    :paragraph="texts[i - 1]"
                     :number="i"
                     :key="i"
                 />
@@ -138,34 +149,38 @@ onUnmounted(() => {
                         <template v-slot:slider>
                             <template v-for="i in 6" :key="i">
                                 <swiper-slide class="pb-20 px-4">
-                                    <ChannelCard/>
+                                    <ChannelCard />
                                 </swiper-slide>
                             </template>
                         </template>
                     </slider>
                 </template>
                 <template v-else>
-                    <ChannelCard v-for="i in 6" :key="i"/>
+                    <ChannelCard v-for="i in 6" :key="i" />
                 </template>
             </template>
         </InterestChannelsBlock>
-        <IntegrationBackground class="margin-top"/>
+        <IntegrationBackground class="margin-top" />
         <IntegrationBlock>
             <template v-slot:comparePairs>
-                <ComparisonCard :background="i" v-for=" (item, i) in compareItems" :item="item" :key="i"/>
+                <ComparisonCard
+                    :background="i"
+                    v-for="(item, i) in compareItems"
+                    :item="item"
+                    :key="i"
+                />
             </template>
         </IntegrationBlock>
         <ClientsBlock>
             <template v-slot:clients-header>
-                <ClientsHeader/>
+                <ClientsHeader />
             </template>
             <template v-slot:slider>
-                <clients-slider/>
+                <clients-slider />
             </template>
             <template v-slot:clients-footer>
-                <feedback/>
+                <feedback />
             </template>
         </ClientsBlock>
     </MainLayout>
 </template>
-

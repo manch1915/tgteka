@@ -1,48 +1,55 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
-import { inputThemeOverrides} from "@/themeOverrides.js";
-import {NInput, useLoadingBar} from "naive-ui";
-import {reactive} from "vue";
+import { inputThemeOverrides } from "@/themeOverrides.js";
+import { NInput, useLoadingBar } from "naive-ui";
+import { reactive } from "vue";
 import axios from "axios";
-import {Head} from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 
 const form = reactive({
-    password: '',
-    password_confirmation: ''
-})
+    password: "",
+    password_confirmation: "",
+});
 const errors = reactive({
     password: [],
     password_confirmation: [],
 });
-const loading = useLoadingBar()
+const loading = useLoadingBar();
 
 const submit = async () => {
-    loading.start()
-    await axios.patch(route('change-password.update'), form)
+    loading.start();
+    await axios
+        .patch(route("change-password.update"), form)
         .then((res) => {
-            loading.finish()
-            console.log(res)
+            loading.finish();
+            console.log(res);
             errors.password = [];
             errors.password_confirmation = [];
         })
-        .catch(error => {
-            if (error.response && error.response.data && error.response.data.errors) {
+        .catch((error) => {
+            if (
+                error.response &&
+                error.response.data &&
+                error.response.data.errors
+            ) {
                 errors.password = error.response.data.errors.password;
-                errors.password_confirmation = error.response.data.errors.password_confirmation;
+                errors.password_confirmation =
+                    error.response.data.errors.password_confirmation;
             }
-            loading.error()
-        })
+            loading.error();
+        });
 };
 const generatePassword = async () => {
-    loading.start()
-    await axios.post(route('change-password.generate'))
+    loading.start();
+    await axios
+        .post(route("change-password.generate"))
         .then(() => {
-            loading.finish()
+            loading.finish();
         })
         .catch(() => {
-            loading.error()
-        })
+            loading.error();
+        });
 };
 </script>
 
@@ -54,27 +61,71 @@ const generatePassword = async () => {
     <AppLayout>
         <ProfileLayout>
             <div class="text-center sm:text-left">
-                <p class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">Изменение пароля</p>
+                <p
+                    class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10"
+                >
+                    Изменение пароля
+                </p>
             </div>
             <div class="mt-8 mb-6 text-center sm:text-left">
-                <p class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Новый пароль</p>
+                <p
+                    class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
+                >
+                    Новый пароль
+                </p>
             </div>
             <div class="flex flex-col gap-y-2 px-2 sm:w-3/4 sm:px-0">
-                <n-input class="py-1.5 my-1 sm:!w-2/4" v-model:value="form.password" placeholder="Новый пароль" type="password" show-password-on="click" :theme-overrides="inputThemeOverrides"/>
-                <span class="text-red-500" v-if="errors.password">{{ errors.password[0] }}</span>
-                <n-input class="py-1.5 my-1 sm:!w-2/4" v-model:value="form.password_confirmation" placeholder="Подтвердите пароль" type="password" show-password-on="click" :theme-overrides="inputThemeOverrides"/>
-                <span class="text-red-500" v-if="errors.password_confirmation">{{ errors.password_confirmation[0] }}</span>
-                <button @click.prevent="submit" class="sm:w-2/4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal bg-purple-600 rounded-full py-4">Обновить пароль</button>
+                <n-input
+                    class="py-1.5 my-1 sm:!w-2/4"
+                    v-model:value="form.password"
+                    placeholder="Новый пароль"
+                    type="password"
+                    show-password-on="click"
+                    :theme-overrides="inputThemeOverrides"
+                />
+                <span class="text-red-500" v-if="errors.password">{{
+                    errors.password[0]
+                }}</span>
+                <n-input
+                    class="py-1.5 my-1 sm:!w-2/4"
+                    v-model:value="form.password_confirmation"
+                    placeholder="Подтвердите пароль"
+                    type="password"
+                    show-password-on="click"
+                    :theme-overrides="inputThemeOverrides"
+                />
+                <span
+                    class="text-red-500"
+                    v-if="errors.password_confirmation"
+                    >{{ errors.password_confirmation[0] }}</span
+                >
+                <button
+                    @click.prevent="submit"
+                    class="sm:w-2/4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal btn_gradient-purple rounded-full py-4"
+                >
+                    Обновить пароль
+                </button>
             </div>
             <div class="mt-8 px-2 sm:px-0">
-                <h2 class="my-2 text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed">Также вы можете сгенерировать новый пароль</h2>
-                <p class="my-2 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Пароль будет выслан на указанную вами почту<br/>e****@admin.com</p>
-                <button @click.prevent="generatePassword" class="my-2 border py-2 px-4 border-violet-700 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">Сгенерировать</button>
+                <h2
+                    class="my-2 text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
+                >
+                    Также вы можете сгенерировать новый пароль
+                </h2>
+                <p
+                    class="my-2 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                >
+                    Пароль будет выслан на указанную вами почту<br />e****@admin.com
+                </p>
+                <button
+                    @click.prevent="generatePassword"
+                    class="my-2 border py-2 px-4 border-violet-700 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                >
+                    Сгенерировать
+                </button>
             </div>
         </ProfileLayout>
     </AppLayout>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

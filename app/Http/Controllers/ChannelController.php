@@ -98,6 +98,14 @@ class ChannelController extends Controller
         $finishedOrdersCount = $finishedOrdersQuery->count();
         $finishedOrdersPriceSum = $finishedOrdersQuery->sum('price');
 
+        // Fetch all reviews for the channel
+        $reviews = $channel->reviews()->get();
+
+        // Calculate the average rating from reviews
+        $totalRating = $reviews->sum('rating');
+        $reviewCount = $reviews->count();
+        $averageRating = $reviewCount > 0 ? $totalRating / $reviewCount : 0;
+
         $decodedData = [
             'stats' => json_decode($channelStatistic->stats, true),
             'subscribers' => json_decode($channelStatistic->subscribers, true),
@@ -105,6 +113,7 @@ class ChannelController extends Controller
             'er' => json_decode($channelStatistic->er, true),
             'finished_orders_count' => $finishedOrdersCount,
             'finished_orders_price_sum' => $finishedOrdersPriceSum,
+            'average_review_rating' => $averageRating,
             'channel' => $channel
         ];
 

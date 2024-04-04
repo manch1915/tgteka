@@ -166,7 +166,7 @@ onMounted(() => {
 
             <div class="item text-center !py-10">
                 <p class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight">Оценка отзывов</p>
-                <p v-if="channelStats.channel" class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">{{channelStats.channel.rating || 0}}</p>
+                <p v-if="channelStats.channel" class="text-violet-100 text-base font-bold font-['Open Sans'] leading-tight">{{channelStats.average_review_rating || 0}}</p>
             </div>
 
             <div class="item text-center !py-10">

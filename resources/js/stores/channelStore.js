@@ -12,6 +12,7 @@ export const useChannelStore = defineStore('channel',{
         loading: false,
         activeButton: null,
         sortDirection: 'desc',
+        subject: null,
         additionalFilter: {
             peerType: 'channel',
             participants_count: [],
@@ -50,6 +51,10 @@ export const useChannelStore = defineStore('channel',{
 
             if(this.order !== '') {
                 params.append('order', this.order);
+            }
+
+            if(this.subject !== null) {
+                params.append('subject', this.subject);
             }
 
             if(this.searchData !== '') {

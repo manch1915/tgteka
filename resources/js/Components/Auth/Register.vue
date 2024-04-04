@@ -1,27 +1,30 @@
 <script setup>
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import InputError from '@/Components/InputError.vue';
-import TextInput from '@/Components/TextInput.vue';
-import {reactive, ref} from "vue";
-import {Link} from "@inertiajs/vue3";
-import {NCheckbox, NInput, useLoadingBar, useMessage} from "naive-ui";
-import {checkboxThemeOverrides, inputThemeOverrides} from "@/themeOverrides.js";
-import {closeModal} from "jenesius-vue-modal";
-import { vMaska } from "maska"
+import AuthenticationCard from "@/Components/AuthenticationCard.vue";
+import InputError from "@/Components/InputError.vue";
+import TextInput from "@/Components/TextInput.vue";
+import { reactive, ref } from "vue";
+import { Link } from "@inertiajs/vue3";
+import { NCheckbox, NInput, useLoadingBar, useMessage } from "naive-ui";
+import {
+    checkboxThemeOverrides,
+    inputThemeOverrides,
+} from "@/themeOverrides.js";
+import { closeModal } from "jenesius-vue-modal";
+import { vMaska } from "maska";
 import { openLogin } from "@/utilities/authModals.js";
 
 const state = reactive({
-  form: {
-    username: '',
-    email: ''
-  },
-  errors: {}
+    form: {
+        username: "",
+        email: "",
+    },
+    errors: {},
 });
 
-const checkbox = ref(true)
+const checkbox = ref(true);
 
-const loading = useLoadingBar()
-const message = useMessage()
+const loading = useLoadingBar();
+const message = useMessage();
 
 function validateForm() {
     let isValid = true;
@@ -38,30 +41,28 @@ function validateForm() {
 
 const submit = async () => {
     if (validateForm()) {
-        loading.start()
-        await axios.post(route('register'), state.form)
-            .then(res => {
-                loading.finish()
-                message.info('Мы отправили ваш пароль на ваш e-mail')
-                closeModal()
+        loading.start();
+        await axios
+            .post(route("register"), state.form)
+            .then((res) => {
+                loading.finish();
+                message.info("Мы отправили ваш пароль на ваш e-mail");
+                closeModal();
             })
-            .catch(error => {
-                loading.error()
-                state.errors = error.response.data.errors || {}
-            })
+            .catch((error) => {
+                loading.error();
+                state.errors = error.response.data.errors || {};
+            });
     }
 };
-
 </script>
 
 <template>
     <AuthenticationCard>
-        <template #logo>
-            Регистрация
-        </template>
+        <template #logo> Регистрация </template>
 
         <form @submit.prevent="submit" class="flex flex-col gap-y-3.5">
-            <div  class="pt-10">
+            <div class="pt-10">
                 <NInput
                     id="username"
                     v-model:value="state.form.username"
@@ -71,7 +72,10 @@ const submit = async () => {
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
                 />
-                <InputError class="mt-2" :message="state.errors.username && state.errors.username[0]" />
+                <InputError
+                    class="mt-2"
+                    :message="state.errors.username && state.errors.username[0]"
+                />
             </div>
             <div>
                 <NInput
@@ -83,34 +87,62 @@ const submit = async () => {
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
                 />
-              <InputError class="mt-2" :message="state.errors.email && state.errors.email[0]" />
+                <InputError
+                    class="mt-2"
+                    :message="state.errors.email && state.errors.email[0]"
+                />
             </div>
-            <div class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">Укажите вашу электронную почту, на этот адрес будет выслан ваш пароль.</div>
+            <div
+                class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none"
+            >
+                Укажите вашу электронную почту, на этот адрес будет выслан ваш
+                пароль.
+            </div>
             <div class="flex items-center gap-x-2">
-                <n-checkbox v-model:checked="checkbox" :theme-overrides="checkboxThemeOverrides"/>
-                <label class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Я согласен получать Email-рассылку от Название компании</label>
+                <n-checkbox
+                    v-model:checked="checkbox"
+                    :theme-overrides="checkboxThemeOverrides"
+                />
+                <label
+                    class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
+                    >Я согласен получать Email-рассылку от Название
+                    компании</label
+                >
             </div>
             <div class="w-full">
-                <button class="w-full text-center pr-6 py-3.5 bg-purple-600 transition hover:bg-purple-800 text-white text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl">
+                <button
+                    class="w-full text-center pr-6 py-3.5 btn_gradient-purple transition hover:bg-purple-800 text-white text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl"
+                >
                     Зарегистрироваться
                 </button>
             </div>
             <div class="px-2">
-                  <span class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
+                <span
+                    class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
+                >
                     Нажимая на кнопку “Зарегистрироваться”, Вы соглашаетесь
-                      <Link :href="route('rules')">
-                    <span class="underline">Правилами</span>
-                      </Link>
+                    <Link :href="route('rules')">
+                        <span class="underline">Правилами</span>
+                    </Link>
                     и
-                      <Link :href="route('terms-of-service')">
-                        <span class="underline">Пользовательским соглашением Сервиса</span>
-                      </Link>
-                  </span>
+                    <Link :href="route('terms-of-service')">
+                        <span class="underline"
+                            >Пользовательским соглашением Сервиса</span
+                        >
+                    </Link>
+                </span>
             </div>
-            <hr class="border border-violet-100 border-opacity-40">
+            <hr class="border border-violet-100 border-opacity-40" />
             <div class="w-full flex justify-center gap-3">
-                <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Уже есть аккаунт? </div>
-                <button @click.prevent="openLogin" class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight cursor-pointer">
+                <div
+                    class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
+                >
+                    Уже есть аккаунт?
+                </div>
+                <button
+                    @click.prevent="openLogin"
+                    class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight cursor-pointer"
+                >
                     Войти
                 </button>
             </div>
@@ -118,9 +150,8 @@ const submit = async () => {
     </AuthenticationCard>
 </template>
 <style scoped>
-.icons{
-    img{
-
+.icons {
+    img {
     }
 }
 </style>

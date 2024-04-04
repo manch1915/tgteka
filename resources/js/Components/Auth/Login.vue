@@ -1,29 +1,31 @@
 <script setup>
-import { useForm} from '@inertiajs/vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import InputError from '@/Components/InputError.vue';
+import { useForm } from "@inertiajs/vue3";
+import AuthenticationCard from "@/Components/AuthenticationCard.vue";
+import InputError from "@/Components/InputError.vue";
 import { openPasswordRecovery, openRegister } from "@/utilities/authModals.js";
-import { NInput } from 'naive-ui'
-import {inputThemeOverrides} from "@/themeOverrides.js";
-import {ref} from "vue";
+import { NInput } from "naive-ui";
+import { inputThemeOverrides } from "@/themeOverrides.js";
+import { ref } from "vue";
 
 const form = useForm({
-    username: '',
-    password: '',
+    username: "",
+    password: "",
 });
 
-const errors = ref({username: null, password: null})
+const errors = ref({ username: null, password: null });
 
 const validateForm = () => {
-    errors.value.username = form.username.length < 1 ? 'Username is required' : null;
-    errors.value.password = form.password.length < 1 ? 'Password is required' : null;
-}
+    errors.value.username =
+        form.username.length < 1 ? "Username is required" : null;
+    errors.value.password =
+        form.password.length < 1 ? "Password is required" : null;
+};
 
 const submit = () => {
     validateForm();
     if (!(errors.value.username || errors.value.password)) {
-        form.post(route('login.post'), {
-            onFinish: () => form.reset('password'),
+        form.post(route("login.post"), {
+            onFinish: () => form.reset("password"),
         });
     }
 };
@@ -31,9 +33,7 @@ const submit = () => {
 
 <template>
     <AuthenticationCard>
-        <template #logo>
-            Авторизация
-        </template>
+        <template #logo> Авторизация </template>
 
         <form @submit.prevent="submit">
             <div class="pt-10">
@@ -62,24 +62,51 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
             <div class="pt-4">
-                <button type="button" @click.prevent="openPasswordRecovery()" class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight cursor-pointer">Забыли пароль?</button>
+                <button
+                    type="button"
+                    @click.prevent="openPasswordRecovery()"
+                    class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight cursor-pointer"
+                >
+                    Забыли пароль?
+                </button>
             </div>
             <div class="pt-4 w-full">
-                <button type="submit" class="w-full text-center pr-6 py-3.5 bg-purple-600 transition hover:bg-purple-800 text-white text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl">
-                   Войти
+                <button
+                    type="submit"
+                    class="w-full text-center pr-6 py-3.5 btn_gradient-purple transition hover:bg-purple-800 text-white text-lg font-bold font-['Open Sans'] leading-normal rounded-3xl"
+                >
+                    Войти
                 </button>
             </div>
             <div class="pt-4 login-with">
-                <p class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">Войти через</p>
+                <p
+                    class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                >
+                    Войти через
+                </p>
                 <div class="icons flex gap-4 pt-4">
-                    <a :href="route('telegram-redirect')"><img class="hover:cursor-pointer" src="/images/loginTelegram.svg" alt=""></a>
-                    <img class="hover:" src="/images/loginVk.svg" alt="">
+                    <a :href="route('telegram-redirect')"
+                        ><img
+                            class="hover:cursor-pointer"
+                            src="/images/loginTelegram.svg"
+                            alt=""
+                    /></a>
+                    <a :href="route('telegram-redirect')"
+                        ><img class="hover:" src="/images/loginVk.svg" alt=""
+                    /></a>
                 </div>
             </div>
-            <hr class="mt-4 border border-violet-100 border-opacity-40">
+            <hr class="mt-4 border border-violet-100 border-opacity-40" />
             <div class="pt-4 w-full flex justify-center gap-3">
-                <div class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Нет аккаунта?</div>
-                <button @click.prevent="openRegister()" class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight cursor-pointer">
+                <div
+                    class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
+                >
+                    Нет аккаунта?
+                </div>
+                <button
+                    @click.prevent="openRegister()"
+                    class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight cursor-pointer"
+                >
                     Зарегистрироваться
                 </button>
             </div>

@@ -1,37 +1,57 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue'
+import AppLayout from "@/Layouts/AppLayout.vue";
 import CatalogChannelCard from "@/Components/Dashboard/CatalogChannelCard.vue";
-import {computed, onMounted, ref} from "vue";
-import {NInput, NSelect, useMessage, useLoadingBar} from "naive-ui";
-import { selectThemeOverrides, textareaThemeOverrides} from "@/themeOverrides.js";
+import { computed, onMounted, ref } from "vue";
+import { NInput, NSelect, useMessage, useLoadingBar } from "naive-ui";
+import {
+    selectThemeOverrides,
+    textareaThemeOverrides,
+} from "@/themeOverrides.js";
 import axios from "axios";
-import {useMainStore} from "@/stores/main.js";
-import {router, Link, Head} from "@inertiajs/vue3";
-import {Title} from "chart.js";
+import { useMainStore } from "@/stores/main.js";
+import { router, Link, Head } from "@inertiajs/vue3";
+import { Title } from "chart.js";
 
-const loading = useLoadingBar()
+const loading = useLoadingBar();
 
 const loadCart = () => {
-    return JSON.parse(localStorage.getItem('cart')) || [];
+    return JSON.parse(localStorage.getItem("cart")) || [];
 };
 
 const isCartEmpty = computed(() => channels.value.length === 0);
 
-const channels = ref(loadCart())
-const userPatterns = ref([])
-const userPattern = ref(null)
-const description = ref('')
+const channels = ref(loadCart());
+const userPatterns = ref([]);
+const userPattern = ref(null);
+const description = ref("");
 
-const store = useMainStore()
+const store = useMainStore();
 
-const totalParticipants = computed(() => channels.value.reduce((sum, channel) => (sum + (channel.statistics ? channel.statistics.participants_count : 0)), 0));
-const totalPostReach = computed(() => channels.value.reduce((sum, channel) => (sum + (channel.statistics ? channel.statistics.avg_post_reach : 0)), 0));
+const totalParticipants = computed(() =>
+    channels.value.reduce(
+        (sum, channel) =>
+            sum +
+            (channel.statistics ? channel.statistics.participants_count : 0),
+        0
+    )
+);
+const totalPostReach = computed(() =>
+    channels.value.reduce(
+        (sum, channel) =>
+            sum + (channel.statistics ? channel.statistics.avg_post_reach : 0),
+        0
+    )
+);
 
 const channelCount = computed(() => channels.value.length);
-const totalSum = computed(() => channels.value.reduce((sum, channel) => {
-    const pricePerUnit = channel[channel.format] ? channel[channel.format] : 0;
-    return sum + pricePerUnit;
-}, 0));
+const totalSum = computed(() =>
+    channels.value.reduce((sum, channel) => {
+        const pricePerUnit = channel[channel.format]
+            ? channel[channel.format]
+            : 0;
+        return sum + pricePerUnit;
+    }, 0)
+);
 const updateChannels = (updatedCart) => {
     channels.value = updatedCart;
 };
@@ -39,66 +59,71 @@ const updateChannels = (updatedCart) => {
 const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
 
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
 const orderPosts = () => {
-    loading.start()
-    const formattedChannels = channels.value.map(channel => ({
+    loading.start();
+    const formattedChannels = channels.value.map((channel) => ({
         id: channel.id,
         format: channel.format,
-        timestamp: formatDate(channel.timestamp)
+        timestamp: formatDate(channel.timestamp),
     }));
-    axios.post(route('catalog.channels.orderPosts'), {
-        channels: formattedChannels,
-        pattern_id: userPattern.value,
-        description: description.value
-    })
-        .then(response => {
-            store.subtractFromUserBalance(response.data)
-            localStorage.removeItem('cart')
-            loading.finish()
-            router.visit(route('placements'))
+    axios
+        .post(route("catalog.channels.orderPosts"), {
+            channels: formattedChannels,
+            pattern_id: userPattern.value,
+            description: description.value,
         })
-        .catch(c => {
-            loading.error()
-            message.error(c.response.data.message)
+        .then((response) => {
+            store.subtractFromUserBalance(response.data);
+            localStorage.removeItem("cart");
+            loading.finish();
+            router.visit(route("placements"));
         })
-}
+        .catch((c) => {
+            loading.error();
+            message.error(c.response.data.message);
+        });
+};
 
-const message = useMessage()
+const message = useMessage();
 
 onMounted(() => {
-    axios.get(route('user-patterns'))
-        .then(response => {
+    axios
+        .get(route("user-patterns"))
+        .then((response) => {
             const patterns = response.data;
             if (!patterns || patterns.length === 0) {
-                message.error('у вас нет готовых шаблонов пожалуйста перейдите на страницу мои шаблоны и создайте шаблон')
-            }else{
-                userPatterns.value.push(...patterns.map((pattern) => ({
-                    label: pattern.title,
-                    value: pattern.id
-                })));
+                message.error(
+                    "у вас нет готовых шаблонов пожалуйста перейдите на страницу мои шаблоны и создайте шаблон"
+                );
+            } else {
+                userPatterns.value.push(
+                    ...patterns.map((pattern) => ({
+                        label: pattern.title,
+                        value: pattern.id,
+                    }))
+                );
             }
         })
-        .catch(error => console.error(error));
-})
+        .catch((error) => console.error(error));
+});
 const formattedTotalSum = computed(() => {
-    const value = totalSum.value
-    return new Intl.NumberFormat('ru-RU', {
-        style: 'currency',
-        currency: 'RUB',
+    const value = totalSum.value;
+    return new Intl.NumberFormat("ru-RU", {
+        style: "currency",
+        currency: "RUB",
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0
+        maximumFractionDigits: 0,
     }).format(value);
 });
-
 </script>
 
 <template>
@@ -107,20 +132,44 @@ const formattedTotalSum = computed(() => {
     </Head>
     <AppLayout>
         <div class="sm:py-20 py-4 text-center">
-            <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Корзина</h1>
+            <h1
+                class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10"
+            >
+                Корзина
+            </h1>
         </div>
         <div class="grid sm:grid-cols-[3fr_1fr] grid-cols-1 gap-x-4">
             <div class="sm:order-1 order-2">
                 <div class="channels">
                     <div class="flex flex-col gap-y-4 mt-8">
-                        <template v-if="!isCartEmpty" v-for="channel in channels" :key="channel.id">
-                            <CatalogChannelCard @cart-updated="updateChannels" is-cart  :channel="channel" :timestamp="channel.timestamp"/>
+                        <template
+                            v-if="!isCartEmpty"
+                            v-for="channel in channels"
+                            :key="channel.id"
+                        >
+                            <CatalogChannelCard
+                                @cart-updated="updateChannels"
+                                is-cart
+                                :channel="channel"
+                                :timestamp="channel.timestamp"
+                            />
                         </template>
-                        <div v-else class="flex justify-center flex-col items-center">
-                            <p class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10">В корзине пусто.</p>
+                        <div
+                            v-else
+                            class="flex justify-center flex-col items-center"
+                        >
+                            <p
+                                class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10"
+                            >
+                                В корзине пусто.
+                            </p>
                             <div class="mt-12">
                                 <Link :href="route('catalog.channels.index')">
-                                    <button class="text-violet-100 px-6 py-4 bg-purple-600 transition hover:bg-purple-800 rounded-full">Перейти в каталог</button>
+                                    <button
+                                        class="text-violet-100 px-6 py-4 btn_gradient-purple transition hover:bg-purple-800 rounded-full"
+                                    >
+                                        Перейти в каталог
+                                    </button>
                                 </Link>
                             </div>
                         </div>
@@ -129,16 +178,31 @@ const formattedTotalSum = computed(() => {
             </div>
             <div class="sm:order-2 order-1 sm:p-0 p-2">
                 <div class="my-2">
-                    <n-select :disabled="isCartEmpty"  placeholder="Шаблоны" v-model:value="userPattern" :options="userPatterns" :theme-overrides="selectThemeOverrides"/>
+                    <n-select
+                        :disabled="isCartEmpty"
+                        placeholder="Шаблоны"
+                        v-model:value="userPattern"
+                        :options="userPatterns"
+                        :theme-overrides="selectThemeOverrides"
+                    />
                 </div>
                 <div class="my-2">
-                    <n-input :autosize="{minRows: 4, maxRows: 10}" :disabled="isCartEmpty" type="textarea" maxlength="300" show-count v-model:value="description" :theme-overrides="textareaThemeOverrides" placeholder="Требования к заказу"/>
+                    <n-input
+                        :autosize="{ minRows: 4, maxRows: 10 }"
+                        :disabled="isCartEmpty"
+                        type="textarea"
+                        maxlength="300"
+                        show-count
+                        v-model:value="description"
+                        :theme-overrides="textareaThemeOverrides"
+                        placeholder="Требования к заказу"
+                    />
                 </div>
                 <table class="table-auto">
                     <tbody class="text-violet-100">
                         <tr>
                             <th>Каналы</th>
-                            <td>{{channelCount}}</td>
+                            <td>{{ channelCount }}</td>
                         </tr>
                         <tr>
                             <th>Подписчики</th>
@@ -150,11 +214,15 @@ const formattedTotalSum = computed(() => {
                         </tr>
                         <tr>
                             <th>Сумма</th>
-                            <th>{{formattedTotalSum}}</th>
+                            <th>{{ formattedTotalSum }}</th>
                         </tr>
                     </tbody>
                 </table>
-                <button :disabled="isCartEmpty" @click.prevent="orderPosts" class="w-full my-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal transition bg-purple-600 hover:bg-purple-800 rounded-3xl py-2">
+                <button
+                    :disabled="isCartEmpty"
+                    @click.prevent="orderPosts"
+                    class="w-full my-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal transition btn_gradient-purple hover:bg-purple-800 rounded-3xl py-2"
+                >
                     Купить размещение
                 </button>
             </div>
@@ -162,7 +230,7 @@ const formattedTotalSum = computed(() => {
     </AppLayout>
 </template>
 <style scoped>
-.channels{
+.channels {
     @media screen and (max-width: 640px) {
         padding: 0 15px;
     }
@@ -176,5 +244,4 @@ const formattedTotalSum = computed(() => {
 .v-leave-to {
     opacity: 0;
 }
-
 </style>

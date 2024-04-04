@@ -12,15 +12,22 @@ import Faq from "@/Components/Home/Faq.vue";
 import TechnicalIssues from "@/Components/Home/Blocks/TechnicalIssues.vue";
 import SloganBlock from "@/Components/Home/Blocks/SloganBlock.vue";
 import Slider from "@/Components/Home/Slider.vue";
-import {SwiperSlide} from "swiper/vue";
-import {onMounted, onUnmounted, ref} from "vue";
-import {Head} from "@inertiajs/vue3";
-import {Title} from "chart.js";
+import { SwiperSlide } from "swiper/vue";
+import { onMounted, onUnmounted, ref } from "vue";
+import { Head } from "@inertiajs/vue3";
+import { Title } from "chart.js";
 
-const headers = ["Добавляете канал в каталог", "Получаете заказы и размещаете посты", "Получаете оплату"]
-const texts = ["В среднем модерация занимает 24 часа ", "Оповещения о новых размещениях приходят на E-mail и в Telegram-бота",
-    "Вы сможете выводить средства от 1 000 рублей три раза в неделю"];
-const windowWidth = ref(window.innerWidth)
+const headers = [
+    "Добавляете канал в каталог",
+    "Получаете заказы и размещаете посты",
+    "Получаете оплату",
+];
+const texts = [
+    "В среднем модерация занимает 24 часа ",
+    "Оповещения о новых размещениях приходят на E-mail и в Telegram-бота",
+    "Вы сможете выводить средства от 1 000 рублей три раза в неделю",
+];
+const windowWidth = ref(window.innerWidth);
 
 const updateWidth = () => {
     windowWidth.value = window.innerWidth;
@@ -28,12 +35,12 @@ const updateWidth = () => {
 
 onMounted(() => {
     // Add the updateWidth function as a window resize listener
-    window.addEventListener('resize', updateWidth);
+    window.addEventListener("resize", updateWidth);
 });
 
 onUnmounted(() => {
     // Remove listener when component is unmounted
-    window.removeEventListener('resize', updateWidth);
+    window.removeEventListener("resize", updateWidth);
 });
 </script>
 
@@ -54,49 +61,45 @@ onUnmounted(() => {
                         <template v-slot:slider>
                             <template v-for="i in 3" :key="i">
                                 <swiper-slide class="py-20">
-                                    <book-card class="flex justify-center"/>
+                                    <book-card class="flex justify-center" />
                                 </swiper-slide>
                             </template>
                         </template>
                     </slider>
                 </template>
                 <template v-else>
-                    <book-card v-for="i in 3"/>
+                    <book-card v-for="i in 3" />
                 </template>
             </template>
         </MissionBlock>
-        <HowItWorksBlock>
+        <HowItWorksBlock class="HowItWorksBlock">
             <template v-slot:points>
                 <point-card
                     v-for="i in 3"
-                    :reversed="false"
-                    :header="headers[i-1]"
-                    :paragraph="texts[i-1]"
+                    :reversed="true"
+                    :header="headers[i - 1]"
+                    :paragraph="texts[i - 1]"
                     :number="i"
                     :key="i"
                 />
             </template>
         </HowItWorksBlock>
         <div class="py-12 md:pt-24">
-            <IntegrationBackground/>
+            <IntegrationBackground />
         </div>
         <ClientsBlock>
             <template v-slot:clients-header>
-                <ClientsHeader/>
+                <ClientsHeader />
             </template>
             <template v-slot:slider>
-                <clients-slider/>
+                <clients-slider />
             </template>
-            <template v-slot:clients-footer>
-            </template>
-
+            <template v-slot:clients-footer> </template>
         </ClientsBlock>
-        <faq/>
+        <faq />
 
-        <TechnicalIssues/>
+        <TechnicalIssues />
     </MainLayout>
 </template>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

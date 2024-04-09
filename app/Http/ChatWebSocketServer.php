@@ -20,6 +20,7 @@ class ChatWebSocketServer implements MessageComponentInterface
 {
     protected SplObjectStorage $clients;
     protected array $userConnections;
+    protected array $userMainConnections;
     protected PersonalChatRepository $personalChatRepository;
     protected SupportChatRepository $supportChatRepository;
     protected MessageFactory $messageFactory;
@@ -42,7 +43,14 @@ class ChatWebSocketServer implements MessageComponentInterface
         parse_str($conn->httpRequest->getUri()->getQuery(), $queryArray);
         $userId = $queryArray['userid'] ?? null;
         if ($userId !== null) {
-            $this->userConnections[$userId] = $conn;
+            // Save the main connection for the user if it's not already set
+            if (!isset($this->userMainConnections[$userId])) {
+                $this->userMainConnections[$userId] = $conn;
+            }else{
+                $this->userConnections[$userId] = $conn;
+            }
+
+            // Save the current connection as a user connection
         }
     }
 
@@ -81,7 +89,7 @@ class ChatWebSocketServer implements MessageComponentInterface
         $type = $data['type'] ?? 'chat';
         try {
             $messageProvider = WebSocketMessageProvider::factory($type, $this->personalChatRepository, $this->supportChatRepository, $this->messageFactory);
-            $messageProvider->sendMessage($data, $this->userConnections);
+            $messageProvider->sendMessage($data, $this->userConnections, $this->userMainConnections);
         } catch (Exception $e) {
             error_log("WebSocketMessageProvider error: " . $e->getMessage());
         }

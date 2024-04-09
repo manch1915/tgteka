@@ -19,7 +19,7 @@ abstract class WebSocketMessageProvider {
         logger('WebSocketMessageProvider constructed');
     }
 
-    abstract public function sendMessage(array $data, array $userConnections): void;
+    abstract public function sendMessage(array $data, array $userConnections, array $userMainConnections): void;
 
     public static function factory(string $type, PersonalChatRepository $personalChatRepository,
                                    SupportChatRepository $supportChatRepository,

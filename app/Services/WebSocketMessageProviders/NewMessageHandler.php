@@ -9,7 +9,7 @@ use Ratchet\ConnectionInterface;
 class NewMessageHandler extends WebSocketMessageProvider
 {
 
-    #[\Override] public function sendMessage(array $data, array $userConnections): void
+    #[\Override] public function sendMessage(array $data, array $userConnections, array $userMainConnections): void
     {
         try {
             $auth_id = $data['auth_id'];
@@ -26,6 +26,15 @@ class NewMessageHandler extends WebSocketMessageProvider
             $messageObject = $this->messageFactory->createPersonalChatMessage($auth_id, $message, $conversation_id, $username);
 
             $this->personalChatRepository->save($auth_id, $conversation_id, $message);
+
+            $notification = [
+                'type' => 'notification',
+                'content' => 'You have a new message',
+            ];
+
+            if (isset($userMainConnections[$recipientId])) {
+                $userMainConnections[$recipientId]->send(json_encode($notification));
+            }
 
             if (!isset($userConnections[$recipientId])) {
                 return;

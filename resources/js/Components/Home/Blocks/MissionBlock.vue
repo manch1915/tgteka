@@ -19,7 +19,7 @@ onUnmounted(() => {
 </script>
 <template>
     <div class="mission">
-        <div class="container mx-auto">
+        <div class="container mx-auto px-4">
             <div
                 class="sm:pt-32 pt-14 flex flex-col items-center justify-center"
             >
@@ -35,7 +35,7 @@ onUnmounted(() => {
                         условиях.
                     </span>
                     <br class="sm:hidden" />
-                    <span class="text-slate-600">
+                    <span class="text-slate">
                         Мы даём им простой инструмент для&nbsp;взаимовыгодного
                         <i class="inline-block hacker-icon -mb-2 me-4"></i
                         >сотрудничества и&nbsp;открываем новые возможности для
@@ -62,6 +62,7 @@ onUnmounted(() => {
     max-width: 1360px;
 }
 i.hacker-icon {
+    pointer-events: none;
     width: 111px;
     height: 40px;
     content: url("/images/hacker.svg");
@@ -69,5 +70,8 @@ i.hacker-icon {
         width: 79px;
         height: 28px;
     }
+}
+.text-slate {
+    color: #575380;
 }
 </style>

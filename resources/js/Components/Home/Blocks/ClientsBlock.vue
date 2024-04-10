@@ -1,13 +1,24 @@
 <script setup></script>
 <template>
-    <div class="bg_fon clients clients_mid">
-        <div class="w-full">
-            <div class="container mx-auto">
-                <slot name="clients-header"></slot>
-                <div>
-                    <slot name="slider"> </slot>
+    <div class="clients_mid">
+        <div class="curvedside">
+            <div class="curvedside__mask"></div>
+            <div class="edge"></div>
+            <div class="curvedside__base">
+                <div class="curvedside__content">
+                    <div class="clients clients_mid">
+                        <div class="w-full pb-28">
+                            <div class="container mx-auto">
+                                <slot name="clients-header"></slot>
+                                <div>
+                                    <slot name="slider"> </slot>
+                                </div>
+
+                                <slot name="clients-footer"> </slot>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <slot name="clients-footer"> </slot>
             </div>
         </div>
     </div>
@@ -58,21 +69,80 @@ $breakpoints_bottom: (
     "380": 270,
     "320": 290,
 );
-
+$bg: linear-gradient(160deg, rgba(55, 50, 189, 1) 11%, rgba(7, 12, 41, 1) 60%);
+$mask: "/images/background-Vector-1.svg";
+$maskHeight: 20vw; /* адаптив */
+$maskPos: "top";
+$minHeight: 300px;
+$offset: 0px;
 .clients_mid {
     height: 100%;
-    &.bg_fon {
+
+    .curvedside {
+        position: relative;
+        width: 100%;
+        z-index: 2;
+
+        .curvedside__mask {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            mask-image: url($mask);
+            mask-repeat: no-repeat;
+            mask-position: #{$maskPos} left;
+            z-index: -1;
+            mask-size: 100%, $maskHeight, contain;
+            /*mask-repeat: repeat-x*/
+
+            background: $bg;
+            @media (max-width: 640px) {
+                mask-size: 100%, 25vw, contain;
+                width: 1000px;
+            }
+        }
+
+        .curvedside__base {
+            min-height: calc($minHeight + $offset);
+            width: 100%;
+            margin-top: 50px;
+
+            background: $bg;
+
+            background-clip: content-box;
+            padding-#{$maskPos}: $maskHeight;
+            @media (max-width: 640px) {
+                background: transparent;
+                padding-#{$maskPos}: 25vw;
+            }
+        }
+
+        .curvedside__content {
+            min-height: 300px;
+            position: relative;
+
+            margin-top: $offset;
+        }
+
+        .edge {
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: $maskHeight;
+            background-image: url("/images/vector-volna.svg");
+            background-size: contain;
+            background-repeat: no-repeat;
+            @media (max-width: 640px) {
+                width: 1000px;
+                height: 27vw;
+                background-size: cover;
+            }
+        }
     }
-    // background: linear-gradient(
-    //     to bottom,
-    //     rgba(255, 255, 255, 0),
-    //     rgba(255, 255, 255, 0.5),
-    //     rgba(255, 255, 255, 0)
-    // );
-    // position: relative;
-    // top: 0; /* Adjust this value to position the overlay */
-    // left: 0;
-    // width: 100%;
-    // height: 100%;
 }
 </style>

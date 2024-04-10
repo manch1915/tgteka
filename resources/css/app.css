@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Open+Sans:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Poppins:wght@300;400;500;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto&display=swap");
 @import "_checkbox-radio-switch.css";
@@ -115,54 +115,8 @@ video {
     border-radius: 40px;
 }
 
-.bg_fon {
-    width: 100%;
-    position: relative;
-    margin-top: 100px;
-    padding-top: 22vw;
-}
-.border__fon:after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1.5px;
-    background: rgb(24, 25, 94);
-
-    background: linear-gradient(
-            45deg,
-            rgba(24, 25, 94, 1) 0%,
-            rgba(21, 21, 21, 0) 100%
-        ),
-        linear-gradient(
-            45deg,
-            rgba(89, 61, 239, 1) 0%,
-            rgba(89, 61, 239, 1) 100%
-        ),
-        linear-gradient(
-            45deg,
-            rgba(255, 255, 255, 1) 0%,
-            rgba(255, 255, 255, 0) 100%
-        );
-    -webkit-mask: linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-}
-.bg_fon::before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 0px;
-    left: 0;
-    right: 0;
-    width: 100vw;
-    height: 200%;
-    z-index: -1;
-    background-image: url("/images/bg-fon.svg");
-    background-repeat: no-repeat;
-
-    background-size: cover;
+.line-1-3 {
+    line-height: 1.3 !important;
 }
 @media (max-width: 2440px) {
     .bg_fon::before {

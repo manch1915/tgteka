@@ -292,7 +292,7 @@ $gradient-background: radial-gradient(
     rgba(255, 255, 255, 0.26) 0%,
     rgba(255, 255, 255, 0) 100%
 );
-$font-OpenSans: Open Sans;
+$font-OpenSans: "Open Sans";
 
 .data_container {
     background: $gradient-background;

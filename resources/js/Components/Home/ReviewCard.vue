@@ -1,7 +1,7 @@
 <template>
     <div class="block">
         <div
-            class="review text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+            class="review text-violet-100 text-base font-normal font-['Open Sans'] line-1-3"
         >
             Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
             Текст отзыва Текст отзыва Текст отзыва Текст отзыва Текст отзыва
@@ -34,6 +34,12 @@
             width: 24px;
             height: 24px;
             background-size: 24px 24px;
+            @media screen and (max-width: 640px) {
+                width: 18px;
+                height: 18px;
+                background-size: 18px 18px;
+                left: -25px;
+            }
         }
         &::after {
             content: "";
@@ -45,6 +51,9 @@
             width: 24px;
             height: 24px;
             background-size: 24px 24px;
+            @media screen and (max-width: 640px) {
+                display: none;
+            }
         }
     }
 }

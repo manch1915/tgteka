@@ -1,17 +1,17 @@
 <template>
     <div class="card">
         <div class="handbook__card">
-            <div class="content flex flex-col justify-between gap-4">
+            <div class="content flex flex-col justify-between gap-4 lg:gap-8">
                 <div class="handbook__card__icon">
                     <img src="/images/virtual-reality-vr.svg" alt="" />
                 </div>
                 <div
-                    class="text-violet-100 text-lg font-bold font-['Open Sans']"
+                    class="text-violet-100 text-sm lg:text-xl line-1-3 font-bold font-['Open Sans']"
                 >
                     Преимущество 1
                 </div>
                 <div
-                    class="text-violet-100 text-sm font-normal font-['Open Sans']"
+                    class="text-violet-100 text-sm lg:text-xl line-1-3 font-light font-['Open Sans']"
                 >
                     Расскажите, что отличает ваши услуги от услуг в других
                     компаниях
@@ -41,12 +41,14 @@
         border-radius: 0 74px 74px 74px;
         // border: 1px solid rgba(255, 255, 255, 0.2);
 
-        backdrop-filter: blur(10px);
-        background: radial-gradient(
-            278.82% 137.51% at 1.95% 3.59%,
-            rgba(255, 255, 255, 0.4) 0%,
+        backdrop-filter: blur(15px);
+        background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.3) 0%,
+            rgba(81, 63, 255, 0.1) 50%,
             rgba(81, 63, 255, 0) 100%
         );
+
         z-index: 1;
         &:before {
             content: "";
@@ -80,7 +82,7 @@
         }
         &__icon {
             width: 40px;
-            margin-left: auto;
+            margin: 18px 9px 0 auto;
         }
     }
     .handbook__card__second {

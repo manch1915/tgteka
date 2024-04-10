@@ -7,11 +7,10 @@ import HowItWorksBlock from "@/Components/Home/Blocks/HowItWorksBlock.vue";
 import PointCard from "@/Components/Home/PointCard.vue";
 import InterestChannelsBlock from "@/Components/Home/Blocks/InterestChannelsBlock.vue";
 import ChannelCard from "@/Components/Home/ChannelCard.vue";
-import IntegrationBlock from "@/Components/Home/Blocks/IntegrationBlock.vue";
+
 import ClientsBlock from "@/Components/Home/Blocks/ClientsBlock.vue";
 import ClientsSlider from "@/Components/Home/ClientsSlider.vue";
-import ComparisonCard from "@/Components/Home/ComparisonCard.vue";
-import IntegrationBackground from "@/Components/Home/Blocks/IntegrationBackground.vue";
+
 import ClientsHeader from "@/Components/Home/ClientsHeader.vue";
 import Feedback from "@/Components/Home/Feedback.vue";
 import Slider from "@/Components/Home/Slider.vue";
@@ -37,54 +36,6 @@ const texts = [
     "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc",
 ];
 
-const compareItems = [
-    {
-        header: "Самостоятельное размещение напрямую",
-        listText: [
-            "Найти каталог Телеграм-каналов через Google",
-            "Проверить каналы на живых подписчиков",
-            "Написать каждому админу, чтобы узнать стоимость интеграции",
-            "Оплатить размещение каждому админу",
-            "Написать посты для интеграции",
-            "Отправить пост каждому админу",
-            "Контролировать выход поста в каждом канале",
-        ],
-        icons: [
-            {
-                class: "blue",
-                text: "ручной процесс",
-            },
-            {
-                class: "blue",
-                text: "нет гарантий",
-            },
-        ],
-        hasButton: false,
-        showSaveTimeMoney: false,
-    },
-    {
-        header: "Автоматическое размещение с TGteka.ru",
-        listText: [
-            "Зарегистрируйтесь на платформе",
-            "Выберите подходящие каналы из каталога в один клик или купите размещение под ключ",
-            "Создайте интеграцию",
-            "Запустите нативную интеграцию",
-            "Получите оповещение о каждом размещении",
-        ],
-        icons: [
-            {
-                class: "white",
-                text: "автоматический процесс",
-            },
-            {
-                class: "white",
-                text: "есть гарантии",
-            },
-        ],
-        hasButton: true,
-        showSaveTimeMoney: true,
-    },
-];
 const windowWidth = ref(window.innerWidth);
 const updateWidth = () => {
     windowWidth.value = window.innerWidth;
@@ -148,7 +99,7 @@ onUnmounted(() => {
                     <slider :interactive="true" :slides="6">
                         <template v-slot:slider>
                             <template v-for="i in 6" :key="i">
-                                <swiper-slide class="pb-20 px-4">
+                                <swiper-slide class="pb-14 px-4">
                                     <ChannelCard />
                                 </swiper-slide>
                             </template>
@@ -160,17 +111,7 @@ onUnmounted(() => {
                 </template>
             </template>
         </InterestChannelsBlock>
-        <IntegrationBackground class="margin-top" />
-        <IntegrationBlock>
-            <template v-slot:comparePairs>
-                <ComparisonCard
-                    :background="i"
-                    v-for="(item, i) in compareItems"
-                    :item="item"
-                    :key="i"
-                />
-            </template>
-        </IntegrationBlock>
+
         <ClientsBlock>
             <template v-slot:clients-header>
                 <ClientsHeader />

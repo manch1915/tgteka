@@ -53,14 +53,14 @@ const modules = [Navigation, Pagination, Autoplay, FreeMode];
                 <div
                     class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed"
                 >
-                    {{ activeIndex }}/{{ slides }}
+                    {{ activeIndex }} / {{ slides }}
                 </div>
                 <div class="arrow arrow_right">
                     <img src="/images/arrow.svg" alt="arrow" />
                 </div>
             </div>
         </div>
-        <div class="w-full">
+        <div class="w-full mb-10">
             <swiper
                 :autoplay="{ delay: 2000 }"
                 :free-mode="freemode"
@@ -76,10 +76,10 @@ const modules = [Navigation, Pagination, Autoplay, FreeMode];
                 <slot name="slider" />
             </swiper>
         </div>
-        <div
+        <!-- <div
             class="pagination flex items-center content-center justify-center gap-6 pt-4"
             v-html="bullets"
-        ></div>
+        ></div> -->
     </div>
 </template>
 
@@ -99,6 +99,7 @@ const modules = [Navigation, Pagination, Autoplay, FreeMode];
         position: relative;
 
         &:before {
+            pointer-events: none;
             content: "“";
             position: absolute;
             color: var(--White, #eae0ff);

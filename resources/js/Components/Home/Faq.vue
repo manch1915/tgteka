@@ -3,7 +3,7 @@ import FaqCard from "@/Components/Home/FaqCard.vue";
 </script>
 
 <template>
-    <div class="container mx-auto mt-28">
+    <div class="container mx-auto">
         <div class="strelka w-full overflow-hidden py-4 h-32">
             <h1
                 class="text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10 text-center"
@@ -34,12 +34,14 @@ import FaqCard from "@/Components/Home/FaqCard.vue";
         );
         width: 100vw;
         height: 150%;
+        pointer-events: none;
     }
 }
 .strelka {
     position: relative;
     &:after {
         content: "";
+        pointer-events: none;
         position: absolute;
         left: 3%;
         bottom: 40%;

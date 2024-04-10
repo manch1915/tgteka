@@ -13,7 +13,7 @@ const props = defineProps({
 <template>
     <div
         :class="{ 'lg:justify-between': !props.reversed }"
-        class="point-card lg:max-w-full max-w-lg lg:flex grid flex-col lg:items-center lg:text-center lg:justify-items-center gap-5"
+        class="point-card lg:max-w-full max-w-lg lg:flex grid flex-col lg:items-center lg:text-center lg:justify-items-center gap-5 pl-2 lg:pl-0"
     >
         <div
             v-if="props.reversed"
@@ -27,12 +27,12 @@ const props = defineProps({
         </div>
         <div class="lg:flex flex-col lg:items-center">
             <h1
-                class="lg:w-80 point-header lg:text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-tight mb-3"
+                class="lg:max-w-[28rem] point-header lg:text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-tight mb-3"
             >
                 {{ props.header }}
             </h1>
             <p
-                class="lg:w-64 point-paragraph lg:text-center text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
+                class="lg:w-64 point-paragraph lg:text-center text-violet-100 text-sm font-light font-['Open_Sans'] leading-tight"
             >
                 {{ props.paragraph }}
             </p>
@@ -40,7 +40,7 @@ const props = defineProps({
 
         <div
             v-if="!props.reversed"
-            class="point flex items-center justify-center lg:mt-9"
+            class="point flex items-center justify-center"
         >
             <div
                 class="point__number text-center text-violet-100 text-4xl font-bold font-['TT Norms'] uppercase leading-10"
@@ -57,7 +57,7 @@ const props = defineProps({
     height: 60px;
     border-radius: 50%;
     background-color: #2e63d9;
-    filter: drop-shadow(4px 1px 57px #2e63d9);
+    box-shadow: 4px 1px 57px 0 #2e63d9;
     z-index: 1;
 }
 .point-card {

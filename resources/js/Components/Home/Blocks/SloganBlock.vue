@@ -35,7 +35,7 @@ const props = defineProps({
             >
                 <div>
                     <div
-                        class="drop-shadow-md sm:text-4xl lg:text-5xl text-2xl sm:p-0 font-bold text-paleblue text-center"
+                        class="drop-shadow-md sm:text-4xl lg:text-5xl text-2xl line-1-3 sm:p-0 font-bold text-paleblue text-center"
                     >
                         {{ props.header }}
                     </div>
@@ -74,6 +74,7 @@ const props = defineProps({
         .main_paragraph {
             max-width: 27rem;
             font-size: 20px;
+            font-weight: 300;
             line-height: 1.3;
         }
         .main_button {
@@ -111,17 +112,19 @@ const props = defineProps({
         max-height: 100px; /* Or whatever size you want */
         width: 100%; /* Will resize down to the max-width */
         height: auto; /* Will resize down to the max-height */
+        pointer-events: none;
     }
 
     & .icon1 {
-        width: 88px;
-        height: 88px;
+        width: 71px;
+        height: 71px;
         top: 75%;
         left: 75%;
-
+        opacity: 0.5;
         @media screen and (max-width: 640px) {
             width: 30px;
             height: 30px;
+            display: none;
         }
     }
     & .icon2 {
@@ -132,6 +135,9 @@ const props = defineProps({
 
         @media screen and (max-width: 640px) {
             width: 20px;
+            left: 5%;
+            top: auto;
+            bottom: 5%;
             height: 20px;
         }
     }
@@ -144,6 +150,10 @@ const props = defineProps({
         @media screen and (max-width: 640px) {
             width: 23px;
             height: 23px;
+            left: auto;
+            top: auto;
+            right: 5%;
+            bottom: 18%;
         }
     }
     & .icon4 {
@@ -153,7 +163,8 @@ const props = defineProps({
         left: 60%;
 
         @media screen and (max-width: 640px) {
-            top: 0%;
+            top: auto;
+            bottom: 50vh;
             left: 50%;
             transform: translateX(-50%);
             max-width: 320px;
@@ -169,17 +180,23 @@ const props = defineProps({
         @media screen and (max-width: 640px) {
             width: 30px;
             height: 30px;
+            top: auto;
+            bottom: 12%;
         }
     }
     & .icon6 {
-        width: 85px;
-        height: 85px;
+        width: 48px;
+        height: 48px;
         top: 70%;
         left: 20%;
-
+        opacity: 0.5;
         @media screen and (max-width: 640px) {
             width: 30px;
             height: 30px;
+            left: auto;
+            top: auto;
+            right: 7%;
+            bottom: 8%;
         }
     }
 
@@ -190,51 +207,63 @@ const props = defineProps({
         left: 0;
         right: 0;
         bottom: 0;
-        background-image: url("/images/background.svg");
-        background-repeat: repeat-x;
-        background-position: bottom center;
-        background-size: contain;
-        height: 30%;
-        width: 100%;
 
+        background-image: url("/images/bg-cub-fon.svg");
+        background-position: bottom center;
+        background-repeat: repeat-x;
+        background-size: contain;
+        mask-image: url("/images/fon-tranparent.svg");
+        mask-repeat: repeat-x;
+        -webkit-mask-position: top left;
+        mask-position: top left;
+        z-index: -1;
+        -webkit-mask-size: 100%, 10%, contain;
+        mask-size: 100%, 10%, contain;
+
+        filter: brightness(10);
+        opacity: 0.7;
+        height: 26%;
+        width: 100%;
         z-index: 0;
 
-        @media screen and (max-width: 640px) {
-            // background: url("/images/background.svg") no-repeat bottom center;
-            // background-size: 200%;
+        @media (max-width: 640px) {
+            filter: brightness(3);
+            height: 15%;
         }
     }
     &__fon_blur {
         content: "";
         position: absolute;
-
-        bottom: -20%;
+        bottom: -50%;
         background-position: bottom center;
         position: absolute;
-        height: 40%;
+        height: 75%;
         width: 40%;
         background: radial-gradient(
             circle,
-            rgba(214, 126, 226, 0.5) 0%,
-            rgba(115, 54, 215, 0.5) 33%,
+            rgba(214, 126, 226, 0.7) 0%,
+            rgba(115, 54, 215, 0.6) 33%,
             rgba(0, 0, 0, 0.13) 89%,
             rgba(255, 255, 255, 0) 100%
         );
         z-index: -1;
-        filter: blur(100px);
+        filter: blur(200px);
         @media (max-width: 640px) {
             filter: blur(50px);
         }
+        @media (min-width: 1600px) {
+            width: 635px;
+        }
         &--left {
-            left: 10%;
-            @media (max-width: 640px) {
-                left: 0%;
+            right: calc(50% + 50px);
+            @media (max-width: 960px) {
+                left: 10%;
             }
         }
         &--right {
-            right: 10%;
-            @media (max-width: 640px) {
-                right: 0%;
+            left: calc(50% + 50px);
+            @media (max-width: 960px) {
+                right: 10%;
             }
         }
     }
@@ -244,6 +273,9 @@ const props = defineProps({
 
 .main-padding {
     height: calc(100vh - 100px);
+    @media screen and (max-width: 767px) {
+        height: calc(100vh - 60px);
+    }
 }
 
 .main_button {

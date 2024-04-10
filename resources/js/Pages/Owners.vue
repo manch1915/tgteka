@@ -9,6 +9,7 @@ import ClientsBlock from "@/Components/Home/Blocks/ClientsBlock.vue";
 import ClientsSlider from "@/Components/Home/ClientsSlider.vue";
 import ClientsHeader from "@/Components/Home/ClientsHeader.vue";
 import Faq from "@/Components/Home/Faq.vue";
+
 import TechnicalIssues from "@/Components/Home/Blocks/TechnicalIssues.vue";
 import SloganBlock from "@/Components/Home/Blocks/SloganBlock.vue";
 import Slider from "@/Components/Home/Slider.vue";

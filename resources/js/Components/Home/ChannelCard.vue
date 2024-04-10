@@ -97,11 +97,12 @@
     box-sizing: border-box;
     overflow: hidden;
     &::before {
+        pointer-events: none;
         content: "";
         position: absolute;
         inset: 0;
         border-radius: inherit;
-        padding: 2.5px;
+        padding: 1.5px;
         background: linear-gradient(
                 0deg,
                 rgba(24, 25, 94, 1) 0%,
@@ -121,6 +122,7 @@
             linear-gradient(#fff 0 0);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
+        z-index: 1;
     }
     @media screen and (max-width: 1024px) {
         margin-top: 20px;
@@ -181,8 +183,8 @@
 }
 .order {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 3px;
+    right: 5px;
     .order_el {
     }
 }

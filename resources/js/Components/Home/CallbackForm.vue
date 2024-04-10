@@ -53,8 +53,8 @@ const orderCallback = () => {
 </script>
 
 <template>
-    <div class="sm:p-0 p-2">
-        <div class="consultation__block sm:p-16 p-5 mt-14">
+    <div class="px-4">
+        <div class="consultation__block sm:p-16 p-5 sm:mt-14 mt-10">
             <div
                 class="form flex flex-col text-violet-100 justify-center gap-y-4"
             >
@@ -87,7 +87,7 @@ const orderCallback = () => {
                             :theme-overrides="checkboxThemeOverrides"
                         />
                         <label
-                            class="terms text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
+                            class="terms text-violet-100 text-sm font-light font-['Open Sans'] leading-tight"
                         >
                             Нажимая на кнопку «Отправить» я соглашаюсь с
                             <Link :href="route('rules')" class="underline">
@@ -120,24 +120,54 @@ const orderCallback = () => {
         rgba(255, 255, 255, 0) 100%
     );
     backdrop-filter: blur(21px);
-    &:before {
+    // &:before {
+    //     pointer-events: none;
+    //     content: "";
+    //     position: absolute;
+    //     inset: 0;
+    //     border-radius: inherit;
+    //     padding: 1.5px;
+    //     background: linear-gradient(
+    //             360deg,
+    //             rgba(24, 25, 94, 1) 0%,
+    //             rgba(21, 21, 21, 0) 100%
+    //         ),
+    //         linear-gradient(
+    //             360deg,
+    //             rgba(78, 64, 97, 1) 0%,
+    //             rgba(130, 120, 185, 1) 100%
+    //         ),
+    //         linear-gradient(
+    //             360deg,
+    //             rgba(255, 255, 255, 1) 0%,
+    //             rgba(255, 255, 255, 0) 100%
+    //         );
+    //     -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    //         linear-gradient(#fff 0 0);
+    //     -webkit-mask-composite: xor;
+    //     mask-composite: exclude;
+    // }
+
+    &::before {
         content: "";
         position: absolute;
         inset: 0;
         border-radius: inherit;
         padding: 1.5px;
+        background: rgb(24, 25, 94);
+        pointer-events: none;
         background: linear-gradient(
-                360deg,
+                45deg,
                 rgba(24, 25, 94, 1) 0%,
                 rgba(21, 21, 21, 0) 100%
             ),
             linear-gradient(
-                360deg,
-                rgba(78, 64, 97, 1) 0%,
-                rgba(130, 120, 185, 1) 100%
+                45deg,
+                rgba(89, 61, 239, 1) 0%,
+                rgba(89, 61, 239, 1) 100%
             ),
             linear-gradient(
-                360deg,
+                45deg,
                 rgba(255, 255, 255, 1) 0%,
                 rgba(255, 255, 255, 0) 100%
             );
@@ -161,17 +191,18 @@ const orderCallback = () => {
         display: block;
         right: -20%;
         bottom: -7%;
-        background: url("/images/plane-consul.svg");
+        background-image: url("/images/plane-consul.svg");
         background-size: contain;
         background-repeat: no-repeat;
         width: 405px;
         height: 120px;
         @media (max-width: 640px) {
             right: auto;
+            height: 112px;
             left: 0;
             width: 100%;
             bottom: -50%;
-            transform: scaleY(-1);
+            background-image: url("/images/plane-consul-2.svg");
         }
     }
 }

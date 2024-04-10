@@ -14,7 +14,7 @@ const props = defineProps({
 <template class="relative">
     <div class="samo border__fon">
         <div class="sm:p-10 p-6">
-            <div class="flex gap-4 icons sm:pb-5 pb-9">
+            <div class="flex lg:gap-4 gap-1 icons sm:pb-5 pb-9">
                 <div
                     v-for="i in props.item.icons"
                     :class="' icons_el icons_el-' + i.class"
@@ -48,12 +48,12 @@ const props = defineProps({
             </div>
             <div
                 v-if="props.item.showSaveTimeMoney"
-                class="flex justify-end pt-4 pb-36"
+                class="flex justify-end xl:pt-8 pt-9 pb-36"
             >
                 <div>
-                    <span class="text-xl font-bold text-violet-100">x</span>
-                    <span class="text-2xl font-bold text-violet-100">2</span>
-                    <span class="text-xl font-bold text-violet-100">
+                    <span class="text-2xl font-bold text-violet-100">x</span>
+                    <span class="text-4xl font-bold text-violet-100">2</span>
+                    <span class="text-2xl font-bold text-violet-100">
                         сэкономить <br />время и деньги</span
                     >
                 </div>
@@ -64,7 +64,6 @@ const props = defineProps({
 
 <style scoped lang="scss">
 .samo {
-    max-width: 70%;
     min-height: 100%;
     background: linear-gradient(
         45deg,
@@ -78,8 +77,7 @@ const props = defineProps({
     border-radius: 0 40px 40px 40px;
 
     backdrop-filter: blur(10px);
-    &::after {
-    }
+
     &::before {
         content: "";
         position: absolute;
@@ -87,13 +85,25 @@ const props = defineProps({
         left: 0;
         bottom: 0;
         width: 100%;
-        height: 15%;
+        height: 208px;
         background-image: url("/images/cardlines.png");
 
         background-size: cover;
         background-repeat: no-repeat;
     }
-
+    &:nth-child(1) {
+        &::before {
+            @media screen and (max-width: 1024px) {
+                height: 150px;
+            }
+            @media screen and (max-width: 480px) {
+                height: 78px;
+            }
+        }
+        @media screen and (max-width: 1024px) {
+            order: 1;
+        }
+    }
     &:nth-child(2) {
         background: linear-gradient(
                 45deg,
@@ -105,25 +115,53 @@ const props = defineProps({
                 rgba(48, 45, 168, 1) 0%,
                 rgba(49, 44, 168, 0) 100%
             );
-    }
-    &:nth-child(2) {
         &::before {
+            height: 177px;
             background-image: url("/images/cardlines2.png");
+            @media screen and (max-width: 1024px) {
+                height: 155px;
+            }
+            @media screen and (max-width: 480px) {
+                height: 70px;
+            }
         }
-    }
-
-    @media screen and (min-width: 1024px) {
-        &:nth-child(2) {
+        @media screen and (min-width: 1024px) {
             transform: translateY(-55px);
         }
     }
-    @media screen and (max-width: 1240px) {
-        max-width: 90%;
-    }
-    @media screen and (max-width: 640px) {
-        max-width: 95%;
+    &.border__fon {
         &:nth-child(1) {
-            order: 1;
+            &:after {
+                padding: 1.5px;
+            }
+        }
+        &:after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 3.5px;
+            background: rgb(24, 25, 94);
+            pointer-events: none;
+            background: linear-gradient(
+                    45deg,
+                    rgba(24, 25, 94, 1) 0%,
+                    rgba(21, 21, 21, 0) 100%
+                ),
+                linear-gradient(
+                    45deg,
+                    rgba(89, 61, 239, 1) 0%,
+                    rgba(89, 61, 239, 1) 100%
+                ),
+                linear-gradient(
+                    45deg,
+                    rgba(255, 255, 255, 1) 0%,
+                    rgba(255, 255, 255, 0) 100%
+                );
+            -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
         }
     }
     ul {
@@ -150,6 +188,14 @@ const props = defineProps({
     .icons_el {
         padding: 8px 12px;
         border-radius: 100px;
+        @media screen and (max-width: 640px) {
+            padding: 3px 9px;
+        }
+        .text-sm {
+            @media screen and (max-width: 640px) {
+                font-size: 12px;
+            }
+        }
     }
     .icons_el-white {
         div {

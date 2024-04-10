@@ -730,7 +730,7 @@ watch(
     }
     h1 {
         color: #eae0ff;
-        font-family: Open Sans;
+        font-family: "Open Sans";
         font-size: 30px;
         font-style: normal;
         font-weight: 700;
@@ -738,7 +738,7 @@ watch(
         @media screen and (max-width: 640px) {
             color: var(--White, #eae0ff);
             text-align: center;
-            font-family: Open Sans;
+            font-family: "Open Sans";
             font-size: 22px;
             font-style: normal;
             font-weight: 700;

@@ -21,8 +21,8 @@ const props = defineProps({
     flex-direction: column;
     justify-content: center;
     background: linear-gradient(
-        60deg,
-        rgba(255, 255, 255, 0.28) 0%,
+        26deg,
+        rgba(255, 255, 255, 0.26) 0%,
         rgba(255, 255, 255, 0) 100%
     );
 
@@ -35,11 +35,11 @@ const props = defineProps({
         border-radius: inherit;
         padding: 3.5px;
         background: linear-gradient(
-                0deg,
+                7deg,
                 rgba(24, 25, 94, 1) 0%,
                 rgba(21, 21, 21, 0) 100%
             ),
-            linear-gradient(0deg, rgba(89, 61, 239, 1), rgba(89, 61, 239, 1)),
+            linear-gradient(45deg, rgba(89, 61, 239, 1), rgba(89, 61, 239, 1)),
             linear-gradient(
                 0deg,
                 rgba(255, 255, 255, 1) 0%,

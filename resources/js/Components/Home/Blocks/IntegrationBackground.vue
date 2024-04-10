@@ -11,10 +11,19 @@ const props = defineProps({
     },
 });
 </script>
-<style>
+<style scoped lang="scss">
 .margin-top {
-    @media (max-width: 385px) {
-        margin-top: 100px;
+    pointer-events: none;
+    @media (max-width: 960px) {
+        margin-top: 80px;
+        display: flex;
+        justify-content: center;
+        img {
+            width: 900px;
+
+            height: 155px;
+            max-width: unset;
+        }
     }
 }
 </style>

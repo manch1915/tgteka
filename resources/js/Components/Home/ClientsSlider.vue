@@ -69,7 +69,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="main">
+    <div class="main px-4">
         <div class="interactive pb-4">
             <div class="buttons flex gap-3 items-center">
                 <div class="arrow arrow_left">
@@ -78,7 +78,7 @@ onUnmounted(() => {
                 <div
                     class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed"
                 >
-                    {{ activeIndex }}/3
+                    {{ activeIndex }} / 3
                 </div>
                 <div class="arrow arrow_right">
                     <img src="/images/arrow.svg" alt="arrow" />
@@ -132,11 +132,11 @@ onUnmounted(() => {
     &::before {
         content: "";
         position: absolute;
-
+        pointer-events: none;
         display: block;
         left: 50%;
         top: 50%;
-        height: 150%;
+        height: 100%;
         width: 100vw;
         transform: translate(-50%, -50%);
         z-index: 0;
@@ -161,24 +161,27 @@ onUnmounted(() => {
         rgba(255, 255, 255, 0.26) 0%,
         rgba(255, 255, 255, 0) 100%
     );
-    &:before {
+
+    &::before {
         content: "";
         position: absolute;
         inset: 0;
         border-radius: inherit;
         padding: 1.5px;
+        background: rgb(24, 25, 94);
+        pointer-events: none;
         background: linear-gradient(
-                360deg,
+                0deg,
                 rgba(24, 25, 94, 1) 0%,
                 rgba(21, 21, 21, 0) 100%
             ),
             linear-gradient(
-                360deg,
-                rgba(78, 64, 97, 1) 0%,
-                rgba(130, 120, 185, 1) 100%
+                0deg,
+                rgba(89, 61, 239, 1) 0%,
+                rgba(89, 61, 239, 1) 100%
             ),
             linear-gradient(
-                360deg,
+                0deg,
                 rgba(255, 255, 255, 1) 0%,
                 rgba(255, 255, 255, 0) 100%
             );

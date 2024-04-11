@@ -1,5 +1,5 @@
 <template>
-    <div :class="classString">
+    <div :class="classString" class="pointer-events-none">
         <img src="/images/integr-background.svg" alt="" />
     </div>
 </template>

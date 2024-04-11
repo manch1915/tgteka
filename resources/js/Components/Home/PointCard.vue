@@ -27,7 +27,7 @@ const props = defineProps({
         </div>
         <div class="lg:flex flex-col lg:items-center">
             <h1
-                class="lg:max-w-[28rem] point-header lg:text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-tight mb-3"
+                class="lg:max-w-[28rem] point-header lg:text-center text-violet-100 xl:text-xl lg:text-base text-xl font-bold font-['Open Sans'] leading-tight mb-3"
             >
                 {{ props.header }}
             </h1>

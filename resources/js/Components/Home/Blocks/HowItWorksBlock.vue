@@ -44,7 +44,7 @@
             width: 80%;
             height: 100px;
             transform: scale(1);
-            @media (max-width: 1024px) {
+            @media (max-width: 1023px) {
                 display: none;
             }
         }
@@ -60,7 +60,7 @@
         @media (max-width: 1280px) {
             top: -20%;
         }
-        @media (max-width: 1024px) {
+        @media (max-width: 1023px) {
             top: auto;
             bottom: -60px;
             left: 280px;
@@ -83,7 +83,7 @@
     position: absolute;
     z-index: 0;
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1023px) {
         height: 105%;
         width: 300px;
         left: 2%;
@@ -107,7 +107,7 @@
         bottom: 6%;
         right: -1%;
     }
-    @media (max-width: 1024px) {
+    @media (max-width: 1023px) {
         bottom: -110px;
         left: 280px;
         right: auto;

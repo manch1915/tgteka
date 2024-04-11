@@ -59,21 +59,32 @@
             inset: 0;
             padding: 2.5px;
 
+            // background: radial-gradient(
+            //         circle,
+            //         rgba(21, 21, 21, 1) 0%,
+            //         rgba(21, 21, 21, 0) 100%
+            //     ),
+            //     radial-gradient(
+            //         circle,
+            //         rgba(166, 105, 232, 1) 0%,
+            //         rgba(166, 105, 232, 0) 100%
+            //     ),
+            //     radial-gradient(
+            //         circle,
+            //         rgba(255, 255, 255, 1) 0%,
+            //         rgba(23, 43, 71, 1) 100%
+            //     );
             background: radial-gradient(
                     circle,
-                    rgba(21, 21, 21, 1) 0%,
+                    rgb(21, 21, 21) 0%,
                     rgba(21, 21, 21, 0) 100%
                 ),
                 radial-gradient(
                     circle,
-                    rgba(166, 105, 232, 1) 0%,
+                    rgb(207 179 239) 0%,
                     rgba(166, 105, 232, 0) 100%
                 ),
-                radial-gradient(
-                    circle,
-                    rgba(255, 255, 255, 1) 0%,
-                    rgba(23, 43, 71, 1) 100%
-                );
+                radial-gradient(circle, rgb(49 32 102) 0%, rgb(23, 43, 71) 100%);
             -webkit-mask: linear-gradient(#fff 0 0) content-box,
                 linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
@@ -99,9 +110,14 @@
         left: 8%;
         background: linear-gradient(
             135deg,
-            rgba(255, 255, 255, 0.4) 0%,
-            rgba(255, 255, 255, 0) 100%
+            rgb(95 85 131) 0%,
+            rgb(40 34 52 / 0%) 100%
         );
+        // background: linear-gradient(
+        //     135deg,
+        //     rgba(255, 255, 255, 0.4) 0%,
+        //     rgba(255, 255, 255, 0) 100%
+        // );
         overflow: hidden;
         &:before {
             content: "";
@@ -113,9 +129,14 @@
             left: 0%;
             top: 0%;
             padding: 2.5px;
+            // background: linear-gradient(
+            //     135deg,
+            //     rgba(129, 99, 192, 1) 0%,
+            //     rgba(129, 99, 192, 0) 100%
+            // );
             background: linear-gradient(
                 135deg,
-                rgba(129, 99, 192, 1) 0%,
+                rgb(59 43 92) 0%,
                 rgba(129, 99, 192, 0) 100%
             );
             -webkit-mask: linear-gradient(#fff 0 0) content-box,

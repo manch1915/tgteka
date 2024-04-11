@@ -6,7 +6,7 @@
         <div class="fon-radial-blue"></div>
         <div class="container mx-auto">
             <div
-                class="integration__header text-center lg:mt-32 mt-14 lg:mb-24 ml-auto mr-auto table py-12 px-4"
+                class="integration__header text-center lg:mt-32 mt-14 lg:mb-24 ml-auto mr-auto table pt-12 lg:pb-4 pb-12 px-4"
             >
                 <span
                     class="text-violet-100 lg:text-4xl text-3xl font-bold font-['Open Sans'] leading-10"

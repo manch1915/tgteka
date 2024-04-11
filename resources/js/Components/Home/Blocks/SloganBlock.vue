@@ -234,11 +234,15 @@ const props = defineProps({
     &__fon_blur {
         content: "";
         position: absolute;
-        bottom: -50%;
+
         background-position: bottom center;
         position: absolute;
-        height: 75%;
-        width: 40%;
+        //  bottom: -50%;
+        // height: 75%;
+        // width: 40%;
+        width: 635px;
+        height: 900px;
+        bottom: -500px;
         background: radial-gradient(
             circle,
             rgba(214, 126, 226, 0.7) 0%,
@@ -251,9 +255,9 @@ const props = defineProps({
         @media (max-width: 640px) {
             filter: blur(50px);
         }
-        @media (min-width: 1600px) {
-            width: 635px;
-        }
+        // @media (min-width: 1600px) {
+        //     width: 635px;
+        // }
         &--left {
             right: calc(50% + 50px);
             @media (max-width: 960px) {

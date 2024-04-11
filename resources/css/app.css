@@ -21,6 +21,7 @@ body {
 body {
     background: #070b28;
     font-family: "Open Sans", sans-serif !important;
+    overflow: hidden;
 }
 img,
 video {

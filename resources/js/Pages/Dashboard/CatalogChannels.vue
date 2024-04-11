@@ -16,7 +16,7 @@ import {
     selectThemeOverrides,
     sliderThemeOverrides,
 } from "@/themeOverrides.js";
-import { computed, ref } from "vue";
+import {computed, ref, watch} from "vue";
 import CatalogChannels from "@/Components/Dashboard/CatalogChannels.vue";
 import { useMainStore } from "@/stores/main.js";
 import { useChannelStore } from "@/stores/channelStore.js";
@@ -33,21 +33,33 @@ const props = defineProps({
 closeModal();
 
 const store = useMainStore();
+const channelStore = useChannelStore();
+
 store.fetchTopics();
 
-const channelSubjects = computed(() =>
-    store.topics.map((topic) => ({
+const channelSubjects = computed(() => {
+    const topicsWithOptions = store.topics.map((topic) => ({
         label: topic.title,
         value: topic.id,
-    }))
-);
+    }));
+
+    // Prepend the null option with label "Все тематики" to the array
+    topicsWithOptions.unshift({
+        label: 'Все тематики',
+        value: null,
+    });
+
+    return topicsWithOptions;
+});
+
+
+watch(() => channelStore.subject, () => channelStore.fetchChannels(1, channelStore.additionalFilter))
 
 const formatTooltip = (value) => `${value}+`;
 const formatTooltipPercent = (value) => `> ${value}%`;
 const additionalFilter = ref(false);
 const placeholder = ["от", "до"];
 
-const channelStore = useChannelStore();
 
 let timeout;
 const searchHandler = (value) => {
@@ -596,6 +608,7 @@ const activate = (place) => {
                     </div>
                     <div class="inline w-full sm:hidden">
                         <n-select
+                            v-model:value="channelStore.subject"
                             :options="channelSubjects"
                             :theme-overrides="selectThemeOverrides"
                             placeholder="Все тематики"
@@ -612,6 +625,7 @@ const activate = (place) => {
                         Тематики
                     </h2>
                     <n-select
+                        v-model:value="channelStore.subject"
                         :options="channelSubjects"
                         :theme-overrides="selectThemeOverrides"
                         placeholder="Все тематики"

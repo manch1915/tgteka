@@ -19,6 +19,7 @@ class ChannelService
         $search = $request->input('search');
         $order = $request->input('order');
         $sort = $request->input('sort', 'desc');
+        $subject = $request->input('subject');
 
         $channelsQuery = Channel::query()
             ->select('channels.*')
@@ -42,6 +43,10 @@ class ChannelService
 
         if ($search) {
             $channelsQuery->where('channel_name', 'like', '%' . $search . '%');
+        }
+
+        if ($subject) {
+            $channelsQuery->where('topic_id', $subject);
         }
 
         $this->applyAdditionalFilters($channelsQuery, $request);

@@ -46,12 +46,11 @@ Route::middleware(['two.factor'])->group(function () {
 Route::group(['prefix' => 'auth'], function (){
     Route::get('/telegram', [TelegramController::class, 'index'])->name('telegram-redirect');
     Route::get('/telegram/callback', [TelegramController::class, 'callback']);
+
     Route::get('/vk', function (){
-        return Socialite::driver('vk')->redirect();
+        return Socialite::driver('vkontakte')->redirect();
     });
-    Route::get('/vk/callback', function (){
-        $telegramUser = Socialite::driver('vk')->user();
-    });
+    Route::get('/vk/callback', [\App\Http\Controllers\Auth\VkController::class, 'auth']);
 });
 
 Route::get('/terms-of-service', fn () => inertia('Agreement'))->name('terms-of-service');

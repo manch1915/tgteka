@@ -441,11 +441,12 @@ $breakpoints_bottom: (
             height: 180px;
             background: url("/images/plane.svg") no-repeat center;
             @media screen and (max-width: 1280px) {
-                left: 5%;
+                left: 0%;
                 bottom: 70%;
             }
             @media screen and (max-width: 1024px) {
-                left: 0%;
+				scale: 0.8;
+                left: -8%;
                 bottom: 70%;
             }
             @media screen and (max-width: 767px) {

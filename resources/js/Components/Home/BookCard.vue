@@ -31,6 +31,7 @@
     @media screen and (max-width: 640px) {
         margin: 0 auto;
     }
+
     .handbook__card {
         div {
             transition: all 0.8s cubic-bezier(0.075, 0.82, 0.165, 1) 0s;

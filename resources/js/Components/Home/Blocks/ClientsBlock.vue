@@ -7,7 +7,7 @@
             <div class="curvedside__base">
                 <div class="curvedside__content">
                     <div class="clients clients_mid">
-                        <div class="w-full pb-28">
+                        <div class="w-full pb-28 fix_line">
                             <div class="container mx-auto">
                                 <slot name="clients-header"></slot>
                                 <div>
@@ -115,7 +115,7 @@ $offset: 0px;
             background-clip: content-box;
             padding-#{$maskPos}: $maskHeight;
             @media (max-width: 640px) {
-                background: transparent;
+                //background: transparent;
                 padding-#{$maskPos}: 25vw;
             }
         }
@@ -144,5 +144,9 @@ $offset: 0px;
             }
         }
     }
+	
+	.fix_line {
+		border-bottom: 1px solid #070c29;
+	}
 }
 </style>

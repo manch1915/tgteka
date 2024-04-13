@@ -21,11 +21,6 @@ const props = defineProps({
                 alt="Icon 1"
                 class="sm:block hidden icon icon4"
             />
-            <img
-                src="/images/bgplane-mobile.svg"
-                alt="Icon 1"
-                class="sm:hidden icon icon4"
-            />
             <img src="/images/bgtelegram.svg" alt="Icon 1" class="icon icon5" />
             <img src="/images/bgwindow.svg" alt="Icon 1" class="icon icon6" />
         </div>
@@ -33,12 +28,17 @@ const props = defineProps({
             <div
                 class="flex flex-col items-center justify-center gap-6 sm:gap-10 px-4"
             >
-                <div>
-                    <div
+                <div class="header">
+                    <h1
                         class="drop-shadow-md sm:text-4xl lg:text-5xl text-2xl line-1-3 sm:p-0 font-bold text-paleblue text-center"
                     >
                         {{ props.header }}
-                    </div>
+                    </h1>
+					<img
+						src="/images/bgplane-mobile-cropped.svg"
+						alt="Icon 1"
+						class="sm:hidden"
+					/>
                 </div>
                 <p class="main_paragraph text-lg text-paleblue text-center">
                     {{ props.paragraph }}
@@ -67,6 +67,33 @@ const props = defineProps({
     height: 100%;
     z-index: 2;
     overflow: hidden;
+	
+	
+	.header__icon {
+		
+	}
+	
+	
+	.header {
+		position: relative;
+		//padding-left: 30px;
+		//padding-right: 30px;
+		//max-width: 60%;
+		
+		h1 {
+			//max-width: 80%;
+			margin: 0 auto;
+		}
+		img {
+			object-fit: cover;
+			width: 90%;
+			position: absolute;
+			right: 0;
+			top: 0;
+			transform: translateY(-35%);
+			//border: 1px solid #fff;
+		}
+	}
 
     .main__block {
         z-index: 9;
@@ -159,16 +186,21 @@ const props = defineProps({
     & .icon4 {
         max-width: 420px;
         max-height: 195px;
-        top: 22%;
+        top: 12%;
         left: 60%;
+		
+		@media screen and (max-width: 1023px) {
+            right: 0px;
+			left: initial;
+        }
 
         @media screen and (max-width: 640px) {
             top: auto;
             bottom: 50vh;
-            left: 50%;
-            transform: translateX(-50%);
-            max-width: 320px;
-            max-height: 223px;
+            right: 0;
+            //transform: translateX(-50%);
+            width: 620px;
+            //max-height: 223px;
         }
     }
     & .icon5 {
@@ -227,48 +259,47 @@ const props = defineProps({
         z-index: 0;
 
         @media (max-width: 640px) {
-            filter: brightness(3);
+            filter: brightness(4);
             height: 15%;
         }
     }
     &__fon_blur {
         content: "";
         position: absolute;
-
         background-position: bottom center;
         position: absolute;
+		//opacity: 0.9;
         //  bottom: -50%;
         // height: 75%;
         // width: 40%;
-        width: 635px;
-        height: 900px;
-        bottom: -500px;
-        background: radial-gradient(
-            circle,
-            rgba(214, 126, 226, 0.7) 0%,
-            rgba(115, 54, 215, 0.6) 33%,
-            rgba(0, 0, 0, 0.13) 89%,
-            rgba(255, 255, 255, 0) 100%
-        );
+        width: 300px;
+        height: 200px;
+		border-radius: 30%;
+        bottom: -100px;
+        background: #944EFE;
         z-index: -1;
-        filter: blur(200px);
+        filter: blur(120px);
         @media (max-width: 640px) {
+			width: 130px;
+        	height: 130px;
+			bottom: -100px;
             filter: blur(50px);
         }
+		
         // @media (min-width: 1600px) {
         //     width: 635px;
         // }
         &--left {
-            right: calc(50% + 50px);
-            @media (max-width: 960px) {
-                left: 10%;
-            }
+            right: calc(50% + 70px);
+			@media (max-width: 640px) {
+				right: calc(50% + 40px);
+			}
         }
         &--right {
-            left: calc(50% + 50px);
-            @media (max-width: 960px) {
-                right: 10%;
-            }
+            left: calc(50% + 70px);
+			@media (max-width: 640px) {
+				left: calc(50% + 40px);
+			}
         }
     }
     &::after {

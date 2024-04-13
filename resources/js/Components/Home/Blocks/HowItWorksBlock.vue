@@ -1,5 +1,13 @@
+<script setup>
+defineProps({
+	shortLine: {
+		type: Boolean,
+		default: false,
+	}
+});
+</script>
 <template>
-    <div class="sm:pt-48 pt-12 platform px-4">
+    <div class="sm:pt-48 pt-12 platform px-4 pb-10 sm:pb-0">
         <div class="container mx-auto">
             <h1 class="text-center text-4xl font-bold text-paleblue">
                 Как работает платформа?
@@ -23,10 +31,19 @@
                 </div>
 
                 <img
+					v-show="!shortLine"
                     class="pointes_linear lg:hidden"
                     src="/images/points-mobile-svg.svg"
                     alt=""
                 />
+				
+				<img
+					v-show="shortLine"
+                    class="pointes_linear pointes_linear-short lg:hidden"
+                    src="/images/points-mobile-short.svg"
+                    alt=""
+                />
+				
             </div>
         </div>
     </div>
@@ -40,7 +57,7 @@
         display: block;
         &.pointes_linear {
             left: 17%;
-            top: -15%;
+            top: -10%;
             width: 80%;
             height: 100px;
             transform: scale(1);
@@ -51,19 +68,19 @@
     }
     .samolet {
         right: 1%;
-        top: -27%;
+        top: -18%;
         bottom: auto;
         z-index: 10;
         @media (max-width: 1535px) {
-            top: -23%;
+            top: -15%;
         }
         @media (max-width: 1280px) {
-            top: -20%;
+            top: -13%;
         }
         @media (max-width: 1023px) {
             top: auto;
-            bottom: -60px;
-            left: 280px;
+            bottom: -68px;
+            left: 180px;
             right: auto;
         }
     }
@@ -76,23 +93,51 @@
 }
 .pointes_linear {
     pointer-events: none;
-    left: -2%;
-    top: 2%;
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: 0;
+	
+	&:not(.pointes_linear-short) {
+		left: -2%;
+    	top: 2%;
+		
+		@media (max-width: 1023px) {
+			height: 105%;
+			width: 300px;
+			left: 2%;
+			top: 1%;
+			transform: scale(1);
+		}
+	}
 
-    @media (max-width: 1023px) {
-        height: 105%;
-        width: 300px;
-        left: 2%;
-        top: 1%;
-        transform: scale(1);
-    }
+		
     // @media (max-width: 640px) {
     //     left: 12%;
     // }
+	
+	&-short {
+		left: -2%;
+    	top: 2%;
+		
+		
+		
+		@media (max-width: 1023px) {
+			height: 105%;
+			width: 300px;
+			left: -6%;
+			top: 1%;
+			transform: scale(1);
+		}
+		
+		@media (max-width: 767px) {
+			height: 105%;
+			width: 300px;
+			left: -8%;
+			top: 1%;
+			transform: scale(1);
+		}
+	}
 }
 .samolet {
     pointer-events: none;

@@ -446,7 +446,7 @@ $offset: 0px;
     }
 }
 footer {
-    overflow: auto;
+    //overflow: auto;
 }
 .up {
     &:hover {

@@ -11,7 +11,7 @@ import CallbackForm from "@/Components/Home/CallbackForm.vue";
                 <div class="curvedside__content">
                     <div class="clients clients_mid">
                         <div
-                            class="issues flex flex-col items-center justify-center sm:pb-20 p-0"
+                            class="issues flex flex-col items-center justify-center sm:pb-20 p-0 fix_line"
                         >
                             <div
                                 class="text-center sm:pb-14 pb-4 px-4 text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-violet-600 sm:text-5xl text-3xl font-bold font-['Open Sans']"
@@ -109,5 +109,9 @@ $offset: 0px;
             }
         }
     }
+	
+	.fix_line {
+		border-bottom: 1px solid #070c29;
+	}
 }
 </style>

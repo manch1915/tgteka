@@ -64,10 +64,10 @@ onUnmounted(() => {
         />
         <MissionBlock>
             <template v-slot:cards>
-                <template v-if="windowWidth <= 640">
-                    <slider :interactive="false">
+                <template v-if="windowWidth <= 1024">
+                    <slider :interactive="false" :freemode="true" slides="4" :slides-per-view="windowWidth <= 768 ? 1.1 : 2.1">
                         <template v-slot:slider>
-                            <template v-for="i in 3" :key="i">
+                            <template v-for="i in 4" :key="i">
                                 <swiper-slide class="py-20">
                                     <book-card class="flex justify-center" />
                                 </swiper-slide>

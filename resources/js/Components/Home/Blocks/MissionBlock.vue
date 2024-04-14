@@ -45,7 +45,7 @@ onUnmounted(() => {
 
                 <div
                     :class="
-                        windowWidth <= 640
+                        windowWidth <= 1024
                             ? 'cards w-full'
                             : 'cards flex gap-24 sm:pt-40 pt-32 flex-wrap justify-center'
                     "

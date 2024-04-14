@@ -98,7 +98,7 @@
                                                 :interactive="false"
                                                 slides="4"
                                                 :freemode="true"
-                                                :slidesPerView="2"
+                                                :slides-per-view="windowWidth <= 425 ? 1.5 : (windowWidth <= 768 ? 1.8 : 3)">
                                             >
                                                 <template v-slot:slider>
                                                     <swiper-slide

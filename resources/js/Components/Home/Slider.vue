@@ -16,8 +16,19 @@ const props = defineProps({
         type: [Number, String],
         default: 1,
     },
+    spaceBetween: {
+        type: [Number, String],
+        default: 0,
+    },
 });
-const spaceBetween = computed(() => (props.slidesPerView > 1 ? 60 : 0));
+
+const spaceBetween = computed(() => {
+    if (parseFloat(props.spaceBetween) > 0) {
+        return parseFloat(props.spaceBetween);
+    }
+    return parseFloat(props.slidesPerView) > 1 ? 60 : 0;
+});
+
 let activeIndex = ref(1);
 const onSlideChange = (swiper) => {
     activeIndex.value = swiper.realIndex + 1;
@@ -69,7 +80,6 @@ const modules = [Navigation, Pagination, Autoplay, FreeMode];
                 @slide-change="onSlideChange"
                 :modules="modules"
                 loop
-                slides-per-view="1"
                 :slides-per-view="slidesPerView"
                 :space-between="spaceBetween"
             >

@@ -73,7 +73,7 @@ onUnmounted(() => {
                 </template>
             </template>
         </MissionBlock>
-        <HowItWorksBlock class="HowItWorksBlock">
+        <HowItWorksBlock :short-line="true" class="HowItWorksBlock">
             <template v-slot:points>
                 <point-card
                     v-for="i in 3"

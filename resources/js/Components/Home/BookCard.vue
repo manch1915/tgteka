@@ -31,7 +31,9 @@
     @media screen and (max-width: 1024px) {
         margin: 0 auto;
     }
-
+    @media screen and (max-width: 609px) {
+        width: 280px;
+    }
     .handbook__card {
         div {
             transition: all 0.8s cubic-bezier(0.075, 0.82, 0.165, 1) 0s;
@@ -39,6 +41,9 @@
         position: relative;
         height: 439px;
         padding: 35px;
+        @media screen and (max-width: 609px) {
+            height: 380px;
+        }
         border-radius: 0 74px 74px 74px;
         // border: 1px solid rgba(255, 255, 255, 0.2);
 

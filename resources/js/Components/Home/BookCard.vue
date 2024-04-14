@@ -32,7 +32,7 @@
         margin: 0 auto;
     }
     @media screen and (max-width: 609px) {
-        width: 280px;
+        width: 230px;
     }
     .handbook__card {
         div {
@@ -42,7 +42,7 @@
         height: 439px;
         padding: 35px;
         @media screen and (max-width: 609px) {
-            height: 380px;
+            height: 340px;
         }
         border-radius: 0 74px 74px 74px;
         // border: 1px solid rgba(255, 255, 255, 0.2);

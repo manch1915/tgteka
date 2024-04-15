@@ -65,7 +65,7 @@ onUnmounted(() => {
         <MissionBlock>
             <template v-slot:cards>
                 <template v-if="windowWidth <= 1024">
-                    <slider :interactive="false" :freemode="true" slides="4" :slides-per-view="windowWidth <= 768 ? 1.3 : 2" space-between="30">
+                    <slider :interactive="false" :freemode="true" slides="4" :slides-per-view="windowWidth <= 768 ? 1.3 : 2" :space-between="windowWidth > 768 ? 100 : 1">
                         <template v-slot:slider>
                             <template v-for="i in 4" :key="i">
                                 <swiper-slide class="py-20">

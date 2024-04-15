@@ -96,14 +96,14 @@
                                         <div class="flex justify-between gap-4">
                                             <slider
                                                 :interactive="false"
-                                                slides="4"
+                                                slides="6"
                                                 :freemode="true"
-                                                :slides-per-view="windowWidth <= 425 ? 1.5 : (windowWidth <= 768 ? 2 : 3)"
+                                                :slides-per-view="windowWidth <= 425 ? 1.5 : (windowWidth <= 768 ? 2.3 : 3)"
                                                 space-between="1"
                                             >
                                                 <template v-slot:slider>
                                                     <swiper-slide
-                                                        v-for="n in 4"
+                                                        v-for="n in 6"
                                                         :key="n"
                                                     >
                                                         <div

@@ -14,8 +14,7 @@ import ClientsSlider from "@/Components/Home/ClientsSlider.vue";
 import ClientsHeader from "@/Components/Home/ClientsHeader.vue";
 import Feedback from "@/Components/Home/Feedback.vue";
 import Slider from "@/Components/Home/Slider.vue";
-import { SwiperSlide } from "swiper/vue";
-import { onMounted, onUnmounted, ref } from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import { Head } from "@inertiajs/vue3";
 import { Title } from "chart.js";
 
@@ -50,6 +49,16 @@ onUnmounted(() => {
     // Remove listener when component is unmounted
     window.removeEventListener("resize", updateWidth);
 });
+
+const spaceBetween = computed(() => {
+    if (windowWidth.value <= 425) {
+        return 20;
+    } else if (windowWidth.value < 609) {
+        return 10;
+    } else {
+        return 100;
+    }
+});
 </script>
 
 <template>
@@ -65,12 +74,12 @@ onUnmounted(() => {
         <MissionBlock>
             <template v-slot:cards>
                 <template v-if="windowWidth <= 1024">
-                    <slider :interactive="false" :freemode="true" slides="4" :slides-per-view="windowWidth <= 768 ? 1.3 : 2" :space-between="windowWidth > 768 ? 100 : 30">
+                    <slider :interactive="false" :space-between="spaceBetween" slides-per-view="auto">
                         <template v-slot:slider>
                             <template v-for="i in 4" :key="i">
-                                <swiper-slide class="py-20">
-                                    <book-card class="flex justify-center" />
-                                </swiper-slide>
+                                <div class="keen-slider__slide" style="height: 105%" :style="{ 'min-width': windowWidth <= 609 ? '280px' : '410px', 'max-width': windowWidth <= 609 ? '280px' : '410px' }">
+                                    <book-card class="flex justify-center"/>
+                                </div>
                             </template>
                         </template>
                     </slider>
@@ -96,12 +105,12 @@ onUnmounted(() => {
         <InterestChannelsBlock>
             <template v-slot:cards>
                 <template v-if="windowWidth <= 1024">
-                    <slider :interactive="true" :slides="6">
+                    <slider :interactive="true" :slides-per-view="1">
                         <template v-slot:slider>
                             <template v-for="i in 6" :key="i">
-                                <swiper-slide class="pb-14 px-4">
+                                <div class="keen-slider__slide">
                                     <ChannelCard />
-                                </swiper-slide>
+                                </div>
                             </template>
                         </template>
                     </slider>

@@ -5,11 +5,18 @@ import InputError from "@/Components/InputError.vue";
 import { openPasswordRecovery, openRegister } from "@/utilities/authModals.js";
 import { NInput } from "naive-ui";
 import { inputThemeOverrides } from "@/themeOverrides.js";
-import { ref } from "vue";
+import {reactive, ref} from "vue";
 
 const form = useForm({
     username: "",
     password: "",
+});
+
+const state = reactive({
+    touched: {
+        username: false,
+        email: false,
+    },
 });
 
 const errors = ref({ username: null, password: null });
@@ -42,7 +49,8 @@ const submit = () => {
                     v-model:value="form.username"
                     type="text"
                     placeholder="Имя пользователя"
-                    :status="form.username ? 'success' : 'error'"
+                    :status="form.username ? 'success' : (state.touched.username ? 'error' : '')"
+                    @focus="state.touched.username = true"
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
                 />
@@ -55,7 +63,8 @@ const submit = () => {
                     v-model:value="form.password"
                     type="password"
                     placeholder="Пароль"
-                    :status="form.password ? 'success' : 'error'"
+                    :status="form.password ? 'success' : (state.touched.password ? 'error' : '')"
+                    @focus="state.touched.password = true"
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
                 />

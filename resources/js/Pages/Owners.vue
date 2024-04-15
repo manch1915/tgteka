@@ -13,8 +13,7 @@ import Faq from "@/Components/Home/Faq.vue";
 import TechnicalIssues from "@/Components/Home/Blocks/TechnicalIssues.vue";
 import SloganBlock from "@/Components/Home/Blocks/SloganBlock.vue";
 import Slider from "@/Components/Home/Slider.vue";
-import { SwiperSlide } from "swiper/vue";
-import { onMounted, onUnmounted, ref } from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import { Head } from "@inertiajs/vue3";
 import { Title } from "chart.js";
 
@@ -43,6 +42,16 @@ onUnmounted(() => {
     // Remove listener when component is unmounted
     window.removeEventListener("resize", updateWidth);
 });
+
+const spaceBetween = computed(() => {
+    if (windowWidth.value <= 425) {
+        return 20;
+    } else if (windowWidth.value < 609) {
+        return 10;
+    } else {
+        return 100;
+    }
+});
 </script>
 
 <template>
@@ -57,13 +66,13 @@ onUnmounted(() => {
         />
         <MissionBlock>
             <template v-slot:cards>
-                <template v-if="windowWidth <= 640">
-                    <slider :interactive="false">
+                <template v-if="windowWidth <= 1024">
+                    <slider :interactive="false" :space-between="spaceBetween" slides-per-view="auto">
                         <template v-slot:slider>
                             <template v-for="i in 3" :key="i">
-                                <swiper-slide class="py-20">
-                                    <book-card class="flex justify-center" />
-                                </swiper-slide>
+                                <div class="keen-slider__slide" style="height: 105%" :style="{ 'min-width': windowWidth <= 609 ? '280px' : '410px', 'max-width': windowWidth <= 609 ? '280px' : '410px' }">
+                                    <book-card class="flex justify-center"/>
+                                </div>
                             </template>
                         </template>
                     </slider>

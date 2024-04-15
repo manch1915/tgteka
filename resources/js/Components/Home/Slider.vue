@@ -1,17 +1,10 @@
 <script setup>
-import { Swiper, SwiperSlide } from "swiper/vue";
-import { Autoplay, FreeMode, Navigation, Pagination } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/autoplay";
-import { computed, ref } from "vue";
+import {computed, onMounted, onUnmounted, ref, watchEffect} from "vue";
+import {useKeenSlider} from "keen-slider/vue";
+import "keen-slider/keen-slider.min.css";
 
 const props = defineProps({
     interactive: Boolean,
-    slides: Number | String,
-    freemode: {
-        default: false,
-    },
     slidesPerView: {
         type: [Number, String],
         default: 1,
@@ -22,6 +15,28 @@ const props = defineProps({
     },
 });
 
+const current = ref(1);
+
+const [container, slider] = useKeenSlider({
+    loop: true,
+    slides: {
+        origin: "center",
+        perView: props.slidesPerView,
+        spacing: props.spaceBetween,
+    },
+
+    initial: current.value,
+    slideChanged: (s) => {
+        current.value = s.track.details.rel
+    },
+});
+
+const dotHelper = ref(null)
+
+watchEffect(() => {
+    dotHelper.value = computed(() => slider.value ? [...Array(slider.value.track.details.slides.length).keys()] : [])
+})
+
 const spaceBetween = computed(() => {
     if (parseFloat(props.spaceBetween) > 0) {
         return parseFloat(props.spaceBetween);
@@ -29,111 +44,79 @@ const spaceBetween = computed(() => {
     return parseFloat(props.slidesPerView) > 1 ? 60 : 0;
 });
 
-let activeIndex = ref(1);
-const onSlideChange = (swiper) => {
-    activeIndex.value = swiper.realIndex + 1;
+const onSlideChange = () => {
+    current.value = slider.value.details().s.track.details.rel;
 };
-let mySwiper = ref();
 
-// Swiper slide data
-
-let bullets = ref("");
-
-const pagination = ref({
-    clickable: true,
-    renderBullet: function (index, className) {
-        return '<span class="' + className + '"></span>';
-    },
+onMounted(() => {
+    window.addEventListener("resize", slider.value.refresh);
 });
-const goToSlide = (index) => {
-    if (mySwiper.value) {
-        mySwiper.value.swiper.slideTo(index);
-    }
-};
 
-const modules = [Navigation, Pagination, Autoplay, FreeMode];
+onUnmounted(() => {
+    window.removeEventListener("resize", slider.value.refresh);
+});
 </script>
 
 <template>
     <div class="main w-full">
         <div v-show="interactive" class="interactive pb-4">
             <div class="buttons flex gap-3 items-center">
-                <div class="arrow arrow_left">
+                <button
+                    class="arrow arrow_left"
+                    @click="slider.prev"
+                    :class="{ 'arrow--disabled': current === 0 }"
+                >
                     <img src="/images/arrow.svg" alt="arrow" />
-                </div>
+                </button>
                 <div
                     class="text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed"
                 >
-                    {{ activeIndex }} / {{ slides }}
+                    {{ current + 1 }} / {{ slider?.track?.details?.slides?.length }}
                 </div>
-                <div class="arrow arrow_right">
+                <button
+                    class="arrow arrow_right"
+                    @click="slider.next"
+                    :class="{ 'arrow--disabled': current === slider?.track?.details?.slides?.length - 1 }"
+                >
                     <img src="/images/arrow.svg" alt="arrow" />
-                </div>
+                </button>
             </div>
         </div>
-        <div class="w-full mb-10">
-            <swiper
-                :autoplay="{ delay: 2000 }"
-                :free-mode="freemode"
-                :navigation="{ prevEl: '.arrow_left', nextEl: '.arrow_right' }"
-                :pagination="pagination"
-                @slide-change="onSlideChange"
-                :modules="modules"
-                loop
-                :slides-per-view="slidesPerView"
-                :space-between="spaceBetween"
-            >
-                <slot name="slider" />
-            </swiper>
+        <div class="w-full mb-2">
+            <div ref="container" class="keen-slider">
+                <slot name="slider"/>
+            </div>
         </div>
-        <!-- <div
-            class="pagination flex items-center content-center justify-center gap-6 pt-4"
-            v-html="bullets"
-        ></div> -->
+        <div class="dots mb-10">
+            <button
+                v-for="(_slide, idx) in dotHelper.value"
+                @click="slider.moveToIdx(idx)"
+                :class="{ dot: true, active: current === idx }"
+                :key="idx"
+            ></button>
+        </div>
     </div>
 </template>
 
 <style scoped lang="scss">
-.block {
-    padding: 50px 80px;
-    border-radius: 1px 40px 40px 40px;
-    border: 1.5px solid #fff;
-    background: radial-gradient(
-        278.82% 137.51% at 1.95% 3.59%,
-        rgba(255, 255, 255, 0.26) 0%,
-        rgba(255, 255, 255, 0) 100%
-    );
-    backdrop-filter: blur(21px);
+.main {
+    position: relative;
+}
 
-    .review {
-        position: relative;
+.arrow {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
 
-        &:before {
-            pointer-events: none;
-            content: "“";
-            position: absolute;
-            color: var(--White, #eae0ff);
-            font-family: Montserrat, serif;
-            font-size: 40px;
-            font-style: normal;
-            font-weight: 900;
-            line-height: 140%; /* 56px */
-
-            left: -30px;
-            top: -20px;
-        }
-
-        &:after {
-            content: "”";
-            position: absolute;
-            font-family: Montserrat, serif;
-            font-size: 40px;
-            font-style: normal;
-            font-weight: 900;
-            line-height: 140%; /* 56px */
-            right: -10px;
-        }
+    img {
+        width: 100%;
+        height: auto;
     }
+}
+
+.arrow--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .interactive {
@@ -145,21 +128,50 @@ const modules = [Navigation, Pagination, Autoplay, FreeMode];
         width: fit-content;
 
         .arrow {
-            width: 30px;
-            height: 30px;
-
             &:hover {
-                cursor: pointer;
-
-                img {
-                    filter: brightness(12);
-                }
+                filter: brightness(0.8);
             }
         }
 
         .arrow_right {
             transform: rotate(180deg);
         }
+    }
+}
+
+.dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .dot {
+        width: 5px !important;
+        height: 5px !important;
+        border-radius: 30px !important;
+        background: #8367bd !important;
+        opacity: 1 !important;
+        margin: 0 5px !important;
+    }
+
+    .active {
+        width: 26px !important;
+        height: 8px !important;
+        border-radius: 30px !important;
+        background: #fff !important;
+    }
+}
+@media screen and (min-width: 1025px) {
+    .dot {
+        width: 40px !important;
+        height: 4px !important;
+        border-radius: 65px !important;
+        background: #fff !important;
+        border: 1px solid #fff !important;
+        opacity: 1 !important;
+        margin: 0 2px !important;
+    }
+    .active {
+        height: 4px !important;
+        background: transparent !important;
     }
 }
 </style>

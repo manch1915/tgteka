@@ -28,9 +28,6 @@
 .card {
     position: relative;
     width: 334px;
-    @media screen and (max-width: 1024px) {
-        margin: 0 auto;
-    }
     @media screen and (max-width: 609px) {
         width: 230px;
     }

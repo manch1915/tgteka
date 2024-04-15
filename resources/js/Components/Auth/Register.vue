@@ -19,6 +19,10 @@ const state = reactive({
         email: "",
     },
     errors: {},
+    touched: {
+        username: false,
+        email: false,
+    },
 });
 
 const checkbox = ref(true);
@@ -68,7 +72,8 @@ const submit = async () => {
                     v-model:value="state.form.username"
                     type="text"
                     placeholder="Имя пользователя"
-                    :status="state.form.username ? 'success' : 'error'"
+                    :status="(state.touched.username && !state.form.username.trim()) ? 'error' : 'success'"
+                    @focus="state.touched.username = true"
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
                 />
@@ -83,7 +88,8 @@ const submit = async () => {
                     v-model:value="state.form.email"
                     type="text"
                     placeholder="Электронная почта"
-                    :status="state.form.email ? 'success' : 'error'"
+                    :status="(state.touched.email && !state.form.username.trim()) ? 'error' : 'success'"
+                    @focus="state.touched.email = true"
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
                 />

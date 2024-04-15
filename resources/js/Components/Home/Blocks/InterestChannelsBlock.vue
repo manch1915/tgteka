@@ -96,24 +96,20 @@
                                         <div class="flex justify-between gap-4">
                                             <slider
                                                 :interactive="false"
-                                                slides="6"
-                                                :freemode="true"
                                                 :slides-per-view="windowWidth <= 425 ? 1.5 : (windowWidth <= 768 ? 2.3 : 3)"
-                                                space-between="1"
+                                                space-between="20"
                                             >
                                                 <template v-slot:slider>
-                                                    <swiper-slide
+                                                    <template
                                                         v-for="n in 6"
                                                         :key="n"
                                                     >
-                                                        <div
-                                                            class="flex justify-center pt-10 pb-14 lg:py-14"
-                                                        >
+                                                        <div class="keen-slider__slide">
                                                             <InterestChannelsCard
                                                                 p="Криптовалюта и Блокчейн"
                                                             />
                                                         </div>
-                                                    </swiper-slide>
+                                                    </template>
                                                 </template>
                                             </slider>
                                         </div>
@@ -152,7 +148,7 @@ import ComparisonCard from "@/Components/Home/ComparisonCard.vue";
 import IntegrationBackground from "@/Components/Home/Blocks/IntegrationBackground.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import Slider from "@/Components/Home/Slider.vue";
-import { SwiperSlide } from "swiper/vue";
+
 const compareItems = [
     {
         header: "Самостоятельное размещение напрямую",

@@ -13,6 +13,10 @@ const props = defineProps({
         type: [Number, String],
         default: 0,
     },
+    heightSetting: {
+        type: [Boolean],
+        default: false,
+    },
 });
 
 const current = ref(1);
@@ -20,16 +24,25 @@ const current = ref(1);
 const [container, slider] = useKeenSlider({
     loop: true,
     slides: {
-        origin: "center",
+        origin: "auto",
         perView: props.slidesPerView,
         spacing: props.spaceBetween,
-    },
 
+    },
     initial: current.value,
     slideChanged: (s) => {
         current.value = s.track.details.rel
     },
 });
+const containerHeight = ref('');
+const setContainerHeight = () => {
+    if (props.heightSetting) {
+        const containerElement = document.querySelector('.keen-slider');
+        const height = containerElement.clientHeight + 50;
+        containerHeight.value = `${height}px`;
+        console.log(containerHeight.value)
+    }
+};
 
 const dotHelper = ref(null)
 
@@ -50,6 +63,7 @@ const onSlideChange = () => {
 
 onMounted(() => {
     window.addEventListener("resize", slider.value.refresh);
+    setContainerHeight();
 });
 
 onUnmounted(() => {
@@ -83,11 +97,11 @@ onUnmounted(() => {
             </div>
         </div>
         <div class="w-full mb-2">
-            <div ref="container" class="keen-slider">
+            <div ref="container" class="keen-slider" :style="{ height: heightSetting ? containerHeight : 'auto' }">
                 <slot name="slider"/>
             </div>
         </div>
-        <div class="dots mb-10">
+        <div class="dots my-14">
             <button
                 v-for="(_slide, idx) in dotHelper.value"
                 @click="slider.moveToIdx(idx)"

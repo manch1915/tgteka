@@ -93,18 +93,18 @@
                                                 некоторые из них
                                             </div>
                                         </div>
-                                        <div class="flex justify-between gap-4">
+                                        <div class="flex justify-between gap-4" style="margin-top: 40px;">
                                             <slider
                                                 :interactive="false"
-                                                :slides-per-view="windowWidth <= 425 ? 1.5 : (windowWidth <= 768 ? 2.3 : 3)"
-                                                space-between="20"
+                                                slides-per-view="auto"
+                                                :space-between="1"
                                             >
                                                 <template v-slot:slider>
                                                     <template
                                                         v-for="n in 6"
                                                         :key="n"
                                                     >
-                                                        <div class="keen-slider__slide">
+                                                        <div class="keen-slider__slide" style="max-width: 200px; min-width: 200px">
                                                             <InterestChannelsCard
                                                                 p="Криптовалюта и Блокчейн"
                                                             />

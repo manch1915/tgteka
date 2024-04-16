@@ -67,7 +67,7 @@ const spaceBetween = computed(() => {
         <MissionBlock>
             <template v-slot:cards>
                 <template v-if="windowWidth <= 1024">
-                    <slider :interactive="false" :space-between="spaceBetween" slides-per-view="auto">
+                    <slider :interactive="false" :space-between="spaceBetween" slides-per-view="auto" class="my-14" height-setting>
                         <template v-slot:slider>
                             <template v-for="i in 3" :key="i">
                                 <div class="keen-slider__slide" style="height: 105%" :style="{ 'min-width': windowWidth <= 609 ? '280px' : '410px', 'max-width': windowWidth <= 609 ? '280px' : '410px' }">

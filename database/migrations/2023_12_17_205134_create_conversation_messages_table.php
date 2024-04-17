@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('conversation_messages', function (Blueprint $table) {
             $table->id();
-            $table->text('message');
+            $table->text('message')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('conversation_id')->constrained()->cascadeOnDelete();
             $table->boolean('is_seen')->default(false);

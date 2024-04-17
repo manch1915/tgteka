@@ -16,16 +16,19 @@ class NewMessageHandler extends WebSocketMessageProvider
             $message = $data['message'];
             $conversation_id = $data['conversation_id'];
             $username = $data['username'];
+            $contentType = $data['content_type'];
 
             $conversation = Conversation::findOrFail($conversation_id);
 
             $recipientId = ($conversation->user_one === $auth_id) ? $conversation->user_two : $conversation->user_one;
 
-            $message = Censure::replace($message);
+            if ($contentType == 'text'){
+                $message = Censure::replace($message);
+            }
 
-            $messageObject = $this->messageFactory->createPersonalChatMessage($auth_id, $message, $conversation_id, $username);
+            $messageObject = $this->messageFactory->createPersonalChatMessage($auth_id, $message, $conversation_id, $username, $contentType);
 
-            $this->personalChatRepository->save($auth_id, $conversation_id, $message);
+            $this->personalChatRepository->save($auth_id, $conversation_id, $message, $contentType);
 
             $notification = [
                 'type' => 'notification',

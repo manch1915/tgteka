@@ -51,6 +51,12 @@ class ConversationController extends Controller
             ->with('user:id,username,email')
             ->get();
 
+        foreach ($conversationMessages as $message) {
+            $image = $message->getFirstMedia('personal_message_images');
+            $message->content_type = ($image) ? 'image' : 'text';
+            $message->message = ($image) ? $image->getUrl() : $message->message;
+        }
+
         return response()->json($conversationMessages);
     }
 

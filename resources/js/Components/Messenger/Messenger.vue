@@ -25,14 +25,14 @@ const getCurrentTime = () => {
     return `${hours}:${minutes}`;
 };
 
-const addNewMessage = (message, username = page.props.auth.user.username) => {
-    store.addNewMessage(message, username, getCurrentTime());
+const addNewMessage = (message, username = page.props.auth.user.username, content_type) => {
+    store.addNewMessage(message, username, getCurrentTime(), content_type);
 };
 
 const processIncomingMessage = (data) => {
     console.log(data)
     if (data.conversation_id === store.conversation_id) {
-        addNewMessage(data.message, data.username);
+        addNewMessage(data.message, data.username, data.content_type);
     }
 };
 function initWebSocket(userID) {
@@ -50,7 +50,19 @@ function initWebSocket(userID) {
     return socket;
 }
 
-const sendMessage = () => {
+const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        const base64Image = reader.result;
+        sendMessage(base64Image, 'image'); // Send image as base64 to server, and specify it is an 'image'
+    };
+
+    reader.readAsDataURL(file);
+}
+
+const sendMessage = (messageContent, messageType='text') => {
     if (!store.conversation_id) {
         return;
     }
@@ -58,13 +70,13 @@ const sendMessage = () => {
     webSocket.send(JSON.stringify({
         auth_id: authenticatedUserID.value,
         conversation_id: store.conversation_id,
-        message: inputMessage.value,
+        message: messageContent,
         username: page.props.auth.user.username,
         type: 'chat_message',
-        content_type: 'text',
+        content_type: messageType,
     }));
 
-    addNewMessage(inputMessage.value);
+    addNewMessage(messageContent, page.props.auth.user.username, messageType);
 
     inputMessage.value = '';
 };
@@ -111,17 +123,20 @@ const handleSearch = (search) => {
                     <button :class="{ 'hidden': store.showChat }" @click="goBack" class="back-button"><BaseIcon style="color: #B5BBDB" size="40" :path="mdiArrowLeft"/></button>
                 </div>
                 <div class="flex-grow overflow-y-auto flex flex-col gap-y-3 p-2" v-scroll-bottom>
-                    <MessageBox v-for="message in store.conversationsMessages" :text="message.message" :user-avatar="message.user.username" :created_at="message.created_at_time" :is-time-string="true"/>
+                    <MessageBox v-for="message in store.conversationsMessages" :isImage="message.content_type === 'image' || !message.message" :text="message.message" :user-avatar="message.user.username" :created_at="message.created_at_time" :is-time-string="true"/>
                 </div>
 
                 <div class="footer">
                     <div class="conversation-panel">
                         <div class="conversation-panel__container">
-                            <button class="conversation-panel__button panel-item btn-icon add-file-button">
-                                <img src="/images/file.svg" alt="file">
-                            </button>
-                            <input v-model="inputMessage" @keydown.enter.prevent="sendMessage" class="conversation-panel__input panel-item" placeholder="Ведите ваше сообщения"/>
-                            <button @click.prevent="sendMessage" class="conversation-panel__button panel-item btn-icon send-message-button">
+                            <label class="file-uploader">
+                                <input type="file"  @change="handleFileUpload" style="display: none;" />
+                                <div class="conversation-panel__button panel-item btn-icon add-file-button">
+                                    <img src="/images/file.svg"  alt="file">
+                                </div>
+                            </label>
+                            <input v-model="inputMessage" @keydown.enter.prevent="sendMessage(inputMessage)" class="conversation-panel__input panel-item" placeholder="Ведите ваше сообщения"/>
+                            <button @click.prevent="sendMessage(inputMessage)" class="conversation-panel__button panel-item btn-icon send-message-button">
                                 <img src="/images/ic-2.svg" alt="send">
                             </button>
                         </div>

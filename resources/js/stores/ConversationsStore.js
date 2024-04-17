@@ -29,7 +29,7 @@ export const useConversationsStore = defineStore("conversations", {
             this.conversationsMessages = response.data;
             this.loading = false;
         },
-        addNewMessage(message, username, createdAt) { // Adjust these parameters as per requirement
+        addNewMessage(message, username, createdAt, content_type) { // Adjust these parameters as per requirement
             const user = {
                 username: username,
             };
@@ -38,6 +38,7 @@ export const useConversationsStore = defineStore("conversations", {
                 message,
                 user,
                 created_at_time: createdAt,
+                content_type
             };
 
             this.conversationsMessages.push(newMessage);

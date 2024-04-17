@@ -9,7 +9,7 @@ use App\Services\Censure;
 class NewSupportMessageHandler extends WebSocketMessageProvider
 {
 
-    #[\Override] public function sendMessage(array $data, array $userConnections): void
+    #[\Override] public function sendMessage(array $data, array $userConnections, array $userMainConnections): void
     {
         $senderId = $data['sender_id'];
         $message = $data['message'];

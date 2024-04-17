@@ -93,7 +93,7 @@
                                                 некоторые из них
                                             </div>
                                         </div>
-                                        <div class="flex justify-between gap-4" style="margin-top: 40px;">
+                                        <div class="flex justify-between gap-4" style="margin-top: 40px; margin-left: -16px;margin-right: -16px">
                                             <slider
                                                 :interactive="false"
                                                 slides-per-view="auto"

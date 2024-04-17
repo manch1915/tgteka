@@ -49,7 +49,7 @@ Route::group(['prefix' => 'auth'], function (){
 
     Route::get('/vk', function (){
         return Socialite::driver('vkontakte')->redirect();
-    });
+    })->name('vk-redirect');
     Route::get('/vk/callback', [\App\Http\Controllers\Auth\VkController::class, 'auth']);
 });
 

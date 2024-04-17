@@ -14,7 +14,7 @@ const width = window.innerWidth
     <div>
         <Head :title="title"/>
         <Header/>
-        <div class="container mx-auto">
+        <div class="container mx-auto mb-14">
             <slot/>
             <div v-show="width <= 640">
 

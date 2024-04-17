@@ -11,7 +11,7 @@ const error = ref('')
 const twoFactorAuthentication = () => {
     axios.post(route('two-factor.enable'), {password: password.value})
         .then(r => {
-            message.success('Двухэтапная аутентификация успешно включён')
+            message.success('Двухэтапная аутентификация успешно включена.')
             closeModal()
         })
         .catch(e => {

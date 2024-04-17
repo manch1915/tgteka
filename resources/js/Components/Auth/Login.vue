@@ -100,7 +100,7 @@ const submit = () => {
                             src="/images/loginTelegram.svg"
                             alt=""
                     /></a>
-                    <a :href="route('telegram-redirect')"
+                    <a :href="route('vk-redirect')"
                         ><img class="hover:" src="/images/loginVk.svg" alt=""
                     /></a>
                 </div>

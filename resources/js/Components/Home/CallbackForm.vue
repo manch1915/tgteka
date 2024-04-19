@@ -208,7 +208,7 @@ const orderCallback = () => {
 }
 .error-message {
     display: block;
-    color: red;
+    color: #ff8888;
     font-size: 0.8rem;
 }
 </style>

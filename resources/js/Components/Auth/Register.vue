@@ -19,10 +19,6 @@ const state = reactive({
         email: "",
     },
     errors: {},
-    touched: {
-        username: false,
-        email: false,
-    },
 });
 
 const checkbox = ref(true);
@@ -32,12 +28,16 @@ const message = useMessage();
 
 function validateForm() {
     let isValid = true;
+    state.errors = {};
+
     if (!state.form.username) {
         isValid = false;
+        state.errors.username = ['Поле имя пользователя обязательно.']
     }
 
     if (!state.form.email) {
         isValid = false;
+        state.errors.email = ['Поле электронная почта обязательно.']
     }
 
     return isValid;
@@ -72,13 +72,11 @@ const submit = async () => {
                     v-model:value="state.form.username"
                     type="text"
                     placeholder="Имя пользователя"
-                    :status="(state.touched.username && !state.form.username.trim()) ? 'error' : 'success'"
-                    @focus="state.touched.username = true"
+                    :status="((state.errors.username && state.errors.username.length > 0)) ? 'error' : 'success'"
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
                 />
                 <InputError
-                    class="mt-2"
                     :message="state.errors.username && state.errors.username[0]"
                 />
             </div>
@@ -88,13 +86,11 @@ const submit = async () => {
                     v-model:value="state.form.email"
                     type="text"
                     placeholder="Электронная почта"
-                    :status="(state.touched.email && !state.form.username.trim()) ? 'error' : 'success'"
-                    @focus="state.touched.email = true"
+                    :status="((state.errors.email && state.errors.email.length > 0)) ? 'error' : 'success'"
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
                 />
                 <InputError
-                    class="mt-2"
                     :message="state.errors.email && state.errors.email[0]"
                 />
             </div>

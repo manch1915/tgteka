@@ -18,7 +18,7 @@ const flex = 'flex-col justify-start items-center gap-y-8 flex'
     </Head>
 
     <MainLayout>
-        <div class="container mx-auto flex flex-col gap-y-10 sm:p-0 p-2">
+        <div class="container mx-auto flex flex-col gap-y-10 sm:p-0 p-2 mb-14">
             <div class="text-center mt-5 text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Правила пользования</div>
             <div class="  flex-col justify-start items-start gap-12 inline-flex">
                 <div :class="flex">>

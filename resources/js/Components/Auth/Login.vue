@@ -21,16 +21,22 @@ const state = reactive({
 
 const errors = ref({ username: null, password: null });
 
-const validateForm = () => {
-    errors.value.username =
-        form.username.length < 1 ? "Username is required" : null;
-    errors.value.password =
-        form.password.length < 1 ? "Password is required" : null;
-};
+function validateForm() {
+    let isValid = true;
+    if (!form.username) {
+        isValid = false;
+        form.errors.username = 'Поле имя пользователя обязательно.'
+    }
 
+    if (!form.password) {
+        isValid = false;
+        form.errors.password = 'Поле пароль обязательно.'
+    }
+
+    return isValid;
+}
 const submit = () => {
-    validateForm();
-    if (!(errors.value.username || errors.value.password)) {
+    if (validateForm()) {
         form.post(route("login.post"), {
             onFinish: () => form.reset("password"),
         });
@@ -49,12 +55,11 @@ const submit = () => {
                     v-model:value="form.username"
                     type="text"
                     placeholder="Имя пользователя"
-                    :status="form.username ? 'success' : (state.touched.username ? 'error' : '')"
-                    @focus="state.touched.username = true"
+                    :status="((form.errors.username && form.errors.username.length > 0)) ? 'error' : 'success'"
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
                 />
-                <InputError class="mt-2" :message="form.errors.username" />
+                <InputError :message="form.errors.username" />
             </div>
 
             <div class="pt-2">
@@ -63,12 +68,11 @@ const submit = () => {
                     v-model:value="form.password"
                     type="password"
                     placeholder="Пароль"
-                    :status="form.password ? 'success' : (state.touched.password ? 'error' : '')"
-                    @focus="state.touched.password = true"
+                    :status="((form.errors.password && form.errors.password.length > 0)) ? 'error' : 'success'"
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
                 />
-                <InputError class="mt-2" :message="form.errors.password" />
+                <InputError :message="form.errors.password" />
             </div>
             <div class="pt-4">
                 <button

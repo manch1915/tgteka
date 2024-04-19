@@ -51,7 +51,7 @@ const props = defineProps({
                 </button>
             </div>
         </div>
-        <a href="!#" class="arrow-main-down"></a>
+        <a href="#" class="arrow-main-down"></a>
         <div class="main__fon_blur main__fon_blur--left"></div>
         <div class="main__fon_blur main__fon_blur--right"></div>
     </main>
@@ -67,19 +67,19 @@ const props = defineProps({
     height: 100%;
     z-index: 2;
     overflow: hidden;
-	
-	
+
+
 	.header__icon {
-		
+
 	}
-	
-	
+
+
 	.header {
 		position: relative;
 		//padding-left: 30px;
 		//padding-right: 30px;
 		//max-width: 60%;
-		
+
 		h1 {
 			//max-width: 80%;
 			margin: 0 auto;
@@ -188,7 +188,7 @@ const props = defineProps({
         max-height: 195px;
         top: 12%;
         left: 60%;
-		
+
 		@media screen and (max-width: 1023px) {
             right: 0px;
 			left: initial;
@@ -285,7 +285,7 @@ const props = defineProps({
 			bottom: -100px;
             filter: blur(50px);
         }
-		
+
         // @media (min-width: 1600px) {
         //     width: 635px;
         // }

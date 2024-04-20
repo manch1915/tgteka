@@ -1,9 +1,15 @@
 <script setup>
 import {closeModal} from "jenesius-vue-modal";
 import { useConversationsStore } from "@/stores/ConversationsStore.js";
+import {ref, watch} from "vue";
 
 const conversations = useConversationsStore()
-let isSmallScreen = window.innerWidth <= 768;
+
+const isSmallScreen = ref(window.innerWidth <= 768);
+
+watch(() => window.innerWidth, (newWidth) => {
+    isSmallScreen.value = newWidth <= 768;
+});
 
 </script>
 

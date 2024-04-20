@@ -35,7 +35,7 @@ const handleError = (e) => {
                 form.errors[key] = errors[key][0];
             });
         } else if (e.response.data.message) {
-            message.error("Слишком много попыток повторите позже ");
+            message.error("Произошла ошибка. Пожалуйста, попробуйте еще раз позже.");
         }
     }
 };

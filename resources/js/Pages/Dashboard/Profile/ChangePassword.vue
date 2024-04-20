@@ -2,10 +2,12 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import { inputThemeOverrides } from "@/themeOverrides.js";
-import { NInput, useLoadingBar } from "naive-ui";
-import { reactive } from "vue";
+import {NInput, useLoadingBar} from "naive-ui";
+import {computed, reactive} from "vue";
 import axios from "axios";
-import { Head } from "@inertiajs/vue3";
+import {Head, usePage} from "@inertiajs/vue3";
+import {openModal} from "jenesius-vue-modal";
+import PasswordGeneration from "@/Components/Dashboard/PasswordGeneration.vue";
 
 const form = reactive({
     password: "",
@@ -17,13 +19,17 @@ const errors = reactive({
 });
 const loading = useLoadingBar();
 
+const page = usePage();
+
+
+const userEmail = computed(() => page.props.auth.user.email);
+
 const submit = async () => {
     loading.start();
     await axios
         .patch(route("change-password.update"), form)
         .then((res) => {
             loading.finish();
-            console.log(res);
             errors.password = [];
             errors.password_confirmation = [];
         })
@@ -46,6 +52,7 @@ const generatePassword = async () => {
         .post(route("change-password.generate"))
         .then(() => {
             loading.finish();
+            openModal(PasswordGeneration, {email: userEmail.value})
         })
         .catch(() => {
             loading.error();
@@ -84,7 +91,7 @@ const generatePassword = async () => {
                         show-password-on="click"
                         :theme-overrides="inputThemeOverrides"
                     />
-                    <span class="text-errorred block leading-4" v-if="errors.password">{{
+                    <span class="block leading-4 text-errorred" v-if="errors.password">{{
                         errors.password[0]
                     }}</span>
                 </div>
@@ -98,14 +105,14 @@ const generatePassword = async () => {
                         :theme-overrides="inputThemeOverrides"
                     />
                     <span
-                        class="text-errorred block leading-4"
+                        class="block leading-4 text-errorred"
                         v-if="errors.password_confirmation"
                         >{{ errors.password_confirmation[0] }}</span
                     >
                 </div>
                 <button
                     @click.prevent="submit"
-                    class="sm:w-2/4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal btn_gradient-purple rounded-full py-4"
+                    class="sm:w-2/4 transition-colors border border-violet-700 hover:bg-transparent text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal btn_gradient-purple rounded-full py-4"
                 >
                     Обновить пароль
                 </button>
@@ -119,11 +126,11 @@ const generatePassword = async () => {
                 <p
                     class="my-2 text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
                 >
-                    Пароль будет выслан на указанную вами почту<br />e****@admin.com
+                    Пароль будет выслан на указанную вами почту<br />{{userEmail}}
                 </p>
                 <button
                     @click.prevent="generatePassword"
-                    class="my-2 border py-2 px-4 border-violet-700 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    class="my-2 border py-2 px-4 border-violet-700 transition-colors hover:bg-violet-700 rounded-3xl text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
                 >
                     Сгенерировать
                 </button>

@@ -5,14 +5,14 @@ const show = ref(false);
 </script>
 
 <template>
-    <div class="faq border__fon lg:p-10 p-6">
+    <div class="faq border__fon lg:p-10 p-6 cursor-pointer" @click="show = !show">
         <div class="flex justify-between items-center">
             <h1
                 class="text-violet-100 lg:text-xl text-lg font-bold font-['Open Sans'] line-1-3"
             >
                 Vestibulum ligula nulla, convallis ?
             </h1>
-            <div class="arrow" @click="show = !show">
+            <div class="arrow">
                 <img
                     :class="show ? 'rotate-90' : '-rotate-90'"
                     src="/images/arrow.svg"

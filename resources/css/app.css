@@ -43,6 +43,8 @@ body {
     background-color: rgba(20, 3, 49, 0.8) !important;
     z-index: 120;
     cursor: default !important;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .n-base-select-menu{
@@ -100,4 +102,7 @@ body {
 }
 .btn_gradient-purple {
     background-color: #8729ff;
+}
+.widget__modal-container__item.modal-container{
+
 }

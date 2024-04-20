@@ -29,14 +29,14 @@ const twoFactorAuthentication = () => {
                 <div class="flex items-center w-full">
                     <div class="flex-1"></div>
                     <div class="flex flex-1 flex-col justify-center sm:items-center items-start gap-y-6">
-                        <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">Включить двухэтапную аутентификацию</h1>
+                        <h1 class="text-center text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-normal">Включить двухэтапную аутентификацию</h1>
                     </div>
                     <div class="flex-1 flex justify-end cursor-pointer" @click.prevent="closeModal()">
                         <img class="messenger_close" src="/images/Icon-close.svg" alt="">
                     </div>
                 </div>
             </div>
-            <div class="content flex flex-col justify-center w-1/3 m-auto">
+            <div class="content flex flex-col justify-center w-1/2 m-auto">
                 <n-input :theme-overrides="inputThemeOverrides" v-model:value="password" placeholder="Введите ваш пароль"/>
                 <span v-if="error" class="block text-red-600">{{error}}</span>
                 <button

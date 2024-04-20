@@ -1,12 +1,12 @@
 <script setup>
 import AuthenticationCard from "@/Components/AuthenticationCard.vue";
 import { inputThemeOverrides } from "@/themeOverrides.js";
-import { NInput, useLoadingBar } from "naive-ui";
+import { NInput, useLoadingBar,useMessage } from "naive-ui";
 import { ref } from "vue";
 import { closeModal } from "jenesius-vue-modal";
 
 const loading = useLoadingBar();
-
+const message = useMessage();
 const email = ref("");
 const recoverPassword = () => {
     loading.start();
@@ -14,9 +14,13 @@ const recoverPassword = () => {
         .post(route("password.forgot"), { email: email.value })
         .then((r) => {
             loading.finish();
+            message.success('Сообщение с инструкциями по восстановлению пароля отправлено на вашу электронную почту.')
+            closeModal();
         })
-        .catch((c) => loading.error());
-    closeModal();
+        .catch((c) => {
+            loading.error()
+            message.error('Произошла ошибка. Пожалуйста, попробуйте еще раз позже.')
+        });
 };
 </script>
 

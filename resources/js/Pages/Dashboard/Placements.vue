@@ -13,7 +13,7 @@ const range = ref([118313526e4, Date.now()]);
 const isLoading = ref(true);
 const maxPrice = ref(1500);
 const loading = useLoadingBar();
-const hasAnyOrder = ref(true);
+const hasAnyOrder = ref(false);
 
 const SORT_DATA = [
     {

@@ -12,6 +12,8 @@ class CallbackController extends Controller
     {
         $validated = $request->validated();
 
+        unset($validated['terms']);
+
         Callback::create($validated);
 
         return response()->json(['message' => 'Callback created successfully'], 201);

@@ -87,11 +87,13 @@ const openMessenger = () => {
                     <div
                         class="hidden sm:inline-flex justify-start items-start gap-2.5"
                     >
-                        <img
-                            class="w-16 md:w-24 lg:w-36"
-                            src="/images/dashboard/logo.svg"
-                            alt="logo"
-                        />
+                        <Link :href="route('catalog.channels.index')">
+                            <img
+                                class="w-16 md:w-24 lg:w-36"
+                                src="/images/dashboard/logo.svg"
+                                alt="logo"
+                            />
+                        </Link>
                     </div>
                 </div>
                 <nav class="flex sm:gap-x-3 gap-x-0">

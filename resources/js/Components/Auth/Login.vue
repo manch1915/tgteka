@@ -42,6 +42,9 @@ const submit = () => {
         });
     }
 };
+const openTelegramRedirect = () => {
+    window.open(route('telegram-redirect'), '_blank', 'toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=500,width=400,height=400');
+};
 </script>
 
 <template>
@@ -98,8 +101,8 @@ const submit = () => {
                     Войти через
                 </p>
                 <div class="icons flex gap-4 pt-4">
-                    <a :href="route('telegram-redirect')"
-                        ><img
+                    <a href="#" @click.prevent="openTelegramRedirect">
+                        <img
                             class="hover:cursor-pointer"
                             src="/images/loginTelegram.svg"
                             alt=""

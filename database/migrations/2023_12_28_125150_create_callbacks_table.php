@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('callbacks', function (Blueprint $table) {
             $table->id();
             $table->string('name', 25);
-            $table->string('mobile_number', 16);
+            $table->string('mobile_number', 18);
             $table->enum('status', ['pending', 'finished', 'declined'])->default('pending');
             $table->timestamps();
         });

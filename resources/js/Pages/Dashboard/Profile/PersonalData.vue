@@ -48,6 +48,10 @@ const twoFactorAuthentication = () => {
     pushModal(twoFactorAuthenticationModal);
 };
 
+const openTelegramRedirect = () => {
+    window.open(route('telegram-redirect'), '_blank', 'toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=500,width=400,height=400');
+};
+
 const submit = async () => {
     loading.start();
     await axios
@@ -149,7 +153,7 @@ const deleteUser = async () => {
                     Telegram-аккаунт
                 </p>
                 <a
-                    :href="route('telegram-redirect')"
+                    href="#" @click.prevent="openTelegramRedirect"
                     class="sm:!w-2/4 block text-center w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal border bg-transparent transition hover:btn_gradient-purple rounded-3xl py-2"
                     >Подключить Телеграм аккаунт</a
                 >

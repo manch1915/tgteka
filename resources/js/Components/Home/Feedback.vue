@@ -1,6 +1,4 @@
 <script setup>
-import { NCheckbox } from "naive-ui";
-import { checkboxThemeOverrides } from "@/themeOverrides.js";
 import CallbackForm from "@/Components/Home/CallbackForm.vue";
 </script>
 

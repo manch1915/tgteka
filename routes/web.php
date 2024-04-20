@@ -44,8 +44,7 @@ Route::middleware(['two.factor'])->group(function () {
 });
 
 Route::group(['prefix' => 'auth'], function (){
-    Route::get('/telegram', [TelegramController::class, 'index'])->name('telegram-redirect');
-    Route::get('/telegram/callback', [TelegramController::class, 'callback']);
+    Route::post('/telegram/callback', [TelegramController::class, 'callback'])->name('telegram.callback');
 
     Route::get('/vk', function (){
         return Socialite::driver('vkontakte')->redirect();

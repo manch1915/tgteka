@@ -9,7 +9,7 @@ import { NInput, useLoadingBar, useMessage } from "naive-ui";
 import { inputThemeOverrides } from "@/themeOverrides.js";
 import twoFactorAuthenticationModal from "@/Components/Auth/twoFactorAuthenticationModal.vue";
 import { closeModal, pushModal } from "jenesius-vue-modal";
-import {LoginWidget} from "vue-tg";
+import TgLogin from "@/Components/Home/TgLogin.vue";
 
 const props = defineProps({
     created_at: String,
@@ -154,11 +154,9 @@ const deleteUser = async () => {
                 >
                     Telegram-аккаунт
                 </p>
-                <LoginWidget
-                    bot-username="tgtekaa_bot"
-                    @auth="handleUserAuth"
-                    size="large"
-                />
+                <div>
+                    <TgLogin/>
+                </div>
                 <p
                     class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
                 >

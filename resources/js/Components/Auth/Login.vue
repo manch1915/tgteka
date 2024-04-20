@@ -6,7 +6,7 @@ import { openPasswordRecovery, openRegister } from "@/utilities/authModals.js";
 import { NInput } from "naive-ui";
 import { inputThemeOverrides } from "@/themeOverrides.js";
 import {reactive, ref} from "vue";
-import {LoginWidget} from "vue-tg";
+import TgLogin from "@/Components/Home/TgLogin.vue";
 
 const form = useForm({
     username: "",
@@ -106,11 +106,7 @@ function handleUserAuth(LoginWidgetUser) {
                     Войти через
                 </p>
                 <div class="icons flex gap-4 pt-4">
-                    <LoginWidget
-                        bot-username="tgtekaa_bot"
-                        @auth="handleUserAuth"
-                        size="small"
-                    />
+                    <TgLogin/>
                     <a :href="route('vk-redirect')"
                         ><img class="hover:" src="/images/loginVk.svg" alt=""
                     /></a>

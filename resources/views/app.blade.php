@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.bunny.net">
 
   <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://telegram.org/js/telegram-widget.js"></script>
 
 
   <link rel="icon" href="{{ asset('favicon.ico') }}">

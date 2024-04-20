@@ -26,6 +26,7 @@ export default {
                 neonblue: '#8729FF',
                 skyblue: '#2E63D9',
                 paleblue: '#EAE0FF',
+                errorred: '#ff8888',
             },
             zIndex: {
                 "-1": "-1",

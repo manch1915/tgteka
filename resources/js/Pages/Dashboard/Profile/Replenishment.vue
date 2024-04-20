@@ -108,7 +108,7 @@ const options = {
                                 placeholder="Укажите сумму в рублях"
                                 :theme-overrides="inputThemeOverrides"
                             />
-                            <span class="block text-red-500" v-if="error">{{
+                            <span class="block text-errorred" v-if="error">{{
                                 error
                             }}</span>
                             <div class="flex flex-col">

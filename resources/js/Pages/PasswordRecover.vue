@@ -53,7 +53,7 @@ const passwordReset = () => {
                 />
                 <span
                     v-if="form.errors.password && form.errors.password.length"
-                    class="block my-1 text-red-500"
+                    class="block text-errorred leading-4"
                     >{{ form.errors.password[0] }}</span
                 >
             </div>
@@ -67,7 +67,7 @@ const passwordReset = () => {
                 />
                 <span
                     v-if="form.errors.password && form.errors.password.length"
-                    class="block my-1 text-red-500"
+                    class="block text-errorred leading-4"
                     >{{ form.errors.password[1] }}</span
                 >
             </div>

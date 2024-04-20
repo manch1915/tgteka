@@ -75,30 +75,34 @@ const generatePassword = async () => {
                 </p>
             </div>
             <div class="flex flex-col gap-y-2 px-2 sm:w-3/4 sm:px-0">
-                <n-input
-                    class="py-1.5 my-1 sm:!w-2/4"
-                    v-model:value="form.password"
-                    placeholder="Новый пароль"
-                    type="password"
-                    show-password-on="click"
-                    :theme-overrides="inputThemeOverrides"
-                />
-                <span class="text-red-500" v-if="errors.password">{{
-                    errors.password[0]
-                }}</span>
-                <n-input
-                    class="py-1.5 my-1 sm:!w-2/4"
-                    v-model:value="form.password_confirmation"
-                    placeholder="Подтвердите пароль"
-                    type="password"
-                    show-password-on="click"
-                    :theme-overrides="inputThemeOverrides"
-                />
-                <span
-                    class="text-red-500"
-                    v-if="errors.password_confirmation"
-                    >{{ errors.password_confirmation[0] }}</span
-                >
+                <div>
+                    <n-input
+                        class="py-1.5 my-1 sm:!w-2/4"
+                        v-model:value="form.password"
+                        placeholder="Новый пароль"
+                        type="password"
+                        show-password-on="click"
+                        :theme-overrides="inputThemeOverrides"
+                    />
+                    <span class="text-errorred block leading-4" v-if="errors.password">{{
+                        errors.password[0]
+                    }}</span>
+                </div>
+                <div>
+                    <n-input
+                        class="py-1.5 my-1 sm:!w-2/4"
+                        v-model:value="form.password_confirmation"
+                        placeholder="Подтвердите пароль"
+                        type="password"
+                        show-password-on="click"
+                        :theme-overrides="inputThemeOverrides"
+                    />
+                    <span
+                        class="text-errorred block leading-4"
+                        v-if="errors.password_confirmation"
+                        >{{ errors.password_confirmation[0] }}</span
+                    >
+                </div>
                 <button
                     @click.prevent="submit"
                     class="sm:w-2/4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal btn_gradient-purple rounded-full py-4"

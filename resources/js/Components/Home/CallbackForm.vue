@@ -210,5 +210,6 @@ const orderCallback = () => {
     display: block;
     color: #ff8888;
     font-size: 0.8rem;
+    line-height: 1em;
 }
 </style>

@@ -137,16 +137,17 @@ const deleteUser = async () => {
                 >
                     Имя пользователя
                 </p>
-                <n-input
-                    v-model:value="form.username"
-                    class="py-1.5 my-1 sm:!w-1/2"
-                    placeholder="Имя пользователя"
-                    :theme-overrides="inputThemeOverrides"
-                />
-                <span class="text-red-500" v-if="errors.username">{{
-                    errors.username[0]
-                }}</span>
-
+                <div>
+                    <n-input
+                        v-model:value="form.username"
+                        class="py-1.5 my-1 sm:!w-1/2"
+                        placeholder="Имя пользователя"
+                        :theme-overrides="inputThemeOverrides"
+                    />
+                    <span class="text-errorred leading-4 block" v-if="errors.username">{{
+                        errors.username[0]
+                    }}</span>
+                </div>
                 <p
                     class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
                 >
@@ -163,17 +164,19 @@ const deleteUser = async () => {
                 >
                     Телефон
                 </p>
-                <n-input
-                    v-maska
-                    :input-props="{ 'data-maska': '+7 (###) ###-##-##' }"
-                    v-model:value="form.mobile_number"
-                    class="py-1.5 my-1 sm:!w-1/2"
-                    placeholder="+7 (___) ___-__-__"
-                    :theme-overrides="inputThemeOverrides"
-                />
-                <span class="text-red-500" v-if="errors.mobile_number">{{
-                    errors.mobile_number[0]
-                }}</span>
+                <div>
+                    <n-input
+                        v-maska
+                        :input-props="{ 'data-maska': '+7 (###) ###-##-##' }"
+                        v-model:value="form.mobile_number"
+                        class="py-1.5 my-1 sm:!w-1/2"
+                        placeholder="+7 (___) ___-__-__"
+                        :theme-overrides="inputThemeOverrides"
+                    />
+                    <span class="text-errorred leading-4 block" v-if="errors.mobile_number">{{
+                        errors.mobile_number[0]
+                    }}</span>
+                </div>
             </div>
             <div class="px-4 sm:px-0">
                 <button

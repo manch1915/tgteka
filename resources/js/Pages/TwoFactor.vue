@@ -61,7 +61,7 @@ const verify = () => {
                     placeholder="Код"
                     :theme-overrides="inputThemeOverrides"
                 />
-                <span v-if="error" class="block my-1 text-red-500">{{
+                <span v-if="error" class="block text-errorred leading-4">{{
                     error
                 }}</span>
                 <button

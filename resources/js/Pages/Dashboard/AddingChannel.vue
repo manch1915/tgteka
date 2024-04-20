@@ -68,7 +68,7 @@ const uploadChannel = () => {
 
             nextTick(() => {
                 const firstErrorElement =
-                    document.querySelector(".text-red-500");
+                    document.querySelector(".text-errorred");
                 if (firstErrorElement) {
                     firstErrorElement.scrollIntoView({
                         behavior: "smooth",
@@ -150,7 +150,7 @@ watch(state.type, (newRadio) => {
                         autocomplete="title"
                         placeholder="Название"
                     />
-                    <span class="text-red-500" v-if="errors.channel_name">{{
+                    <span class="text-errorred" v-if="errors.channel_name">{{
                         errors.channel_name[0]
                     }}</span>
                 </div>
@@ -169,7 +169,7 @@ watch(state.type, (newRadio) => {
                         autocomplete="description"
                         placeholder="Опишите особенности вашего канала, которые выделяют вас в каталоге. Не указывать личные контакты или ссылки на другие сайты."
                     />
-                    <span class="text-red-500" v-if="errors.description">{{
+                    <span class="text-errorred" v-if="errors.description">{{
                         errors.description[0]
                     }}</span>
                 </div>
@@ -185,7 +185,7 @@ watch(state.type, (newRadio) => {
                         v-model:value="form.topic_id"
                         :options="channelSubjects"
                     />
-                    <span class="text-red-500" v-if="errors.topic_id">{{
+                    <span class="text-errorred" v-if="errors.topic_id">{{
                         errors.topic_id[0]
                     }}</span>
                 </div>
@@ -205,7 +205,7 @@ watch(state.type, (newRadio) => {
                         placeholder="@channel или https://t.me/dr_amina_pirmanova"
                     />
                     <span
-                        class="text-red-500"
+                        class="text-errorred"
                         v-if="errors.url"
                         ref="el => { errorRefs.url = el }"
                         >{{ errors.url[0] }}</span
@@ -237,7 +237,7 @@ watch(state.type, (newRadio) => {
                             Группу/ чат
                         </p>
                         </n-checkbox>
-                        <span class="text-red-500" v-if="errors.type">{{ errors.type[0] }}</span>
+                        <span class="text-errorred" v-if="errors.type">{{ errors.type[0] }}</span>
                     </div>
                 </div>-->
                 <div class="w-full text-start">
@@ -482,7 +482,7 @@ watch(state.type, (newRadio) => {
                             placeholder="Детально укажите методы продвижения вашего канала. Укажите ссылки, если подписчики пришли с вашего аккаунта в Instagram, Facebook, YouTube, TikTok и т.д. — этоповысит шансы успешной модерации."
                         />
                         <span
-                            class="text-red-500"
+                            class="text-errorred"
                             v-if="errors.subscribers_source"
                             >{{ errors.subscribers_source[0] }}</span
                         >
@@ -511,7 +511,7 @@ watch(state.type, (newRadio) => {
                         v-model:value="form.repeat_discount"
                         :options="discountData"
                     />
-                    <span class="text-red-500" v-if="errors.repeat_discount">{{
+                    <span class="text-errorred" v-if="errors.repeat_discount">{{
                         errors.repeat_discount[0]
                     }}</span>
                 </div>
@@ -531,7 +531,7 @@ watch(state.type, (newRadio) => {
                                 >
                             </div>
                         </n-checkbox>
-                        <span class="text-red-500" v-if="errors.terms">{{
+                        <span class="text-errorred" v-if="errors.terms">{{
                             errors.terms[0]
                         }}</span>
                     </div>

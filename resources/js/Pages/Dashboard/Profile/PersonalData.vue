@@ -9,6 +9,7 @@ import { NInput, useLoadingBar, useMessage } from "naive-ui";
 import { inputThemeOverrides } from "@/themeOverrides.js";
 import twoFactorAuthenticationModal from "@/Components/Auth/twoFactorAuthenticationModal.vue";
 import { closeModal, pushModal } from "jenesius-vue-modal";
+import {LoginWidget} from "vue-tg";
 
 const props = defineProps({
     created_at: String,
@@ -48,8 +49,8 @@ const twoFactorAuthentication = () => {
     pushModal(twoFactorAuthenticationModal);
 };
 
-const openTelegramRedirect = () => {
-    window.open(route('telegram-redirect'), '_blank', 'toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=500,width=400,height=400');
+const handleUserAuth = (user) => {
+    console.log(user)
 };
 
 const submit = async () => {
@@ -153,12 +154,11 @@ const deleteUser = async () => {
                 >
                     Telegram-аккаунт
                 </p>
-                <a
-                    href="#" @click.prevent="openTelegramRedirect"
-                    class="sm:!w-2/4 block text-center w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal border bg-transparent transition hover:btn_gradient-purple rounded-3xl py-2"
-                    >Подключить Телеграм аккаунт</a
-                >
-
+                <LoginWidget
+                    bot-username="tgtekaa_bot"
+                    @auth="handleUserAuth"
+                    size="large"
+                />
                 <p
                     class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
                 >

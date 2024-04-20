@@ -109,6 +109,7 @@ function handleUserAuth(LoginWidgetUser) {
                     <LoginWidget
                         bot-username="tgtekaa_bot"
                         @auth="handleUserAuth"
+                        size="small"
                     />
                     <a :href="route('vk-redirect')"
                         ><img class="hover:" src="/images/loginVk.svg" alt=""

@@ -27,7 +27,7 @@ onBeforeMount(() => {
     <Link :href="routeHref">
         <div @click="profileButton.setActiveButton(title)" class="button flex justify-between items-center" :class="profileButtonTitle === title ? 'background' : ''">
             <div class="flex gap-x-2.5 items-center">
-                <img :src="icon" alt="">
+                <img class="select-none" :src="icon" alt="">
                 <button
                     :class="[
                     'text-left',

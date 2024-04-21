@@ -25,7 +25,7 @@ class ChannelSeeder extends Seeder
         ];
 
         foreach ($urls as $index => $url) {
-            $channel = Channel::factory()->create(['url' => $url, 'type' => $types[$index]]);
+            $channel = Channel::factory()->create(['url' => $url, 'type' => $types[$index], 'status' => 'loading']);
             FetchChannelStatisticsJob::dispatch($channel);
         }
     }

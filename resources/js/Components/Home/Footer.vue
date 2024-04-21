@@ -98,13 +98,14 @@ const toUp = () => {
                                                 >
                                                     <div class="glow_icon">
                                                         <img
+                                                            class="select-none"
                                                             src="/images/telegram.svg"
                                                             alt="telegram"
                                                         />
                                                     </div>
 
                                                     <div
-                                                        class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
+                                                        class="select-none text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
                                                     >
                                                         Telegram
                                                     </div>
@@ -114,13 +115,14 @@ const toUp = () => {
                                                 >
                                                     <div class="glow_icon">
                                                         <img
+                                                            class="select-none"
                                                             src="/images/message.svg"
                                                             alt="message"
                                                         />
                                                     </div>
 
                                                     <div
-                                                        class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
+                                                        class="select-none text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
                                                     >
                                                         Почта
                                                     </div>
@@ -152,7 +154,7 @@ const toUp = () => {
                             </div>
                         </div>
                         <div class="w-full footer-lines">
-                            <img src="/images/linesanime.svg" alt="lines" />
+                            <img class="select-none" src="/images/linesanime.svg" alt="lines" />
                         </div>
                         <div class="pb-4">
                             <div class="container mx-auto pt-12 px-4">

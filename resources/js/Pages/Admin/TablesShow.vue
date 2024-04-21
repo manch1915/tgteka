@@ -145,7 +145,7 @@ const updateChannel = () => {
 
         <!-- Channel Creation Date -->
         <FormField label="Дата создания канала">
-            <n-date-picker type="date" v-model="form.channel_creation_date" :icon="mdiCardText" />
+            <n-date-picker type="date" value-format="yyyy-MM-dd" v-model:formatted-value="form.channel_creation_date" :icon="mdiCardText" />
         </FormField>
         <div class="flex flex-wrap gap-3">
             <button class="p-3 bg-green-700" v-if="props.channel.status === 'pending'" @click="toggleChannel('loading')">Принять канал</button>

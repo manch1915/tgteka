@@ -152,7 +152,7 @@ watch(
                                     class="h-full flex py-4 gap-x-2.5"
                                 >
                                     <img
-                                        class="w-6"
+                                        class="w-6 select-none"
                                         src="/images/calendar-bold.svg"
                                         alt="calendar"
                                     />
@@ -195,6 +195,7 @@ watch(
                             <div class="my-4">
                                 <div class="flex items-start gap-x-2.5">
                                     <img
+                                        class="select-none"
                                         src="/images/information.svg"
                                         alt="information"
                                     />
@@ -253,6 +254,7 @@ watch(
                             <div class="dashed">
                                 <div class="flex items-start gap-x-2.5">
                                     <img
+                                        class="select-none"
                                         src="/images/information.svg"
                                         alt="information"
                                     />
@@ -359,6 +361,7 @@ watch(
                                                 Читать подробнее
                                             </h2>
                                             <img
+                                                class="select-none"
                                                 src="/images/arrow-down.svg"
                                                 alt=""
                                             />
@@ -378,6 +381,7 @@ watch(
                                             class="flex h-full flex-col items-center justify-center payment_types-card"
                                         >
                                             <img
+                                                class="select-none"
                                                 src="/images/card-white.svg"
                                                 alt="card-white"
                                             />
@@ -404,7 +408,7 @@ watch(
                                         class="h-full flex py-4 gap-x-2.5"
                                     >
                                         <img
-                                            class="w-6"
+                                            class="w-6 select-none"
                                             src="/images/calendar-bold.svg"
                                             alt="calendar"
                                         />
@@ -444,6 +448,7 @@ watch(
                                 <div class="my-4">
                                     <div class="flex items-center gap-x-2.5">
                                         <img
+                                            class="select-none"
                                             src="/images/database-import.svg"
                                             alt=""
                                         />
@@ -455,6 +460,7 @@ watch(
                                     </div>
                                     <div class="flex items-center gap-x-2.5">
                                         <img
+                                            class="select-none"
                                             src="/images/information-white.svg"
                                             alt=""
                                         />
@@ -548,7 +554,7 @@ watch(
                                         class="h-full flex py-4 gap-x-2.5"
                                     >
                                         <img
-                                            class="w-6"
+                                            class="w-6 select-none"
                                             src="/images/calendar-bold.svg"
                                             alt="calendar"
                                         />

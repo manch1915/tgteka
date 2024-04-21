@@ -7,7 +7,6 @@ import TableCheckboxCell from "@/Components/Admin/TableCheckboxCell.vue";
 import BaseLevel from "@/Components/Admin/BaseLevel.vue";
 import BaseButtons from "@/Components/Admin/BaseButtons.vue";
 import BaseButton from "@/Components/Admin/BaseButton.vue";
-import UserAvatar from "@/Components/Admin/UserAvatar.vue";
 import {router} from "@inertiajs/vue3";
 
 defineProps({

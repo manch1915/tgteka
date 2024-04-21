@@ -105,12 +105,12 @@ const openMessenger = () => {
                                 class="sm:border-r-[1px] pr-2 flex items-center"
                             >
                                 <p
-                                    class="sm:block hidden text-violet-100 text-xs lg:text-lg font-bold font-['Open Sans'] leading-normal"
+                                    class="sm:block hidden select-none text-violet-100 text-xs lg:text-lg font-bold font-['Open Sans'] leading-normal"
                                 >
                                     Общий баланс&nbsp;
                                 </p>
                                 <p
-                                    class="text-violet-100 sm:text-xl md:text-xs lg:text-lg text-lg font-bold font-['Open Sans'] leading-normal"
+                                    class="text-violet-100 select-none sm:text-xl md:text-xs lg:text-lg text-lg font-bold font-['Open Sans'] leading-normal"
                                 >
                                     <animated-number
                                         :number="parseFloat(store.userBalance)"
@@ -122,13 +122,13 @@ const openMessenger = () => {
                                 class="cursor-pointer replenish pr-2 flex items-center gap-x-1"
                             >
                                 <p
-                                    class="sm:block hidden text-violet-100 text-xs lg:text-lg font-bold font-['Open Sans'] leading-normal"
+                                    class="sm:block hidden select-none text-violet-100 text-xs lg:text-lg font-bold font-['Open Sans'] leading-normal"
                                 >
                                     Пополнить
                                 </p>
                                 <div class="w-4 sm:w-6 lg:w-6">
                                     <img
-                                        class="w-6"
+                                        class="w-6 select-none"
                                         src="/images/group.svg"
                                         alt=""
                                     />
@@ -141,7 +141,7 @@ const openMessenger = () => {
                             @click.prevent="openMessenger"
                             class="h-8 border-r-[1px] px-2 md:px-4 lg:px-5 flex flex-col justify-center"
                         >
-                            <img src="/images/messenger.svg" alt="" />
+                            <img class="select-none" src="/images/messenger.svg" alt="" />
                         </div>
                         <div
                             class="border-r-[1px] px-2 md:px-4 lg:px-5 h-8 flex flex-col justify-center"
@@ -153,6 +153,7 @@ const openMessenger = () => {
                             >
                                 <Link :href="route('notifications')">
                                     <img
+                                        class="select-none"
                                         src="/images/notification.svg"
                                         alt=""
                                     />
@@ -169,7 +170,7 @@ const openMessenger = () => {
                             >
                                 <n-badge type="info" :value="cart.items.length">
                                     <BaseIcon
-                                        class="text-purple-400"
+                                        class="text-purple-400 select-none"
                                         size="30"
                                         :path="mdiCart"
                                     />
@@ -184,7 +185,7 @@ const openMessenger = () => {
                                 class="flex flex-col items-center"
                             >
                                 <BaseIcon
-                                    class="text-purple-400"
+                                    class="text-purple-400 select-none"
                                     size="30"
                                     :path="mdiFaceAgent"
                                 />
@@ -194,7 +195,7 @@ const openMessenger = () => {
                             class="px-2 md:px-4 lg:px-5 h-8 flex flex-col justify-center"
                         >
                             <Link :href="route('personal-data')">
-                                <img src="/images/person.svg" alt="" />
+                                <img class="select-none" src="/images/person.svg" alt="" />
                             </Link>
                         </div>
                     </div>
@@ -334,7 +335,7 @@ const openMessenger = () => {
                         ><li
                             :class="{
                                 active: isActiveRoute('/patterns'),
-                                'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans leading-normal cursor-pointer': true,
+                                'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans select-none leading-normal cursor-pointer': true,
                             }"
                         >
                             Мои шаблоны
@@ -344,7 +345,7 @@ const openMessenger = () => {
                         ><li
                             :class="{
                                 active: isActiveRoute('/placements'),
-                                'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans leading-normal cursor-pointer': true,
+                                'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans select-none leading-normal cursor-pointer': true,
                             }"
                         >
                             Мои размещения
@@ -354,7 +355,7 @@ const openMessenger = () => {
                         ><li
                             :class="{
                                 active: isActiveRoute('/catalog/channels'),
-                                'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans leading-normal cursor-pointer': true,
+                                'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans select-none leading-normal cursor-pointer': true,
                             }"
                         >
                             Каталог каналов
@@ -364,7 +365,7 @@ const openMessenger = () => {
                         ><li
                             :class="{
                                 active: isActiveRoute('/channels'),
-                                'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans leading-normal cursor-pointer': true,
+                                'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans select-none leading-normal cursor-pointer': true,
                             }"
                         >
                             Мои каналы
@@ -374,7 +375,7 @@ const openMessenger = () => {
                         ><li
                             :class="{
                                 active: isActiveRoute('/orders'),
-                                'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans leading-normal cursor-pointer': true,
+                                'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans select-none leading-normal cursor-pointer': true,
                             }"
                         >
                             Заявки на размещение

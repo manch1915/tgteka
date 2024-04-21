@@ -23,8 +23,11 @@ body {
     font-family: "Open Sans", sans-serif !important;
     overflow: hidden;
 }
-
-
+img{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
 .pagination_el {
     width: 40px;
     height: 4px;
@@ -105,4 +108,9 @@ body {
 }
 .widget__modal-container__item.modal-container{
 
+}
+button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
 }

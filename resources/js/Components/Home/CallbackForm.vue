@@ -65,7 +65,7 @@ const orderCallback = () => {
                         type="text"
                         placeholder="Имя"
                     />
-                    <div class="error-message">{{ form.errors.name }}</div>
+                    <div class="error-message mt-1">{{ form.errors.name }}</div>
                 </div>
                 <div>
                     <input
@@ -76,7 +76,7 @@ const orderCallback = () => {
                         type="text"
                         placeholder="+7(___) - ___ - __ - __"
                     />
-                    <div class="error-message">
+                    <div class="error-message mt-1">
                         {{ form.errors.mobile_number }}
                     </div>
                 </div>
@@ -95,7 +95,7 @@ const orderCallback = () => {
                             </Link>
                         </label>
                     </div>
-                    <div class="error-message">{{ form.errors.terms }}</div>
+                    <div class="error-message mt-1">{{ form.errors.terms }}</div>
                 </div>
                 <button
                     @click.prevent="orderCallback"

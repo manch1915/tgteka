@@ -604,7 +604,7 @@ const activate = (place) => {
                         >
                             Фильтр
                         </h1>
-                        <img src="/images/setting.svg" alt="setting" />
+                        <img class="select-none" src="/images/setting.svg" alt="setting" />
                     </div>
                     <div class="inline w-full sm:hidden">
                         <n-select

@@ -66,6 +66,7 @@ function handleUserAuth(LoginWidgetUser) {
                     :status="((form.errors.username && form.errors.username.length > 0)) ? 'error' : 'success'"
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
+                    autocomplete="username"
                 />
                 <InputError :message="form.errors.username" />
             </div>
@@ -79,6 +80,7 @@ function handleUserAuth(LoginWidgetUser) {
                     :status="((form.errors.password && form.errors.password.length > 0)) ? 'error' : 'success'"
                     :theme-overrides="inputThemeOverrides"
                     class="py-1.5 my-1 sm:!w-full"
+                    autocomplete="current-password"
                 />
                 <InputError :message="form.errors.password" />
             </div>

@@ -148,6 +148,7 @@ const checked = (isChecked, client) => {
         />
         <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar
+            api="initials"
             :avatar="channel.avatar"
             :username="channel.channel_name"
             class="w-24 mx-auto lg:w-6 lg:h-6"
@@ -198,3 +199,8 @@ const checked = (isChecked, client) => {
     </BaseLevel>
   </div>
 </template>
+<style scoped>
+td{
+    word-break: break-all;
+}
+</style>

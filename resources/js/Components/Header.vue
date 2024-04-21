@@ -222,7 +222,7 @@ const clearBodyOverflow = () => {
             <div class="flex gap-x-4 mt-5 pb-24">
                 <div class="flex flex-col justify-center items-center">
                     <div class="glow_icon">
-                        <img src="/images/telegram.svg" alt="telegram" />
+                        <img class="select-none" src="/images/telegram.svg" alt="telegram" />
                     </div>
 
                     <div
@@ -233,7 +233,7 @@ const clearBodyOverflow = () => {
                 </div>
                 <div class="flex flex-col justify-center items-center">
                     <div class="glow_icon">
-                        <img src="/images/message.svg" alt="message" />
+                        <img class="select-none" src="/images/message.svg" alt="message" />
                     </div>
                     <div
                         class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"

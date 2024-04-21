@@ -80,15 +80,6 @@ watch(
         <n-select v-model:value="statusValue" :options="statusOptions" class="my-4 w-64"/>
     </div>
 
-  <CardBoxModal
-    v-model="isModalDangerActive"
-    title="Пожалуйста подтвердите"
-    button="danger"
-    @confirm="deleteTopic"
-    has-cancel
-  >
-    <p>вы действительно хотите удалить?</p>
-  </CardBoxModal>
 
   <table>
     <thead>

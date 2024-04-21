@@ -113,8 +113,8 @@ const discountData = [
 const handleUpdateChecked = (value) => {
     form.type = value;
 };
-const state = toRefs(form);
-watch(state.type, (newRadio) => {
+
+watch(() => form.type, (newRadio) => {
     if (newRadio === "channel") {
         form.type = "channel";
     } else if (newRadio === "chat") {

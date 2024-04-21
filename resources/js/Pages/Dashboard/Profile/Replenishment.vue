@@ -273,7 +273,7 @@ const options = {
                                 Создать
                             </button>
                             <p
-                                class="mt-8 text-violet-100 text-lg font-normal font-['Open Sans'] underline"
+                                class="mt-8 select-none text-violet-100 text-lg font-normal font-['Open Sans'] underline"
                             >
                                 Посмотреть историю транзакций
                             </p>

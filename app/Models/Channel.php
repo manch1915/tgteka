@@ -42,7 +42,9 @@ class Channel extends Model implements HasMedia
         parent::boot();
 
         static::saving(function ($channel) {
-            $channel->slug = Str::slug($channel->channel_name) . '-' . $channel->id;
+            if (!isset($channel->slug)) {
+                $channel->slug = Str::slug($channel->channel_name) . '-' . $channel->id;
+            }
         });
     }
 

@@ -8,6 +8,7 @@ import {
 import { NCheckbox, NInput } from "naive-ui";
 import { Head, usePage } from "@inertiajs/vue3";
 import { computed } from "vue";
+import TgLogin from "@/Components/Home/TgLogin.vue";
 
 const page = usePage();
 
@@ -52,11 +53,7 @@ const telegram_username = computed(
                             оперативные уведомления и управляйте заказами
                         </p>
                         <div class="py-6">
-                            <a
-                                :href="route('telegram-redirect')"
-                                class="sm:!w-2/4 block text-center w-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal btn_gradient-purple rounded-3xl py-2"
-                                >Подключить бот</a
-                            >
+                            <TgLogin/>
                         </div>
                         <p
                             class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
@@ -89,7 +86,7 @@ const telegram_username = computed(
                             <p
                                 class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
                             >
-                                3) Добавьте бот уведомлений Telega.in в качестве
+                                3) Добавьте бот уведомлений 1-24.xyz в качестве
                                 участника вашей группы
                             </p>
                         </div>

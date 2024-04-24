@@ -17,6 +17,7 @@ import Slider from "@/Components/Home/Slider.vue";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import { Head } from "@inertiajs/vue3";
 import { Title } from "chart.js";
+import GoUp from "@/Components/Home/GoUp.vue";
 
 const headers = [
     "Регистрируйте аккаунт",
@@ -133,4 +134,5 @@ const spaceBetween = computed(() => {
             </template>
         </ClientsBlock>
     </MainLayout>
+    <GoUp/>
 </template>

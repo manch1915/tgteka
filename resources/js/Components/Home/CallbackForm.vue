@@ -10,11 +10,11 @@ const message = useMessage();
 
 const form = reactive({
     name: "",
-    mobile_number: "",
+    email: "",
     terms: false,
     errors: {
         name: "",
-        mobile_number: "",
+        email: "",
         terms: "",
     },
 });
@@ -22,7 +22,7 @@ const form = reactive({
 const handleSuccess = () => {
     message.success("Ваша заявка на обратный звонок принято");
     form.name = "";
-    form.mobile_number = "";
+    form.email = "";
     form.terms = false;
 };
 
@@ -70,14 +70,12 @@ const orderCallback = () => {
                 <div>
                     <input
                         class="w-full"
-                        v-model="form.mobile_number"
-                        v-maska
-                        data-maska="+7 (###) ###-##-##"
-                        type="text"
-                        placeholder="+7(___) - ___ - __ - __"
+                        v-model="form.email"
+                        type="email"
+                        placeholder="example@gmail.com"
                     />
                     <div class="error-message mt-1">
-                        {{ form.errors.mobile_number }}
+                        {{ form.errors.email }}
                     </div>
                 </div>
                 <div>
@@ -101,7 +99,7 @@ const orderCallback = () => {
                     @click.prevent="orderCallback"
                     class="cursor-pointer px-3 py-3.5 btn_gradient-purple animation hover:bg-purple-800 rounded-full w-full gap-2.5 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
                 >
-                    Заказать обратный звонок
+                    Отправить
                 </button>
             </div>
         </div>
@@ -179,6 +177,12 @@ const orderCallback = () => {
 
     .form {
         input[type="text"] {
+            padding: 13px 14px;
+            border-radius: 30px;
+            background: transparent;
+            border: 1px solid #ffffff;
+        }
+        input[type="email"] {
             padding: 13px 14px;
             border-radius: 30px;
             background: transparent;

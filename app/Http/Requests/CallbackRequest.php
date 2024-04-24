@@ -10,7 +10,7 @@ class CallbackRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:25'],
-            'mobile_number' => ['required', 'string', 'regex:/^\+7\s\(\d{3}\)\s\d{3}-\d{2}-\d{2}$/'],
+            'email' => ['required', 'email', 'max:250'],
             'terms' => ['accepted']
         ];
     }

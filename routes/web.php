@@ -52,9 +52,6 @@ Route::group(['prefix' => 'auth'], function (){
     Route::get('/vk/callback', [\App\Http\Controllers\Auth\VkController::class, 'auth']);
 });
 
-Route::get('/terms-of-service', fn () => inertia('Agreement'))->name('terms-of-service');
-Route::get('/rules', fn () => inertia('Rules'))->name('rules');
-
 Route::post('/order/callback', [\App\Http\Controllers\CallbackController::class, 'handleCallback'])->name('order.callback');
 
 Route::middleware(['auth:sanctum', 'two.factor'])->group(function () {

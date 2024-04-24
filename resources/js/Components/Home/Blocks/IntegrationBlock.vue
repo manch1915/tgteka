@@ -10,7 +10,7 @@
             >
                 <span
                     class="text-violet-100 lg:text-4xl text-3xl font-bold font-['Open Sans'] leading-10"
-                    >Как купить интеграцию в Телеграм с&nbsp;TGteka.ru</span
+                    >Как купить интеграцию в Телеграм с&nbsp;1-24.xyz</span
                 >
             </div>
             <div
@@ -30,7 +30,7 @@
         content: "";
         position: absolute;
         left: 0;
-        top: 38%;
+        top: 60%;
         width: 120%;
         height: 100%;
         background: url("/images/planeInter.svg") no-repeat center;

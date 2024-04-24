@@ -4,7 +4,7 @@ import InputError from "@/Components/InputError.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { reactive, ref } from "vue";
 import { Link } from "@inertiajs/vue3";
-import { NCheckbox, NInput, useLoadingBar, useMessage } from "naive-ui";
+import {NCheckbox, NDrawer, NDrawerContent, NInput, useLoadingBar, useMessage} from "naive-ui";
 import {
     checkboxThemeOverrides,
     inputThemeOverrides,
@@ -12,6 +12,8 @@ import {
 import { closeModal } from "jenesius-vue-modal";
 import { vMaska } from "maska";
 import { openLogin } from "@/utilities/authModals.js";
+import Rules from "@/Pages/Rules.vue";
+import Agreement from "@/Pages/Agreement.vue";
 
 const state = reactive({
     form: {
@@ -21,10 +23,13 @@ const state = reactive({
     errors: {},
 });
 
-const checkbox = ref(true);
+const checkbox = ref(false);
 
 const loading = useLoadingBar();
 const message = useMessage();
+
+const activeRules = ref(false)
+const activeAgree = ref(false)
 
 function validateForm() {
     let isValid = true;
@@ -123,15 +128,15 @@ const submit = async () => {
                     class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
                 >
                     Нажимая на кнопку “Зарегистрироваться”, Вы соглашаетесь
-                    <Link :href="route('rules')">
+                    <span class="cursor-pointer" @click.prevent="activeRules = !activeRules">
                         <span class="underline">Правилами</span>
-                    </Link>
+                    </span>
                     и
-                    <Link :href="route('terms-of-service')">
+                    <span class="cursor-pointer" @click.prevent="activeAgree = !activeAgree">
                         <span class="underline"
                             >Пользовательским соглашением Сервиса</span
                         >
-                    </Link>
+                    </span>
                 </span>
             </div>
             <hr class="border border-violet-100 border-opacity-40" />
@@ -149,11 +154,16 @@ const submit = async () => {
                 </button>
             </div>
         </form>
+        <n-drawer v-model:show="activeRules" width="100%" height="90%" placement="bottom" >
+            <n-drawer-content title="Правила пользования">
+                <Rules/>
+            </n-drawer-content>
+        </n-drawer>
+        <n-drawer v-model:show="activeAgree" width="100%" height="90%" placement="bottom" >
+            <n-drawer-content title="Пользовательское соглашение">
+                <Agreement/>
+            </n-drawer-content>
+        </n-drawer>
     </AuthenticationCard>
+
 </template>
-<style scoped>
-.icons {
-    img {
-    }
-}
-</style>

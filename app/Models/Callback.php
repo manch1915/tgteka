@@ -8,7 +8,7 @@ class Callback extends Model
 {
     protected $fillable = [
         'name',
-        'mobile_number',
+        'email',
         'status'
     ];
 }

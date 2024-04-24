@@ -16,6 +16,7 @@ import Slider from "@/Components/Home/Slider.vue";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import { Head } from "@inertiajs/vue3";
 import { Title } from "chart.js";
+import GoUp from "@/Components/Home/GoUp.vue";
 
 const headers = [
     "Добавляете канал в каталог",
@@ -94,9 +95,11 @@ const spaceBetween = computed(() => {
                 />
             </template>
         </HowItWorksBlock>
+
         <div class="py-12 md:pt-24">
             <IntegrationBackground />
         </div>
+
         <ClientsBlock>
             <template v-slot:clients-header>
                 <ClientsHeader />
@@ -106,10 +109,12 @@ const spaceBetween = computed(() => {
             </template>
             <template v-slot:clients-footer> </template>
         </ClientsBlock>
+
         <faq />
 
         <TechnicalIssues />
     </MainLayout>
+    <GoUp/>
 </template>
 
 <style scoped lang="scss"></style>

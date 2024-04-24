@@ -116,13 +116,6 @@ onUnmounted(() => {
         <div
             class="pagination-mod flex items-center content-center justify-center sm:mt-11 mt-4"
         ></div>
-        <div class="review sm:pt-16 pt-12 flex justify-center">
-            <button
-                class="px-6 py-4 btn_gradient-purple transition hover:bg-purple-800 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
-            >
-                Добавить отзыв
-            </button>
-        </div>
     </div>
 </template>
 

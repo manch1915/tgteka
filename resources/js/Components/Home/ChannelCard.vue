@@ -36,7 +36,7 @@
             </div>
         </div>
         <div
-            class="body__buttons grid grid-cols-2 lg:gap-x-7 gap-2 gap-y-3 mt-5"
+            class="body__buttons grid grid-cols-2 lg:gap-x-7 gap-2 gap-y-3 my-5"
         >
             <div class="body__button">
                 <div class="text-center">
@@ -183,8 +183,8 @@
 }
 .order {
     position: absolute;
-    bottom: 3px;
-    right: 5px;
+    bottom: 0;
+    right: 0;
     .order_el {
     }
 }

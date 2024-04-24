@@ -1,8 +1,3 @@
-<script setup>
-const toUp = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-};
-</script>
 
 <template>
     <div class="clients_mid">
@@ -24,14 +19,14 @@ const toUp = () => {
                                             class="logo flex items-center w-28"
                                         >
                                             <img
-                                                src="/images/logo.svg"
+                                                src="/images/dashboard/logo.svg"
                                                 alt="logo"
                                             />
                                         </div>
                                         <div
                                             class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
                                         >
-                                            © 2023 tgteka.ru
+                                            © 2024 1-24.xyz
                                         </div>
                                         <ul
                                             class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
@@ -85,7 +80,7 @@ const toUp = () => {
                                         <div
                                             class="text-violet-100 xl:text-7xl lg:text-5xl sm:text-4xl text-xl font-bold font-['Open Sans'] leading-10"
                                         >
-                                            info@tgteka.ru
+                                            info@1-24.xyz
                                         </div>
                                         <div
                                             class="flex sm:flex-row flex-col justify-between items-start gap-8 sm:gap-3"
@@ -290,21 +285,6 @@ const toUp = () => {
                                             </ul>
                                         </div>
                                     </div>
-                                    <div
-                                        @click.prevent="toUp"
-                                        class="up cursor-pointer sm:flex hidden flex-col items-center gap-1"
-                                    >
-                                        <img
-                                            class="transition w-20"
-                                            src="/images/arrow-circle-down.svg"
-                                            alt="arrow"
-                                        />
-                                        <div
-                                            class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
-                                        >
-                                            Наверх
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="footer-vector-lines">
@@ -450,14 +430,7 @@ $offset: 0px;
 footer {
     //overflow: auto;
 }
-.up {
-    &:hover {
-        img {
-            -webkit-filter: drop-shadow(3px 3px 2px rgba(255, 255, 255, 1));
-            filter: drop-shadow(0 0 2px rgba(255, 255, 255, 1));
-        }
-    }
-}
+
 .list {
     ul {
         li {

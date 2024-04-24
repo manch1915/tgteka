@@ -125,9 +125,7 @@ const props = defineProps({
                 height: 70px;
             }
         }
-        @media screen and (min-width: 1024px) {
-            transform: translateY(-55px);
-        }
+
     }
     &.border__fon {
         &:nth-child(1) {

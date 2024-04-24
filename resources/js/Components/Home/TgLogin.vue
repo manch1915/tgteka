@@ -19,6 +19,7 @@ const login = () =>{
         (data) => {
             if (!data) {
                 message.error('Произошла ошибка. Пожалуйста, попробуйте еще раз позже.')
+                return
             }
 
             axios.post(route('telegram.callback'), data)

@@ -3,12 +3,12 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import TextArea from "@/Components/TextArea.vue";
 import { computed, ref } from "vue";
-import { usePage, Head } from "@inertiajs/vue3";
+import {usePage, Head, router} from "@inertiajs/vue3";
 import { openModal } from "jenesius-vue-modal";
 import ModalAlert from "@/Components/Dashboard/ModalAlert.vue";
 import TicketCard from "@/Components/Dashboard/TicketCard.vue";
 import Messanger from "@/Components/Dashboard/Messanger.vue";
-import { useMessage } from "naive-ui";
+import {NUpload, useMessage} from "naive-ui";
 
 const props = defineProps({
     tickets: Object,
@@ -35,12 +35,27 @@ const socket = new WebSocket(
         userId.value
     }`
 );
+
 const title = ref("");
 const content = ref("");
-socket.onmessage = function (event) {
-    console.log(`[message] Данные получены с сервера: ${event.data}`);
-};
+
+const uploadedFile = ref(null);
+const upload = ref(null);
+
+const handleChange = (data) => {
+    uploadedFile.value = data.file.file;
+}
+
+const handleRemove = () => {
+    uploadedFile.value = null;
+}
+
 const createNewAppeal = () => {
+    if (socket.readyState !== WebSocket.OPEN) {
+        // If the connection is not open, display an error message and return
+        message.error("Ошибка соединения с сервером WebSocket.");
+        return;
+    }
     if (title.value.trim() === "" && content.value.trim() === "") {
         message.error("Заполните 'Тема обращения' и 'Текст обращения' ");
         return;
@@ -56,7 +71,44 @@ const createNewAppeal = () => {
         })
     );
 
+    const handleResponse = (ticket_id) => {
+        if (ticket_id) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                // Send the image message with the base64 data
+                socket.send(
+                    JSON.stringify({
+                        title: '',
+                        message: event.target.result, // Base64 data
+                        sender_id: userId.value,
+                        ticket_id: ticket_id,
+                        type: "support_message",
+                        content_type: "image",
+                    })
+                );
+            };
+            reader.readAsDataURL(uploadedFile.value);
+            uploadedFile.value = null;
+            upload.value?.clear()
+
+        } else {
+            message.error("Не получен идентификатор заявки от сервера.");
+        }
+    };
+
+    socket.onmessage = function (event) {
+        const data = JSON.parse(event.data)
+
+        if (uploadedFile.value !== null && data.type == 10) {
+            handleResponse(data.ticket_id)
+        }
+
+    }
+
+    title.value = ""
+    content.value = ""
     openModal(ModalAlert);
+    router.reload();
 };
 
 socket.onclose = function (event) {
@@ -99,7 +151,18 @@ socket.onerror = function (error) {
                         rows="4"
                         v-model="content"
                     />
+                    <n-upload
+                        :default-upload="false"
+                        @change="handleChange"
+                        :on-remove="handleRemove"
+                        :max="1"
+                        ref="upload"
+                    >
+                        <button class="select-none main_button sm:text-lg text-base font-bold text-paleblue text-center flex gap-x-2 items-center"><img
+                            src="/images/paper-clip.svg" alt="">Прикрепить фото</button>
+                    </n-upload>
                 </div>
+
                 <button
                     @click.prevent="createNewAppeal"
                     class="flex my-2 justify-center w-full py-4 btn_gradient-purple transition hover:bg-purple-800 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
@@ -211,5 +274,12 @@ socket.onerror = function (error) {
     @media screen and (max-width: 640px) {
         grid-template-columns: 1fr;
     }
+}
+.main_button {
+    padding: 10px 18px;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #171961;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25) inset;
 }
 </style>

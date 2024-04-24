@@ -1,7 +1,11 @@
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
+import {useScrollingStore} from "@/stores/ScrollingStore.js";
+
+const scrollingStore = useScrollingStore();
 
 const windowWidth = ref(window.innerWidth);
+const maximumOffset = ref(null)
 
 const updateWidth = () => {
     windowWidth.value = window.innerWidth;
@@ -10,6 +14,8 @@ const updateWidth = () => {
 onMounted(() => {
     // Add the updateWidth function as a window resize listener
     window.addEventListener("resize", updateWidth);
+
+    scrollingStore.missionBlockOffset = maximumOffset.value.offsetTop
 });
 
 onUnmounted(() => {
@@ -18,7 +24,7 @@ onUnmounted(() => {
 });
 </script>
 <template>
-    <div class="mission">
+    <div class="mission" ref="maximumOffset">
         <div class="container mx-auto px-4">
             <div
                 class="sm:pt-32 pt-14 flex flex-col items-center justify-center"

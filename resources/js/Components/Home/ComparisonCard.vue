@@ -1,4 +1,6 @@
 <script setup>
+import {openLogin} from "@/utilities/authModals.js";
+
 const props = defineProps({
     item: {
         type: Object,
@@ -42,6 +44,7 @@ const props = defineProps({
             <div class="sm:pt-16 pt-7" v-if="props.item.hasButton">
                 <button
                     class="rounded-full btn_gradient-purple px-6 py-4 text-base font-bold leading-normal text-violet-100 transition hover:bg-purple-800"
+                    @click.prevent="openLogin"
                 >
                     Создать проект
                 </button>

@@ -28,7 +28,7 @@ class ChangePasswordController extends Controller
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/');
+        return response()->json('success');
     }
 
     public function generate(Request $request)

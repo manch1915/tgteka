@@ -34,7 +34,7 @@
                                             </div>
                                             <div>
                                                 <div
-                                                    class="interestChannels__categories-button"
+                                                    class="interestChannels__categories-button cursor-pointer" @click.prevent="openLogin"
                                                 >
                                                     <div
                                                         class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
@@ -75,7 +75,7 @@
                                     >
                                         <div class="gotocatalog transition-all">
                                             <button
-                                                class="transition-all text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                                                class="transition-all text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal" @click.prevent="openLogin"
                                             >
                                                 Перейти в полный каталог
                                             </button>
@@ -148,6 +148,7 @@ import ComparisonCard from "@/Components/Home/ComparisonCard.vue";
 import IntegrationBackground from "@/Components/Home/Blocks/IntegrationBackground.vue";
 import { onMounted, onUnmounted, ref } from "vue";
 import Slider from "@/Components/Home/Slider.vue";
+import { openLogin } from "@/utilities/authModals.js";
 
 const compareItems = [
     {

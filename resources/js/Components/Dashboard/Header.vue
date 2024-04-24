@@ -80,7 +80,7 @@ const openMessenger = () => {
                         </div>
                     </div>
                     <div class="flex sm:hidden logo items-center">
-                        <img class="w-16" src="/images/logo.svg" alt="logo" />
+                        <img class="w-16" src="/images/dashboard/logo.svg" alt="logo" />
                     </div>
                 </div>
                 <div class="logo">

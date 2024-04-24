@@ -57,7 +57,7 @@ const clearBodyOverflow = () => {
             <div class="logo flex-1">
                 <img
                     class="w-32"
-                    src="/images/logo.svg"
+                    src="/images/dashboard/logo.svg"
                     alt="Application logo"
                 />
             </div>
@@ -126,7 +126,7 @@ const clearBodyOverflow = () => {
                 <div class="logo flex-1">
                     <img
                         class="w-16"
-                        src="/images/logo.svg"
+                        src="/images/dashboard/logo.svg"
                         alt="Application logo"
                     />
                 </div>

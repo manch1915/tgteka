@@ -25,6 +25,15 @@ class NewSupportMessageHandler extends WebSocketMessageProvider
 
         if ($ticketId !== null) {
             $this->supportChatRepository->saveMessage($senderId, $ticketId, $message, $contentType);
+        }else{
+            $response = [
+                'type' => 10,
+                'ticket_id' => $ticketBackId,
+            ];
+
+            if (isset($userConnections[$senderId])) {
+                $userConnections[$senderId]->send(json_encode($response));
+            }
         }
 
         // Get the SupportTicket model using the ticket id

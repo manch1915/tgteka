@@ -6,11 +6,11 @@ const props = defineProps({
 
 <template>
     <div class="category br-40 self-start flex-col" style="width: 190px;">
-        <div
-            class="text-center break-words px-3 py-3 sm:px-4 sm:py-4 md:px-5 md:py-5 lg:px-6 lg:py-6 xl:px-10 xl:py-10 text-violet-100 lg:text-base xl:text-lg font-bold font-['Open Sans'] leading-normal"
+        <p
+            class="text-center px-3 py-3 sm:px-4 sm:py-4 md:px-5 md:py-5 lg:px-6 lg:py-6 xl:px-10 xl:py-10 text-violet-100 text-sm font-bold font-['Open Sans'] leading-normal"
         >
             {{ p }}
-        </div>
+        </p>
     </div>
 </template>
 

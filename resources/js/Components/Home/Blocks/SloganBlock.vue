@@ -1,10 +1,20 @@
 <script setup>
 import { openRegister } from "@/utilities/authModals.js";
+import {useScrollingStore} from "@/stores/ScrollingStore.js";
 
 const props = defineProps({
     header: String,
     paragraph: String,
 });
+
+const scrollingStore = useScrollingStore();
+
+const goToOffset = () => {
+    window.scrollTo({
+        top: scrollingStore.missionBlockOffset,
+        behavior: 'smooth'
+    });
+}
 </script>
 <template>
     <main class="main main-padding min-h-[600px]">
@@ -51,7 +61,7 @@ const props = defineProps({
                 </button>
             </div>
         </div>
-        <a href="#" class="arrow-main-down"></a>
+        <button @click.prevent="goToOffset" class="arrow-main-down"></button>
         <div class="main__fon_blur main__fon_blur--left"></div>
         <div class="main__fon_blur main__fon_blur--right"></div>
     </main>

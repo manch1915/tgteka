@@ -2,10 +2,10 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import { inputThemeOverrides } from "@/themeOverrides.js";
-import {NInput, useLoadingBar} from "naive-ui";
+import {NInput, useLoadingBar, useMessage} from "naive-ui";
 import {computed, reactive} from "vue";
 import axios from "axios";
-import {Head, usePage} from "@inertiajs/vue3";
+import {Head, router, usePage} from "@inertiajs/vue3";
 import {openModal} from "jenesius-vue-modal";
 import PasswordGeneration from "@/Components/Dashboard/PasswordGeneration.vue";
 
@@ -13,14 +13,16 @@ const form = reactive({
     password: "",
     password_confirmation: "",
 });
+
 const errors = reactive({
     password: [],
     password_confirmation: [],
 });
+
+const message = useMessage()
 const loading = useLoadingBar();
 
 const page = usePage();
-
 
 const userEmail = computed(() => page.props.auth.user.email);
 
@@ -32,6 +34,8 @@ const submit = async () => {
             loading.finish();
             errors.password = [];
             errors.password_confirmation = [];
+            message.success('Пароль успешно изменен. Пожалуйста, выполните повторный вход.')
+            router.reload()
         })
         .catch((error) => {
             if (

@@ -14,7 +14,7 @@ class CallbackResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'mobile_number' => $this->mobile_number,
+            'email' => $this->email,
             'status' => trans('statuses.' . $this->status),
             'created_at' => DateLocalizationService::localize($this->created_at) . ', ' . $this->created_at->format('H:i'),
         ];

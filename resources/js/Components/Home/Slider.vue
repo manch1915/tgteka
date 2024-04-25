@@ -40,7 +40,6 @@ const setContainerHeight = () => {
         const containerElement = document.querySelector('.keen-slider');
         const height = containerElement.clientHeight + 50;
         containerHeight.value = `${height}px`;
-        console.log(containerHeight.value)
     }
 };
 

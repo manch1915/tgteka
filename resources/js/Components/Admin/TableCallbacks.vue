@@ -127,8 +127,8 @@ const checked = (isChecked, client) => {
         <td data-label="Название">
           {{ callback.name }}
         </td>
-        <td data-label="Номер телефона">
-            {{ callback.mobile_number }}
+        <td data-label="Email">
+            {{ callback.email }}
         </td>
         <td data-label="Статус">
           {{ callback.status }}

@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import TextArea from "@/Components/TextArea.vue";
-import { NCheckbox, NSelect, NSlider, NSwitch, useLoadingBar } from "naive-ui";
+import {NCheckbox, NDrawer, NDrawerContent, NSelect, NSlider, NSwitch, useLoadingBar} from "naive-ui";
 import {
     switchThemeOverrides,
     checkboxThemeOverrides,
@@ -16,6 +16,8 @@ import { useMainStore } from "@/stores/main.js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import { mdiFaceMan, mdiFaceWoman } from "@mdi/js";
 import { Title } from "chart.js";
+import Rules from "@/Pages/Rules.vue";
+import Agreement from "@/Pages/Agreement.vue";
 
 const discount_check = ref(false);
 const format_one_checkbox = ref(true);
@@ -42,6 +44,8 @@ const form = reactive({
 const loading = useLoadingBar();
 const errors = ref({});
 let errorRefs = reactive({});
+
+const activeRules = ref(false)
 
 const uploadChannel = () => {
     loading.start();
@@ -526,8 +530,8 @@ watch(() => form.type, (newRadio) => {
                                 class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal"
                             >
                                 Ознакомлен с
-                                <Link :href="route('rules')" class="underline"
-                                    >Правилами пользования Сервисом</Link
+                                <span class="cursor-pointer underline" @click.prevent="activeRules = !activeRules">
+                                    >Правилами пользования Сервисом</span
                                 >
                             </div>
                         </n-checkbox>
@@ -554,6 +558,16 @@ watch(() => form.type, (newRadio) => {
                 </div>
             </div>
         </div>
+        <n-drawer v-model:show="activeRules" width="100%" height="90%" placement="bottom" >
+            <n-drawer-content title="Правила пользования">
+                <Rules/>
+            </n-drawer-content>
+        </n-drawer>
+        <n-drawer v-model:show="activeAgree" width="100%" height="90%" placement="bottom" >
+            <n-drawer-content title="Пользовательское соглашение">
+                <Agreement/>
+            </n-drawer-content>
+        </n-drawer>
     </AppLayout>
 </template>
 

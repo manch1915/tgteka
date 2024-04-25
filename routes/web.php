@@ -36,6 +36,8 @@ Route::group(['middleware' => 'guest'], function () {
     })->name('password.reset')->middleware('validate.password_reset_token');
     Route::post('/reset-password', [LoginController::class, 'update'])->name('password.update');
 
+    Route::post('remember-redirect', [\App\Http\Controllers\UrlController::class, 'rememberURL'])->name('remember-url');
+
 });
 
 Route::middleware(['two.factor'])->group(function () {

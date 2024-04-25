@@ -8,6 +8,7 @@ use App\Services\AvatarService;
 use App\Services\ChannelService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ChannelController extends Controller
@@ -163,6 +164,35 @@ class ChannelController extends Controller
         $ordersCount = Channel::find($channelId)->orders()->count();
 
         return response()->json($ordersCount);
+    }
+
+
+
+    public function fetchBest()
+    {
+        // Query to select the top 6 channels based on the participants_count statistic
+        $bestChannels = ChannelStatistic::select('channel_id')
+            ->selectRaw('JSON_EXTRACT(stats, "$.participants_count") as participants_count')
+            ->selectRaw('JSON_EXTRACT(stats, "$.adv_post_reach_24h") as adv_post_reach_24h')
+            ->orderByRaw('CAST(JSON_EXTRACT(stats, "$.participants_count") AS UNSIGNED) DESC')
+            ->limit(6)
+            ->get();
+
+        // Extract the channel IDs from the result
+        $channelIds = $bestChannels->pluck('channel_id');
+
+        // Fetch the channel data for the selected IDs
+        $channels = Channel::whereIn('id', $channelIds)->get();
+
+        // Merge the channel data with the statistics
+        $bestChannelsWithDetails = $bestChannels->map(function ($item) use ($channels) {
+            $channel = $channels->where('id', $item->channel_id)->first();
+            $item->channel = $channel;
+            return $item;
+        });
+
+        // Return the response with channels and their statistics
+        return response()->json($bestChannelsWithDetails);
     }
 
     protected function getChannelWithAvatarAndTopic(Channel $channel, AvatarService $avatarService)

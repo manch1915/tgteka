@@ -154,12 +154,12 @@ const submit = async () => {
                 </button>
             </div>
         </form>
-        <n-drawer v-model:show="activeRules" width="100%" height="90%" placement="bottom" >
+        <n-drawer :block-scroll="false" v-model:show="activeRules" width="100%" height="90%" placement="bottom" >
             <n-drawer-content title="Правила пользования">
                 <Rules/>
             </n-drawer-content>
         </n-drawer>
-        <n-drawer v-model:show="activeAgree" width="100%" height="90%" placement="bottom" >
+        <n-drawer :block-scroll="false" v-model:show="activeAgree" width="100%" height="90%" placement="bottom" >
             <n-drawer-content title="Пользовательское соглашение">
                 <Agreement/>
             </n-drawer-content>

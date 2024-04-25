@@ -1,9 +1,8 @@
 <script setup>
-import { reactive } from "vue";
-import { vMaska } from "maska";
+import {reactive, ref} from "vue";
 import { checkboxThemeOverrides } from "@/themeOverrides.js";
-import { Link } from "@inertiajs/vue3";
-import { NCheckbox, useLoadingBar, useMessage } from "naive-ui";
+import {NCheckbox, NDrawer, NDrawerContent, useLoadingBar, useMessage} from "naive-ui";
+import Rules from "@/Pages/Rules.vue";
 
 const loading = useLoadingBar();
 const message = useMessage();
@@ -18,6 +17,8 @@ const form = reactive({
         terms: "",
     },
 });
+
+const activeRules = ref(false)
 
 const handleSuccess = () => {
     message.success("Ваша заявка на обратный звонок принято");
@@ -88,9 +89,9 @@ const orderCallback = () => {
                             class="terms text-violet-100 text-sm font-light font-['Open Sans'] leading-tight"
                         >
                             Нажимая на кнопку «Отправить» я соглашаюсь с
-                            <Link :href="route('rules')" class="underline">
+                            <span class="cursor-pointer underline" @click.prevent="activeRules = !activeRules">
                                 Правилами пользования Сервисом
-                            </Link>
+                            </span>
                         </label>
                     </div>
                     <div class="error-message mt-1">{{ form.errors.terms }}</div>
@@ -104,6 +105,11 @@ const orderCallback = () => {
             </div>
         </div>
     </div>
+    <n-drawer :block-scroll="false" v-model:show="activeRules" width="100%" height="90%" placement="bottom" >
+        <n-drawer-content title="Правила пользования">
+            <Rules/>
+        </n-drawer-content>
+    </n-drawer>
 </template>
 
 <style scoped lang="scss">

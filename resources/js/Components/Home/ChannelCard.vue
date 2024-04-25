@@ -1,11 +1,26 @@
-<script setup></script>
+<script setup>
+import {openRegister} from "@/utilities/authModals.js";
+
+const props = defineProps({
+    channel: {
+        type: Object,
+        default: {}
+    }
+})
+const appeal = (slug) => {
+    axios.post(route('remember-url'), {slug})
+        .then(() => {
+            openRegister()
+        })
+}
+</script>
 
 <template>
     <div class="body">
         <div class="body__head flex justify-start gap-6 items-center">
             <div class="body__profile">
                 <img
-                    src="https://via.placeholder.com/108x108"
+                    :src="channel?.channel?.avatar"
                     alt=""
                     class="rounded-full"
                 />
@@ -15,12 +30,12 @@
                     <div
                         class="pb-2.5 text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
                     >
-                        Доктор Амина
+                        {{channel?.channel?.channel_name}}
                     </div>
                     <div
                         class="body__podp text-center text-violet-100 sm:text-sm text-xs font-normal font-['Open Sans'] leading-tight"
                     >
-                        127 995 подписчиков
+                        {{channel?.participants_count}}&nbsp;подписчиков
                     </div>
                     <div
                         class="mt-4 lg:px-11 px-4 py-1.5 rounded-3xl border border-violet-100 justify-start items-start gap-2.5 inline-flex"
@@ -28,7 +43,7 @@
                         <div
                             class="text-violet-100 sm:text-sm text-xs font-bold font-['Open Sans'] leading-tight"
                         >
-                            1/24 — 12 500 руб.
+                            1/24 — {{ channel?.channel?.format_one_price }}&nbsp;руб.
                         </div>
                     </div>
                 </div>
@@ -45,7 +60,7 @@
                         >CRM<br /></span
                     ><span
                         class="text-violet-100 sm:text-sm text-xs font-normal font-['Open Sans'] leading-tight"
-                        >905 руб.</span
+                        >{{channel?.channel?.cpm}} руб.</span
                     >
                 </div>
             </div>
@@ -56,7 +71,7 @@
                         >Просмотров за 24 часа <br /></span
                     ><span
                         class="text-violet-100 sm:text-sm text-xs font-normal font-['Open Sans'] leading-tight"
-                        >49 002</span
+                        >{{channel?.adv_post_reach_24h}}</span
                     >
                 </div>
             </div>
@@ -71,6 +86,7 @@
         </div>
         <div class="order">
             <button
+                @click.prevent="appeal(channel?.channel?.slug)"
                 class="order_el pl-6 pr-11 py-1.5 btn_gradient-purple transition hover:bg-purple-800 rounded-tl-3xl rounded-br-3xl text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
             >
                 Заказать размещение

@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TextInput from "@/Components/TextInput.vue";
 import TextArea from "@/Components/TextArea.vue";
-import { NCheckbox, NSelect, NSlider, NSwitch, useLoadingBar } from "naive-ui";
+import {NCheckbox, NDrawer, NDrawerContent, NSelect, NSlider, NSwitch, useLoadingBar} from "naive-ui";
 import {
     switchThemeOverrides,
     checkboxThemeOverrides,
@@ -23,6 +23,8 @@ import { Head, Link, router } from "@inertiajs/vue3";
 import { useMainStore } from "@/stores/main.js";
 import { mdiFaceMan, mdiFaceWoman } from "@mdi/js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
+import Rules from "@/Pages/Rules.vue";
+import Agreement from "@/Pages/Agreement.vue";
 
 const props = defineProps({
     channelId: [Number, null],
@@ -61,6 +63,8 @@ watchEffect(() => {
 const loading = useLoadingBar();
 const errors = ref({});
 let errorRefs = reactive({});
+
+const activeRules = ref(false)
 
 const uploadChannel = () => {
     loading.start();
@@ -509,8 +513,8 @@ watch(state.type, (newRadio) => {
                                 class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal"
                             >
                                 Ознакомлен с
-                                <Link :href="route('rules')" class="underline"
-                                    >Правилами пользования Сервисом</Link
+                                <span class="cursor-pointer underline" @click.prevent="activeRules = !activeRules">
+                                    >Правилами пользования Сервисом</span
                                 >
                             </div>
                         </n-checkbox>
@@ -537,6 +541,12 @@ watch(state.type, (newRadio) => {
                 </div>
             </div>
         </div>
+        <n-drawer :block-scroll="false" v-model:show="activeRules" width="100%" height="90%" placement="bottom" >
+            <n-drawer-content title="Правила пользования">
+                <Rules/>
+            </n-drawer-content>
+        </n-drawer>
+
     </AppLayout>
 </template>
 

@@ -21,3 +21,5 @@ use Illuminate\Support\Facades\Route;
 //Route::apiResource('entity_infos', \App\Http\Controllers\EntityInfoController::class);
 //Route::apiResource('reviews', \App\Http\Controllers\ReviewController::class);
 //Route::apiResource('orders',\App\Http\Controllers\OrderController::class);
+
+Route::get('best-channels', [\App\Http\Controllers\ChannelController::class, 'fetchBest'])->name('best-channels.get');

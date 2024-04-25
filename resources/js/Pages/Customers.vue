@@ -60,6 +60,23 @@ const spaceBetween = computed(() => {
         return 100;
     }
 });
+const fetchChannels = async () => {
+    try {
+        const response = await axios.get(route('best-channels.get'));
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching channels:', error);
+        return [];
+    }
+};
+
+// Define a reactive ref to hold the channels data
+const channelsData = ref([]);
+
+// Fetch channels data when the component mounts
+onMounted(async () => {
+    channelsData.value = await fetchChannels();
+});
 </script>
 
 <template>
@@ -108,16 +125,16 @@ const spaceBetween = computed(() => {
                 <template v-if="windowWidth <= 1024">
                     <slider :interactive="true" :slides-per-view="1">
                         <template v-slot:slider>
-                            <template v-for="i in 6" :key="i">
+                            <template v-for="(channel, index) in channelsData" :key="index">
                                 <div class="keen-slider__slide">
-                                    <ChannelCard />
+                                    <ChannelCard :key="index" :channel="channel" />
                                 </div>
                             </template>
                         </template>
                     </slider>
                 </template>
                 <template v-else>
-                    <ChannelCard v-for="i in 6" :key="i" />
+                    <ChannelCard v-for="(channel, index) in channelsData" :key="index" :channel="channel" />
                 </template>
             </template>
         </InterestChannelsBlock>

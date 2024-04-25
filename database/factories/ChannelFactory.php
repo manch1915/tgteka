@@ -20,7 +20,7 @@ class ChannelFactory extends Factory
             'description' => $this->faker->text(150),
             'subscribers_source' => $this->faker->url,
             'topic_id' => \App\Models\Topic::inRandomOrder()->first()->id,
-            'type' => $this->faker->randomElement(['channel', 'chat']),
+            'type' => 'channel',
             'url' => '@' . $this->faker->words(1, true),
             'repeat_discount' => $this->faker->randomElement([0, 10, 20, 30, 50]),
             'male_percentage' => $this->faker->numberBetween(0, 100),

@@ -33,7 +33,7 @@ onMounted(async () => {
     cart.items = loadCart();
     const response = await axios.get(route("get.unread-notifications-count"));
     unreadNotifications.value = response.data;
-    connectWebSocket(page.props.auth.user.id, showMessage);
+    // connectWebSocket(page.props.auth.user.id, showMessage);
 });
 
 const isActiveRoute = (routeUrl) => page.url === routeUrl;

@@ -110,7 +110,7 @@ const checked = (isChecked, client) => {
         <th v-if="checkable" />
         <th>id</th>
         <th>Имя</th>
-        <th>Номер телефона</th>
+        <th>Email</th>
         <th>Статус</th>
         <th />
       </tr>

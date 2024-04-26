@@ -123,7 +123,7 @@ onMounted(async () => {
         <InterestChannelsBlock>
             <template v-slot:cards>
                 <template v-if="windowWidth <= 1024">
-                    <slider :interactive="true" :slides-per-view="1">
+                    <slider :interactive="true" :slides-per-view="1" v-if="channelsData.length > 0">
                         <template v-slot:slider>
                             <template v-for="(channel, index) in channelsData" :key="index">
                                 <div class="keen-slider__slide">

@@ -157,6 +157,7 @@ socket.onerror = function (error) {
                         :on-remove="handleRemove"
                         :max="1"
                         ref="upload"
+                        accept="image/jpeg,image/jpg,image/png"
                     >
                         <button class="select-none main_button sm:text-lg text-base font-bold text-paleblue text-center flex gap-x-2 items-center"><img
                             src="/images/paper-clip.svg" alt="">Прикрепить фото</button>

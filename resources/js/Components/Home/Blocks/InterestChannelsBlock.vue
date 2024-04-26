@@ -115,6 +115,7 @@
                                         </div>
                                         <div class="">
                                             <button
+                                                @click.prevent="openLogin"
                                                 class="text-violet-100 text-lg mx-auto font-bold font-['Open Sans'] leading-normal interestChannels__categories-button"
                                             >
                                                 Посмотреть остальные

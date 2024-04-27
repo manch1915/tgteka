@@ -542,7 +542,7 @@ watch(state.type, (newRadio) => {
             </div>
         </div>
         <n-drawer :block-scroll="false" v-model:show="activeRules" width="100%" height="90%" placement="bottom" >
-            <n-drawer-content title="Правила пользования">
+            <n-drawer-content closable title="Правила пользования">
                 <Rules/>
             </n-drawer-content>
         </n-drawer>

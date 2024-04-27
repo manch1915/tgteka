@@ -9,7 +9,7 @@ class SupportController extends Controller
 {
     public function index()
     {
-        $tickets = auth()->user()->tickets;
+        $tickets = auth()->user()->tickets()->orderByDesc('created_at')->get();
         foreach ($tickets as $ticket) {
             $ticket->localized_date = \App\Services\DateLocalizationService::localize($ticket->created_at);
         }

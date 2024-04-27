@@ -88,7 +88,7 @@ function handleUserAuth(LoginWidgetUser) {
                 <button
                     type="button"
                     @click.prevent="openPasswordRecovery()"
-                    class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight cursor-pointer"
+                    class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight cursor-pointer transition hover:underline"
                 >
                     Забыли пароль?
                 </button>

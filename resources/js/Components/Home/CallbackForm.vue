@@ -21,7 +21,7 @@ const form = reactive({
 const activeRules = ref(false)
 
 const handleSuccess = () => {
-    message.success("Ваша заявка на обратный звонок принято");
+    message.success("Ваша заявка на обратный звонок принята");
     form.name = "";
     form.email = "";
     form.terms = false;
@@ -106,7 +106,7 @@ const orderCallback = () => {
         </div>
     </div>
     <n-drawer :block-scroll="false" v-model:show="activeRules" width="100%" height="90%" placement="bottom" >
-        <n-drawer-content title="Правила пользования">
+        <n-drawer-content closable title="Правила пользования">
             <Rules/>
         </n-drawer-content>
     </n-drawer>

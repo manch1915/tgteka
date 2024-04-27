@@ -4,6 +4,7 @@ import { inputThemeOverrides } from "@/themeOverrides.js";
 import { NInput, useLoadingBar,useMessage } from "naive-ui";
 import { ref } from "vue";
 import { closeModal } from "jenesius-vue-modal";
+import {openLogin} from "@/utilities/authModals.js";
 
 const loading = useLoadingBar();
 const message = useMessage();
@@ -41,6 +42,15 @@ const recoverPassword = () => {
             >
                 Восстановить
             </button>
+            <div class="pt-4">
+                <button
+                    type="button"
+                    @click.prevent="openLogin()"
+                    class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight cursor-pointer transition hover:underline"
+                >
+                    Назад
+                </button>
+            </div>
         </div>
     </AuthenticationCard>
 </template>

@@ -16,7 +16,7 @@ const props = defineProps({
 <template class="relative">
     <div class="samo border__fon">
         <div class="sm:p-10 p-6">
-            <div class="flex lg:gap-4 gap-1 icons sm:pb-5 pb-9">
+            <div class="flex lg:gap-4 gap-x-4 gap-1 icons sm:pb-5 pb-9">
                 <div
                     v-for="i in props.item.icons"
                     :class="' icons_el icons_el-' + i.class"

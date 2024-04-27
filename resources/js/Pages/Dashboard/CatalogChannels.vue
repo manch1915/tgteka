@@ -117,19 +117,13 @@ const activate = (place) => {
             :placement="placement"
             :theme-overrides="{ color: '#070C29' }"
         >
-            <n-drawer-content>
+            <n-drawer-content closable>
                 <template #header>
-                    <div
-                        @click.prevent="active = false"
-                        class="flex cursor-pointer"
+                    <p
+                        class="text-violet-100 text-lg font-bold font-['Open Sans']"
                     >
-                        <base-icon :path="mdiArrowLeftBold" size="24" />
-                        <p
-                            class="text-violet-100 text-lg font-bold font-['Open Sans']"
-                        >
-                            Фильтр
-                        </p>
-                    </div>
+                        Фильтр
+                    </p>
                 </template>
                 <!--                todo additional_filter to component -->
                 <div class="additional_filter">

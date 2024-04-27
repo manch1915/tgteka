@@ -12,6 +12,16 @@ const props = defineProps({
 
 const messages = ref(null)
 const message = ref('')
+const messageContainer = ref(null);
+
+const scrollToBottom = () => {
+    // Check if message container is available
+    if (messageContainer.value) {
+        // Scroll to the bottom
+        messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
+    }
+}
+
 const getMessages =  async () => {
     await axios.post(route('get-messages-by-ticket-id'), {tickets: props.tickets}).then(res => {
         messages.value = res.data;
@@ -52,12 +62,14 @@ const sendMessage = (messageContent, messageType='text') => {
         content_type: messageType
     });
     message.value = '';
+
+    scrollToBottom();
 }
 
 props.socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
 
-    if(data.ticket_id === props.tickets) {
+    if(data.ticket_id === props.tickets && data.sender_id !== props.userId) {
         messages.value.push({
             message: data.message,
             sender: {
@@ -67,6 +79,7 @@ props.socket.onmessage = function(event) {
             content_type: data.content_type
         });
     }
+    scrollToBottom();
 };
 </script>
 
@@ -82,7 +95,7 @@ props.socket.onmessage = function(event) {
                     <h1 class="sm:text-center text-start text-violet-100 sm:text-3xl text-xl font-bold font-['Open Sans'] leading-10">{{ ticketTitle }}</h1>
                 </div>
             </div>
-            <div class="flex flex-col gap-y-3 overflowing p-2">
+            <div class="flex flex-col gap-y-3 overflowing p-2" ref="messageContainer">
                 <MessageBox v-for="message in messages" :isImage="message.content_type === 'image' || !message.message" :text="message.message" :user-avatar="message.sender.username" :created_at="message.created_at"/>
             </div>
         </div>

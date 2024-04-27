@@ -155,12 +155,12 @@ const submit = async () => {
             </div>
         </form>
         <n-drawer :block-scroll="false" v-model:show="activeRules" width="100%" height="90%" placement="bottom" >
-            <n-drawer-content title="Правила пользования">
+            <n-drawer-content closable title="Правила пользования">
                 <Rules/>
             </n-drawer-content>
         </n-drawer>
         <n-drawer :block-scroll="false" v-model:show="activeAgree" width="100%" height="90%" placement="bottom" >
-            <n-drawer-content title="Пользовательское соглашение">
+            <n-drawer-content closable title="Пользовательское соглашение">
                 <Agreement/>
             </n-drawer-content>
         </n-drawer>

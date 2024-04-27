@@ -151,6 +151,8 @@ socket.onerror = function (error) {
                         rows="4"
                         v-model="content"
                     />
+                    <p style="color: rgba(234,224,255, 0.4);font-size: 16px">Формат изображения jpg, jpeg, png,
+                        не менее 140*140рх,не более 1600*1024рх</p>
                     <n-upload
                         :default-upload="false"
                         @change="handleChange"

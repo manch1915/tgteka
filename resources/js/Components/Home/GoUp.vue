@@ -7,15 +7,10 @@
             class="up cursor-pointer sm:flex hidden flex-col items-center gap-1"
         >
             <img
-                class="transition w-20"
+                class="transition w-14"
                 src="/images/arrow-circle-down.svg"
                 alt="arrow"
             />
-            <div
-                class="text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
-            >
-                Наверх
-            </div>
         </div>
         </transition>
     </div>

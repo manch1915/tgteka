@@ -99,13 +99,7 @@ const openMessengerModal = (ticketId) =>{
 
 <template>
     <n-drawer v-model:show="active" close-on-esc width="100%" :theme-overrides="{color: '#070C29'}">
-        <n-drawer-content>
-            <template #header>
-                <div @click.prevent="active = false" class="flex cursor-pointer">
-                    <base-icon :path="mdiArrowLeftBold" size="24"/>
-                    <p class="text-violet-100 text-lg font-bold font-['Open Sans']">Чат</p>
-                </div>
-            </template>
+        <n-drawer-content closable>
             <div class="w-full flex justify-center">
                 <Messanger :tickets="ticketsId" :socket="socket" :user-id="userId"></Messanger>
             </div>

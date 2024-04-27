@@ -2,8 +2,7 @@ import {
     mdiMonitor,
     mdiTable,
     mdiMessage,
-    mdiMessageText,
-    mdiForum, mdiCog, mdiTextLong, mdiAccount, mdiPhone, mdiCreditCardOutline, mdiBug, mdiBugOutline,
+    mdiForum, mdiCog, mdiTextLong, mdiAccount, mdiPhone, mdiCreditCardOutline, mdiBugOutline,
 } from "@mdi/js";
 
 export default [

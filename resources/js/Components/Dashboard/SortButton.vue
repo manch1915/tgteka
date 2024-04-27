@@ -30,12 +30,12 @@ const setActiveButton = (title) => {
 <template>
     <button :class="{'background': channelStore.activeButton === title}" @click.prevent="setActiveButton(title)"
             :disabled="isButtonDisabled"
-            class="transition px-5 py-3 hover:bg-violet-950 rounded-full border border-violet-700 text-violet-100 text-lg font-bold font-['Open Sans']">
+            class="transition px-5 py-2 lg:py-3 hover:bg-violet-950 rounded-full border border-violet-700 text-violet-100 lg:text-lg text-sm font-bold font-['Open Sans']">
         {{ title }}
-        <span v-if="channelStore.activeButton === title">
-        <BaseIcon v-if="channelStore.sort === 'asc'" :path="mdiArrowUpDropCircleOutline"/>
-        <BaseIcon v-else :path="mdiArrowDownDropCircleOutline"/>
-    </span>
+        <span v-if="channelStore.activeButton === title" style="display: inline-block; vertical-align: middle;">
+            <BaseIcon v-if="channelStore.sort === 'asc'" :path="mdiArrowUpDropCircleOutline"/>
+            <BaseIcon v-else :path="mdiArrowDownDropCircleOutline"/>
+        </span>
     </button>
 </template>
 

@@ -301,7 +301,7 @@ onMounted(() => {
                             />
                             <div class="flex flex-col gap-y-6">
                                 <h1
-                                    class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10"
+                                    class="text-violet-100 lg:text-4xl text-xl break-all font-bold font-['Open Sans'] leading-10"
                                 >
                                     {{ channel.channel_name }}
                                 </h1>

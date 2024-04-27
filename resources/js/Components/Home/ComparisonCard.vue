@@ -19,13 +19,13 @@ const props = defineProps({
             <div class="flex lg:gap-4 gap-x-4 gap-1 icons sm:pb-5 pb-9">
                 <div
                     v-for="i in props.item.icons"
-                    :class="' icons_el icons_el-' + i.class"
+                    :class="'flex flex-col items-center justify-center icons_el icons_el-' + i.class"
                 >
-                    <div
-                        class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                    <p
+                        class="text-violet-100 text-center text-sm font-bold font-['Open Sans'] leading-tight"
                     >
                         {{ i.text }}
-                    </div>
+                    </p>
                 </div>
             </div>
             <h3
@@ -199,7 +199,7 @@ const props = defineProps({
         }
     }
     .icons_el-white {
-        div {
+        p {
             color: #070c29 !important;
         }
         border: 1px solid rgba(255, 255, 255, 0.1);

@@ -18,13 +18,17 @@ const scrollToBottom = () => {
     // Check if message container is available
     if (messageContainer.value) {
         // Scroll to the bottom
-        messageContainer.value.scrollTop = messageContainer.value.scrollHeight;
+        messageContainer.value.scrollTo({
+            top: messageContainer.value.scrollHeight,
+            behavior: 'smooth'
+        });
     }
 }
 
 const getMessages =  async () => {
     await axios.post(route('get-messages-by-ticket-id'), {tickets: props.tickets}).then(res => {
         messages.value = res.data;
+        setTimeout(scrollToBottom, 100);
     });
 }
 

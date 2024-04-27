@@ -49,7 +49,7 @@ const buttons = [
 <template>
     <div class="sm:mt-20 mt-4 profile-layout">
         <div class="sm:w-auto w-full">
-            <aside class="sm:mr-10 h-auto sm:max-w-xs origin-top-left rounded-tr-2xl rounded-br-2xl rounded-bl-2xl sm:border pb-4 backdrop-blur-2xl">
+            <aside class="lg:mr-10 mr-4 h-auto sm:max-w-xs origin-top-left rounded-tr-2xl rounded-br-2xl rounded-bl-2xl sm:border pb-4 backdrop-blur-2xl">
                 <div class="sm:text-violet-100 text-purple-600 text-lg font-normal font-['Roboto Flex'] leading-relaxed py-6 px-3">
                     {{ username }}
                 </div>
@@ -76,6 +76,17 @@ aside {
     display: grid;
     justify-content: start;
     grid-template-columns: 4fr 12fr;
+    padding: 0 10px;
+    @media screen and (max-width: 1280px){
+        grid-template-columns: 6fr 12fr;
+        justify-content: center;
+        justify-items: center;
+    }
+    @media screen and (max-width: 768px){
+        grid-template-columns: 8fr 12fr;
+        justify-content: center;
+        justify-items: center;
+    }
     @media screen and (max-width: 640px){
         grid-template-columns: 1fr;
         justify-content: center;

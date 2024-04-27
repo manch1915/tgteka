@@ -50,8 +50,9 @@ img{
     padding-right: 1em;
 }
 
-.n-base-select-menu{
-    width: max-content;
+.n-base-select-menu {
+    min-width: max-content;
+    width: 100%;
 }
 
 .n-slider-handle-indicator {

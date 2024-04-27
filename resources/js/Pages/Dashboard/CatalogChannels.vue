@@ -20,8 +20,6 @@ import {computed, ref, watch} from "vue";
 import CatalogChannels from "@/Components/Dashboard/CatalogChannels.vue";
 import { useMainStore } from "@/stores/main.js";
 import { useChannelStore } from "@/stores/channelStore.js";
-import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import { mdiArrowLeftBold } from "@mdi/js";
 import { Head } from "@inertiajs/vue3";
 
 const SORT_DATA = ["Рейтинг", "ER", "Просмотры", "Подписчики", "Цена", "CPМ"];
@@ -98,7 +96,7 @@ const togglePeerType = (peerType) => {
 const active = ref(false);
 const placement = ref("right");
 const activate = (place) => {
-    if (window.matchMedia("(max-width: 640px)").matches) {
+    if (window.matchMedia("(max-width: 1024px)").matches) {
         active.value = true;
         placement.value = place;
     }
@@ -574,24 +572,24 @@ const activate = (place) => {
                 </div>
             </n-drawer-content>
         </n-drawer>
-        <div class="sm:py-20 py-10 text-center">
+        <div class="py-10 text-center lg:py-20">
             <h1
                 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10"
             >
                 Каталог Telegram-каналов
             </h1>
             <p
-                class="sm:hidden text-center block total pt-4 text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal"
+                class="lg:hidden text-center block total pt-4 text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal"
             >
                 Всего каналов {{ count }}
             </p>
         </div>
         <div class="grid catalog">
-            <div class="w-full pr-0 filter sm:pr-10">
-                <div class="sm:block flex justify-between gap-x-12 flex-wrap">
+            <div class="w-full pr-0 filter lg:pr-10">
+                <div class="flex flex-wrap justify-between gap-x-12 lg:block">
                     <div
                         @click.prevent="activate('right')"
-                        class="flex cursor-pointer items-center justify-start pb-[24px] gap-x-2.5 sm:justify-between sm:gap-x-0"
+                        class="flex cursor-pointer items-center justify-start pb-[24px] gap-x-2.5 lg:justify-between lg:gap-x-0"
                     >
                         <h1
                             class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10"
@@ -600,7 +598,7 @@ const activate = (place) => {
                         </h1>
                         <img class="select-none" src="/images/setting.svg" alt="setting" />
                     </div>
-                    <div class="inline w-full sm:hidden">
+                    <div class="inline w-full lg:hidden">
                         <n-select
                             v-model:value="channelStore.subject"
                             :options="channelSubjects"
@@ -609,10 +607,10 @@ const activate = (place) => {
                         />
                     </div>
                 </div>
-                <div class="pb-6">
+                <div class="lg:pb-6 pb-0">
                     <SearchBar @search="searchHandler" class="py-2" />
                 </div>
-                <div class="hidden py-[23px] sm:block">
+                <div class="hidden py-[23px] lg:block">
                     <h2
                         class="pb-3 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
                     >
@@ -627,7 +625,7 @@ const activate = (place) => {
                 </div>
                 <button
                     @click.prevent="additionalFilter = !additionalFilter"
-                    class="hidden sm:block px-6 py-3.5 w-full btn_gradient-purple transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 sm:text-sm break-all text-lg font-bold font-['Open Sans'] leading-normal"
+                    class="hidden lg:block px-6 py-3.5 w-full btn_gradient-purple transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 lg:text-sm break-all text-lg font-bold font-['Open Sans'] leading-normal"
                 >
                     Дополнительный фильтр
                 </button>
@@ -1095,11 +1093,11 @@ const activate = (place) => {
             </div>
             <div class="channels">
                 <div
-                    class="hidden sm:block total text-right text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal"
+                    class="hidden lg:block total text-right text-violet-100 text-sm font-normal font-['Open Sans'] leading-normal"
                 >
                     Всего каналов {{ count }}
                 </div>
-                <div class="hidden gap-3 filter_buttons sm:flex flex-wrap">
+                <div class="mt-4 flex flex-wrap lg:gap-3 gap-1 filter_buttons lg:justify-normal justify-center">
                     <SortButton v-for="title in SORT_DATA" :title="title" />
                 </div>
                 <CatalogChannels />
@@ -1116,18 +1114,18 @@ const activate = (place) => {
 }
 .catalog {
     grid-template-columns: 3fr 9fr;
-    @media screen and (max-width: 640px) {
+    @media screen and (max-width: 1024px) {
         grid-template-columns: 1fr;
         justify-items: center;
     }
     .filter {
-        @media screen and (max-width: 640px) {
+        @media screen and (max-width: 1024px) {
             padding: 0 15px;
         }
         min-width: 0;
     }
     .channels {
-        @media screen and (max-width: 640px) {
+        @media screen and (max-width: 1024px) {
             padding: 0 15px;
         }
         min-width: 0;

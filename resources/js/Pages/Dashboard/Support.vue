@@ -31,7 +31,7 @@ const message = useMessage();
 const userId = computed(() => page.props.auth.user.id);
 
 const socket = new WebSocket(
-    `ws://${import.meta.env.VITE_APP_WEBSOCKETS_IP}:1915/?userid=${
+    `wss://${import.meta.env.VITE_APP_WEBSOCKETS_IP}:1915/?userid=${
         userId.value
     }`
 );

@@ -86,7 +86,7 @@ watch([appointmentVal, statusValue, range], () => {
 
     <AppLayout>
         <ProfileLayout>
-            <div class="text-center sm:text-left">
+            <div class="text-center lg:text-left">
                 <p class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">История транзакций</p>
             </div>
             <div class="my-12 flex sm:flex-row flex-col sm:p-0 p-2 items-center content-center sm:justify-between justify-center gap-x-2">

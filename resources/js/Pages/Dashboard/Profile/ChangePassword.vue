@@ -71,7 +71,7 @@ const generatePassword = async () => {
 
     <AppLayout>
         <ProfileLayout>
-            <div class="text-center sm:text-left">
+            <div class="text-center lg:text-left">
                 <p
                     class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10"
                 >
@@ -85,10 +85,10 @@ const generatePassword = async () => {
                     Новый пароль
                 </p>
             </div>
-            <div class="flex flex-col gap-y-2 px-2 sm:w-3/4 sm:px-0">
+            <div class="flex flex-col gap-y-2 px-2 lg:w-3/4 lg:px-0">
                 <div>
                     <n-input
-                        class="py-1.5 my-1 sm:!w-2/4"
+                        class="py-1.5 my-1 lg:!w-2/4"
                         v-model:value="form.password"
                         placeholder="Новый пароль"
                         type="password"
@@ -101,7 +101,7 @@ const generatePassword = async () => {
                 </div>
                 <div>
                     <n-input
-                        class="py-1.5 my-1 sm:!w-2/4"
+                        class="py-1.5 my-1 lg:!w-2/4"
                         v-model:value="form.password_confirmation"
                         placeholder="Подтвердите пароль"
                         type="password"
@@ -116,7 +116,7 @@ const generatePassword = async () => {
                 </div>
                 <button
                     @click.prevent="submit"
-                    class="sm:w-2/4 transition-colors border border-violet-700 hover:bg-transparent text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal btn_gradient-purple rounded-full py-4"
+                    class="lg:w-2/4 transition-colors border border-violet-700 hover:bg-transparent text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal btn_gradient-purple rounded-full py-2"
                 >
                     Обновить пароль
                 </button>

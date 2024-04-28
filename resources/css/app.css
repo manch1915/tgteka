@@ -115,3 +115,6 @@ button {
     -moz-user-select: none;
     user-select: none;
 }
+.n-tabs .n-tabs-rail{
+    flex-wrap: wrap;
+}

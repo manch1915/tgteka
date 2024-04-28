@@ -57,14 +57,14 @@ watch(
 
     <AppLayout>
         <ProfileLayout>
-            <div class="text-center sm:text-left">
+            <div class="text-center lg:text-left">
                 <p
                     class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10"
                 >
                     Вывод средств
                 </p>
             </div>
-            <div class="mt-8 segment sm:w-3/4">
+            <div class="mt-8 segment lg:w-3/4">
                 <n-tabs
                     :animated="true"
                     :theme-overrides="nTabSegmentsThemeOverrides"

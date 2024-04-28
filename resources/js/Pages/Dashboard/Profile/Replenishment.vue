@@ -64,14 +64,14 @@ const options = {
     </Head>
     <AppLayout>
         <ProfileLayout>
-            <div class="text-center sm:text-left">
+            <div class="text-center lg:text-left">
                 <p
                     class="text-violet-100 sm:text-4xl text-2xl font-bold font-['Open Sans'] leading-10"
                 >
                     Пополнение средств
                 </p>
             </div>
-            <div class="mt-8 segment sm:w-3/4">
+            <div class="mt-8 segment lg:w-3/4">
                 <n-tabs
                     :animated="true"
                     :theme-overrides="nTabSegmentsThemeOverrides"
@@ -104,7 +104,7 @@ const options = {
                             <n-input
                                 v-maska:[options]
                                 v-model:value="amount"
-                                class="py-1.5 my-1 sm:!w-3/4"
+                                class="py-1.5 my-1 lg:!w-3/4"
                                 placeholder="Укажите сумму в рублях"
                                 :theme-overrides="inputThemeOverrides"
                             />
@@ -114,7 +114,7 @@ const options = {
                             <div class="flex flex-col">
                                 <button
                                     @click.prevent="createPaymentRequest"
-                                    class="sm:w-3/4 w-full my-2 btn_gradient-purple rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                                    class="lg:w-3/4 w-full my-2 btn_gradient-purple rounded-3xl py-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
                                 >
                                     Пополнить
                                 </button>

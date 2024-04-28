@@ -119,7 +119,7 @@ const deleteUser = async () => {
 
     <AppLayout>
         <ProfileLayout>
-            <div class="text-center sm:text-left">
+            <div class="text-center lg:text-left">
                 <p
                     class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10"
                 >
@@ -179,7 +179,7 @@ const deleteUser = async () => {
             <div class="px-4 sm:px-0">
                 <button
                     @click.prevent="submit"
-                    class="mt-6 px-6 py-4 border bg-transparent transition hover:btn_gradient-purple rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    class="mt-6 px-6 py-4 bg-purple-600 transition hover:btn_gradient-purple rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
                 >
                     Сохранить данные
                 </button>
@@ -187,7 +187,7 @@ const deleteUser = async () => {
                 <button
                     @click.prevent="twoFactorAuthentication"
                     :disabled="isTwoFactorEnabled"
-                    class="mt-6 px-6 py-4 bg-transparent border transition hover:bg-green-600 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    class="mt-12 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
                 >
                     {{
                         isTwoFactorEnabled
@@ -197,7 +197,7 @@ const deleteUser = async () => {
                 </button>
                 <button
                     @click.prevent="disableTwoFactorAuthentication"
-                    class="block mt-6 px-6 py-4 bg-red-600 transition hover:bg-red-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    class="mt-12 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
                     v-if="isTwoFactorEnabled"
                 >
                     Отключить двухэтапную аутентификацию
@@ -205,14 +205,14 @@ const deleteUser = async () => {
                 <br />
                 <button
                     @click.prevent="logout"
-                    class="mt-6 px-6 py-4 bg-transparent transition hover:bg-red-800 border border-red-900 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                    class="mt-12 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
                 >
                     Выйти
                 </button>
                 <br />
                 <button
                     @click.prevent="deleteUser"
-                    class="mt-12 text-violet-100 border text-sm font-normal font-['Open Sans'] leading-tight border-red-600 transition hover:bg-red-600 rounded-full px-6 py-2"
+                    class="mt-12 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
                 >
                     Удалить профиль
                 </button>

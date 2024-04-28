@@ -60,7 +60,7 @@ onBeforeMount(() => {
     &.background {
         background: #6522D9;
     }
-    @media screen and (max-width: 640px){
+    @media screen and (max-width: 1024px){
         color: #EAE0FF;
         font-family: Open Sans,sans-serif;
         font-size: 16px;

@@ -24,7 +24,7 @@ const telegram_username = computed(
 
     <AppLayout>
         <ProfileLayout>
-            <div class="text-center sm:text-left">
+            <div class="text-center lg:text-left">
                 <p
                     class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10"
                 >

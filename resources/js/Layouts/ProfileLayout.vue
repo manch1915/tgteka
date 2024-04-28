@@ -48,12 +48,12 @@ const buttons = [
 
 <template>
     <div class="sm:mt-20 mt-4 profile-layout">
-        <div class="sm:w-auto w-full">
-            <aside class="lg:mr-10 mr-4 h-auto sm:max-w-xs origin-top-left rounded-tr-2xl rounded-br-2xl rounded-bl-2xl sm:border pb-4 backdrop-blur-2xl">
-                <div class="sm:text-violet-100 text-purple-600 text-lg font-normal font-['Roboto Flex'] leading-relaxed py-6 px-3">
+        <div class="lg:w-auto w-full">
+            <aside class="lg:mr-10 mr-4 h-auto lg:max-w-xs origin-top-left rounded-tr-2xl rounded-br-2xl rounded-bl-2xl lg:border pb-4 backdrop-blur-2xl">
+                <div class="lg:text-violet-100 text-purple-600 text-lg font-normal font-['Roboto Flex'] leading-relaxed py-2 px-3">
                     {{ username }}
                 </div>
-                <div class="sm:p-0 px-4">
+                <div class="sm:px-0 px-4 pt-4">
                     <profile-button v-for="item in buttons" :title="item.title" :routeHref="item.route" :icon="item.icon"/>
                 </div>
             </aside>
@@ -66,12 +66,14 @@ const buttons = [
 
 <style scoped lang="scss">
 aside {
-    background: radial-gradient(278.82% 137.51% at 1.95% 3.59%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.00) 100%);
-    @media screen and (max-width: 640px){
-       background: transparent;
+    background: linear-gradient(38deg, rgb(149 149 149 / 59%) 0%, rgb(208 208 208 / 4%) 100%);
+    @media screen and (max-width: 1024px) {
+        background: transparent;
+    }
+    @media (min-width: 1024px) {
+        border: #9c72d170 solid 2px;
     }
 }
-
 .profile-layout {
     display: grid;
     justify-content: start;
@@ -82,12 +84,7 @@ aside {
         justify-content: center;
         justify-items: center;
     }
-    @media screen and (max-width: 768px){
-        grid-template-columns: 8fr 12fr;
-        justify-content: center;
-        justify-items: center;
-    }
-    @media screen and (max-width: 640px){
+    @media screen and (max-width: 1024px){
         grid-template-columns: 1fr;
         justify-content: center;
         justify-items: center;

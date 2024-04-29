@@ -70,7 +70,7 @@ onMounted(() => getPatterns());
         <title>Мои шаблоны</title>
     </Head>
     <AppLayout>
-        <div class="sm:mt-28 mt-10">
+        <div class="lg:mt-28 mt-10">
             <div
                 :class="
                     patterns.data && patterns.data.length === 0
@@ -79,13 +79,13 @@ onMounted(() => getPatterns());
                 "
             >
                 <h1
-                    class="sm:text-left text-center text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10"
+                    class="lg:text-left text-center text-violet-100 lg:text-4xl text-3xl font-bold font-['Open Sans'] leading-10"
                 >
                     Мои шаблоны
                 </h1>
             </div>
             <div class="grid gap-x-12">
-                <div class="sm:px-0 px-2">
+                <div class="lg:px-0 px-2">
                     <transition-group name="fade" tag="div" mode="in-out">
                         <template
                             v-if="patterns"
@@ -101,7 +101,7 @@ onMounted(() => getPatterns());
                                 >
                                     <div class="flex items-center">
                                         <div
-                                            class="data shadow px-2.5 py-1 rounded-lg flex gap-x-1 items-center"
+                                            class="data shadow px-2.5 py-1 rounded-lg flex gap-x-1 items-center flex-[1_0_auto]"
                                         >
                                             <div>
                                                 <img
@@ -110,7 +110,7 @@ onMounted(() => getPatterns());
                                                 />
                                             </div>
                                             <p
-                                                class="text-violet-100 text-sm font-normal font-['Open Sans']"
+                                                class="text-violet-100 text-lg font-normal font-['Open Sans']"
                                             >
                                                 {{
                                                     pattern.localized_created_at
@@ -118,14 +118,15 @@ onMounted(() => getPatterns());
                                             </p>
                                         </div>
                                         <h3
-                                            class="pl-12 text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
+                                            class="sm:pl-12 md:pl-6 lg:pl-8 pl-4  text-violet-100 text-xl font-bold font-['Open Sans'] leading-5"
+                                            style="word-break: break-word"
                                         >
                                             {{ pattern.title }}
                                         </h3>
                                     </div>
                                     <div
                                         @click.stop="changeContext(pattern.id)"
-                                        class="cursor-pointer"
+                                        class="cursor-pointer flex-[0_0_auto]"
                                     >
                                         <img
                                             src="/images/menu.svg"
@@ -228,7 +229,7 @@ onMounted(() => getPatterns());
                     </div>
                 </div>
                 <template v-if="patterns.data && patterns.data.length !== 0">
-                    <div class="relative h-full sm:block flex justify-center">
+                    <div class="relative h-full lg:block flex justify-center">
                         <div class="sticky top-0 inline-block">
                             <div class="wrapper">
                                 <div
@@ -255,12 +256,12 @@ onMounted(() => getPatterns());
                 </template>
             </div>
             <template v-if="patterns.data && patterns.data.length === 0">
-                <div class="flex sm:justify-start justify-center">
+                <div class="flex lg:justify-start justify-center">
                     <div
-                        class="flex flex-col justify-center gap-y-10 sm:mt-32 mt-10"
+                        class="flex flex-col justify-center gap-y-10 lg:mt-32 mt-10"
                     >
                         <div
-                            class="sm:text-start text-center text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10"
+                            class="lg:text-start text-center text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10"
                         >
                             Шаблонов нет
                         </div>
@@ -273,7 +274,7 @@ onMounted(() => getPatterns());
                             <Link :href="route('pattern.adding')">
                                 <button
                                     style="box-shadow: 0 0 3px #b7b7b7"
-                                    class="text-violet-100 sm:w-auto w-full px-6 py-4 btn_gradient-purple rounded-full"
+                                    class="text-violet-100 lg:w-auto w-full px-6 py-4 btn_gradient-purple rounded-full"
                                 >
                                     Создать шаблон
                                 </button>
@@ -343,7 +344,7 @@ $font-OpenSans: "Open Sans";
 
 .grid {
     grid-template-columns: 9fr 3fr;
-    @media screen and (max-width: 640px) {
+    @media screen and (max-width: 1024px) {
         grid-template-columns: 1fr;
     }
 }

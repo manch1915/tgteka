@@ -217,7 +217,7 @@ content.value = htmlToDelta(content.value);
                 <div
                     class="text-violet-100 sm:text-2xl text-xl sm:text-left text-center ms:px-0 px-4 font-bold font-['Open Sans'] sm:leading-10 leading-7"
                 >
-                    Редактирование поста № {{ patternId }} {{ patternName }}
+                    Редактирование поста
                 </div>
             </div>
         </template>
@@ -278,13 +278,13 @@ content.value = htmlToDelta(content.value);
                     v-model="images"
                     group="people"
                     item-key="id"
-                    class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2"
+                    class="grid justify-items-center content-center grid-cols-5 sm:pt-0 pt-8 sm:justify-end gap-2"
                 >
                     <transition-group name="delete">
                         <div
                             v-for="(image, index) in images"
                             :key="'img-' + index"
-                            class="sm:h-24 sm:w-24 h-12 w-12 rounded-lg relative"
+                            class="sm:h-24 h-12 w-full rounded-lg relative"
                         >
                             <template
                                 v-if="
@@ -326,6 +326,7 @@ content.value = htmlToDelta(content.value);
                                     :src="image.url"
                                     alt=""
                                     class="absolute top-0 left-0 object-cover w-full h-full"
+                                    width="100%"
                                 />
                             </template>
                             <div

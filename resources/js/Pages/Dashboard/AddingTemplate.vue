@@ -215,7 +215,7 @@ onUnmounted(() => {
                 <div
                     class="text-violet-100 sm:text-2xl text-xl sm:text-left text-center ms:px-0 px-4 font-bold font-['Open Sans'] sm:leading-10 leading-7"
                 >
-                    Создание поста № {{ patternCount }} (название)
+                    Создание поста
                 </div>
             </div>
         </template>
@@ -276,7 +276,7 @@ onUnmounted(() => {
                     v-model="images"
                     group="people"
                     item-key="id"
-                    class="grid grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2"
+                    class="grid justify-items-center content-center grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2"
                 >
                     <transition-group name="delete">
                         <div

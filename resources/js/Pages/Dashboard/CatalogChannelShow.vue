@@ -291,9 +291,9 @@ onMounted(() => {
     <AppLayout>
         <div>
             <div class="wrapper w-full sm:my-24 my-8 sm:p-0 p-2">
-                <div class="card sm:p-12 p-2 pb-8">
+                <div class="card sm:p-12 p-6 pb-8">
                     <div class="flex flex-wrap justify-between items-start">
-                        <div class="flex gap-x-8">
+                        <div class="flex sm:gap-x-8 gap-x-2">
                             <img
                                 class="rounded-full w-[90px] h-[90px]"
                                 :src="channel.avatar"
@@ -301,7 +301,8 @@ onMounted(() => {
                             />
                             <div class="flex flex-col gap-y-6">
                                 <h1
-                                    class="text-violet-100 lg:text-4xl text-xl break-all font-bold font-['Open Sans'] leading-10"
+                                    class="text-violet-100 lg:text-4xl text-lg font-bold font-['Open Sans'] leading-4"
+                                    style="word-break: break-word"
                                 >
                                     {{ channel.channel_name }}
                                 </h1>
@@ -318,7 +319,7 @@ onMounted(() => {
                                 </div>
                                 <a
                                     :href="channel.url"
-                                    class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
+                                    class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-tight"
                                     >{{ channel.channel_url }}</a
                                 >
                             </div>
@@ -367,7 +368,7 @@ onMounted(() => {
                     </div>
                     <div class="sm:w-1/2">
                         <h1
-                            class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose"
+                            class="text-violet-100 sm:text-2xl text-lg mt-4 my-2 font-bold font-['Open Sans'] leading-tight"
                         >
                             Купить интеграцию в этом канале
                         </h1>
@@ -385,19 +386,19 @@ onMounted(() => {
                                 </div>
                             </div>
                         </div>
-                        <div class="flex flex-wrap justify-between pt-8">
+                        <div class="flex flex-wrap items-center gap-x-2 pt-8">
                             <h1
-                                class="text-violet-100 text-2xl font-bold font-['Open Sans'] leading-loose"
+                                class="text-violet-100 sm:text-2xl text-lg font-bold font-['Open Sans'] leading-tight"
                             >
                                 Стоимость публикации:
                             </h1>
                             <h1
-                                class="text-right text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10"
+                                class="text-right text-violet-100 sm:text-2xl text-lg font-bold font-['Open Sans'] leading-tight"
                             >
                                 {{ totalPrice }} ₽
                             </h1>
                         </div>
-                        <div class="flex flex-wrap gap-4 pt-4">
+                        <div class="flex flex-wrap sm:justify-start justify-center gap-4 pt-4">
                             <button
                                 @click.prevent="toggleChannelInCart(channel)"
                                 class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 btn_gradient-purple transition hover:bg-purple-800 rounded-3xl items-center inline-flex gap-x-2.5"
@@ -481,7 +482,7 @@ onMounted(() => {
                             </h1>
                         </InfoCard>
                     </div>
-                    <div class="flex flex-wrap mt-4 justify-center gap-8">
+                    <div class="flex flex-wrap mt-8 justify-center gap-8">
                         <InfoCard>
                             <h2
                                 class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"

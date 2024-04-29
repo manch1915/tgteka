@@ -36,7 +36,28 @@ onMounted(async () => {
     // connectWebSocket(page.props.auth.user.id, showMessage);
 });
 
-const isActiveRoute = (routeUrl) => page.url === routeUrl;
+const isActiveRoute = (routeUrl) => {
+    // Check if the current URL starts with the provided route URL
+    if (page.url.startsWith(routeUrl)) {
+        return true;
+    }
+
+    // Additional logic for specific routes like '/patterns'
+    if (routeUrl === '/patterns') {
+        // Check if the current URL matches '/pattern/edit/[number]'
+        const patternEditRegex = /^\/pattern\/edit\/\d+$/;
+        if (patternEditRegex.test(page.url)) {
+            return true;
+        }
+
+        // Check if the current URL matches '/pattern/adding'
+        if (page.url === '/pattern/adding') {
+            return true;
+        }
+    }
+
+    return false;
+};
 
 watchEffect(() => {
     if (

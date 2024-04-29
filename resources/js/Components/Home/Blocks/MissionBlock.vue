@@ -24,12 +24,12 @@ onUnmounted(() => {
 });
 </script>
 <template>
-    <div class="mission" ref="maximumOffset">
+    <div class="mission" >
         <div class="container mx-auto px-4">
             <div
                 class="sm:pt-32 pt-14 flex flex-col items-center justify-center"
             >
-                <p class="font-bold text-lg text-paleblue text-center pb-14">
+                <p class="font-bold text-lg text-paleblue text-center pb-14" ref="maximumOffset">
                     Наша миссия
                 </p>
                 <div

@@ -28,7 +28,7 @@ const appeal = (slug) => {
             <div class="body__data">
                 <div>
                     <div
-                        class="pb-2.5 text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
+                        class="pb-2.5 text-left text-violet-100 text-xl font-bold font-['Open Sans'] leading-5"
                     >
                         {{channel?.channel?.channel_name}}
                     </div>

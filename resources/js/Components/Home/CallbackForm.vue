@@ -25,6 +25,9 @@ const handleSuccess = () => {
     form.name = "";
     form.email = "";
     form.terms = false;
+    Object.keys(form.errors).forEach(key => {
+        form.errors[key] = "";
+    });
 };
 
 const handleError = (e) => {

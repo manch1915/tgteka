@@ -589,7 +589,7 @@ const activate = (place) => {
                 <div class="flex flex-wrap justify-between gap-x-12 lg:block">
                     <div
                         @click.prevent="activate('right')"
-                        class="flex cursor-pointer items-center justify-start pb-[24px] gap-x-2.5 lg:justify-between lg:gap-x-0"
+                        class="flex cursor-pointer items-center justify-start pb-[18px] gap-x-2.5 lg:justify-between lg:gap-x-0"
                     >
                         <h1
                             class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10"
@@ -607,10 +607,10 @@ const activate = (place) => {
                         />
                     </div>
                 </div>
-                <div class="lg:pb-6 pb-0">
+                <div>
                     <SearchBar @search="searchHandler" class="py-2" />
                 </div>
-                <div class="hidden py-[23px] lg:block">
+                <div class="hidden py-[18px] lg:block">
                     <h2
                         class="pb-3 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
                     >
@@ -626,6 +626,7 @@ const activate = (place) => {
                 <button
                     @click.prevent="additionalFilter = !additionalFilter"
                     class="hidden lg:block px-6 py-3.5 w-full btn_gradient-purple transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 lg:text-sm break-all text-lg font-bold font-['Open Sans'] leading-normal"
+                    style="word-break: break-word"
                 >
                     Дополнительный фильтр
                 </button>
@@ -1097,7 +1098,7 @@ const activate = (place) => {
                 >
                     Всего каналов {{ count }}
                 </div>
-                <div class="mt-4 flex flex-wrap lg:gap-3 gap-1 filter_buttons lg:justify-normal justify-center">
+                <div class="mt-4 flex flex-wrap lg:gap-3 gap-2 filter_buttons lg:justify-normal justify-center">
                     <SortButton v-for="title in SORT_DATA" :title="title" />
                 </div>
                 <CatalogChannels />

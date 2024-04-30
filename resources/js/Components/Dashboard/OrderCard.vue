@@ -257,7 +257,7 @@ const openMessenger = () => {
         }
         grid-template-columns: 5fr 5fr 3fr;
 
-        @media screen and (max-width: 640px) {
+        @media screen and (max-width: 1024px) {
             grid-template-columns: 1fr;
         }
         div{

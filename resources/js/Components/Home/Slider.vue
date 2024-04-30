@@ -46,8 +46,11 @@ const setContainerHeight = () => {
 const dotHelper = ref(null)
 
 watchEffect(() => {
-    dotHelper.value = computed(() => slider.value ? [...Array(slider.value.track.details.slides.length).keys()] : [])
-})
+    if (dotHelper.value && slider.value) {
+        dotHelper.value = [...Array(slider.value.track.details.slides.length).keys()];
+    }
+});
+
 
 const spaceBetween = computed(() => {
     if (parseFloat(props.spaceBetween) > 0) {
@@ -101,13 +104,16 @@ onUnmounted(() => {
             </div>
         </div>
         <div class="dots my-14">
-            <button
-                v-for="(_slide, idx) in dotHelper.value"
-                @click="slider.moveToIdx(idx)"
-                :class="{ dot: true, active: current === idx }"
-                :key="idx"
-            ></button>
+            <template v-if="dotHelper && dotHelper.value">
+                <button
+                    v-for="(_slide, idx) in dotHelper.value"
+                    @click="slider.moveToIdx(idx)"
+                    :class="{ dot: true, active: current === idx }"
+                    :key="idx"
+                ></button>
+            </template>
         </div>
+
     </div>
 </template>
 

@@ -437,7 +437,7 @@ watch(
                 </div>
             </div>
         </div>
-        <div class="mx-auto mt-12 max-w-2xl text-center lg:px-0 px-4">
+        <div class="mx-auto mt-12 max-w-2xl text-center lg:px-0 px-2">
             <div class="flex flex-col gap-y-16">
                 <div>
                     <div class="flex w-full flex-col gap-y-3 text-start">

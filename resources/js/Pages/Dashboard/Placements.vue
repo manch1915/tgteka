@@ -143,7 +143,7 @@ watch([activeSortButton, value, range], () => {
                     />
                 </div>
             </div>
-            <div class="flex flex-col gap-y-4 mt-8">
+            <div class="flex flex-col gap-y-4 mt-8 px-2">
                 <template
                     v-if="
                         !isLoading &&

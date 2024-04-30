@@ -274,7 +274,7 @@ socket.onerror = function (error) {
 <style scoped lang="scss">
 .support_grid {
     grid-template-columns: 4fr 6fr;
-    @media screen and (max-width: 640px) {
+    @media screen and (max-width: 1024px) {
         grid-template-columns: 1fr;
     }
 }

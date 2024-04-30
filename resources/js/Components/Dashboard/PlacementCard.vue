@@ -224,7 +224,7 @@ const acceptOrder = () => {
         }
         grid-template-columns: 5fr 5fr;
 
-        @media screen and (max-width: 640px) {
+        @media screen and (max-width: 1024px) {
             grid-template-columns: 1fr;
         }
 

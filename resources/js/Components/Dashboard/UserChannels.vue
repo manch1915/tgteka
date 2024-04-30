@@ -55,13 +55,13 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div v-if="channels.data && channels.data.length" class="w-full sm:py-16 py-8">
+    <div v-if="channels.data && channels.data.length" class="w-full sm:py-16 py-8 px-2">
         <search-bar @search="handleSearch"/>
     </div>
-    <div v-if="channels.data && channels.data.length" class="flex gap-2 flex-wrap">
+    <div v-if="channels.data && channels.data.length" class="mt-4 flex flex-wrap lg:gap-3 gap-2 filter_buttons lg:justify-normal justify-center">
         <SortButton v-for="title in sortData" :title="title"/>
     </div>
-    <div v-if="channels.data && channels.data.length" class="flex flex-col gap-y-4 mt-8">
+    <div v-if="channels.data && channels.data.length" class="flex flex-col gap-y-4 mt-8 px-2">
         <template v-if="channels" v-for="(channel, index) in channels.data" :key="index">
             <ChannelCard :channel="channel"/>
         </template>

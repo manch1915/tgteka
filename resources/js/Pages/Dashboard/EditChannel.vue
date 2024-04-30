@@ -420,10 +420,10 @@ watch(state.type, (newRadio) => {
                 </div>
             </div>
         </div>
-        <div class="mx-auto mt-12 max-w-2xl text-center">
+        <div class="mx-auto mt-12 max-w-2xl text-center px-2">
             <div class="flex flex-col gap-y-16">
                 <div>
-                    <div class="flex w-full flex-col gap-y-3 text-start">
+                    <div class="flex w-full flex-col gap-y-3 text-start ">
                         <h2
                             class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                             Источник подписчиков

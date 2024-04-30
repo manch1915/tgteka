@@ -18,7 +18,9 @@ watch(() => channelStore.loading, (isLoading) => {
         loading.finish()
     }
 }, {immediate: true});
-
+const changePage = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 <template>
     <div class="flex flex-col gap-y-4 mt-8">
@@ -43,7 +45,7 @@ watch(() => channelStore.loading, (isLoading) => {
         </template>
     </div>
     <div class="flex justify-center mt-10">
-        <TailwindPagination @pagination-change-page="channelStore.fetchChannels" :data="channelStore.channels"
+        <TailwindPagination @pagination-change-page="channelStore.fetchChannels" @click.prevent="changePage" :data="channelStore.channels"
                             :limit="3"
                             :active-classes="['bg-blue-950', 'rounded-full', 'shadow-inner', 'border', 'border-white', 'border-opacity-10', 'text-white', 'text-base', 'font-bold', 'font-[\'Open Sans\']', 'leading-tight']"
                             :itemClasses="['border-none', 'text-violet-100', 'text-base', 'font-normal', 'font-[\'Inter\']', 'leading-normal',]">

@@ -118,3 +118,6 @@ button {
 .n-tabs .n-tabs-rail{
     flex-wrap: wrap;
 }
+.isolate.inline-flex.-space-x-px.rounded-md.shadow-sm{
+    flex-wrap: wrap;
+}

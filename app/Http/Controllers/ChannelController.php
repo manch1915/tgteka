@@ -168,15 +168,29 @@ class ChannelController extends Controller
 
 
 
-    public function fetchBest()
+    public function fetchBest(Request $request, AvatarService $avatarService)
     {
-        // Query to select the top 6 channels based on the participants_count statistic
-        $bestChannels = ChannelStatistic::select('channel_id')
+        // Retrieve the topic from the request
+        $topic = $request->input('topic');
+
+        // Start building the query to select the top 6 channels based on the participants_count statistic
+        $bestChannelsQuery = ChannelStatistic::select('channel_id')
             ->selectRaw('JSON_EXTRACT(stats, "$.participants_count") as participants_count')
             ->selectRaw('JSON_EXTRACT(stats, "$.adv_post_reach_24h") as adv_post_reach_24h')
             ->orderByRaw('CAST(JSON_EXTRACT(stats, "$.participants_count") AS UNSIGNED) DESC')
-            ->limit(6)
-            ->get();
+            ->limit(6);
+
+        // If a topic is provided, filter channels by topic
+        if ($topic) {
+            $bestChannelsQuery->whereIn('channel_id', function ($query) use ($topic) {
+                $query->select('id')
+                    ->from('channels')
+                    ->where('topic_id', $topic);
+            });
+        }
+
+        // Execute the query to get the best channels
+        $bestChannels = $bestChannelsQuery->get();
 
         // Extract the channel IDs from the result
         $channelIds = $bestChannels->pluck('channel_id');
@@ -185,8 +199,9 @@ class ChannelController extends Controller
         $channels = Channel::whereIn('id', $channelIds)->get();
 
         // Merge the channel data with the statistics
-        $bestChannelsWithDetails = $bestChannels->map(function ($item) use ($channels) {
+        $bestChannelsWithDetails = $bestChannels->map(function ($item) use ($avatarService, $channels) {
             $channel = $channels->where('id', $item->channel_id)->first();
+            $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);
             $item->channel = $channel;
             return $item;
         });
@@ -194,6 +209,7 @@ class ChannelController extends Controller
         // Return the response with channels and their statistics
         return response()->json($bestChannelsWithDetails);
     }
+
 
     protected function getChannelWithAvatarAndTopic(Channel $channel, AvatarService $avatarService)
     {

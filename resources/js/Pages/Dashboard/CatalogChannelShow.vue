@@ -301,7 +301,7 @@ onMounted(() => {
                             />
                             <div class="flex flex-col gap-y-6">
                                 <h1
-                                    class="text-violet-100 lg:text-4xl text-lg font-bold font-['Open Sans'] leading-4"
+                                    class="text-violet-100 lg:text-4xl text-lg font-bold font-['Open Sans'] leading-tight"
                                     style="word-break: break-word"
                                 >
                                     {{ channel.channel_name }}
@@ -447,9 +447,9 @@ onMounted(() => {
                             Информация
                         </button>
                     </template>
-                    <div class="flex justify-center">
+                    <div class="flex justify-center px-1">
                         <p
-                            class="sm:w-1/2 w-full py-6 text-center text-violet-100 text-xl font-normal font-['Open Sans'] leading-relaxed"
+                            class="sm:w-1/2 w-full py-6 text-center text-violet-100 text-xl font-normal font-['Open Sans'] leading-tight"
                         >
                             {{ channel.description }}
                         </p>

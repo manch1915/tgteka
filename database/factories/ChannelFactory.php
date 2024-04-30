@@ -28,6 +28,7 @@ class ChannelFactory extends Factory
             'format_two_price' => $this->faker->numberBetween(1, 1000),
             'format_three_price' => $this->faker->numberBetween(1, 1000),
             'no_deletion_price' => $this->faker->numberBetween(1, 1000),
+            'cpm' => $this->faker->numberBetween(1, 1000)
         ];
     }
 }

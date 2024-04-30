@@ -44,7 +44,7 @@ const wrap = ref(false)
                         <div>
                         <p class="rate_catalog inline text-violet-100 text-sm font-normal font-['Open Sans']">#{{channel.id}} в каталоге</p>
                         </div>
-                        <h1 class="text-white text-xl font-bold font-['Open Sans'] leading-relaxed">{{channel.channel_name}}</h1>
+                        <h1 class="text-white text-xl font-bold font-['Open Sans'] !leading-tight">{{channel.channel_name}}</h1>
                         <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Open Sans'] break-all leading-tight">{{channel.description}}</p>
                     </div>
                 </div>

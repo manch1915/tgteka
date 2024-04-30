@@ -49,6 +49,7 @@ const deletePattern = async (patternIdToDelete) => {
         if (indexToDelete !== -1) {
             patterns.value.data.splice(indexToDelete, 1);
         }
+        message.success('Шаблон успешно удален.');
     } catch (error) {
         if (error.response && error.response.status === 409) {
             message.error(error.response.data.message);

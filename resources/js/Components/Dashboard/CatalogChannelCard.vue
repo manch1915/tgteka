@@ -156,7 +156,7 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
                     </div>
                     <div class="flex-1 grid-element">
                         <div class="flex flex-col justify-between gap-y-2">
-                            <h1 class="text-white text-xl font-bold font-['Open Sans'] leading-relaxed">{{channel.channel_name}}</h1>
+                            <h1 class="text-white text-xl font-bold font-['Open Sans'] !leading-tight">{{channel.channel_name}}</h1>
                             <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Open Sans'] break-all leading-tight">{{channel.description}}</p>
                         </div>
                     </div>

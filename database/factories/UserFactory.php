@@ -21,7 +21,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'username' => $this->faker->lexify(str_repeat('?', rand(1, 16))),
+            'username' => substr($this->faker->unique()->userName, 0, 16),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'mobile_number' => $this->faker->phoneNumber,

@@ -18,6 +18,8 @@ import {computed, onMounted, onUnmounted, ref} from "vue";
 import { Head } from "@inertiajs/vue3";
 import { Title } from "chart.js";
 import GoUp from "@/Components/Home/GoUp.vue";
+import InterestChannelsCard from "@/Components/Home/InterestChannelsCard.vue";
+import {useMainStore} from "@/stores/main.js";
 
 const headers = [
     "Регистрируйте аккаунт",
@@ -60,22 +62,25 @@ const spaceBetween = computed(() => {
         return 100;
     }
 });
-const fetchChannels = async () => {
+
+const fetchChannels = async (topic = null) => {
     try {
-        const response = await axios.get(route('best-channels.get'));
-        return response.data;
+        const response = await axios.get(route('best-channels.get', {topic}));
+        channelsData.value = response.data;
     } catch (error) {
         console.error('Error fetching channels:', error);
         return [];
     }
 };
+const mainStore = useMainStore();
+mainStore.fetchTopics()
 
 // Define a reactive ref to hold the channels data
 const channelsData = ref([]);
 
 // Fetch channels data when the component mounts
-onMounted(async () => {
-    channelsData.value = await fetchChannels();
+onMounted( () => {
+     fetchChannels();
 });
 </script>
 
@@ -121,6 +126,23 @@ onMounted(async () => {
             </template>
         </HowItWorksBlock>
         <InterestChannelsBlock>
+            <template #topicCards>
+                <template v-for="(topic, index) in mainStore.topics" :key="index">
+                    <InterestChannelsCard class="cursor-pointer" v-if="index < 4" :topic="topic" :p="topic.title" @click.prevent="fetchChannels(topic.id)"/>
+                </template>
+            </template>
+
+            <template #sliderTopicCard>
+                <template
+                    v-for="(topic, index) in mainStore.topics" :key="index"
+                >
+                    <div class="keen-slider__slide" style="max-width: 200px; min-width: 200px">
+                        <InterestChannelsCard
+                            :p="topic.title" @click.prevent="fetchChannels(topic.id)"
+                        />
+                    </div>
+                </template>
+            </template>
             <template v-slot:cards>
                 <template v-if="windowWidth <= 1024">
                     <slider :interactive="true" :slides-per-view="1" v-if="channelsData.length > 0">
@@ -134,7 +156,7 @@ onMounted(async () => {
                     </slider>
                 </template>
                 <template v-else>
-                    <ChannelCard v-for="(channel, index) in channelsData" :key="index" :channel="channel" />
+                    <ChannelCard v-for="(channel, index) in channelsData" :key="index" :channel="channel"/>
                 </template>
             </template>
         </InterestChannelsBlock>

@@ -156,10 +156,10 @@ watch(state.type, (newRadio) => {
                 class="py-24 text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">
                 Редактирование канала
             </h1>
-            <div class="flex flex-col gap-y-16 px-4 sm:px-0">
+            <div class="flex flex-col gap-y-16 px-4 lg:px-0">
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Название канала/чата
                     </h2>
                     <div>
@@ -180,7 +180,7 @@ watch(state.type, (newRadio) => {
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Описание канала/чата
                     </h2>
                     <div>
@@ -201,7 +201,7 @@ watch(state.type, (newRadio) => {
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Тематика канала/чата
                     </h2>
                     <div>
@@ -219,7 +219,7 @@ watch(state.type, (newRadio) => {
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Ссылка на канал/чат
                     </h2>
                     <div>
@@ -240,7 +240,7 @@ watch(state.type, (newRadio) => {
                 </div>
                 <div class="w-full text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Соотношение полов, %
                     </h2>
                     <n-slider
@@ -256,7 +256,7 @@ watch(state.type, (newRadio) => {
                                 size="25"
                                 :path="mdiFaceMan"/>
                             <p
-                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                                 {{ malePercentage }}%
                             </p>
                         </div>
@@ -266,7 +266,7 @@ watch(state.type, (newRadio) => {
                                 size="25"
                                 :path="mdiFaceWoman"/>
                             <p
-                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                                 {{ femalePercentage }}%
                             </p>
                         </div>
@@ -274,11 +274,11 @@ watch(state.type, (newRadio) => {
                 </div>
             </div>
         </div>
-        <div class="mt-12 format sm:px-0 px-4">
+        <div class="mt-12 format lg:px-0 px-4">
             <div class="format__header">
                 <div class="flex flex-col items-start justify-start gap-7">
                     <h3
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Формат размещения
                     </h3>
                     <p
@@ -303,7 +303,7 @@ watch(state.type, (newRadio) => {
                         </div>
                         <div>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 Стоимость за 24 часа в ленте и 1 час в топе, минимум 400 руб.
                             </p>
                         </div>
@@ -316,7 +316,7 @@ watch(state.type, (newRadio) => {
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0"/>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 руб.
                             </p>
                         </div>
@@ -335,7 +335,7 @@ watch(state.type, (newRadio) => {
                         </div>
                         <div>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 Стоимость за 48 часов в ленте и 2 часа в топе
                             </p>
                         </div>
@@ -348,7 +348,7 @@ watch(state.type, (newRadio) => {
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0"/>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 руб.
                             </p>
                         </div>
@@ -367,7 +367,7 @@ watch(state.type, (newRadio) => {
                         </div>
                         <div>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 Стоимость за 72 часов в ленте и 3 часа в топе
                             </p>
                         </div>
@@ -380,7 +380,7 @@ watch(state.type, (newRadio) => {
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0"/>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 руб.
                             </p>
                         </div>
@@ -399,7 +399,7 @@ watch(state.type, (newRadio) => {
                         </div>
                         <div>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 Стоимость за пост без удаления и 3 часа в топе
                             </p>
                         </div>
@@ -412,7 +412,7 @@ watch(state.type, (newRadio) => {
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0"/>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 руб.
                             </p>
                         </div>
@@ -423,9 +423,9 @@ watch(state.type, (newRadio) => {
         <div class="mx-auto mt-12 max-w-2xl text-center">
             <div class="flex flex-col gap-y-16">
                 <div>
-                    <div class="flex w-full flex-col gap-y-3">
+                    <div class="flex w-full flex-col gap-y-3 text-start">
                         <h2
-                            class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                            class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                             Источник подписчиков
                         </h2>
                         <div>
@@ -448,7 +448,7 @@ watch(state.type, (newRadio) => {
                 <div class="flex flex-col gap-y-8">
                     <div class="flex items-center justify-center gap-x-2.5">
                         <h2
-                            class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                            class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                             Скидка на повторный заказ
                         </h2>
                         <n-switch
@@ -479,13 +479,11 @@ watch(state.type, (newRadio) => {
                             v-model:checked="form.terms"
                             class="flex items-center justify-center">
                             <div
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 Ознакомлен с
                                 <span
                                     class="cursor-pointer underline"
-                                    @click.prevent="activeRules = !activeRules">
-                  >Правилами пользования Сервисом</span
-                                >
+                                    @click.prevent="activeRules = !activeRules">Правилами пользования Сервисом</span>
                             </div>
                         </n-checkbox>
                         <span
@@ -495,7 +493,7 @@ watch(state.type, (newRadio) => {
                         >
                     </div>
                     <div
-                        class="flex mt-12 sm:flex-row flex-col gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="flex mt-12 lg:flex-row flex-col gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         <button
                             @click.prevent="uploadChannel"
                             class="rounded-3xl btn_gradient-purple px-6 py-3.5">
@@ -541,7 +539,7 @@ watch(state.type, (newRadio) => {
     justify-items: start;
     row-gap: 1rem;
     grid-template-columns: 2fr 6fr 2fr;
-    @media screen and (max-width: 640px) {
+    @media screen and (max-width: 1024px) {
         grid-template-columns: 1fr;
     }
 }

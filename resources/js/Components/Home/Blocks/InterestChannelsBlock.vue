@@ -47,16 +47,7 @@
                                         <div
                                             class="InterestChannelsCards grid h-auto grid-cols-2 lg:grid-cols-2 justify-center sm:gap-8 gap-1"
                                         >
-                                            <InterestChannelsCard
-                                                p="Криптовалюта и Блокчейн"
-                                            />
-                                            <InterestChannelsCard
-                                                p="Кулинария"
-                                            />
-                                            <InterestChannelsCard p="Спорт" />
-                                            <InterestChannelsCard
-                                                p="Путешествия"
-                                            />
+                                            <slot name="topicCards"/>
                                         </div>
                                     </div>
                                     <div
@@ -100,16 +91,7 @@
                                                 :space-between="1"
                                             >
                                                 <template v-slot:slider>
-                                                    <template
-                                                        v-for="n in 6"
-                                                        :key="n"
-                                                    >
-                                                        <div class="keen-slider__slide" style="max-width: 200px; min-width: 200px">
-                                                            <InterestChannelsCard
-                                                                p="Криптовалюта и Блокчейн"
-                                                            />
-                                                        </div>
-                                                    </template>
+                                                    <slot name="sliderTopicCard"/>
                                                 </template>
                                             </slider>
                                         </div>

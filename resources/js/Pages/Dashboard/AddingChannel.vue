@@ -140,13 +140,13 @@ watch(
     <AppLayout>
         <div class="mx-auto max-w-2xl text-center">
             <h1
-                class="py-24 text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">
+                class="py-24 text-violet-100 lg:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">
                 Добавление канала / чата
             </h1>
-            <div class="flex flex-col gap-y-16 sm:px-0 px-4">
+            <div class="flex flex-col gap-y-16 lg:px-0 px-4">
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Название канала/чата
                     </h2>
                     <div>
@@ -167,7 +167,7 @@ watch(
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Описание канала/чата
                     </h2>
                     <div>
@@ -188,7 +188,7 @@ watch(
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Тематика канала/чата
                     </h2>
                     <div>
@@ -206,7 +206,7 @@ watch(
                 </div>
                 <div class="flex w-full flex-col gap-y-3 text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Ссылка на канал/чат
                     </h2>
                     <div>
@@ -228,7 +228,7 @@ watch(
                 </div>
                 <!--                <div class="flex w-full flex-col justify-center gap-y-3 text-center">
                             <h2
-                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                                 Вы добавляете
                             </h2>
                             <div class="flex flex-col items-start justify-start gap-y-2">
@@ -257,7 +257,7 @@ watch(
                         </div>-->
                 <div class="w-full text-start">
                     <h2
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Соотношение полов, %
                     </h2>
                     <n-slider
@@ -273,7 +273,7 @@ watch(
                                 size="25"
                                 :path="mdiFaceMan" />
                             <p
-                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                                 {{ malePercentage }}%
                             </p>
                         </div>
@@ -283,7 +283,7 @@ watch(
                                 size="25"
                                 :path="mdiFaceWoman" />
                             <p
-                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                                 {{ femalePercentage }}%
                             </p>
                         </div>
@@ -291,11 +291,11 @@ watch(
                 </div>
             </div>
         </div>
-        <div class="mt-12 format sm:px-0 px-4">
+        <div class="mt-12 format lg:px-0 px-4">
             <div class="format__header">
                 <div class="flex flex-col items-start justify-start gap-7">
                     <h3
-                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         Формат размещения
                     </h3>
                     <p
@@ -320,7 +320,7 @@ watch(
                         </div>
                         <div>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 Стоимость за 24 часа в ленте и 1 час в топе, минимум 400 руб.
                             </p>
                         </div>
@@ -333,7 +333,7 @@ watch(
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 руб.
                             </p>
                         </div>
@@ -352,7 +352,7 @@ watch(
                         </div>
                         <div>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 Стоимость за 48 часов в ленте и 2 часа в топе
                             </p>
                         </div>
@@ -365,7 +365,7 @@ watch(
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 руб.
                             </p>
                         </div>
@@ -384,7 +384,7 @@ watch(
                         </div>
                         <div>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 Стоимость за 72 часов в ленте и 3 часа в топе
                             </p>
                         </div>
@@ -397,7 +397,7 @@ watch(
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 руб.
                             </p>
                         </div>
@@ -416,7 +416,7 @@ watch(
                         </div>
                         <div>
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 Стоимость за пост без удаления и 3 часа в топе
                             </p>
                         </div>
@@ -429,7 +429,7 @@ watch(
                                 type="text"
                                 class="w-24 border-t-0 border-r-0 border-b border-l-0 border-violet-700 bg-transparent text-violet-100 ring-0 focus:border-violet-700 focus:ring-0" />
                             <p
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 руб.
                             </p>
                         </div>
@@ -437,12 +437,12 @@ watch(
                 </div>
             </div>
         </div>
-        <div class="mx-auto mt-12 max-w-2xl text-center sm:px-0 px-4">
+        <div class="mx-auto mt-12 max-w-2xl text-center lg:px-0 px-4">
             <div class="flex flex-col gap-y-16">
                 <div>
-                    <div class="flex w-full flex-col gap-y-3">
+                    <div class="flex w-full flex-col gap-y-3 text-start">
                         <h2
-                            class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                            class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                             Источник подписчиков
                         </h2>
                         <div>
@@ -466,7 +466,7 @@ watch(
                 <div class="flex flex-col gap-y-8">
                     <div class="flex items-center justify-center gap-x-2.5">
                         <h2
-                            class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                            class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                             Скидка на повторный заказ
                         </h2>
                         <n-switch
@@ -492,20 +492,18 @@ watch(
                 </div>
                 <div>
                     <div>
-                        <n-checkbox
-                            :theme-overrides="checkboxThemeOverrides"
-                            v-model:checked="form.terms"
-                            class="flex items-center justify-center">
-                            <div
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-normal">
+                        <div class="flex items-center justify-center text-left gap-x-2">
+                                <n-checkbox
+                                    :theme-overrides="checkboxThemeOverrides"
+                                    v-model:checked="form.terms"/>
+                            <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
                                 Ознакомлен с
-                                <span
-                                    class="cursor-pointer underline"
-                                    @click.prevent="activeRules = !activeRules">
-                  Правилами пользования Сервисом</span
-                                >
-                            </div>
-                        </n-checkbox>
+                                <span class="cursor-pointer underline" @click.prevent="activeRules = !activeRules">
+                                    Правилами пользования Сервисом
+                                </span>
+                            </p>
+                        </div>
+
                         <span
                             class="text-errorred"
                             v-if="errors.terms"
@@ -513,7 +511,7 @@ watch(
                         >
                     </div>
                     <div
-                        class="flex sm:flex-row flex-col mt-12 gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                        class="flex lg:flex-row flex-col mt-12 gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                         <button
                             @click.prevent="uploadChannel"
                             class="rounded-3xl btn_gradient-purple transition hover:bg-purple-800 px-6 py-3.5">
@@ -558,7 +556,7 @@ watch(
     justify-items: start;
     row-gap: 1rem;
     grid-template-columns: 2fr 6fr 2fr;
-    @media screen and (max-width: 640px) {
+    @media screen and (max-width: 1024px) {
         grid-template-columns: 1fr;
     }
 }

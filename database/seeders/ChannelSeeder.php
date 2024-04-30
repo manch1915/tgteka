@@ -4,22 +4,29 @@ namespace Database\Seeders;
 
 use App\Jobs\FetchChannelStatisticsJob;
 use App\Models\Channel;
+use App\Models\Topic;
+use Faker\Factory;
 use Illuminate\Database\Seeder;
+use Str;
 
 class ChannelSeeder extends Seeder
 {
     public function run(): void
     {
-        $urls = [
-            'https://t.me/granitnauky',
-            'https://t.me/+B-qE5hUu4DBmMGY6',
-            'https://t.me/cmd_cv',
-            'https://t.me/+gFCT63NlnfE5YWZi'
-        ];
+        $topics = Topic::all();
 
-        foreach ($urls as $index => $url) {
-            $channel = Channel::factory()->create(['url' => $url, 'status' => 'loading']);
-            FetchChannelStatisticsJob::dispatch($channel);
+        foreach ($topics as $topic) {
+
+            for ($i = 0; $i < 6; $i++) {
+                $uniqueUrl = '@' . Str::random(6);
+
+                Channel::factory()->create([
+                    'topic_id' => $topic->id,
+                    'url' => $uniqueUrl,
+                    'slug' => $uniqueUrl . '-' . $i,
+                    'status' => 'accepted'
+                ]);
+            }
         }
     }
 }

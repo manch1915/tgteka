@@ -108,7 +108,18 @@ const handleFileUpload = function (event) {
         message.error("Вы не можете загрузить более 10 изображений / видео.");
         return;
     }
+    const duplicateFiles = files.filter((file) => {
+        return images.value.some(
+            (image) => image.file && image.file.name === file.name
+        );
+    });
 
+    if (duplicateFiles.length > 0) {
+        message.error("Вы не можете загрузить дубликаты файлов.", {
+            duration: 1000 * 10
+        });
+        return;
+    }
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
 
@@ -152,10 +163,8 @@ const patchPattern = async function () {
         );
         message.success("Шаблон успешно сохранен!");
         loading.finish();
-        console.log(response);
     } catch (error) {
         loading.error();
-        console.error(error);
     } finally {
         loading.finish();
     }
@@ -276,13 +285,13 @@ onUnmounted(() => {
                     v-model="images"
                     group="people"
                     item-key="id"
-                    class="grid justify-items-center content-center grid-cols-5 sm:pt-0 pt-8 sm:justify-end sm:justify-items-end gap-2"
+                    class="grid justify-items-center content-center grid-cols-3 sm:grid-cols-2 xl:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 sm:pt-0 pt-8 sm:justify-end gap-2 gap-y-6"
                 >
                     <transition-group name="delete">
                         <div
                             v-for="(image, index) in images"
                             :key="'img-' + index"
-                            class="sm:h-24 sm:w-24 h-12 w-12 rounded-lg relative"
+                            class="sm:h-24 sm:w-24 h-20 w-20 rounded-lg relative"
                         >
                             <template
                                 v-if="

@@ -625,7 +625,7 @@ const activate = (place) => {
                 </div>
                 <button
                     @click.prevent="additionalFilter = !additionalFilter"
-                    class="hidden lg:block px-6 py-3.5 w-full btn_gradient-purple transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 lg:text-sm break-all text-lg font-bold font-['Open Sans'] leading-normal"
+                    class="hidden lg:block px-6 py-3.5 w-full btn_gradient-purple transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 lg:text-sm break-all text-lg font-bold font-['Open Sans'] !leading-4"
                     style="word-break: break-word"
                 >
                     Дополнительный фильтр

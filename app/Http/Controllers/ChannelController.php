@@ -26,8 +26,7 @@ class ChannelController extends Controller
 
     public function channelsGet(Request $request, AvatarService $avatarService)
     {
-        $channels = $this->fetchChannels($request, $avatarService);
-
+        $channels = $this->fetchChannels($request);
         return response()->json($channels);
     }
 

@@ -52,11 +52,17 @@ class ChannelService
         $this->applyAdditionalFilters($channelsQuery, $request);
         $this->applyMainFilters($channelsQuery, $request);
 
-        return $channelsQuery->paginate(10)->each(function ($channel) use ($request) {
+        $channels = $channelsQuery->paginate(10);
+
+        // Modify each channel in the pagination result
+        $channels->getCollection()->transform(function ($channel) use ($request) {
             $channel->isFav = $request->user()->hasFavorited($channel);
             $channel->avatar = $this->avatarService->getAvatarUrlOfChannel($channel);
             $channel->statistics = $channel->stats ? json_decode($channel->stats, true) : [];
+            return $channel;
         });
+
+        return $channels;
     }
 
     protected function applyAdditionalFilters($query, Request $request): void

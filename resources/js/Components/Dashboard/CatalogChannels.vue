@@ -32,8 +32,9 @@ watch(() => channelStore.loading, (isLoading) => {
 
         <!-- Results or no results -->
         <template v-else>
-            <template v-if="channelStore.channels && channelStore.channels.length > 0"
-                      v-for="(channel, index) in channelStore.channels" :key="index">
+            <template v-if="channelStore.channels.data && channelStore.channels.data.length > 0"
+                      v-for="(channel, index) in channelStore.channels.data" :key="index">
+
                 <CatalogChannelCard :channel="channel"/>
             </template>
             <p v-else class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10">
@@ -41,7 +42,7 @@ watch(() => channelStore.loading, (isLoading) => {
             </p>
         </template>
     </div>
-    <div class="flex justify-center">
+    <div class="flex justify-center mt-10">
         <TailwindPagination @pagination-change-page="channelStore.fetchChannels" :data="channelStore.channels"
                             :limit="3"
                             :active-classes="['bg-blue-950', 'rounded-full', 'shadow-inner', 'border', 'border-white', 'border-opacity-10', 'text-white', 'text-base', 'font-bold', 'font-[\'Open Sans\']', 'leading-tight']"

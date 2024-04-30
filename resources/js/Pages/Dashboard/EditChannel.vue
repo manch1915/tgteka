@@ -450,10 +450,11 @@ watch(state.type, (newRadio) => {
                         <h2
                             class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                             Скидка на повторный заказ
+                            <n-switch
+                                v-model:value="discount_check"
+                                :theme-overrides="switchThemeOverrides"/>
                         </h2>
-                        <n-switch
-                            v-model:value="discount_check"
-                            :theme-overrides="switchThemeOverrides"/>
+
                     </div>
                     <p
                         class="text-violet-100 text-opacity-40 text-base font-normal font-['Inter'] leading-tight">
@@ -474,18 +475,17 @@ watch(state.type, (newRadio) => {
                 </div>
                 <div>
                     <div>
-                        <n-checkbox
-                            :theme-overrides="checkboxThemeOverrides"
-                            v-model:checked="form.terms"
-                            class="flex items-center justify-center">
-                            <div
-                                class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
-                                Ознакомлен с
-                                <span
-                                    class="cursor-pointer underline"
-                                    @click.prevent="activeRules = !activeRules">Правилами пользования Сервисом</span>
-                            </div>
-                        </n-checkbox>
+                        <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
+                            <n-checkbox
+                                :theme-overrides="checkboxThemeOverrides"
+                                v-model:checked="form.terms"
+                            class="-mt-[1px]"
+                            />
+                            Ознакомлен с
+                            <span class="cursor-pointer underline" @click.prevent="activeRules = !activeRules">
+                                    Правилами пользования Сервисом
+                                </span>
+                        </p>
                         <span
                             class="text-errorred block leading-4"
                             v-if="errors.terms"

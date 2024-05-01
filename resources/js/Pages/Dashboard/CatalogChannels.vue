@@ -125,58 +125,60 @@ const activate = (place) => {
                 </template>
                 <!--                todo additional_filter to component -->
                 <div class="additional_filter">
-                    <div class="py-2">
-                        <h2
-                            class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
-                        >
-                            Возраст канала от (мес.)
-                        </h2>
-                        <n-slider
-                            v-model:value="
-                                channelStore.mainFilter.channel_creation_date
-                            "
-                            :theme-overrides="sliderThemeOverrides"
-                            :max="36"
-                            :format-tooltip="formatTooltip"
-                            :show-tooltip="additionalFilter"
-                        />
+                    <div class="px-6 py-2">
+                        <div class="py-2">
+                            <h2
+                                class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                            >
+                                Возраст канала от (мес.)
+                            </h2>
+                            <n-slider
+                                v-model:value="
+                                    channelStore.mainFilter.channel_creation_date
+                                "
+                                :theme-overrides="sliderThemeOverrides"
+                                :max="36"
+                                :format-tooltip="formatTooltip"
+                                :show-tooltip="additionalFilter"
+                            />
+                        </div>
+                        <div class="py-2">
+                            <h2
+                                class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                            >
+                                Мужская аудитория
+                            </h2>
+                            <n-slider
+                                v-model:value="
+                                    channelStore.mainFilter.male_percentage
+                                "
+                                :theme-overrides="sliderThemeOverrides"
+                                :max="90"
+                                :format-tooltip="formatTooltipPercent"
+                                :show-tooltip="additionalFilter"
+                            />
+                        </div>
+                        <div class="py-2">
+                            <h2
+                                class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                            >
+                                Женская аудитория
+                            </h2>
+                            <n-slider
+                                v-model:value="
+                                    channelStore.mainFilter.female_percentage
+                                "
+                                :theme-overrides="sliderThemeOverrides"
+                                :max="90"
+                                :format-tooltip="formatTooltipPercent"
+                                :show-tooltip="additionalFilter"
+                            />
+                        </div>
                     </div>
-                    <div class="py-2">
-                        <h2
-                            class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
-                        >
-                            Мужская аудитория
-                        </h2>
-                        <n-slider
-                            v-model:value="
-                                channelStore.mainFilter.male_percentage
-                            "
-                            :theme-overrides="sliderThemeOverrides"
-                            :max="90"
-                            :format-tooltip="formatTooltipPercent"
-                            :show-tooltip="additionalFilter"
-                        />
-                    </div>
-                    <div class="py-2">
-                        <h2
-                            class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
-                        >
-                            Женская аудитория
-                        </h2>
-                        <n-slider
-                            v-model:value="
-                                channelStore.mainFilter.female_percentage
-                            "
-                            :theme-overrides="sliderThemeOverrides"
-                            :max="90"
-                            :format-tooltip="formatTooltipPercent"
-                            :show-tooltip="additionalFilter"
-                        />
-                    </div>
-                    <n-space vertical size="large" class="mt-6">
+                    <n-space vertical :size="[12,24]" class="mt-6 px-2">
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Подписчиков
                             </h2>
@@ -195,7 +197,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Средний охват поста (24 часа)
                             </h2>
@@ -214,7 +216,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Процент вовлеченности подписчиков (ERR %)
                             </h2>
@@ -232,7 +234,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Коэффициент вовлеченности подписчиков во
                                 взаимодействия с постом (реакция, пересылка,
@@ -252,7 +254,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Cуммарный дневной охват
                             </h2>
@@ -270,7 +272,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Индекс цитирования (ИЦ)
                             </h2>
@@ -288,7 +290,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Количество упоминаний канала в других каналах
                             </h2>
@@ -306,7 +308,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Количество репостов в другие каналы
                             </h2>
@@ -324,7 +326,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Количество каналов, упоминающих данный канал
                             </h2>
@@ -343,7 +345,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Общее количество неудаленных публикаций в канале
                             </h2>
@@ -368,7 +370,7 @@ const activate = (place) => {
                     >
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Количество участников чата на момент запроса
                             </h2>
@@ -387,7 +389,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 DAU, кол-во активных участников за сутки
                             </h2>
@@ -405,7 +407,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 WAU, кол-во активных участников за неделю
                             </h2>
@@ -423,7 +425,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 MAU, кол-во активных участников за месяц
                             </h2>
@@ -441,7 +443,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Количество участников "онлайн" в дневное время
                             </h2>
@@ -460,7 +462,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Количество участников "онлайн" в ночное время
                             </h2>
@@ -479,7 +481,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Количество сообщений за вчера
                             </h2>
@@ -498,7 +500,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Количество сообщений за последнюю неделю
                             </h2>
@@ -517,7 +519,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Количество сообщений за последний месяц
                             </h2>
@@ -536,7 +538,7 @@ const activate = (place) => {
                         </div>
                         <div>
                             <h2
-                                class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                             >
                                 Количество сообщений всего
                             </h2>
@@ -554,7 +556,7 @@ const activate = (place) => {
                             />
                         </div>
                     </n-space>
-
+                    <div class="p-2">
                     <button
                         @click.prevent="applyFilters"
                         class="my-6 px-6 py-2 w-full btn_gradient-purple transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
@@ -568,6 +570,7 @@ const activate = (place) => {
                         >
                             Очистить форму
                         </button>
+                    </div>
                     </div>
                 </div>
             </n-drawer-content>
@@ -584,7 +587,7 @@ const activate = (place) => {
                 Всего каналов {{ count }}
             </p>
         </div>
-        <div class="grid catalog">
+        <div class="grid catalog px-2">
             <div class="w-full pr-0 filter lg:pr-10">
                 <div class="flex flex-wrap justify-between gap-x-12 lg:block">
                     <div
@@ -632,59 +635,61 @@ const activate = (place) => {
                 </button>
                 <transition>
                     <div v-show="additionalFilter" class="additional_filter">
-                        <div class="py-2">
-                            <h2
-                                class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
-                            >
-                                Возраст канала от (мес.)
-                            </h2>
-                            <n-slider
-                                v-model:value="
-                                    channelStore.mainFilter
-                                        .channel_creation_date
-                                "
-                                :theme-overrides="sliderThemeOverrides"
-                                :max="36"
-                                :format-tooltip="formatTooltip"
-                                :show-tooltip="additionalFilter"
-                            />
+                        <div class="px-6">
+                            <div class="py-2">
+                                <h2
+                                    class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                >
+                                    Возраст канала от (мес.)
+                                </h2>
+                                <n-slider
+                                    v-model:value="
+                                        channelStore.mainFilter
+                                            .channel_creation_date
+                                    "
+                                    :theme-overrides="sliderThemeOverrides"
+                                    :max="36"
+                                    :format-tooltip="formatTooltip"
+                                    :show-tooltip="additionalFilter"
+                                />
+                            </div>
+                            <div class="py-2">
+                                <h2
+                                    class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                >
+                                    Мужская аудитория
+                                </h2>
+                                <n-slider
+                                    v-model:value="
+                                        channelStore.mainFilter.male_percentage
+                                    "
+                                    :theme-overrides="sliderThemeOverrides"
+                                    :max="90"
+                                    :format-tooltip="formatTooltipPercent"
+                                    :show-tooltip="additionalFilter"
+                                />
+                            </div>
+                            <div class="py-2">
+                                <h2
+                                    class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                >
+                                    Женская аудитория
+                                </h2>
+                                <n-slider
+                                    v-model:value="
+                                        channelStore.mainFilter.female_percentage
+                                    "
+                                    :theme-overrides="sliderThemeOverrides"
+                                    :max="90"
+                                    :format-tooltip="formatTooltipPercent"
+                                    :show-tooltip="additionalFilter"
+                                />
+                            </div>
                         </div>
-                        <div class="py-2">
-                            <h2
-                                class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
-                            >
-                                Мужская аудитория
-                            </h2>
-                            <n-slider
-                                v-model:value="
-                                    channelStore.mainFilter.male_percentage
-                                "
-                                :theme-overrides="sliderThemeOverrides"
-                                :max="90"
-                                :format-tooltip="formatTooltipPercent"
-                                :show-tooltip="additionalFilter"
-                            />
-                        </div>
-                        <div class="py-2">
-                            <h2
-                                class="mb-12 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
-                            >
-                                Женская аудитория
-                            </h2>
-                            <n-slider
-                                v-model:value="
-                                    channelStore.mainFilter.female_percentage
-                                "
-                                :theme-overrides="sliderThemeOverrides"
-                                :max="90"
-                                :format-tooltip="formatTooltipPercent"
-                                :show-tooltip="additionalFilter"
-                            />
-                        </div>
-                        <n-space vertical size="large" class="mt-6">
+                        <n-space vertical :size="[12,24]" class="mt-6 px-2">
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Подписчиков
                                 </h2>
@@ -703,7 +708,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Средний охват поста (24 часа)
                                 </h2>
@@ -722,7 +727,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Процент вовлеченности подписчиков (ERR %)
                                 </h2>
@@ -741,7 +746,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Коэффициент вовлеченности подписчиков во
                                     взаимодействия с постом (реакция, пересылка,
@@ -761,7 +766,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Cуммарный дневной охват
                                 </h2>
@@ -780,7 +785,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Индекс цитирования (ИЦ)
                                 </h2>
@@ -798,7 +803,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Количество упоминаний канала в других
                                     каналах
@@ -818,7 +823,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Количество репостов в другие каналы
                                 </h2>
@@ -837,7 +842,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Количество каналов, упоминающих данный канал
                                 </h2>
@@ -856,7 +861,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Общее количество неудаленных публикаций в
                                     канале
@@ -886,7 +891,7 @@ const activate = (place) => {
                         >
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Количество участников чата на момент запроса
                                 </h2>
@@ -905,7 +910,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     DAU, кол-во активных участников за сутки
                                 </h2>
@@ -923,7 +928,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     WAU, кол-во активных участников за неделю
                                 </h2>
@@ -941,7 +946,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     MAU, кол-во активных участников за месяц
                                 </h2>
@@ -959,7 +964,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Количество участников "онлайн" в дневное
                                     время
@@ -979,7 +984,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Количество участников "онлайн" в ночное
                                     время
@@ -999,7 +1004,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Количество сообщений за вчера
                                 </h2>
@@ -1018,7 +1023,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Количество сообщений за последнюю неделю
                                 </h2>
@@ -1037,7 +1042,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Количество сообщений за последний месяц
                                 </h2>
@@ -1056,7 +1061,7 @@ const activate = (place) => {
                             </div>
                             <div>
                                 <h2
-                                    class="mb-3 text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                    class="mb-1 text-violet-100 text-sm font-bold font-['Open Sans'] leading-4"
                                 >
                                     Количество сообщений всего
                                 </h2>
@@ -1074,7 +1079,7 @@ const activate = (place) => {
                                 />
                             </div>
                         </n-space>
-
+                        <div class="p-4">
                         <button
                             @click.prevent="applyFilters"
                             class="my-6 px-6 py-2 w-full btn_gradient-purple transition hover:bg-purple-800 rounded-3xl justify-start items-start text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
@@ -1088,6 +1093,7 @@ const activate = (place) => {
                             >
                                 Очистить форму
                             </button>
+                        </div>
                         </div>
                     </div>
                 </transition>
@@ -1110,7 +1116,6 @@ const activate = (place) => {
 .additional_filter {
     border-radius: 25px;
     border: 1px solid #eae0ff;
-    padding: 19px 25px;
     margin-top: 23px;
 }
 .catalog {

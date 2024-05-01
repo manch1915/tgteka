@@ -296,10 +296,12 @@ watch(state.type, (newRadio) => {
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="format_one_checkbox"
-                                class="flex items-center justify-center"/>
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
-                                1/24
-                            </h2>
+                                class="flex items-center justify-center">
+                                <h2 class="text-violet-100 text-2xl font-bold font-['Inter'] leading-5">
+                                    1/24
+                                </h2>
+                            </n-checkbox>
+
                         </div>
                         <div>
                             <p
@@ -328,10 +330,12 @@ watch(state.type, (newRadio) => {
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="format_two_checkbox"
-                                class="flex items-center justify-center"/>
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
-                                2/48
-                            </h2>
+                                class="flex items-center justify-center">
+                                <h2 class="text-violet-100 text-2xl font-bold font-['Inter'] leading-5">
+                                    2/48
+                                </h2>
+                            </n-checkbox>
+
                         </div>
                         <div>
                             <p
@@ -360,10 +364,10 @@ watch(state.type, (newRadio) => {
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="format_three_checkbox"
-                                class="flex items-center justify-center"/>
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
+                                class="flex items-center justify-center"> <h2 class="text-violet-100 text-2xl font-bold font-['Inter'] leading-5">
                                 3/72
-                            </h2>
+                            </h2></n-checkbox>
+
                         </div>
                         <div>
                             <p
@@ -392,10 +396,12 @@ watch(state.type, (newRadio) => {
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="no_deletion_checkbox"
-                                class="flex items-center justify-center"/>
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
-                                3/без удаления
-                            </h2>
+                                class="flex items-center justify-center">
+                                <h2 class="text-violet-100 text-2xl font-bold font-['Inter'] leading-5">
+                                    3/без удаления
+                                </h2>
+                            </n-checkbox>
+
                         </div>
                         <div>
                             <p
@@ -475,22 +481,23 @@ watch(state.type, (newRadio) => {
                 </div>
                 <div>
                     <div>
-                        <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
-                            <n-checkbox
-                                :theme-overrides="checkboxThemeOverrides"
-                                v-model:checked="form.terms"
-                            class="-mt-[1px]"
-                            />
-                            Ознакомлен с
-                            <span class="cursor-pointer underline" @click.prevent="activeRules = !activeRules">
+                        <div class="flex items-center justify-center text-center gap-x-2">
+                            <p class="text-violet-100 text-lg text-center font-normal font-['Open Sans'] leading-tight">
+                                <n-checkbox
+                                    :theme-overrides="checkboxThemeOverrides"
+                                    v-model:checked="form.terms"/>
+                                Ознакомлен с
+                                <span class="cursor-pointer underline" @click.prevent="activeRules = !activeRules">
                                     Правилами пользования Сервисом
                                 </span>
-                        </p>
-                        <span
-                            class="text-errorred block leading-4"
-                            v-if="errors.terms"
-                        >{{ errors.terms[0] }}</span
-                        >
+                                <span
+                                    class="text-errorred sm:text-start text-center block text-sm"
+                                    v-if="errors.terms"
+                                >
+                            {{ errors.terms[0] }}
+                        </span>
+                            </p>
+                        </div>
                     </div>
                     <div
                         class="flex mt-12 lg:flex-row flex-col gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">

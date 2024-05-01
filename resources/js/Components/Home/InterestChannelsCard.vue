@@ -1,11 +1,12 @@
 <script setup>
 const props = defineProps({
     p: String,
+    isActive: Boolean
 });
 </script>
 
 <template>
-    <div class="category br-40 self-start flex-col" style="width: 190px;">
+    <div class="category br-40 self-start flex-col" style="width: 190px;"  :class="{ active: isActive }">
         <p
             class="text-center px-3 py-3 sm:px-4 sm:py-4 md:px-5 md:py-5 lg:px-6 lg:py-6 xl:px-10 xl:py-10 text-violet-100 text-sm font-bold font-['Open Sans'] leading-normal"
         >
@@ -15,6 +16,12 @@ const props = defineProps({
 </template>
 
 <style lang="scss" scoped>
+.category:hover {
+    filter: brightness(1.1);
+}
+.category.active {
+    filter: brightness(1.3);
+}
 .category {
     position: relative;
     display: flex;

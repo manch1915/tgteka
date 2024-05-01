@@ -306,17 +306,19 @@ watch(
                     </p>
                 </div>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col leading-4">
                 <div class="border-b border-violet-100 border-opacity-40">
                     <div class="format__grid items-center justify-between py-8">
-                        <div class="flex items-center gap-x-2">
+                        <div class="flex items-center gap-x-2 ">
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="format_one_checkbox"
-                                class="flex items-center justify-center" />
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
-                                1/24
-                            </h2>
+                                class="flex items-center justify-center">
+                                <h2 class="text-violet-100 text-2xl font-bold font-['Inter'] leading-5">
+                                    1/24
+                                </h2>
+                            </n-checkbox>
+
                         </div>
                         <div>
                             <p
@@ -341,14 +343,16 @@ watch(
                 </div>
                 <div class="border-b border-violet-100 border-opacity-40">
                     <div class="format__grid items-center justify-between py-8">
-                        <div class="flex items-center gap-x-2">
+                        <div class="flex items-center gap-x-2 ">
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="format_two_checkbox"
-                                class="flex items-center justify-center" />
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
-                                2/48
-                            </h2>
+                                class="flex items-center justify-center" >
+                                <h2 class="text-violet-100 text-2xl font-bold font-['Inter'] leading-5">
+                                    2/48
+                                </h2>
+                            </n-checkbox>
+
                         </div>
                         <div>
                             <p
@@ -373,14 +377,16 @@ watch(
                 </div>
                 <div class="border-b border-violet-100 border-opacity-40">
                     <div class="format__grid items-center justify-between py-8">
-                        <div class="flex items-center gap-x-2">
+                        <div class="flex items-center gap-x-2 ">
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="format_three_checkbox"
-                                class="flex items-center justify-center" />
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
-                                3/72
-                            </h2>
+                                class="flex items-center justify-center">
+                                <h2 class="text-violet-100 text-2xl font-bold font-['Inter'] leading-5">
+                                    3/72
+                                </h2>
+                            </n-checkbox>
+
                         </div>
                         <div>
                             <p
@@ -405,14 +411,16 @@ watch(
                 </div>
                 <div class="border-b border-violet-100 border-opacity-40">
                     <div class="format__grid items-center justify-between py-8">
-                        <div class="flex items-center gap-x-2">
+                        <div class="flex items-center gap-x-2 ">
                             <n-checkbox
                                 :theme-overrides="checkboxToRadioThemeOverrides"
                                 v-model:checked="no_deletion_checkbox"
-                                class="flex items-center justify-center" />
-                            <h2 class="text-violet-100 text-2xl font-bold font-['Inter']">
-                                3/без удаления
-                            </h2>
+                                class="flex items-center justify-center" >
+                                <h2 class="text-violet-100 text-2xl font-bold font-['Inter'] leading-5">
+                                    3/без удаления
+                                </h2>
+                            </n-checkbox>
+
                         </div>
                         <div>
                             <p
@@ -494,7 +502,7 @@ watch(
                 <div>
                     <div>
                         <div class="flex items-center justify-center text-center gap-x-2">
-                            <p class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-tight">
+                            <p class="text-violet-100 text-lg text-center font-normal font-['Open Sans'] leading-tight">
                                 <n-checkbox
                                     :theme-overrides="checkboxThemeOverrides"
                                     v-model:checked="form.terms"/>
@@ -502,14 +510,16 @@ watch(
                                 <span class="cursor-pointer underline" @click.prevent="activeRules = !activeRules">
                                     Правилами пользования Сервисом
                                 </span>
+                                <span
+                                    class="text-errorred sm:text-start text-center block text-sm"
+                                    v-if="errors.terms"
+                                >
+                            {{ errors.terms[0] }}
+                        </span>
                             </p>
                         </div>
 
-                        <span
-                            class="text-errorred"
-                            v-if="errors.terms"
-                        >{{ errors.terms[0] }}</span
-                        >
+
                     </div>
                     <div
                         class="flex lg:flex-row flex-col mt-12 gap-y-2 justify-evenly text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">

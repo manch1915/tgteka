@@ -314,7 +314,7 @@ content.value = htmlToDelta(content.value);
                                     "
                                     :src="image.thumbnail_path"
                                     alt="thumbnail_path"
-                                    class="cursor-pointer absolute top-0 left-0 object-cover w-full h-full"
+                                    class="cursor-pointer absolute top-0 left-0 object-contain w-full h-full"
                                 />
                             </template>
                             <template
@@ -328,15 +328,15 @@ content.value = htmlToDelta(content.value);
                                     autoplay
                                     loop
                                     muted
-                                    class="absolute top-0 left-0 object-cover w-full h-full"
+                                    class="absolute top-0 left-0 object-contain w-full h-full"
                                 ></video>
                             </template>
                             <template v-else>
                                 <n-image
-                                    object-fit="cover"
+                                    object-fit="contain"
                                     :src="image.url"
                                     alt=""
-                                    class="absolute top-0 left-0 object-cover w-full h-full"
+                                    class="absolute top-0 left-0 object-contain w-full h-full"
                                 />
                             </template>
                             <div
@@ -375,7 +375,7 @@ content.value = htmlToDelta(content.value);
                     >
                         <template v-if="image.file">
                             <n-image
-                                object-fit="cover"
+                                object-fit="contain"
                                 v-if="image.file.type.includes('image/')"
                                 :src="image.url"
                                 alt=""
@@ -402,7 +402,7 @@ content.value = htmlToDelta(content.value);
                                 alt=""
                             />
                             <n-image
-                                object-fit="cover"
+                                object-fit="contain"
                                 v-else
                                 :src="image.url"
                                 alt=""
@@ -413,7 +413,7 @@ content.value = htmlToDelta(content.value);
                 </transition-group>
             </n-image-group>
             <div v-else>
-                <img :src="uploadedImageUrl" class="object-cover" alt="" />
+                <img :src="uploadedImageUrl" class="object-contain" alt="" />
             </div>
             <div
                 class="break-words pt-2 text-violet-100 text-base font-normal font-['Inter'] leading-tight"

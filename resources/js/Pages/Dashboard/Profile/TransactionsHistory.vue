@@ -89,18 +89,18 @@ watch([appointmentVal, statusValue, range], () => {
             <div class="text-center lg:text-left">
                 <p class="text-violet-100 sm:text-4xl text-3xl font-bold font-['Open Sans'] leading-10">История транзакций</p>
             </div>
-            <div class="my-12 flex sm:flex-row flex-col sm:p-0 p-2 items-center content-center sm:justify-between justify-center gap-x-2">
-                <div class="flex flex-col gap-x-4 w-full">
-                    <div class="flex items-center gap-x-2">
+            <div class="my-12 flex xl:flex-row flex-col sm:p-0 p-2 items-center content-center sm:justify-between justify-center gap-x-2">
+                <div class="flex sm:flex-row flex-col gap-x-4 w-full justify-between 2xl:justify-start xl:justify-start">
+                    <div class="flex items-center gap-x-2 sm:justify-end justify-end">
                         <p class="text-violet-100 text-lg font-bold font-['Open Sans']">Назначение</p>
                         <n-select :theme-overrides="selectThemeOverrides" v-model:value="appointmentVal" :options="appointment" class="my-4 w-40"/>
                     </div>
-                    <div class="flex items-center gap-x-2">
+                    <div class="flex items-center gap-x-2 sm:justify-end justify-end">
                         <p class="text-violet-100 text-lg font-bold font-['Open Sans']">Статус</p>
                         <n-select :theme-overrides="selectThemeOverrides" v-model:value="statusValue" placeholder="Выберите причину" :options="status" class="my-4 w-40"/>
                     </div>
                 </div>
-                <div class="w-full">
+                <div class="sm:flex-[1_1_50%] flex-auto self-end sm:self-end 2xl:self-auto xl:self-auto">
                     <n-date-picker v-model:value="range" type="daterange" clearable />
                 </div>
             </div>

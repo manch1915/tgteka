@@ -150,7 +150,7 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
             <div class="flex flex-wrap items-center">
                 <div class="flex sm:w-1/2 w-full">
                     <div class="flex flex-col items-center justify-center gap-y-3 grid-element">
-                        <div class="avatar">
+                        <div class="avatar mb-auto">
                             <img :src="channel.avatar" alt="avatar">
                         </div>
                     </div>

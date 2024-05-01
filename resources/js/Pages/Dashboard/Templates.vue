@@ -30,14 +30,54 @@ const changeContext = (id) => {
 };
 
 const navigateToEditPattern = (patternID) => {
-    router.visit(route("pattern.edit", patternID));
+    // Log the patternID to check its value
+    console.log("Pattern ID:", patternID);
+
+    // Find the pattern by ID
+    const pattern = patterns.value.data.find(pattern => pattern.id === patternID);
+
+    // Log the found pattern to check its value
+    console.log("Pattern:", pattern);
+
+    // Check if the pattern is fake
+    if (pattern && pattern.title.includes('Копия')) {
+        // Display the message for fake templates
+        message.warning('Ваш шаблон еще не готов. Пожалуйста, подождите.');
+    } else {
+        // Navigate to edit the pattern as usual
+        router.visit(route("pattern.edit", patternID));
+    }
 };
 
+
 const duplicatePattern = async (patternIdToDuplicate) => {
-    const { data } = await axios.post(
-        `/pattern/${patternIdToDuplicate}/duplicate`
-    );
-    message.success(data.message);
+    try {
+        const { data } = await axios.post(`/pattern/${patternIdToDuplicate}/duplicate`);
+
+        if (data) {
+            message.success('Началось дублирование шаблона!');
+            const fakeDataTemplate = {
+                id: data.id + 1, // Assuming the new ID is one more than the duplicated pattern's ID
+                user_id: data.user_id,
+                title: "Название шаблона (Копия)", // You can modify this as needed
+                body: null,
+                status: "pending",
+                created_at: new Date().toISOString(), // Assuming current timestamp
+                updated_at: new Date().toISOString(), // Assuming current timestamp
+                localized_created_at: "Сегодня", // Modify this as needed
+            };
+
+            // Push the fake data template to the `data` array
+            patterns.value.data.push(fakeDataTemplate);
+            router.reload()
+        } else {
+            message.error('No data received from the server.');
+        }
+    } catch (error) {
+        message.error('An error occurred while duplicating the pattern.');
+        console.error(error);
+    }
+    isContextMenuOpen.value = false;
 };
 
 const deletePattern = async (patternIdToDelete) => {
@@ -55,6 +95,7 @@ const deletePattern = async (patternIdToDelete) => {
             message.error(error.response.data.message);
         }
     }
+    isContextMenuOpen.value = false;
 };
 
 const getPatterns = async (page = 1) => {

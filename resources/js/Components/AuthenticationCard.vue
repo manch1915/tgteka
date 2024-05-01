@@ -1,6 +1,9 @@
 <template>
     <div class="wrapper sm:w-[600px] w-[95%]">
         <div class="auth w-full flex flex-col sm:justify-center items-center p-12 sm:px-16 px-4">
+            <div class="flex justify-end w-full">
+                <BaseIcon size="30" class="text-white cursor-pointer" :path="mdiClose" @click.prevent="closeModal()"/>
+            </div>
             <div>
                 <div class="text-center text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10"><slot name="logo" /></div>
             </div>
@@ -46,4 +49,7 @@
 
 </style>
 <script setup>
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
+import {mdiClose} from "@mdi/js";
+import {closeModal} from "jenesius-vue-modal";
 </script>

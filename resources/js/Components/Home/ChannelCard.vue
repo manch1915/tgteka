@@ -13,19 +13,20 @@ const appeal = (slug) => {
             openRegister()
         })
 }
+
 </script>
 
 <template>
     <div class="body">
         <div class="body__head flex justify-start gap-6 items-center">
-            <div class="body__profile">
+            <div class="body__profile flex-[0_0_auto] self-start">
                 <img
                     :src="channel?.channel?.avatar"
                     alt=""
                     class="rounded-full"
                 />
             </div>
-            <div class="body__data">
+            <div class="body__data sm:ml-10 ml-0">
                 <div>
                     <div
                         class="pb-2.5 text-left text-violet-100 text-xl font-bold font-['Open Sans'] leading-5"
@@ -98,7 +99,9 @@ const appeal = (slug) => {
 <style scoped lang="scss">
 .body {
     position: relative;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     padding: 20px 20px 35px 20px;
     border-radius: 0 40px 40px 40px;
@@ -151,9 +154,6 @@ const appeal = (slug) => {
     &__profile {
         width: 108px;
         height: 108px;
-    }
-    &__data {
-        margin: 0 auto;
     }
     &__podp {
         display: flex;

@@ -124,7 +124,7 @@ class PatternController extends Controller
     {
         DuplicatePatternJob::dispatch($pattern);
 
-        return response()->json(['message' => 'Началось дублирование шаблона']);
+        return response()->json($pattern);
     }
 
     public function edit(Pattern $pattern)

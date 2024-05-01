@@ -62,8 +62,12 @@ const spaceBetween = computed(() => {
         return 100;
     }
 });
+const activeIndex = ref(null);
 
-const fetchChannels = async (topic = null) => {
+const fetchChannels = async (topic = null, index) => {
+
+    activeIndex.value = index;
+
     try {
         const response = await axios.get(route('best-channels.get', {topic}));
         channelsData.value = response.data;
@@ -128,7 +132,7 @@ onMounted( () => {
         <InterestChannelsBlock>
             <template #topicCards>
                 <template v-for="(topic, index) in mainStore.topics" :key="index">
-                    <InterestChannelsCard class="cursor-pointer" v-if="index < 4" :topic="topic" :p="topic.title" @click.prevent="fetchChannels(topic.id)"/>
+                    <InterestChannelsCard :isActive="index === activeIndex" class="cursor-pointer" v-if="index < 4" :topic="topic" :p="topic.title" @click.prevent="fetchChannels(topic.id, index)"/>
                 </template>
             </template>
 
@@ -138,7 +142,8 @@ onMounted( () => {
                 >
                     <div class="keen-slider__slide" style="max-width: 200px; min-width: 200px">
                         <InterestChannelsCard
-                            :p="topic.title" @click.prevent="fetchChannels(topic.id)"
+                            :isActive="index === activeIndex"
+                            :p="topic.title" @click.prevent="fetchChannels(topic.id, index)"
                         />
                     </div>
                 </template>

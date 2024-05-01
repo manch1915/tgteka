@@ -366,7 +366,7 @@ onMounted(() => {
                             </div>
                         </div>
                     </div>
-                    <div class="sm:w-1/2">
+                    <div>
                         <h1
                             class="text-violet-100 sm:text-2xl text-lg mt-4 my-2 font-bold font-['Open Sans'] leading-tight"
                         >
@@ -386,14 +386,14 @@ onMounted(() => {
                                 </div>
                             </div>
                         </div>
-                        <div class="flex flex-wrap items-center gap-x-2 pt-8">
+                        <div class="flex flex-wrap items-baseline gap-x-2 pt-8">
                             <h1
                                 class="text-violet-100 sm:text-2xl text-lg font-bold font-['Open Sans'] leading-tight"
                             >
                                 Стоимость публикации:
                             </h1>
                             <h1
-                                class="text-right text-violet-100 sm:text-2xl text-lg font-bold font-['Open Sans'] leading-tight"
+                                class="text-right text-violet-100 sm:text-3xl text-2xl font-bold font-['Open Sans'] leading-tight"
                             >
                                 {{ totalPrice }} ₽
                             </h1>

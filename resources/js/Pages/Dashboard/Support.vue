@@ -131,7 +131,7 @@ socket.onerror = function (error) {
         <title>Поддержка</title>
     </Head>
     <AppLayout>
-        <div class="mt-12 grid support_grid">
+        <div class="mt-12 grid support_grid px-2">
             <div class="sm:p-6">
                 <h1
                     class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10"

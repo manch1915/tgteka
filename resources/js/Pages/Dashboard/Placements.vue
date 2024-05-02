@@ -86,7 +86,7 @@ watch([activeSortButton, value, range], () => {
         <title>Мои размещения</title>
     </Head>
     <AppLayout>
-        <div class="sm:py-20 py-4 text-center">
+        <div class="sm:py-20 py-4 text-center px-2">
             <h1
                 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10"
             >

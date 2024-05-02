@@ -112,7 +112,7 @@ onMounted(() => getPatterns());
         <title>Мои шаблоны</title>
     </Head>
     <AppLayout>
-        <div class="lg:mt-28 mt-10">
+        <div class="lg:mt-28 mt-10 px-2">
             <div
                 :class="
                     patterns.data && patterns.data.length === 0

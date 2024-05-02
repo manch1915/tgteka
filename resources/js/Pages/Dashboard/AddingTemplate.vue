@@ -285,13 +285,13 @@ onUnmounted(() => {
                     v-model="images"
                     group="people"
                     item-key="id"
-                    class="grid justify-items-center content-center grid-cols-3 sm:grid-cols-2 xl:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 sm:pt-0 pt-8 sm:justify-end gap-2 gap-y-6"
+                    class="grid sm:justify-items-end justify-items-center content-center grid-cols-3 sm:grid-cols-2 xl:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 sm:pt-0 pt-8 sm:justify-end gap-2 gap-y-6"
                 >
                     <transition-group name="delete">
                         <div
                             v-for="(image, index) in images"
                             :key="'img-' + index"
-                            class="sm:h-24 sm:w-24 h-20 w-20 rounded-lg relative"
+                            class="sm:h-28 sm:w-28 h-[20vw] w-[20vw] rounded-lg relative"
                         >
                             <template
                                 v-if="
@@ -303,6 +303,7 @@ onUnmounted(() => {
                                     :src="image.displayImage"
                                     alt=""
                                     class="absolute top-0 left-0 object-cover w-full h-full"
+                                    style="border: 2px solid #4d5170; border-radius: 10px; padding: 3px;"
                                 />
                             </template>
                             <template

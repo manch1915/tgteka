@@ -138,7 +138,7 @@ const formattedTotalSum = computed(() => {
                 Корзина
             </h1>
         </div>
-        <div class="grid sm:grid-cols-[3fr_1fr] grid-cols-1 gap-x-4">
+        <div class="grid lg:grid-cols-[3fr_1fr] grid-cols-1 gap-x-4 px-2">
             <div class="sm:order-1 order-2">
                 <div class="channels">
                     <div class="flex flex-col gap-y-4 mt-8">

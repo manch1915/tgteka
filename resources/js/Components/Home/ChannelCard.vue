@@ -146,11 +146,6 @@ const appeal = (slug) => {
     @media screen and (max-width: 1024px) {
         margin-top: 20px;
     }
-    &__head {
-        @media screen and (max-width: 360px) {
-            flex-direction: column;
-        }
-    }
     &__profile {
         width: 108px;
         height: 108px;

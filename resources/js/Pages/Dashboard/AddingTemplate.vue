@@ -291,7 +291,7 @@ onUnmounted(() => {
                         <div
                             v-for="(image, index) in images"
                             :key="'img-' + index"
-                            class="sm:h-28 sm:w-28 h-[26vw] w-[26vw] rounded-lg relative"
+                            class="sm:h-[8.5rem] sm:w-[8.5rem] md:w-28 md:h-28 h-[26vw] w-[26vw] rounded-lg relative"
                         >
                             <template
                                 v-if="

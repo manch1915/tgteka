@@ -289,13 +289,13 @@ content.value = htmlToDelta(content.value);
                     v-model="images"
                     group="people"
                     item-key="id"
-                    class="grid sm:justify-items-end justify-items-center content-center grid-cols-3 sm:grid-cols-2 xl:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 sm:pt-0 pt-8 sm:justify-end gap-2 gap-y-6"
+                    class="grid sm:justify-items-end justify-items-center content-center grid-cols-3 sm:grid-cols-2 xl:grid-cols-5 md:grid-cols-3 lg:grid-cols-4 sm:pt-0 pt-8 sm:justify-end gap-2 "
                 >
                     <transition-group name="delete">
                         <div
                             v-for="(image, index) in images"
                             :key="'img-' + index"
-                            class="sm:h-28 sm:w-28 h-[20vw] w-[20vw] rounded-lg relative"
+                            class="sm:h-28 sm:w-28 h-[26vw] w-[26vw] rounded-lg relative"
                         >
                             <template
                                 v-if="
@@ -315,6 +315,7 @@ content.value = htmlToDelta(content.value);
                                     :src="image.thumbnail_path"
                                     alt="thumbnail_path"
                                     class="cursor-pointer absolute top-0 left-0 object-contain w-full h-full"
+                                    style="border: 2px solid #4d5170; border-radius: 10px; padding: 3px;"
                                 />
                             </template>
                             <template
@@ -329,6 +330,7 @@ content.value = htmlToDelta(content.value);
                                     loop
                                     muted
                                     class="absolute top-0 left-0 object-contain w-full h-full"
+                                    style="border: 2px solid #4d5170; border-radius: 10px; padding: 3px;"
                                 ></video>
                             </template>
                             <template v-else>

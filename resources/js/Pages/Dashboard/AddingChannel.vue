@@ -502,7 +502,7 @@ watch(
                 <div>
                     <div>
                         <div class="flex items-center justify-center text-center gap-x-2">
-                            <p class="text-violet-100 text-lg text-center font-normal font-['Open Sans'] leading-tight">
+                            <p class="text-violet-100 text-lg text-center break-all font-normal font-['Open Sans'] leading-tight">
                                 <n-checkbox
                                     :theme-overrides="checkboxThemeOverrides"
                                     v-model:checked="form.terms"/>
@@ -511,7 +511,7 @@ watch(
                                     Правилами пользования Сервисом
                                 </span>
                                 <span
-                                    class="text-errorred sm:text-start text-center block text-sm"
+                                    class="text-errorred text-start block text-sm"
                                     v-if="errors.terms"
                                 >
                             {{ errors.terms[0] }}

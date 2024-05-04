@@ -25,22 +25,21 @@ onBeforeUnmount(() => {
     window.removeEventListener("click", handleOutsideClick);
 });
 const changeContext = (id) => {
+    const pattern = patterns.value.data.find(pattern => pattern.id === patternID);
+
+    if (pattern && pattern.status === 'loading'){
+        return
+    }
+
     contextMenuId.value = id;
     isContextMenuOpen.value = true;
 };
 
 const navigateToEditPattern = (patternID) => {
-    // Log the patternID to check its value
-    console.log("Pattern ID:", patternID);
-
-    // Find the pattern by ID
     const pattern = patterns.value.data.find(pattern => pattern.id === patternID);
 
-    // Log the found pattern to check its value
-    console.log("Pattern:", pattern);
-
     // Check if the pattern is fake
-    if (pattern && pattern.title.includes('Копия')) {
+    if (pattern && pattern.status === 'loading') {
         // Display the message for fake templates
         message.warning('Ваш шаблон еще не готов. Пожалуйста, подождите.');
     } else {
@@ -54,14 +53,18 @@ const duplicatePattern = async (patternIdToDuplicate) => {
     try {
         const { data } = await axios.post(`/pattern/${patternIdToDuplicate}/duplicate`);
 
-        if (data) {
+        if (data && !data.fake) {
+            console.log(data[0])
             message.success('Началось дублирование шаблона!');
+            patterns.value.data.push(data[0]);
+
+        } else {
             const fakeDataTemplate = {
                 id: data.id + 1, // Assuming the new ID is one more than the duplicated pattern's ID
                 user_id: data.user_id,
                 title: "Название шаблона (Копия)", // You can modify this as needed
                 body: null,
-                status: "pending",
+                status: "loading",
                 created_at: new Date().toISOString(), // Assuming current timestamp
                 updated_at: new Date().toISOString(), // Assuming current timestamp
                 localized_created_at: "Сегодня", // Modify this as needed
@@ -69,9 +72,6 @@ const duplicatePattern = async (patternIdToDuplicate) => {
 
             // Push the fake data template to the `data` array
             patterns.value.data.push(fakeDataTemplate);
-            router.reload()
-        } else {
-            message.error('No data received from the server.');
         }
     } catch (error) {
         message.error('An error occurred while duplicating the pattern.');
@@ -139,11 +139,12 @@ onMounted(() => getPatterns());
                                     @click.prevent="
                                         navigateToEditPattern(pattern.id)
                                     "
+                                    :class="{ 'opacity-50': pattern.status === 'loading' }"
                                     class="cursor-pointer mb-5 data_container flex items-center justify-between origin-top-left rounded-tr-3xl rounded-bl-3xl rounded-br-3xl border border-color backdrop-blur-2xl px-4 py-3"
                                 >
                                     <div class="flex items-center">
                                         <div
-                                            class="data shadow px-2.5 py-1 rounded-lg flex gap-x-1 items-center flex-[1_0_auto]"
+                                            class="data shadow min-w-[200px] px-2.5 py-1 rounded-lg flex gap-x-1 items-center flex-[1_0_auto]"
                                         >
                                             <div>
                                                 <img

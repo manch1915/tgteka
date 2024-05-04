@@ -120,11 +120,47 @@ class PatternController extends Controller
         return response()->json($patternMedia->sortBy('order')->values());
     }
 
+    /**
+     * @throws FileCannotBeAdded
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
     public function duplicate(Pattern $pattern): JsonResponse
     {
-        DuplicatePatternJob::dispatch($pattern);
+        if ($pattern->hasVideo()) {
+            DuplicatePatternJob::dispatch($pattern);
+        } else {
+            $duplicatedPattern = $this->copyPattern($pattern);
+            $duplicatedPattern->localized_created_at = \App\Services\DateLocalizationService::localize($pattern->created_at);
+            return response()->json([$duplicatedPattern, 'fake' => false]);
+        }
 
-        return response()->json($pattern);
+        return response()->json([$pattern, 'fake' => true]);
+    }
+
+    /**
+     * @throws FileCannotBeAdded
+     * @throws FileDoesNotExist
+     * @throws FileIsTooBig
+     */
+    private function copyPattern(Pattern $pattern): Pattern
+    {
+        $duplicatedPattern = $pattern->replicate();
+
+        $duplicatedPattern->title = 'Название шаблона (Копия)';
+        $duplicatedPattern->save();
+
+        $existingMediaItems = $pattern->getMedia('images');
+        foreach ($existingMediaItems as $mediaItem) {
+            $order = $mediaItem->getCustomProperty('order');
+            $url = $mediaItem->getFullUrl();
+            $duplicatedPattern
+                ->addMediaFromUrl($url)
+                ->withCustomProperties(['order' => $order])
+                ->toMediaCollection('images');
+        }
+
+        return $duplicatedPattern;
     }
 
     public function edit(Pattern $pattern)

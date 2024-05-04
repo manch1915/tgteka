@@ -289,151 +289,152 @@ onMounted(() => {
         <title>{{ channel.channel_name }}</title>
     </Head>
     <AppLayout>
-        <div>
-            <div class="wrapper w-full sm:my-24 my-8 sm:p-0 p-2">
-                <div class="card sm:p-12 p-6 pb-8">
-                    <div class="flex flex-wrap justify-between items-start">
-                        <div class="flex sm:gap-x-8 gap-x-2">
-                            <img
-                                class="rounded-full w-[90px] h-[90px]"
-                                :src="channel.avatar"
-                                alt=""
-                            />
-                            <div class="flex flex-col gap-y-6">
-                                <h1
-                                    class="text-violet-100 lg:text-4xl text-lg font-bold font-['Open Sans'] leading-tight"
-                                    style="word-break: break-word"
-                                >
-                                    {{ channel.channel_name }}
-                                </h1>
-                                <div class="flex gap-x-4">
-                                    <div
-                                        class="w-6 h-6 bg-violet-100 rounded-full"
-                                    ></div>
-                                    <div
-                                        class="w-6 h-6 bg-violet-100 rounded-full"
-                                    ></div>
-                                    <div
-                                        class="w-6 h-6 bg-violet-100 rounded-full"
-                                    ></div>
-                                </div>
-                                <a
-                                    :href="channel.url"
-                                    class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-tight"
-                                    >{{ channel.channel_url }}</a
-                                >
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-y-4">
-                            <div class="flex gap-x-4 text-violet-100">
-                                <div
-                                    class="text-base font-normal font-['Open Sans'] leading-tight flex items-center gap-x-1"
-                                >
-                                    <BaseIcon
-                                        :path="mdiEyeOutline"
-                                        size="25"
-                                    />{{ channel.views_count }}
-                                </div>
-                                <div
-                                    class="text-base font-normal font-['Open Sans'] leading-tight flex items-center gap-x-1"
-                                >
-                                    <BaseIcon
-                                        :path="mdiHeartOutline"
-                                        size="25"
-                                    />{{ favorites_count }}
-                                </div>
-                            </div>
-                            <div
-                                class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
-                            >
-                                Язык:<span class="font-normal pl-2">{{
-                                    channel.language
-                                }}</span>
-                            </div>
-                            <div
-                                class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
-                            >
-                                Категория:<span class="font-normal pl-2">{{
-                                    channel.topic.title
-                                }}</span>
-                            </div>
-                            <div
-                                class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
-                            >
-                                Вид ссылки:<span class="font-normal pl-2"
-                                    >Приватный канал</span
-                                >
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <h1
-                            class="text-violet-100 sm:text-2xl text-lg mt-4 my-2 font-bold font-['Open Sans'] leading-tight"
-                        >
-                            Купить интеграцию в этом канале
-                        </h1>
-                        <div class="flex flex-wrap gap-x-14 w-full">
-                            <div class="w-60">
-                                <n-select
-                                    v-model:value="formatValue"
-                                    :theme-overrides="selectThemeOverrides"
-                                    :options="format"
+        <div class="px-2">
+            <div>
+                <div class="wrapper w-full sm:my-24 my-8 sm:p-0 p-2">
+                    <div class="card sm:p-12 p-6 pb-8">
+                        <div class="flex flex-wrap justify-between items-start">
+                            <div class="flex sm:gap-x-8 gap-x-2">
+                                <img
+                                    class="rounded-full w-[90px] h-[90px]"
+                                    :src="channel.avatar"
+                                    alt=""
                                 />
+                                <div class="flex flex-col gap-y-6">
+                                    <h1
+                                        class="text-violet-100 lg:text-4xl text-lg font-bold font-['Open Sans'] leading-tight"
+                                        style="word-break: break-word"
+                                    >
+                                        {{ channel.channel_name }}
+                                    </h1>
+                                    <div class="flex gap-x-4">
+                                        <div
+                                            class="w-6 h-6 bg-violet-100 rounded-full"
+                                        ></div>
+                                        <div
+                                            class="w-6 h-6 bg-violet-100 rounded-full"
+                                        ></div>
+                                        <div
+                                            class="w-6 h-6 bg-violet-100 rounded-full"
+                                        ></div>
+                                    </div>
+                                    <a
+                                        :href="channel.url"
+                                        class="text-violet-100 text-xl font-bold font-['Open Sans'] leading-tight"
+                                    >{{ channel.channel_url }}</a
+                                    >
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-y-4">
+                                <div class="flex gap-x-4 text-violet-100">
+                                    <div
+                                        class="text-base font-normal font-['Open Sans'] leading-tight flex items-center gap-x-1"
+                                    >
+                                        <BaseIcon
+                                            :path="mdiEyeOutline"
+                                            size="25"
+                                        />{{ channel.views_count }}
+                                    </div>
+                                    <div
+                                        class="text-base font-normal font-['Open Sans'] leading-tight flex items-center gap-x-1"
+                                    >
+                                        <BaseIcon
+                                            :path="mdiHeartOutline"
+                                            size="25"
+                                        />{{ favorites_count }}
+                                    </div>
+                                </div>
                                 <div
-                                    class="pl-3 pt-2 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
+                                    class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
                                 >
-                                    {{ explain[format] }}
+                                    Язык:<span class="font-normal pl-2">{{
+                                        channel.language
+                                    }}</span>
+                                </div>
+                                <div
+                                    class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                >
+                                    Категория:<span class="font-normal pl-2">{{
+                                        channel.topic.title
+                                    }}</span>
+                                </div>
+                                <div
+                                    class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight"
+                                >
+                                    Вид ссылки:<span class="font-normal pl-2"
+                                >Приватный канал</span
+                                >
                                 </div>
                             </div>
                         </div>
-                        <div class="flex flex-wrap items-baseline gap-x-2 pt-8">
+                        <div>
                             <h1
-                                class="text-violet-100 sm:text-2xl text-lg font-bold font-['Open Sans'] leading-tight"
+                                class="text-violet-100 sm:text-2xl text-lg mt-4 my-2 font-bold font-['Open Sans'] leading-tight"
                             >
-                                Стоимость публикации:
+                                Купить интеграцию в этом канале
                             </h1>
-                            <h1
-                                class="text-right text-violet-100 sm:text-3xl text-2xl font-bold font-['Open Sans'] leading-tight"
-                            >
-                                {{ totalPrice }} ₽
-                            </h1>
-                        </div>
-                        <div class="flex flex-wrap sm:justify-start justify-center gap-4 pt-4">
-                            <button
-                                @click.prevent="toggleChannelInCart(channel)"
-                                class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 btn_gradient-purple transition hover:bg-purple-800 rounded-3xl items-center inline-flex gap-x-2.5"
-                            >
-                                {{
-                                    isInCart(channel)
-                                        ? "Удалить из корзины"
-                                        : "Добавить в корзину"
-                                }}
-                                <BaseIcon
-                                    size="25"
-                                    :path="
+                            <div class="flex flex-wrap gap-x-14 w-full">
+                                <div class="w-60">
+                                    <n-select
+                                        v-model:value="formatValue"
+                                        :theme-overrides="selectThemeOverrides"
+                                        :options="format"
+                                    />
+                                    <div
+                                        class="pl-3 pt-2 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight"
+                                    >
+                                        {{ explain[format] }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap items-baseline gap-x-2 pt-8">
+                                <h1
+                                    class="text-violet-100 sm:text-2xl text-lg font-bold font-['Open Sans'] leading-tight"
+                                >
+                                    Стоимость публикации:
+                                </h1>
+                                <h1
+                                    class="text-right text-violet-100 sm:text-3xl text-2xl font-bold font-['Open Sans'] leading-tight"
+                                >
+                                    {{ totalPrice }} ₽
+                                </h1>
+                            </div>
+                            <div class="flex flex-wrap sm:justify-start justify-center gap-4 pt-4">
+                                <button
+                                    @click.prevent="toggleChannelInCart(channel)"
+                                    class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 btn_gradient-purple transition hover:bg-purple-800 rounded-3xl items-center inline-flex gap-x-2.5"
+                                >
+                                    {{
+                                        isInCart(channel)
+                                            ? "Удалить из корзины"
+                                            : "Добавить в корзину"
+                                    }}
+                                    <BaseIcon
+                                        size="25"
+                                        :path="
                                         isInCart(channel)
                                             ? mdiCartRemove
                                             : mdiCartPlus
                                     "
-                                />
-                            </button>
-                            <!--                            <button class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 border  rounded-3xl items-center inline-flex gap-x-2.5">Купить по QR <BaseIcon fill="white" size="20" :path="mdiQrcodeScan"/></button>-->
+                                    />
+                                </button>
+                                <!--                            <button class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 border  rounded-3xl items-center inline-flex gap-x-2.5">Купить по QR <BaseIcon fill="white" size="20" :path="mdiQrcodeScan"/></button>-->
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="segment">
-            <n-tabs
-                :animated="true"
-                :theme-overrides="nTabSegmentsThemeOverrides"
-                type="segment"
-            >
-                <n-tab-pane name="info">
-                    <template #tab>
-                        <button
-                            @click.prevent="activeButton = 'info'"
-                            :class="[
+            <div class="segment">
+                <n-tabs
+                    :animated="true"
+                    :theme-overrides="nTabSegmentsThemeOverrides"
+                    type="segment"
+                >
+                    <n-tab-pane name="info">
+                        <template #tab>
+                            <button
+                                @click.prevent="activeButton = 'info'"
+                                :class="[
                                 'tab-button',
                                 'transition',
                                 'text-violet-100',
@@ -443,132 +444,132 @@ onMounted(() => {
                                 'leading-normal',
                                 activeButton === 'info' ? 'active' : '',
                             ]"
-                        >
-                            Информация
-                        </button>
-                    </template>
-                    <div class="flex justify-center px-1">
-                        <p
-                            class="sm:w-1/2 w-full py-6 text-center text-violet-100 text-xl font-normal font-['Open Sans'] leading-tight"
-                        >
-                            {{ channel.description }}
-                        </p>
-                    </div>
-                    <div class="flex justify-center gap-x-8">
-                        <InfoCard>
-                            <h3
-                                class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
                             >
-                                Оценка отзывов
-                            </h3>
-                            <div
-                                class="flex gap-x-1 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight"
+                                Информация
+                            </button>
+                        </template>
+                        <div class="flex justify-center px-1">
+                            <p
+                                class="sm:w-1/2 w-full py-6 text-center text-violet-100 text-xl font-normal font-['Open Sans'] leading-tight"
                             >
-                                <BaseIcon :path="mdiStar" fill="#FFB800" />{{
-                                    channel.rating
-                                }}
-                            </div>
-                        </InfoCard>
-                        <InfoCard>
-                            <h2
-                                class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
-                            >
-                                Выявлено заявок
-                            </h2>
-                            <h1
-                                class="flex gap-x-1 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight"
-                            >
-                                {{ ordersCount }}
-                            </h1>
-                        </InfoCard>
-                    </div>
-                    <div class="flex flex-wrap mt-8 justify-center gap-8">
-                        <InfoCard>
-                            <h2
-                                class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
-                            >
-                                Подписчики
-                            </h2>
-                            <h3
-                                v-if="channelStats.stats"
-                                class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
-                            >
-                                {{ channelStats.stats.participants_count }}
-                            </h3>
-                        </InfoCard>
-                        <InfoCard
-                            v-if="
+                                {{ channel.description }}
+                            </p>
+                        </div>
+                        <div class="flex justify-center gap-x-8">
+                            <InfoCard>
+                                <h3
+                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                >
+                                    Оценка отзывов
+                                </h3>
+                                <div
+                                    class="flex gap-x-1 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight"
+                                >
+                                    <BaseIcon :path="mdiStar" fill="#FFB800" />{{
+                                        channel.rating
+                                    }}
+                                </div>
+                            </InfoCard>
+                            <InfoCard>
+                                <h2
+                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                >
+                                    Выявлено заявок
+                                </h2>
+                                <h1
+                                    class="flex gap-x-1 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight"
+                                >
+                                    {{ ordersCount }}
+                                </h1>
+                            </InfoCard>
+                        </div>
+                        <div class="flex flex-wrap mt-8 justify-center gap-8">
+                            <InfoCard>
+                                <h2
+                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                >
+                                    Подписчики
+                                </h2>
+                                <h3
+                                    v-if="channelStats.stats"
+                                    class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
+                                >
+                                    {{ channelStats.stats.participants_count }}
+                                </h3>
+                            </InfoCard>
+                            <InfoCard
+                                v-if="
                                 channelStats.stats &&
                                 channelStats.stats.avg_post_reach
                             "
-                        >
-                            <h2
-                                class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
                             >
-                                Просмотры на<br />
-                                пост
-                            </h2>
-                            <h3
-                                v-if="channelStats.stats"
-                                class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
-                            >
-                                {{ channelStats.stats.avg_post_reach }}
-                            </h3>
-                        </InfoCard>
-                        <InfoCard
-                            v-if="
+                                <h2
+                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                >
+                                    Просмотры на<br />
+                                    пост
+                                </h2>
+                                <h3
+                                    v-if="channelStats.stats"
+                                    class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
+                                >
+                                    {{ channelStats.stats.avg_post_reach }}
+                                </h3>
+                            </InfoCard>
+                            <InfoCard
+                                v-if="
                                 channelStats.stats &&
                                 channelStats.stats.er_percent
                             "
-                        >
-                            <h2
-                                class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
                             >
-                                ER
-                            </h2>
-                            <h3
-                                v-if="channelStats.stats"
-                                class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
-                            >
-                                {{ channelStats.stats.er_percent }}%
-                            </h3>
-                        </InfoCard>
-                        <InfoCard
-                            v-if="
+                                <h2
+                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                >
+                                    ER
+                                </h2>
+                                <h3
+                                    v-if="channelStats.stats"
+                                    class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
+                                >
+                                    {{ channelStats.stats.er_percent }}%
+                                </h3>
+                            </InfoCard>
+                            <InfoCard
+                                v-if="
                                 channelStats.stats &&
                                 channelStats.stats.posts_count
                             "
-                        >
-                            <h2
-                                class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
                             >
-                                Публикаций
-                            </h2>
-                            <h3
-                                class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
-                            >
-                                {{ channelStats.stats.posts_count }}
-                            </h3>
-                        </InfoCard>
-                        <InfoCard v-if="channel.cpm && channel">
-                            <h2
-                                class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
-                            >
-                                СРМ
-                            </h2>
-                            <h3
-                                class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
-                            >
-                                {{ channel.cpm }}&nbsp;₽
-                            </h3>
-                        </InfoCard>
-                    </div>
-                </n-tab-pane>
-                <n-tab-pane name="stat">
-                    <template #tab>
-                        <button
-                            @click.prevent="activeButton = 'stat'"
-                            :class="[
+                                <h2
+                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                >
+                                    Публикаций
+                                </h2>
+                                <h3
+                                    class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
+                                >
+                                    {{ channelStats.stats.posts_count }}
+                                </h3>
+                            </InfoCard>
+                            <InfoCard v-if="channel.cpm && channel">
+                                <h2
+                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                >
+                                    СРМ
+                                </h2>
+                                <h3
+                                    class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
+                                >
+                                    {{ channel.cpm }}&nbsp;₽
+                                </h3>
+                            </InfoCard>
+                        </div>
+                    </n-tab-pane>
+                    <n-tab-pane name="stat">
+                        <template #tab>
+                            <button
+                                @click.prevent="activeButton = 'stat'"
+                                :class="[
                                 'tab-button',
                                 'transition',
                                 'text-violet-100',
@@ -578,51 +579,51 @@ onMounted(() => {
                                 'leading-normal',
                                 activeButton === 'stat' ? 'active' : '',
                             ]"
-                        >
-                            Статистика
-                        </button>
-                    </template>
-                    <div class="grid sm:grid-cols-2 grid-cols-1 gap-y-10 px-2">
-                        <div>
-                            <h1
-                                class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
                             >
-                                График с текущим количеством подписчиков
-                            </h1>
-                            <Line
-                                :data="chartDataSubs"
-                                :options="chartOptionsNoLabels"
-                            />
+                                Статистика
+                            </button>
+                        </template>
+                        <div class="grid sm:grid-cols-2 grid-cols-1 gap-y-10 px-2">
+                            <div>
+                                <h1
+                                    class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
+                                >
+                                    График с текущим количеством подписчиков
+                                </h1>
+                                <Line
+                                    :data="chartDataSubs"
+                                    :options="chartOptionsNoLabels"
+                                />
+                            </div>
+                            <div>
+                                <h1
+                                    class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
+                                >
+                                    Охват за 24 часа
+                                </h1>
+                                <Line
+                                    :data="chartDataAvg"
+                                    :options="chartOptionsNoLabels"
+                                />
+                            </div>
+                            <div>
+                                <h1
+                                    class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
+                                >
+                                    ER% — вовлеченность по взаимодействиям
+                                </h1>
+                                <Line
+                                    :data="chartDataER"
+                                    :options="chartOptionsNoLabels"
+                                />
+                            </div>
                         </div>
-                        <div>
-                            <h1
-                                class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
-                            >
-                                Охват за 24 часа
-                            </h1>
-                            <Line
-                                :data="chartDataAvg"
-                                :options="chartOptionsNoLabels"
-                            />
-                        </div>
-                        <div>
-                            <h1
-                                class="text-center text-violet-100 text-xl font-bold font-['Open Sans'] leading-relaxed"
-                            >
-                                ER% — вовлеченность по взаимодействиям
-                            </h1>
-                            <Line
-                                :data="chartDataER"
-                                :options="chartOptionsNoLabels"
-                            />
-                        </div>
-                    </div>
-                </n-tab-pane>
-                <n-tab-pane name="review">
-                    <template #tab>
-                        <button
-                            @click.prevent="activeButton = 'review'"
-                            :class="[
+                    </n-tab-pane>
+                    <n-tab-pane name="review">
+                        <template #tab>
+                            <button
+                                @click.prevent="activeButton = 'review'"
+                                :class="[
                                 'tab-button',
                                 'transition',
                                 'text-violet-100',
@@ -632,15 +633,17 @@ onMounted(() => {
                                 'leading-normal',
                                 activeButton === 'review' ? 'active' : '',
                             ]"
-                        >
-                            Отзывы
-                        </button>
-                    </template>
+                            >
+                                Отзывы
+                            </button>
+                        </template>
 
-                    <Reviews :channel-id="channel.id" />
-                </n-tab-pane>
-            </n-tabs>
-        </div>
+                        <Reviews :channel-id="channel.id" />
+                    </n-tab-pane>
+                </n-tabs>
+            </div>
+    </div>
+
     </AppLayout>
 </template>
 <style scoped>

@@ -144,7 +144,7 @@ onMounted(() => getPatterns());
                                 >
                                     <div class="flex items-center">
                                         <div
-                                            class="data shadow min-w-[200px] px-2.5 py-1 rounded-lg flex gap-x-1 items-center flex-[1_0_auto]"
+                                            class="data minwidthnast shadow px-2.5 py-1 rounded-lg flex gap-x-1 items-center flex-[1_0_auto]"
                                         >
                                             <div>
                                                 <img
@@ -153,7 +153,7 @@ onMounted(() => getPatterns());
                                                 />
                                             </div>
                                             <p
-                                                class="text-violet-100 text-lg font-normal font-['Open Sans']"
+                                                class="text-violet-100 sm:text-lg text-sm font-normal font-['Open Sans']"
                                             >
                                                 {{
                                                     pattern.localized_created_at
@@ -344,6 +344,13 @@ $font-OpenSans: "Open Sans";
 
 .data {
     background: #4e526a;
+}
+
+.minwidthnast{
+    min-width: 200px;
+    @media screen and (max-width: 640px) {
+    min-width: 170px
+    }
 }
 
 .context {

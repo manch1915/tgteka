@@ -38,7 +38,7 @@ class Pattern extends Model implements HasMedia
     public function hasVideo(): bool
     {
         // Check if any media items are videos
-        return $this->getMedia()
+        return $this->getMedia('images')
             ->filter(function (Media $media) {
                 return $media->mime_type === 'video/mp4' || $media->mime_type === 'video/quicktime';
             })

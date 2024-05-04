@@ -39,7 +39,7 @@ const navigateToEditPattern = (patternID) => {
     const pattern = patterns.value.data.find(pattern => pattern.id === patternID);
 
     // Check if the pattern is fake
-    if (pattern && pattern.status === 'loading') {
+    if (pattern.status === 'loading') {
         // Display the message for fake templates
         message.warning('Ваш шаблон еще не готов. Пожалуйста, подождите.');
     } else {
@@ -53,12 +53,11 @@ const duplicatePattern = async (patternIdToDuplicate) => {
     try {
         const { data } = await axios.post(`/pattern/${patternIdToDuplicate}/duplicate`);
 
-        if (data && !data.fake) {
-            console.log(data[0])
-            message.success('Началось дублирование шаблона!');
+        if (data && data.fake === false) {
             patterns.value.data.push(data[0]);
-
         } else {
+            message.success('Началось дублирование шаблона!');
+
             const fakeDataTemplate = {
                 id: data.id + 1, // Assuming the new ID is one more than the duplicated pattern's ID
                 user_id: data.user_id,

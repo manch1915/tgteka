@@ -32,6 +32,7 @@ class DuplicatePatternJob implements ShouldQueue
     public function handle(MediaItemService $mediaItemService): void
     {
         $newPattern = $this->pattern->replicate();
+        $newPattern->title = $newPattern->title . '(Копия)';
         $newPattern->save();
 
         $existingMediaItems = $this->pattern->getMedia('images');

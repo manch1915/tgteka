@@ -25,7 +25,7 @@ onBeforeUnmount(() => {
     window.removeEventListener("click", handleOutsideClick);
 });
 const changeContext = (id) => {
-    const pattern = patterns.value.data.find(pattern => pattern.id === patternID);
+    const pattern = patterns.value.data.find(pattern => pattern.id === id);
 
     if (pattern && pattern.status === 'loading'){
         return

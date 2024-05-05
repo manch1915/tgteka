@@ -36,29 +36,6 @@ onMounted(async () => {
     // connectWebSocket(page.props.auth.user.id, showMessage);
 });
 
-const isActiveRoute = (routeUrl) => {
-    // Check if the current URL starts with the provided route URL
-    if (page.url.startsWith(routeUrl)) {
-        return true;
-    }
-
-    // Additional logic for specific routes like '/patterns'
-    if (routeUrl === '/patterns') {
-        // Check if the current URL matches '/pattern/edit/[number]'
-        const patternEditRegex = /^\/pattern\/edit\/\d+$/;
-        if (patternEditRegex.test(page.url)) {
-            return true;
-        }
-
-        // Check if the current URL matches '/pattern/adding'
-        if (page.url === '/pattern/adding') {
-            return true;
-        }
-    }
-
-    return false;
-};
-
 watchEffect(() => {
     if (
         page.props.auth.user &&
@@ -108,7 +85,7 @@ const openMessenger = () => {
                     <div
                         class="hidden sm:inline-flex justify-start items-start gap-2.5"
                     >
-                        <Link :href="route('catalog.channels.index')">
+                        <Link preserve-scroll :href="route('catalog.channels.index')">
                             <img
                                 class="w-16 md:w-24 lg:w-36"
                                 src="/images/dashboard/logo.svg"
@@ -266,7 +243,7 @@ const openMessenger = () => {
                         <Link :href="route('patterns')"
                             ><p
                                 :class="{
-                                    active: isActiveRoute('/patterns'),
+                                    active: $page.url.startsWith('/patterns') || $page.url.startsWith('/pattern'),
                                     'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true,
                                 }"
                             >
@@ -276,7 +253,7 @@ const openMessenger = () => {
                         <Link :href="route('placements')"
                             ><p
                                 :class="{
-                                    active: isActiveRoute('/placements'),
+                                    active: $page.url.startsWith('/placements'),
                                     'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true,
                                 }"
                             >
@@ -286,7 +263,7 @@ const openMessenger = () => {
                         <Link :href="route('catalog.channels.index')"
                             ><p
                                 :class="{
-                                    active: isActiveRoute('/catalog/channels'),
+                                    active: $page.url.startsWith('/catalog'),
                                     'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true,
                                 }"
                             >
@@ -296,7 +273,7 @@ const openMessenger = () => {
                         <Link :href="route('channels')"
                             ><p
                                 :class="{
-                                    active: isActiveRoute('/channels'),
+                                    active: $page.url.startsWith('/channels'),
                                     'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true,
                                 }"
                             >
@@ -306,7 +283,7 @@ const openMessenger = () => {
                         <Link :href="route('order.index')"
                             ><p
                                 :class="{
-                                    active: isActiveRoute('/orders'),
+                                    active: $page.url.startsWith('/orders'),
                                     'text-violet-100 text-lg font-bold font-OpenSans leading-normal cursor-pointer': true,
                                 }"
                             >
@@ -352,50 +329,50 @@ const openMessenger = () => {
         <div class="container mx-auto">
             <div class="py-10">
                 <ul class="flex gap-x-5 justify-center">
-                    <Link :href="route('patterns')"
+                    <Link preserve-scroll :href="route('patterns')"
                         ><li
                             :class="{
-                                active: isActiveRoute('/patterns'),
+                                active: $page.url.startsWith('/patterns') || $page.url.startsWith('/pattern'),
                                 'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans select-none leading-normal cursor-pointer': true,
                             }"
                         >
                             Мои шаблоны
                         </li></Link
                     >
-                    <Link :href="route('placements')"
+                    <Link preserve-scroll :href="route('placements')"
                         ><li
                             :class="{
-                                active: isActiveRoute('/placements'),
+                                active: $page.url.startsWith('/placements'),
                                 'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans select-none leading-normal cursor-pointer': true,
                             }"
                         >
                             Мои размещения
                         </li></Link
                     >
-                    <Link :href="route('catalog.channels.index')"
+                    <Link preserve-scroll :href="route('catalog.channels.index')"
                         ><li
                             :class="{
-                                active: isActiveRoute('/catalog/channels'),
+                                active: $page.url.startsWith('/catalog'),
                                 'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans select-none leading-normal cursor-pointer': true,
                             }"
                         >
                             Каталог каналов
                         </li></Link
                     >
-                    <Link :href="route('channels')"
+                    <Link preserve-scroll :href="route('channels')"
                         ><li
                             :class="{
-                                active: isActiveRoute('/channels'),
+                                active: $page.url.startsWith('/channels'),
                                 'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans select-none leading-normal cursor-pointer': true,
                             }"
                         >
                             Мои каналы
                         </li></Link
                     >
-                    <Link :href="route('order.index')"
+                    <Link preserve-scroll :href="route('order.index')"
                         ><li
                             :class="{
-                                active: isActiveRoute('/orders'),
+                                active: $page.url.startsWith('/orders'),
                                 'text-violet-100 text-xs lg:text-lg font-bold font-OpenSans select-none leading-normal cursor-pointer': true,
                             }"
                         >

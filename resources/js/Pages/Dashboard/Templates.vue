@@ -54,7 +54,7 @@ const duplicatePattern = async (patternIdToDuplicate) => {
         const { data } = await axios.post(`/pattern/${patternIdToDuplicate}/duplicate`);
 
         if (data && data.fake === false) {
-            patterns.value.data.push(data[0]);
+            patterns.value.data.unshift(data[0]);
         } else {
             message.success('Началось дублирование шаблона!');
 
@@ -70,7 +70,7 @@ const duplicatePattern = async (patternIdToDuplicate) => {
             };
 
             // Push the fake data template to the `data` array
-            patterns.value.data.push(fakeDataTemplate);
+            patterns.value.data.unshift(fakeDataTemplate);
         }
     } catch (error) {
         message.error('An error occurred while duplicating the pattern.');

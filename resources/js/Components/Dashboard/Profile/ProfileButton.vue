@@ -24,7 +24,7 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <Link :href="routeHref">
+    <Link :href="routeHref" preserve-scroll>
         <div @click="profileButton.setActiveButton(title)" class="button flex justify-between items-center" :class="profileButtonTitle === title ? 'background' : ''">
             <div class="flex gap-x-2.5 items-center">
                 <img class="select-none" :src="icon" alt="">

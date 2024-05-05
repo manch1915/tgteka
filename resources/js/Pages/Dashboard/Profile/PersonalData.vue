@@ -3,7 +3,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import { computed, reactive, ref } from "vue";
 import { vMaska } from "maska";
-import { Head, router, usePage } from "@inertiajs/vue3";
+import { Head, Link, usePage } from "@inertiajs/vue3";
 import axios from "axios";
 import { NInput, useLoadingBar, useMessage } from "naive-ui";
 import { inputThemeOverrides } from "@/themeOverrides.js";
@@ -76,13 +76,7 @@ const submit = async () => {
             loading.error();
         });
 };
-const logout = () => {
-    loading.start();
-    axios.post(route("logout")).then((res) => {
-        loading.finish();
-        router.visit(route("customers"));
-    });
-};
+
 const disableTwoFactorAuthentication = () => {
     axios
         .post(route("two-factor.disable"))
@@ -203,12 +197,13 @@ const deleteUser = async () => {
                     Отключить двухэтапную аутентификацию
                 </button>
                 <br />
-                <button
-                    @click.prevent="logout"
-                    class="mt-12 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
+                <Link
+                    :href="route('logout')"
+                    method="post"
+                    class="block mt-12 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
                 >
                     Выйти
-                </button>
+                </Link>
                 <br />
                 <button
                     @click.prevent="deleteUser"

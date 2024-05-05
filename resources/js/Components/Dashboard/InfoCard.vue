@@ -20,6 +20,10 @@
         width: 160px;
         height: 120px;
         border-radius: 30px;
+        @media screen and (max-width: 375px) {
+            width: 140px;
+            height: 100px;
+        }
     }
 }
 </style>

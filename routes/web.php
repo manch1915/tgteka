@@ -145,7 +145,7 @@ Route::middleware(['auth:sanctum', 'two.factor'])->group(function () {
     Route::get('channelsGet', [UserChannelController::class, 'channelsGet'])->name('channels.get');
     Route::get('channels/{channel}', [UserChannelController::class, 'edit'])->name('channels.edit');
     Route::patch('channels/{channel}', [UserChannelController::class, 'update'])->name('channels.update');
-    Route::get('adding-channel', [UserChannelController::class, 'show'])->name('adding-channel');
+    Route::get('channels/add/channel', [UserChannelController::class, 'show'])->name('adding-channel');
     Route::post('adding-channel', [UserChannelController::class, 'store'])->name('adding-channel.store');
 
     Route::prefix('orders')->name('order.')->group(function () {

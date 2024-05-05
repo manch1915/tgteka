@@ -293,7 +293,7 @@ onMounted(() => {
             <div>
                 <div class="wrapper w-full sm:my-24 my-8 sm:p-0 p-2">
                     <div class="card sm:p-12 p-6 pb-8">
-                        <div class="flex flex-wrap justify-between items-start">
+                        <div class="flex flex-wrap justify-between items-start gap-x-6">
                             <div class="flex sm:gap-x-8 gap-x-2">
                                 <img
                                     class="rounded-full w-[90px] h-[90px]"
@@ -402,7 +402,7 @@ onMounted(() => {
                             <div class="flex flex-wrap sm:justify-start justify-center gap-4 pt-4">
                                 <button
                                     @click.prevent="toggleChannelInCart(channel)"
-                                    class="text-white text-lg font-bold font-['Open Sans'] leading-normal px-6 py-3.5 btn_gradient-purple transition hover:bg-purple-800 rounded-3xl items-center inline-flex gap-x-2.5"
+                                    class="text-white text-lg font-bold font-['Open Sans'] leading-4 px-6 py-3.5 btn_gradient-purple transition hover:bg-purple-800 rounded-3xl items-center inline-flex gap-x-2.5"
                                 >
                                     {{
                                         isInCart(channel)
@@ -458,12 +458,12 @@ onMounted(() => {
                         <div class="flex justify-center gap-x-8">
                             <InfoCard>
                                 <h3
-                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-normal font-['Open Sans'] leading-tight"
                                 >
                                     Оценка отзывов
                                 </h3>
                                 <div
-                                    class="flex gap-x-1 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight"
+                                    class="flex gap-x-1 text-violet-100 sm:text-base text-sm font-bold font-['Open Sans'] leading-tight"
                                 >
                                     <BaseIcon :path="mdiStar" fill="#FFB800" />{{
                                         channel.rating
@@ -472,12 +472,12 @@ onMounted(() => {
                             </InfoCard>
                             <InfoCard>
                                 <h2
-                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-normal font-['Open Sans'] leading-tight"
                                 >
                                     Выявлено заявок
                                 </h2>
                                 <h1
-                                    class="flex gap-x-1 text-violet-100 text-base font-bold font-['Open Sans'] leading-tight"
+                                    class="flex gap-x-1 text-violet-100 sm:text-base text-sm font-bold font-['Open Sans'] leading-tight"
                                 >
                                     {{ ordersCount }}
                                 </h1>
@@ -486,13 +486,13 @@ onMounted(() => {
                         <div class="flex flex-wrap mt-8 justify-center gap-8">
                             <InfoCard>
                                 <h2
-                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-normal font-['Open Sans'] leading-tight"
                                 >
                                     Подписчики
                                 </h2>
                                 <h3
                                     v-if="channelStats.stats"
-                                    class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-bold font-['Open Sans'] leading-none"
                                 >
                                     {{ channelStats.stats.participants_count }}
                                 </h3>
@@ -504,14 +504,14 @@ onMounted(() => {
                             "
                             >
                                 <h2
-                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-normal font-['Open Sans'] leading-tight"
                                 >
                                     Просмотры на<br />
                                     пост
                                 </h2>
                                 <h3
                                     v-if="channelStats.stats"
-                                    class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-bold font-['Open Sans'] leading-none"
                                 >
                                     {{ channelStats.stats.avg_post_reach }}
                                 </h3>
@@ -523,13 +523,13 @@ onMounted(() => {
                             "
                             >
                                 <h2
-                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-normal font-['Open Sans'] leading-tight"
                                 >
                                     ER
                                 </h2>
                                 <h3
                                     v-if="channelStats.stats"
-                                    class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-bold font-['Open Sans'] leading-none"
                                 >
                                     {{ channelStats.stats.er_percent }}%
                                 </h3>
@@ -541,24 +541,24 @@ onMounted(() => {
                             "
                             >
                                 <h2
-                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-normal font-['Open Sans'] leading-tight"
                                 >
                                     Публикаций
                                 </h2>
                                 <h3
-                                    class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-bold font-['Open Sans'] leading-none"
                                 >
                                     {{ channelStats.stats.posts_count }}
                                 </h3>
                             </InfoCard>
                             <InfoCard v-if="channel.cpm && channel">
                                 <h2
-                                    class="text-center text-violet-100 text-base font-normal font-['Open Sans'] leading-tight"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-normal font-['Open Sans'] leading-tight"
                                 >
                                     СРМ
                                 </h2>
                                 <h3
-                                    class="text-center text-violet-100 text-base font-bold font-['Open Sans'] leading-none"
+                                    class="text-center text-violet-100 sm:text-base text-sm font-bold font-['Open Sans'] leading-none"
                                 >
                                     {{ channel.cpm }}&nbsp;₽
                                 </h3>

@@ -357,6 +357,12 @@ $offset: 0px;
 
             height: 50px;
             max-width: unset;
+
+        }
+    }
+    img{
+        @media screen and (min-width: 1920px){
+            width: 100%;
         }
     }
 }

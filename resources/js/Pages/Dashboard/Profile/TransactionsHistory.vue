@@ -7,6 +7,8 @@ import {onMounted, ref, watch} from "vue";
 import {selectThemeOverrides} from "@/themeOverrides.js";
 import { NDatePicker, NSelect, useLoadingBar} from "naive-ui";
 import {Head, usePage} from "@inertiajs/vue3";
+import {mdiArrowLeftBold, mdiArrowRightBold} from "@mdi/js";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 
 const page = usePage();
 const appointmentInUrl = page.props.ziggy.query.appointment;
@@ -77,6 +79,20 @@ onMounted(() => getTransactions(1, appointmentVal.value, statusValue.value));
 watch([appointmentVal, statusValue, range], () => {
     getTransactions(1, appointmentVal.value, statusValue.value)
 })
+const windowWidth = ref(window.innerWidth);
+const updateWidth = () => {
+    windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+    // Add the updateWidth function as a window resize listener
+    window.addEventListener("resize", updateWidth);
+});
+
+onUnmounted(() => {
+    // Remove listener when component is unmounted
+    window.removeEventListener("resize", updateWidth);
+});
 </script>
 
 <template>
@@ -107,12 +123,14 @@ watch([appointmentVal, statusValue, range], () => {
             <Transactions v-if="transactions.data && transactions.data.length" :transactions="transactions.data"/>
             <p v-else class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10">Транзакции отсутствуют.</p>
             <div class="flex justify-center">
-                <TailwindPagination @pagination-change-page="getTransactions" :data="transactions"  :limit="3" :active-classes="['bg-blue-950', 'rounded-full', 'shadow-inner', 'border', 'border-white', 'border-opacity-10', 'text-white', 'text-base', 'font-bold', 'font-[\'Open Sans\']', 'leading-tight']" :itemClasses="['border-none', 'text-violet-100', 'text-base', 'font-normal', 'font-[\'Inter\']', 'leading-normal',]" >
+                <TailwindPagination @pagination-change-page="getTransactions" :data="transactions"  :limit="2" :active-classes="['bg-blue-950', 'rounded-full', 'shadow-inner', 'border', 'border-white', 'border-opacity-10', 'text-white', 'text-base', 'font-bold', 'font-[\'Open Sans\']', 'leading-tight']" :itemClasses="['border-none', 'text-violet-100', 'text-base', 'font-normal', 'font-[\'Inter\']', 'leading-normal',]" >
                     <template v-slot:prev-nav>
-                        <p class="text-center text-violet-100 text-base font-normal font-['Inter'] leading-normal">Назад</p>
+                        <p v-if="windowWidth >= 640" class="text-center text-violet-100 text-base font-normal font-['Inter'] leading-normal">Назад</p>
+                        <BaseIcon v-else size="15" :path="mdiArrowLeftBold"/>
                     </template>
                     <template v-slot:next-nav>
-                        <p class="text-center text-violet-100 text-base font-semibold font-['Inter'] leading-snug">Вперёд</p>
+                        <p  v-if="windowWidth >= 640" class="text-center text-violet-100 text-base font-semibold font-['Inter'] leading-snug">Вперёд</p>
+                        <BaseIcon v-else size="15" :path="mdiArrowRightBold"/>
                     </template>
                 </TailwindPagination>
             </div>

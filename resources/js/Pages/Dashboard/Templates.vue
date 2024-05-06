@@ -1,10 +1,12 @@
 <script setup>
-import { ref, onBeforeMount, onBeforeUnmount, onMounted } from "vue";
+import {ref, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted} from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import axios from "axios";
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
 import { useMessage } from "naive-ui";
+import {mdiArrowLeftBold, mdiArrowRightBold} from "@mdi/js";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 
 const isContextMenuOpen = ref(false);
 const contextMenuId = ref(null);
@@ -104,6 +106,21 @@ const getPatterns = async (page = 1) => {
     });
 };
 onMounted(() => getPatterns());
+
+const windowWidth = ref(window.innerWidth);
+const updateWidth = () => {
+    windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+    // Add the updateWidth function as a window resize listener
+    window.addEventListener("resize", updateWidth);
+});
+
+onUnmounted(() => {
+    // Remove listener when component is unmounted
+    window.removeEventListener("resize", updateWidth);
+});
 </script>
 
 <template>
@@ -139,7 +156,7 @@ onMounted(() => getPatterns());
                                         navigateToEditPattern(pattern.id)
                                     "
                                     :class="{ 'opacity-50': pattern.status === 'loading' }"
-                                    class="cursor-pointer mb-5 data_container flex items-center justify-between origin-top-left rounded-tr-3xl rounded-bl-3xl rounded-br-3xl border border-color backdrop-blur-2xl px-4 py-3"
+                                    class="cursor-pointer mb-5 data_container flex lg:gap-0 gap-y-4 flex-wrap items-center justify-between origin-top-left rounded-tr-3xl rounded-bl-3xl rounded-br-3xl border border-color backdrop-blur-2xl px-4 py-3"
                                 >
                                     <div class="flex items-center">
                                         <div
@@ -160,6 +177,7 @@ onMounted(() => getPatterns());
                                             </p>
                                         </div>
                                         <h3
+                                            v-show="windowWidth > 1024"
                                             class="sm:pl-12 md:pl-6 lg:pl-8 pl-4  text-violet-100 text-xl font-bold font-['Open Sans'] leading-5"
                                             style="word-break: break-word"
                                         >
@@ -175,6 +193,13 @@ onMounted(() => getPatterns());
                                             alt="menu"
                                         />
                                     </div>
+                                    <h3
+                                        v-show="windowWidth <= 1024"
+                                        class=" w-full text-violet-100 text-xl font-bold font-['Open Sans'] leading-5"
+                                        style="word-break: break-word"
+                                    >
+                                        {{ pattern.title }}
+                                    </h3>
                                 </div>
                                 <Transition>
                                     <div
@@ -228,7 +253,7 @@ onMounted(() => getPatterns());
                     </transition-group>
                     <div class="flex justify-center">
                         <TailwindPagination
-                            :limit="3"
+                            :limit="2"
                             :active-classes="[
                                 'bg-blue-950',
                                 'rounded-full',
@@ -254,18 +279,12 @@ onMounted(() => getPatterns());
                             :data="patterns"
                         >
                             <template v-slot:prev-nav>
-                                <p
-                                    class="text-center text-violet-100 text-base font-normal font-['Inter'] leading-normal"
-                                >
-                                    Назад
-                                </p>
+                                <p v-if="windowWidth >= 640" class="text-center text-violet-100 text-base font-normal font-['Inter'] leading-normal">Назад</p>
+                                <BaseIcon v-else size="15" :path="mdiArrowLeftBold"/>
                             </template>
                             <template v-slot:next-nav>
-                                <p
-                                    class="text-center text-violet-100 text-base font-semibold font-['Inter'] leading-snug"
-                                >
-                                    Вперёд
-                                </p>
+                                <p  v-if="windowWidth >= 640" class="text-center text-violet-100 text-base font-semibold font-['Inter'] leading-snug">Вперёд</p>
+                                <BaseIcon v-else size="15" :path="mdiArrowRightBold"/>
                             </template>
                         </TailwindPagination>
                     </div>

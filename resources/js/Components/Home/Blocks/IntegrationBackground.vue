@@ -1,5 +1,5 @@
 <template>
-    <div :class="classString" class="pointer-events-none">
+    <div :class="classString" class="pointer-events-none intergr">
         <img src="/images/integr-background.svg" alt="" />
     </div>
 </template>
@@ -26,4 +26,12 @@ const props = defineProps({
         }
     }
 }
+.intergr{
+    img {
+        @media screen and (min-width: 1920px){
+            width: 100%;
+        }
+    }
+}
+
 </style>

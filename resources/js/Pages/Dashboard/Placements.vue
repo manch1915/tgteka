@@ -1,10 +1,12 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
-import { onMounted, ref, watch } from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import PlacementCard from "@/Components/Dashboard/PlacementCard.vue";
 import { NDatePicker, NSlider, useLoadingBar } from "naive-ui";
 import { Head, Link } from "@inertiajs/vue3";
+import {mdiArrowLeftBold, mdiArrowRightBold} from "@mdi/js";
+import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 
 const placements = ref([]);
 const activeSortButton = ref("");
@@ -78,6 +80,20 @@ const handleOrderAccepted = () => {
 
 watch([activeSortButton, value, range], () => {
     getPlacements();
+});
+const windowWidth = ref(window.innerWidth);
+const updateWidth = () => {
+    windowWidth.value = window.innerWidth;
+};
+
+onMounted(() => {
+    // Add the updateWidth function as a window resize listener
+    window.addEventListener("resize", updateWidth);
+});
+
+onUnmounted(() => {
+    // Remove listener when component is unmounted
+    window.removeEventListener("resize", updateWidth);
 });
 </script>
 
@@ -187,7 +203,7 @@ watch([activeSortButton, value, range], () => {
                 <TailwindPagination
                     @pagination-change-page="getPlacements"
                     :data="placements"
-                    :limit="3"
+                    :limit="2"
                     :active-classes="[
                         'bg-blue-950',
                         'rounded-full',
@@ -211,18 +227,12 @@ watch([activeSortButton, value, range], () => {
                     ]"
                 >
                     <template v-slot:prev-nav>
-                        <p
-                            class="text-center text-violet-100 text-base font-normal font-['Inter'] leading-normal"
-                        >
-                            Назад
-                        </p>
+                        <p v-if="windowWidth >= 640" class="text-center text-violet-100 text-base font-normal font-['Inter'] leading-normal">Назад</p>
+                        <BaseIcon v-else size="15" :path="mdiArrowLeftBold"/>
                     </template>
                     <template v-slot:next-nav>
-                        <p
-                            class="text-center text-violet-100 text-base font-semibold font-['Inter'] leading-snug"
-                        >
-                            Вперёд
-                        </p>
+                        <p  v-if="windowWidth >= 640" class="text-center text-violet-100 text-base font-semibold font-['Inter'] leading-snug">Вперёд</p>
+                        <BaseIcon v-else size="15" :path="mdiArrowRightBold"/>
                     </template>
                 </TailwindPagination>
             </div>

@@ -159,7 +159,7 @@ const telegram_username = computed(
                             Дополнительные Email адреса
                         </h1>
                         <div
-                            class="flex flex-col gap-x-2.5 sm:w-3/4 sm:flex-row"
+                            class="flex flex-col gap-2.5 sm:w-3/4 sm:flex-row"
                         >
                             <n-input
                                 class="py-1.5 my-1 sm:!w-3/4"
@@ -167,7 +167,7 @@ const telegram_username = computed(
                                 :theme-overrides="inputThemeOverrides"
                             />
                             <button
-                                class="btn_gradient-purple rounded-full px-6 py-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
+                                class="btn_gradient-purple rounded-full px-6 py-4 text-violet-100 text-lg font-bold font-['Open Sans'] leading-4"
                             >
                                 Добавить
                             </button>
@@ -189,6 +189,9 @@ const telegram_username = computed(
         padding: 40px;
         background: linear-gradient(to right bottom, #676a7d, #060b2a);
         border-radius: 0px 50px 50px 50px;
+        @media screen and (max-width: 640px){
+            padding:20px;
+        }
     }
 }
 </style>

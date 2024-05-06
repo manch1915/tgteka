@@ -30,9 +30,22 @@ const props = defineProps({
     data: Object
 })
 
-const activeClasses = ['bg-blue-950', 'rounded-full', 'shadow-inner', 'border', 'border-white', 'border-opacity-10', 'text-white', 'text-base', 'font-bold', 'font-[\'Open Sans\']', 'leading-tight'];
-const itemClasses = ['border-none', 'text-violet-100', 'text-base', 'font-normal', 'font-[\'Inter\']', 'leading-normal'];
-const windowWidth = ref(window.innerWidth);
+const activeClasses = computed(() => {
+    const classes = ['bg-blue-950', 'rounded-full', 'shadow-inner', 'border', 'border-white', 'border-opacity-10', 'text-white', 'text-base', 'font-bold', 'font-[\'Open Sans\']', 'leading-tight'];
+    if (windowWidth.value < 425) {
+        classes.push('!px-[0.7rem]');
+    }
+    return classes;
+});
+
+// Computed property to dynamically update itemClasses based on window width
+const itemClasses = computed(() => {
+    const classes = ['border-none', 'text-violet-100', 'text-base', 'font-normal', 'font-[\'Inter\']', 'leading-normal'];
+    if (windowWidth.value < 425) {
+        classes.push('!px-[0.7rem]');
+    }
+    return classes;
+});const windowWidth = ref(window.innerWidth);
 
 const emit = defineEmits(['pagination-change-page']);
 // Emit the pagination-change-page event whenever the pagination changes
@@ -41,7 +54,7 @@ const emitPaginationChangePage = (page) => {
 };
 
 const limit = computed(() => {
-    return windowWidth.value < 425 ? 1 : 3;
+    return windowWidth.value < 455 ? 1 : 3;
 });
 
 // Handle changePage event

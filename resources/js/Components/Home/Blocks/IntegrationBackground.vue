@@ -14,7 +14,7 @@ const props = defineProps({
 <style scoped lang="scss">
 .margin-top {
     pointer-events: none;
-    @media (max-width: 960px) {
+    @media (max-width: 895px) {
         margin-top: 80px;
         display: flex;
         justify-content: center;
@@ -28,7 +28,7 @@ const props = defineProps({
 }
 .intergr{
     img {
-        @media screen and (min-width: 960px){
+        @media screen and (min-width: 895px){
             width: 100%;
         }
     }

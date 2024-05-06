@@ -349,7 +349,7 @@ $minHeight: 300px;
 $offset: 0px;
 .footer-lines {
     pointer-events: none;
-    @media (max-width: 960px) {
+    @media (max-width: 895px) {
         display: flex;
         justify-content: center;
         img {
@@ -361,7 +361,7 @@ $offset: 0px;
         }
     }
     img{
-        @media screen and (min-width: 960px){
+        @media screen and (min-width: 895px){
             width: 100%;
         }
     }

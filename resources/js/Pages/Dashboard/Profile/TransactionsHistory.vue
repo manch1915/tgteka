@@ -1,14 +1,12 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProfileLayout from "@/Layouts/ProfileLayout.vue";
-import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
 import Transactions from "@/Components/Dashboard/Profile/Transactions.vue";
-import {onMounted, ref, watch} from "vue";
+import {onMounted, onUnmounted, ref, watch} from "vue";
 import {selectThemeOverrides} from "@/themeOverrides.js";
 import { NDatePicker, NSelect, useLoadingBar} from "naive-ui";
 import {Head, usePage} from "@inertiajs/vue3";
-import {mdiArrowLeftBold, mdiArrowRightBold} from "@mdi/js";
-import BaseIcon from "@/Components/Admin/BaseIcon.vue";
+import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
 
 const page = usePage();
 const appointmentInUrl = page.props.ziggy.query.appointment;
@@ -123,16 +121,7 @@ onUnmounted(() => {
             <Transactions v-if="transactions.data && transactions.data.length" :transactions="transactions.data"/>
             <p v-else class="text-violet-100 text-center text-2xl font-bold font-['Open Sans'] leading-10">Транзакции отсутствуют.</p>
             <div class="flex justify-center">
-                <TailwindPagination @pagination-change-page="getTransactions" :data="transactions"  :limit="2" :active-classes="['bg-blue-950', 'rounded-full', 'shadow-inner', 'border', 'border-white', 'border-opacity-10', 'text-white', 'text-base', 'font-bold', 'font-[\'Open Sans\']', 'leading-tight']" :itemClasses="['border-none', 'text-violet-100', 'text-base', 'font-normal', 'font-[\'Inter\']', 'leading-normal',]" >
-                    <template v-slot:prev-nav>
-                        <p v-if="windowWidth >= 640" class="text-center text-violet-100 text-base font-normal font-['Inter'] leading-normal">Назад</p>
-                        <BaseIcon v-else size="15" :path="mdiArrowLeftBold"/>
-                    </template>
-                    <template v-slot:next-nav>
-                        <p  v-if="windowWidth >= 640" class="text-center text-violet-100 text-base font-semibold font-['Inter'] leading-snug">Вперёд</p>
-                        <BaseIcon v-else size="15" :path="mdiArrowRightBold"/>
-                    </template>
-                </TailwindPagination>
+                <CustomPagination @pagination-change-page="getTransactions" :data="transactions"/>
             </div>
         </ProfileLayout>
     </AppLayout>

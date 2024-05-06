@@ -3,10 +3,8 @@ import {ref, onBeforeMount, onBeforeUnmount, onMounted, onUnmounted} from "vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import axios from "axios";
-import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
 import { useMessage } from "naive-ui";
-import {mdiArrowLeftBold, mdiArrowRightBold} from "@mdi/js";
-import BaseIcon from "@/Components/Admin/BaseIcon.vue";
+import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
 
 const isContextMenuOpen = ref(false);
 const contextMenuId = ref(null);
@@ -252,41 +250,7 @@ onUnmounted(() => {
                         </template>
                     </transition-group>
                     <div class="flex justify-center">
-                        <TailwindPagination
-                            :limit="2"
-                            :active-classes="[
-                                'bg-blue-950',
-                                'rounded-full',
-                                'shadow-inner',
-                                'border',
-                                'border-white',
-                                'border-opacity-10',
-                                'text-white',
-                                'text-base',
-                                'font-bold',
-                                'font-[\'Open Sans\']',
-                                'leading-tight',
-                            ]"
-                            :itemClasses="[
-                                'border-none',
-                                'text-violet-100',
-                                'text-base',
-                                'font-normal',
-                                'font-[\'Inter\']',
-                                'leading-normal',
-                            ]"
-                            @pagination-change-page="getPatterns"
-                            :data="patterns"
-                        >
-                            <template v-slot:prev-nav>
-                                <p v-if="windowWidth >= 640" class="text-center text-violet-100 text-base font-normal font-['Inter'] leading-normal">Назад</p>
-                                <BaseIcon v-else size="15" :path="mdiArrowLeftBold"/>
-                            </template>
-                            <template v-slot:next-nav>
-                                <p  v-if="windowWidth >= 640" class="text-center text-violet-100 text-base font-semibold font-['Inter'] leading-snug">Вперёд</p>
-                                <BaseIcon v-else size="15" :path="mdiArrowRightBold"/>
-                            </template>
-                        </TailwindPagination>
+                        <CustomPagination @pagination-change-page="getPatterns" :data="patterns"/>
                     </div>
                 </div>
                 <template v-if="patterns.data && patterns.data.length !== 0">

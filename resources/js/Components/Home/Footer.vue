@@ -361,7 +361,7 @@ $offset: 0px;
         }
     }
     img{
-        @media screen and (min-width: 1920px){
+        @media screen and (min-width: 960px){
             width: 100%;
         }
     }

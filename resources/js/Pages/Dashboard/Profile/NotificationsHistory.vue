@@ -7,6 +7,7 @@ import Notifications from "@/Components/Dashboard/Profile/Notifications.vue";
 import {Head} from "@inertiajs/vue3";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiArrowLeftBold, mdiArrowRightBold} from "@mdi/js";
+import {onMounted, onUnmounted} from "vue";
 
 const notificationsStore = useNotificationStore()
 notificationsStore.getNotifications()

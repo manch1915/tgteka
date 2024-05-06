@@ -28,7 +28,7 @@ const props = defineProps({
 }
 .intergr{
     img {
-        @media screen and (min-width: 1920px){
+        @media screen and (min-width: 960px){
             width: 100%;
         }
     }

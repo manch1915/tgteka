@@ -30,6 +30,11 @@ class PersonalDataController extends Controller
     public function destroy(Request $request)
     {
         $user = auth()->user();
+
+        if ($user->hasRole('Admin')) {
+            return response()->json(['message' => 'Вы не можете удалить пользователя с правами администратора.'], 403);
+        }
+
         $request->session()->invalidate();
         $user->delete();
 

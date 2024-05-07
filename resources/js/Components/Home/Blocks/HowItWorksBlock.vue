@@ -7,7 +7,7 @@ defineProps({
 });
 </script>
 <template>
-    <div class="sm:pt-48 pt-12 platform px-4 pb-10 sm:pb-0">
+    <div class="xl:pt-32 md:pt-16 lg:pt-26 pt-0 platform px-4 pb-10 sm:pb-0">
         <div class="container mx-auto">
             <h1 class="text-center text-4xl font-bold text-paleblue">
                 Как работает платформа?
@@ -36,14 +36,14 @@ defineProps({
                     src="/images/points-mobile-svg.svg"
                     alt=""
                 />
-				
+
 				<img
 					v-show="shortLine"
                     class="pointes_linear pointes_linear-short lg:hidden"
                     src="/images/points-mobile-short.svg"
                     alt=""
                 />
-				
+
             </div>
         </div>
     </div>
@@ -97,11 +97,11 @@ defineProps({
     height: 100%;
     position: absolute;
     z-index: 0;
-	
+
 	&:not(.pointes_linear-short) {
 		left: -2%;
     	top: 2%;
-		
+
 		@media (max-width: 1023px) {
 			height: 105%;
 			width: 300px;
@@ -111,17 +111,17 @@ defineProps({
 		}
 	}
 
-		
+
     // @media (max-width: 640px) {
     //     left: 12%;
     // }
-	
+
 	&-short {
 		left: -2%;
     	top: 2%;
-		
-		
-		
+
+
+
 		@media (max-width: 1023px) {
 			height: 105%;
 			width: 300px;
@@ -129,7 +129,7 @@ defineProps({
 			top: 1%;
 			transform: scale(1);
 		}
-		
+
 		@media (max-width: 767px) {
 			height: 105%;
 			width: 300px;

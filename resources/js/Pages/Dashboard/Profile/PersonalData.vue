@@ -100,7 +100,7 @@ const deleteUser = async () => {
             })
             .catch((error) => {
                 loading.error();
-                console.error(error);
+                message.error(error?.response?.data?.message)
             });
     }
 };
@@ -181,7 +181,7 @@ const deleteUser = async () => {
                 <button
                     @click.prevent="twoFactorAuthentication"
                     :disabled="isTwoFactorEnabled"
-                    class="mt-12 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
+                    class="mt-12  text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
                 >
                     {{
                         isTwoFactorEnabled
@@ -191,23 +191,22 @@ const deleteUser = async () => {
                 </button>
                 <button
                     @click.prevent="disableTwoFactorAuthentication"
-                    class="mt-12 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
+                    class="mt-6 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
                     v-if="isTwoFactorEnabled"
                 >
                     Отключить двухэтапную аутентификацию
                 </button>
-                <br />
                 <Link
+                    as="button"
                     :href="route('logout')"
                     method="post"
-                    class="block mt-12 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
+                    class="block mt-6 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
                 >
                     Выйти
                 </Link>
-                <br />
                 <button
                     @click.prevent="deleteUser"
-                    class="mt-12 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
+                    class="mt-6 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
                 >
                     Удалить профиль
                 </button>

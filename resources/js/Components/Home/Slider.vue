@@ -1,6 +1,6 @@
 <script setup>
-import {computed, onMounted, onUnmounted, ref, watchEffect} from "vue";
-import {useKeenSlider} from "keen-slider/vue";
+import {computed, onMounted, onUnmounted, ref, watch, watchEffect} from "vue";
+import {useKeenSlider} from "keen-slider/vue.es";
 import "keen-slider/keen-slider.min.css";
 
 const props = defineProps({
@@ -27,11 +27,10 @@ const [container, slider] = useKeenSlider({
         origin: "auto",
         perView: props.slidesPerView,
         spacing: props.spaceBetween,
-
     },
     initial: current.value,
     slideChanged: (s) => {
-        current.value = s.track.details.rel
+        current.value = s.track.details.rel;
     },
 });
 const containerHeight = ref('');
@@ -43,21 +42,20 @@ const setContainerHeight = () => {
     }
 };
 
-const dotHelper = ref(null)
+const dotHelper = ref([]);
 
-watchEffect(() => {
-    if (dotHelper.value && slider.value) {
+const updateDotHelper = () => {
+    if (slider && slider.value && slider.value.track && slider.value.track.details && slider.value.track.details.slides && slider.value.track.details.slides.length) {
         dotHelper.value = [...Array(slider.value.track.details.slides.length).keys()];
+    } else {
+        dotHelper.value = [];
     }
-});
+};
 
-
-const spaceBetween = computed(() => {
-    if (parseFloat(props.spaceBetween) > 0) {
-        return parseFloat(props.spaceBetween);
-    }
-    return parseFloat(props.slidesPerView) > 1 ? 60 : 0;
-});
+setTimeout(() => {
+    slider.value.update();
+    updateDotHelper(); // Update dotHelper after 3 seconds
+}, 3000);
 
 const onSlideChange = () => {
     current.value = slider.value.details().s.track.details.rel;
@@ -66,6 +64,7 @@ const onSlideChange = () => {
 onMounted(() => {
     window.addEventListener("resize", slider.value.refresh);
     setContainerHeight();
+    updateDotHelper()
 });
 
 onUnmounted(() => {
@@ -104,9 +103,9 @@ onUnmounted(() => {
             </div>
         </div>
         <div class="dots my-14">
-            <template v-if="dotHelper && dotHelper.value">
+            <template v-if="dotHelper">
                 <button
-                    v-for="(_slide, idx) in dotHelper.value"
+                    v-for="(_slide, idx) in dotHelper"
                     @click="slider.moveToIdx(idx)"
                     :class="{ dot: true, active: current === idx }"
                     :key="idx"
@@ -169,6 +168,9 @@ onUnmounted(() => {
         background: #8367bd !important;
         opacity: 1 !important;
         margin: 0 5px !important;
+        @media screen and (max-width: 640px) {
+            margin: 0 2px !important;
+        }
     }
 
     .active {

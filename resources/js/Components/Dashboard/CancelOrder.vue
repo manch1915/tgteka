@@ -136,7 +136,7 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
                         type="datetime"
                         :is-date-disabled="disablePastDates"
                         :is-time-disabled="disableMinutesAndSeconds"
-                    />>
+                    />
                     <n-input
                         v-show="other"
                         v-model:value="otherBody"

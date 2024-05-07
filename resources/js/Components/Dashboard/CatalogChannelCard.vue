@@ -151,13 +151,13 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
                 <div class="flex sm:w-1/2 w-full">
                     <div class="flex flex-col items-center justify-center gap-y-3 grid-element">
                         <div class="avatar mb-auto">
-                            <img :src="channel.avatar" alt="avatar">
+                            <img :src="channel?.avatar" alt="avatar">
                         </div>
                     </div>
                     <div class="flex-1 grid-element">
                         <div class="flex flex-col justify-between gap-y-2">
-                            <h1 class="text-white text-xl font-bold font-['Open Sans'] !leading-tight">{{channel.channel_name}}</h1>
-                            <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Open Sans'] break-all leading-tight">{{channel.description}}</p>
+                            <h1 class="text-white text-xl font-bold font-['Open Sans'] !leading-tight">{{channel?.channel_name}}</h1>
+                            <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Open Sans'] break-all leading-tight">{{channel?.description}}</p>
                         </div>
                     </div>
                 </div>
@@ -165,20 +165,20 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
                     <div class="sm:border-x-[1px] h-full w-full border-[#6522D9] flex flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                             <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Подписчики</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ channel.statistics.participants_count }}</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ channel?.statistics?.participants_count }}</p>
                         </div>
                     </div>
                     <div class="sm:border-r-[1px] h-full w-full border-[#6522D9] flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                             <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Просмотры</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ channel.statistics.avg_post_reach}}</p>
+                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ channel?.statistics?.avg_post_reach}}</p>
                         </div>
                     </div>
                     <div class="flex h-full w-full flex-col items-center justify-center">
                         <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
                             <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">CPМ</p>
                             <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
-                                {{ channel.cpm }}</p>
+                                {{ channel?.cpm }}</p>
                         </div>
                     </div>
                 </div>

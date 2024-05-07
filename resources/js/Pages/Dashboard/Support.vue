@@ -212,17 +212,17 @@ socket.onerror = function (error) {
                 </div>
             </div>
         </div>
-        <hr class="mt-40" />
-        <div class="mt-40 px-12 contacts">
+        <hr class="sm:mt-32 mt-16 border-t border-[#EAE0FF]" />
+        <div class="sm:mt-32 mt-16 px-12 contacts">
             <h1
-                class="text-violet-100 lg:text-4xl text-xl font-bold font-['Open Sans'] leading-10"
+                class="text-violet-100 lg:text-4xl sm:text-start text-center text-xl font-bold font-['Open Sans'] leading-10"
             >
                 Контакты
             </h1>
             <div
-                class="mt-20 grid grid-cols-1 items-center justify-start sm:grid-cols-2"
+                class="mt-20 items-center sm:justify-start justify-center flex flex-wrap gap-x-12"
             >
-                <div class="flex flex-col gap-y-2">
+                <div class="flex flex-col gap-y-2 sm:text-start text-center">
                     <h1
                         class="text-violet-100 lg:text-4xl text-xl font-bold font-['Open Sans'] leading-10"
                     >
@@ -244,7 +244,7 @@ socket.onerror = function (error) {
                         +7 (495) 818-62-50
                     </p>
                 </div>
-                <div class="flex flex-col gap-y-2">
+                <div class="flex flex-col gap-y-2 sm:text-start text-center">
                     <h1
                         class="text-violet-100 lg:text-4xl text-xl font-bold font-['Open Sans'] leading-10"
                     >

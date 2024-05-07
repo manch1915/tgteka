@@ -5,7 +5,6 @@ import {onMounted, onUnmounted, ref} from "vue";
 import {useOrdersStore} from "@/stores/OrdersStore.js";
 import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
 
-
 onMounted(() => getOrders())
 const ordersStore = useOrdersStore()
 const getOrders = (page = 1) => {
@@ -29,7 +28,7 @@ onUnmounted(() => {
 
 <template>
     <AppLayout>
-        <div class="sm:py-20 py-4 text-center">
+        <div class="sm:py-20 py-4 text-center px-2">
             <h1 class="text-violet-100 text-4xl font-bold font-['Open Sans'] leading-10">Заявки</h1>
             <div class="flex flex-col gap-y-4 mt-8">
                 <template v-if="ordersStore.orders && ordersStore.orders.data && ordersStore.orders.data.length > 0"

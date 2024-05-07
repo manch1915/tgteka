@@ -166,7 +166,7 @@ const openMessenger = () => {
             </div>
         </div>
 
-        <div class="flex justify-between items-center sm:py-6 py-3 unwrap sm:px-4 px-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+        <div class="flex justify-between items-center sm:py-6 py-3 unwrap flex-wrap sm:px-4 px-2 text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
             <div class="flex flex-wrap gap-4">
                 <button v-if="canAccept" :disabled="isLoading"  @click.prevent="accept" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 sm:px-6 px-2 transition sm:py-3.5 py-3 hover:bg-gray-400 sm:text-lg text-base">Принять <BaseIcon size="30" :path="mdiCheck"/></button>
                 <button v-if="isCard" @click.prevent="openMission" class="flex items-center gap-x-2 rounded-3xl border border-violet-100 sm:px-6 px-2 transition sm:py-3.5 py-3 hover:bg-gray-400 sm:text-lg text-base">Посмотреть задание <BaseIcon size="30" :path="mdiEyeOutline"/></button>
@@ -258,7 +258,7 @@ const openMessenger = () => {
         grid-template-columns: 5fr 5fr 3fr;
 
         @media screen and (max-width: 1024px) {
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr !important;
         }
         div{
             .point{

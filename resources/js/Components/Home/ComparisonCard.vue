@@ -34,7 +34,7 @@ const props = defineProps({
                 {{ props.item.header }}
             </h3>
             <ul
-                :class="{ 'pb-36': !props.item.hasButton }"
+                :class="{ 'pb-20': !props.item.hasButton }"
                 class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-[1.7rem] gap-4 sm:pt-5 pt-8 pl-5"
             >
                 <li v-for="(text, index) in props.item.listText" :key="index">
@@ -51,12 +51,12 @@ const props = defineProps({
             </div>
             <div
                 v-if="props.item.showSaveTimeMoney"
-                class="flex justify-end xl:pt-8 pt-9 pb-36"
+                class="flex justify-end xl:pt-8 pt-9 pb-16"
             >
                 <div>
-                    <span class="text-2xl font-bold text-violet-100">x</span>
-                    <span class="text-4xl font-bold text-violet-100">2</span>
-                    <span class="text-2xl font-bold text-violet-100">
+                    <span class="text-lg font-bold text-violet-100 leading-4">x</span>
+                    <span class="text-3xl font-bold text-violet-100 leading-4">2</span>
+                    <span class="text-lg font-bold text-violet-100 leading-4">
                         сэкономить <br />время и деньги</span
                     >
                 </div>

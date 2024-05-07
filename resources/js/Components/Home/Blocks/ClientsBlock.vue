@@ -7,7 +7,7 @@
             <div class="curvedside__base">
                 <div class="curvedside__content">
                     <div class="clients clients_mid">
-                        <div class="w-full pb-28 fix_line">
+                        <div class="w-full sm:pb-28 pb-0 fix_line">
                             <div class="container mx-auto">
                                 <slot name="clients-header"></slot>
                                 <div>
@@ -144,7 +144,7 @@ $offset: 0px;
             }
         }
     }
-	
+
 	.fix_line {
 		border-bottom: 1px solid #070c29;
 	}

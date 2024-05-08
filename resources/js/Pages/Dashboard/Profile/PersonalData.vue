@@ -205,6 +205,7 @@ const deleteUser = async () => {
                     Выйти
                 </Link>
                 <button
+                    v-if="$page.props.userRole !== 'Admin'"
                     @click.prevent="deleteUser"
                     class="mt-6 text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight underline"
                 >

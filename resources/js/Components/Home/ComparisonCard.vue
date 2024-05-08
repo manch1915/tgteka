@@ -34,7 +34,7 @@ const props = defineProps({
                 {{ props.item.header }}
             </h3>
             <ul
-                :class="{ 'pb-20': !props.item.hasButton }"
+                :class="{ 'pb-52 padding_mani': !props.item.hasButton }"
                 class="text-violet-100 text-lg font-normal font-['Open Sans'] leading-[1.7rem] gap-4 sm:pt-5 pt-8 pl-5"
             >
                 <li v-for="(text, index) in props.item.listText" :key="index">
@@ -51,7 +51,7 @@ const props = defineProps({
             </div>
             <div
                 v-if="props.item.showSaveTimeMoney"
-                class="flex justify-end xl:pt-8 pt-9 pb-16"
+                class="flex justify-end xl:pt-8 pt-9 md:pb-16 sm:pb-16 pb-24"
             >
                 <div>
                     <span class="text-lg font-bold text-violet-100 leading-4">x</span>
@@ -99,9 +99,6 @@ const props = defineProps({
             @media screen and (max-width: 1024px) {
                 height: 150px;
             }
-            @media screen and (max-width: 480px) {
-                height: 78px;
-            }
         }
         @media screen and (max-width: 1024px) {
             order: 1;
@@ -125,7 +122,7 @@ const props = defineProps({
                 height: 155px;
             }
             @media screen and (max-width: 480px) {
-                height: 70px;
+                height: 125px;
             }
         }
 
@@ -159,8 +156,7 @@ const props = defineProps({
                     rgba(255, 255, 255, 1) 0%,
                     rgba(255, 255, 255, 0) 100%
                 );
-            -webkit-mask: linear-gradient(#fff 0 0) content-box,
-                linear-gradient(#fff 0 0);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
         }
@@ -174,6 +170,7 @@ const props = defineProps({
                 @media screen and (max-width: 640px) {
                     margin-bottom: 22px;
                 }
+
             }
         }
     }
@@ -210,6 +207,11 @@ const props = defineProps({
         border: 1px solid rgba(255, 255, 255, 0.1);
         background: #171961;
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
+    }
+}
+.padding_mani{
+    @media screen and (max-width: 425px){
+        padding-bottom: 9rem !important;
     }
 }
 </style>

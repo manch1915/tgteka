@@ -46,6 +46,7 @@ onBeforeMount(() => {
 
 const clearBodyOverflow = () => {
     document.body.style.overflow = "";
+    document.querySelector("html").style.overflowY = "";
 };
 </script>
 
@@ -66,23 +67,15 @@ const clearBodyOverflow = () => {
                     <Link :href="route('customers')">
                         <li
                             class="text-paleblue font-bold py-1 px-4 cursor-pointer"
-                            :class="
-                                profileButtonTitle === 'Заказчикам'
-                                    ? 'background'
-                                    : ''
-                            "
+                            :class="{ 'background': $page.url === '/' }"
                         >
                             Заказчикам
                         </li>
                     </Link>
-                    <Link :on-start="clearBodyOverflow" :href="route('owners')">
+                    <Link :href="route('owners')">
                         <li
                             class="text-paleblue font-bold py-1 px-4 cursor-pointer whitespace-nowrap"
-                            :class="
-                                profileButtonTitle === 'Владельцу канала'
-                                    ? 'background'
-                                    : ''
-                            "
+                            :class="{ 'background': $page.url === '/owners' }"
                         >
                             Владельцу канала
                         </li>
@@ -145,18 +138,18 @@ const clearBodyOverflow = () => {
             <div
                 class="flex gap-x-3 pt-10 text-white text-sm font-bold font-['Open Sans'] leading-tight"
             >
-                <button
-                    @click.prevent="router.visit(route('customers'))"
+                <Link as="button" :href="route('customers')" :onStart="clearBodyOverflow"
                     class="customers-btn w-full py-2"
+                      :class="{ 'background': $page.url === '/' }"
                 >
                     Заказчикам
-                </button>
-                <button
-                    @click.prevent="router.visit(route('owners'))"
+                </Link>
+                <Link as="button" :href="route('owners')" :onStart="clearBodyOverflow"
                     class="owners-btn w-full py-2"
+                      :class="{ 'background': $page.url === '/owners' }"
                 >
                     Владельцу канала
-                </button>
+                </Link>
             </div>
             <div class="justify-start items-center gap-1 inline-flex mt-12">
                 <div
@@ -201,6 +194,7 @@ const clearBodyOverflow = () => {
                     </div>
                     <div class="flex justify-center">
                         <button
+                            @click.prevent="openLogin"
                             class="text-center px-6 py-4 mt-5 bg-deepblue rounded-full shadow-inner border border-white border-opacity-10 justify-center items-center gap-2.5 inline-flex text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
                         >
                             Купить размещение
@@ -294,7 +288,7 @@ const clearBodyOverflow = () => {
 .customers-btn {
     border-radius: 100px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    background: #171961;
+    background: transparent;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
 }
 .owners-btn {

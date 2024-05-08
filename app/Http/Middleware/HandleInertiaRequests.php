@@ -30,13 +30,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+
+        // Get user's role if the user is authenticated
+        $role = $user ? $user->getRoleNames()->first() : null;
         return [
             ...parent::share($request),
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
-                'query'=>$request->query()
+                'query'=>$request->query(),
             ],
+            'userRole' => $role,
         ];
     }
 }

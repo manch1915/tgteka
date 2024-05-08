@@ -447,7 +447,7 @@ onUnmounted(() => {
 }
 
 .ql-container.empty-editor {
-    height: 200px;
+    height: 227px;
     transition: height 1s ease-out;
 }
 

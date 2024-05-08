@@ -7,7 +7,7 @@ defineProps({
 });
 </script>
 <template>
-    <div class="xl:pt-32 md:pt-16 lg:pt-26 pt-0 platform px-4 pb-10 sm:pb-0">
+    <div class="xl:pt-52 lg:pt-52 md:pt-32 sm:pt-16 pt-12 platform px-4 pb-10 sm:pb-0">
         <div class="container mx-auto">
             <h1 class="text-center text-4xl font-bold text-paleblue">
                 Как работает платформа?

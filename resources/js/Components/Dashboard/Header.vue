@@ -78,7 +78,13 @@ const openMessenger = () => {
                         </div>
                     </div>
                     <div class="flex sm:hidden logo items-center">
-                        <img class="w-16" src="/images/dashboard/logo.svg" alt="logo" />
+                        <Link preserve-scroll :href="route('catalog.channels.index')">
+                            <img
+                                class="w-16 md:w-24 lg:w-36"
+                                src="/images/dashboard/logo.svg"
+                                alt="logo"
+                            />
+                        </Link>
                     </div>
                 </div>
                 <div class="logo">

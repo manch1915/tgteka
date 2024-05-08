@@ -1,7 +1,7 @@
 <script setup>
 import ChannelCard from "@/Components/Dashboard/ChannelCard.vue";
 import axios from "axios";
-import {onMounted, ref, defineEmits, onUnmounted} from "vue";
+import {onMounted, ref, defineEmits, onUnmounted, computed} from "vue";
 import SortButton from "@/Components/Dashboard/SortButton.vue";
 import SearchBar from "@/Components/Dashboard/SearchBar.vue";
 import {useLoadingBar} from "naive-ui"
@@ -36,16 +36,21 @@ const getChannels = async (page = 1, search = '') => {
         })
 }
 
+const searchEngine = ref(false);
+
 const handleSearch = (search) => {
     getChannels(1, search);
 }
+
 const emit = defineEmits(['isEmptyChannels']);
+
 onMounted(async () => {
     try {
         await getChannels();
         if (channels.value.data.length === 0){
             emit('isEmptyChannels', true);
         } else {
+            searchEngine.value = true
             emit('isEmptyChannels', false);
         }
     } catch (error) {
@@ -69,7 +74,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div v-if="channels.data && channels.data.length" class="w-full sm:py-16 py-8 px-2">
+    <div v-if="searchEngine" class="w-full sm:py-16 py-8 px-2">
         <search-bar @search="handleSearch"/>
     </div>
     <div v-if="channels.data && channels.data.length" class="mt-4 flex flex-wrap lg:gap-3 gap-2 filter_buttons lg:justify-normal justify-center">

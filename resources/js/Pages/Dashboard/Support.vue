@@ -212,7 +212,7 @@ socket.onerror = function (error) {
                 </div>
             </div>
         </div>
-        <hr class="sm:mt-32 mt-16 border-t border-[#EAE0FF]" />
+        <hr class="sm:mt-32 mt-16 border-t border-[#6b627c]" />
         <div class="sm:mt-32 mt-16 px-12 contacts">
             <h1
                 class="text-violet-100 lg:text-4xl sm:text-start text-center text-xl font-bold font-['Open Sans'] leading-10"

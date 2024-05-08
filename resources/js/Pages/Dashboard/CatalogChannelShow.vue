@@ -389,7 +389,7 @@ onMounted(() => {
                             </div>
                             <div class="flex flex-wrap items-baseline gap-x-2 pt-8">
                                 <h1
-                                    class="text-violet-100 sm:text-2xl text-lg font-bold font-['Open Sans'] leading-tight"
+                                    class="text-violet-100 sm:text-2xl text-base font-bold font-['Open Sans'] leading-tight"
                                 >
                                     Стоимость публикации:
                                 </h1>

@@ -163,7 +163,7 @@ const formattedTotalSum = computed(() => {
                             >
                                 В корзине пусто.
                             </p>
-                            <div class="mt-12">
+                            <div class="my-12">
                                 <Link :href="route('catalog.channels.index')">
                                     <button
                                         class="text-violet-100 px-6 py-4 btn_gradient-purple transition hover:bg-purple-800 rounded-full"

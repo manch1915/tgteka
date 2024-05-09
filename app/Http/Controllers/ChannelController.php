@@ -45,6 +45,13 @@ class ChannelController extends Controller
             $channel->increment('views_count');
             session()->put("viewed_channel.{$channel->id}", true);
         }
+        $channel = Channel::select('channels.*')
+            ->addSelect('channel_statistics.stats')
+            ->leftJoin('channel_statistics', 'channels.id', '=', 'channel_statistics.channel_id')
+            ->whereNotNull('channel_statistics.stats')
+            ->where('channels.id', $channel->id)
+            ->firstOrFail();
+
         return inertia('Dashboard/CatalogChannelShow', ['channel' => $this->getChannelWithAvatarAndTopic($channel, $avatarService), 'favorites_count' => $channel->favorites()->count()] );
     }
 
@@ -213,7 +220,9 @@ class ChannelController extends Controller
     protected function getChannelWithAvatarAndTopic(Channel $channel, AvatarService $avatarService)
     {
         $channel->avatar = $avatarService->getAvatarUrlOfChannel($channel);
+        $channel->statistics = $channel->stats ? json_decode($channel->stats, true) : [];
         $channel->load('topic');
+
         return $channel;
     }
 }

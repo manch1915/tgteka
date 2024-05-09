@@ -141,7 +141,7 @@ const formattedTotalSum = computed(() => {
         <div class="grid lg:grid-cols-[3fr_1fr] grid-cols-1 gap-x-4 px-2">
             <div class="sm:order-1 order-2">
                 <div class="channels">
-                    <div class="flex flex-col gap-y-4 mt-8">
+                    <div class="flex flex-col gap-y-4 lg:mt-[10px] mt-8">
                         <template
                             v-if="!isCartEmpty"
                             v-for="channel in channels"

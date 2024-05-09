@@ -39,7 +39,7 @@ const removeCart = (cart, index, channel) => {
     cart.splice(index, 1);
     message.info(`Канал ${channel.channel_name} был удален из корзины.`);
     saveCart(cart);
-    emit("cartChanged");
+    emit("cartUpdated", cart);
 };
 
 const toggleChannelInCart = (channel) => {

@@ -37,6 +37,7 @@ import { Line } from "vue-chartjs";
 import Reviews from "@/Components/Dashboard/ChannelTab/Reviews.vue";
 import axios from "axios";
 import { Head } from "@inertiajs/vue3";
+import {useCartStore} from "@/stores/CartStore.js";
 
 Chart.register(
     Title,
@@ -61,7 +62,7 @@ const fav = ref(false);
 const message = useMessage();
 const format = computed(() => generateFormatArray(props.channel));
 const formatValue = ref(format.value[0]?.value || null);
-
+const cartStore = useCartStore()
 const removeCart = (cart, index, channel) => {
     cart.splice(index, 1);
     message.info(`Канал ${channel.channel_name} был удален из корзины.`);
@@ -71,7 +72,7 @@ const removeCart = (cart, index, channel) => {
 const toggleChannelInCart = (channel) => {
     const cart = loadCart();
     const index = cart.findIndex((ch) => ch.id === channel.id);
-
+    cartStore.cartUpdate++;
     if (index > -1 && formatValue.value === cart[index].format) {
         removeCart(cart, index, channel);
     } else {

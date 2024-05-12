@@ -23,10 +23,11 @@ const wrap = ref(false)
                 <div class="flex grid-element flex-col items-center justify-center gap-y-3">
                     <n-popover trigger="hover">
                         <template #trigger>
-                            <div
-                                :class="{'bg-yellow-400 point': channel.status === 'pending',
-                    'bg-green-400 point': channel.status === 'accepted',
-                    'bg-red-400 point': channel.status === 'declined'}">
+                            <div :class="{
+                                'bg-yellow-400 point': channel.status === 'pending' || channel.status === 'loading',
+                                'bg-green-400 point': channel.status === 'accepted',
+                                'bg-red-400 point': channel.status === 'declined'
+                                }">
                             </div>
                         </template>
                         <span>{{ $t('messages.' + channel.status) }}</span>

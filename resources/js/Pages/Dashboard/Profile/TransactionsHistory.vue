@@ -64,7 +64,7 @@ const status = [
     },
     {
         value: 'succeeded',
-        label: 'Законченный'
+        label: 'Успешный'
     },
     {
         value: 'failed',

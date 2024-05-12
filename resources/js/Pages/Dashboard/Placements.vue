@@ -33,7 +33,7 @@ const SORT_DATA = [
         value: "check",
     },
     {
-        title: "законченный",
+        title: "завершенный",
         value: "finished",
     },
 ];

@@ -25,7 +25,7 @@ const state = reactive({
         },
         {
             value: 'succeeded',
-            label: 'законченный',
+            label: 'успешный',
         },
         {
             value: 'failed',

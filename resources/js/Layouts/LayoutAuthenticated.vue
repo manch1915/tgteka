@@ -58,7 +58,7 @@ const menuClick = (event, item) => {
       :class="[layoutAsidePadding, { 'ml-60 lg:ml-0': isAsideMobileExpanded }]"
       class="pt-14 min-h-screen w-screen transition-position lg:w-auto bg-gray-50 dark:bg-slate-800 dark:text-slate-100"
     >
-<!--      <NavBar
+ <NavBar
         :menu="menuNavBar"
         :class="[
           layoutAsidePadding,
@@ -81,15 +81,7 @@ const menuClick = (event, item) => {
         >
           <BaseIcon :path="mdiMenu" size="24" />
         </NavBarItemPlain>
-        <NavBarItemPlain use-margin>
-          <FormControl
-            placeholder="Search (ctrl+k)"
-            ctrl-k-focus
-            transparent
-            borderless
-          />
-        </NavBarItemPlain>
-      </NavBar>-->
+      </NavBar>
       <AsideMenu
         :is-aside-mobile-expanded="isAsideMobileExpanded"
         :is-aside-lg-active="isAsideLgActive"

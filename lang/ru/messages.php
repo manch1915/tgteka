@@ -8,6 +8,7 @@ return [
     'checked' => 'проверено',
     'finished' => 'завершенный',
     'succeeded' => 'успешный',
+    'loading' => 'в прогрессе',
     'failed' => 'неуспешный',
     'in_progress' => 'в прогрессе',
     'completed' => 'завершенный',

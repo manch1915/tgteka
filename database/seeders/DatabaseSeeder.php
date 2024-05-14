@@ -18,8 +18,7 @@ class DatabaseSeeder extends Seeder
             TopicSeeder::class,
             FormatSeeder::class,
             SettingSeeder::class,
-            ChannelSeeder::class,
-            ChannelStatisticsSeeder::class
+            ChannelSeeder::class
         ]);
     }
 }

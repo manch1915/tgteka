@@ -12,7 +12,7 @@ class CreateChannelsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('url')->unique();
-            $table->string('channel_name', 64);
+            $table->string('channel_name', 128);
             $table->string('avatar')->nullable();
             $table->string('slug')->unique();
             $table->foreignId('topic_id')->constrained();

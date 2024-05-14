@@ -118,12 +118,17 @@ class FetchChannelStatisticsJob implements ShouldQueue
             $this->channel->language = $channelDetails->response->language;
         }
 
-        if ($generalStatistics->response->peer_type === 'channel'
-            && property_exists($generalStatistics->response, 'adv_post_reach_12h')
-            && $generalStatistics->response->adv_post_reach_12h != 0)
-        {
-            $this->channel->cpm = ($this->channel->format_one_price * 1000)
-                / $generalStatistics->response->adv_post_reach_12h;
+        if (property_exists($generalStatistics->response, 'peer_type')) {
+            // Access the 'peer_type' property
+            if ($generalStatistics->response->peer_type === 'channel'
+                && property_exists($generalStatistics->response, 'adv_post_reach_12h')
+                && $generalStatistics->response->adv_post_reach_12h != 0)
+            {
+                $this->channel->cpm = ($this->channel->format_one_price * 1000)
+                    / $generalStatistics->response->adv_post_reach_12h;
+            }
+        } else {
+            logger('Property "peer_type" does not exist in the response.');
         }
 
         $this->channel->status = 'accepted';

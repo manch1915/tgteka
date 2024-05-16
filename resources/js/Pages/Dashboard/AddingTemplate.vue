@@ -193,7 +193,7 @@ watch(
     [content, images, title],
     () => {
         clearTimeout(typingTimer);
-        typingTimer = setTimeout(patchPattern, 500);
+        typingTimer = setTimeout(patchPattern, 1300);
     },
     { immediate: true, deep: true }
 );

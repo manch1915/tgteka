@@ -2,7 +2,7 @@
 import {computed, ref} from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiCheck, mdiClose, mdiEyeOutline, mdiForumOutline} from "@mdi/js";
-import {openModal, pushModal} from "jenesius-vue-modal";
+import { closeModal, openModal, pushModal } from 'jenesius-vue-modal'
 import Mission from "@/Components/Dashboard/Mission.vue";
 import { useLoadingBar, useMessage} from "naive-ui";
 import CancelOrder from "@/Components/Dashboard/CancelOrder.vue";
@@ -41,6 +41,7 @@ const accept = async () => {
             loading.finish()
             isLoading.value = false
             message.success(response.data.message);
+            closeModal()
             ordersStore.getOrders()
         })
         .catch(error => {

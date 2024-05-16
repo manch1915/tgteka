@@ -30,7 +30,7 @@ class UpdateFinishedOrdersCommand extends Command
     public function handle(): void
     {
         $orders = Order::where('post_date_end', '<', Carbon::now())
-            ->where('status', 'accepted')
+            ->where('status', 'checked')
             ->whereDoesntHave('orderReports')
             ->orWhereHas('orderReports', function ($query) {
                 $query->where('status', 'declined');

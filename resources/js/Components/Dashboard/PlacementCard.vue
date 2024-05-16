@@ -67,7 +67,7 @@ const openReview = () => {
   pushModal(Review, {order_id: props.order.id})
 }
 
-defineEmits(['orderAccepted'])
+const emit = defineEmits(['orderAccepted'])
 
 const acceptOrder = () => {
     axios.post(route('accept-order', { order: props.order.id }))

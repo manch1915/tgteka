@@ -10,19 +10,36 @@ use Illuminate\Http\Request;
 
 class ChannelController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $channels = Channel::with('topic')->get();
+        // Get the 'pageSize' parameter from the request, with a default value of 15 if not provided
+        $pageSize = $request->input('pageSize', 15);
 
-        [$channelsType, $chatsType] = $channels->partition(function ($channel) {
-            return $channel->type === 'channel';
-        });
+        // Get the search parameters
+        $searchParams = $request->all();
 
-        return response()->json([
-            'channels' => $channelsType,
-            'chats' => $chatsType,
-        ]);
+        // Create a query builder instance
+        $query = Channel::with('topic');
+
+        $searchableFields = [
+            'channel_name',
+            'status',
+            'description',
+            'language',
+            'subscribers_source',
+        ];
+
+        foreach ($searchableFields as $field) {
+            if (isset($searchParams[$field])) {
+                $query->where($field, 'LIKE', '%' . $searchParams[$field] . '%');
+            }
+        }
+
+        $channels = $query->paginate($pageSize);
+
+        return response()->json($channels);
     }
+
 
     public function store(Request $request)
     {

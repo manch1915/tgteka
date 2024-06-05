@@ -1,11 +1,12 @@
 <script setup>
 import ChannelCard from "@/Components/Dashboard/ChannelCard.vue";
 import axios from "axios";
-import {onMounted, ref, defineEmits, onUnmounted, computed} from "vue";
+import {onMounted, ref, defineEmits} from "vue";
 import SortButton from "@/Components/Dashboard/SortButton.vue";
 import SearchBar from "@/Components/Dashboard/SearchBar.vue";
 import {useLoadingBar} from "naive-ui"
 import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 const channels = ref({})
 
@@ -57,20 +58,8 @@ onMounted(async () => {
         console.error("Error fetching channels: ", error);
     }
 });
-const windowWidth = ref(window.innerWidth);
-const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
-};
 
-onMounted(() => {
-    // Add the updateWidth function as a window resize listener
-    window.addEventListener("resize", updateWidth);
-});
-
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
+const { windowWidth } = useWindowWidth()
 </script>
 
 <template>

@@ -7,6 +7,7 @@ import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/Components/Admin/SectionTitleLineWithButton.vue";
 import CardBox from "@/Components/Admin/CardBox.vue";
 import TableReports from "@/Components/Admin/TableReports.vue";
+import ReportsTableWithSearch from '@/Components/Admin/ReportsTableWithSearch.vue'
 
 </script>
 
@@ -15,7 +16,7 @@ import TableReports from "@/Components/Admin/TableReports.vue";
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiTableBorder" title="Жалобы" main/>
         <CardBox class="mb-6 mt-12" has-table>
-            <TableReports/>
+            <ReportsTableWithSearch/>
         </CardBox>
     </SectionMain>
   </LayoutAuthenticated>

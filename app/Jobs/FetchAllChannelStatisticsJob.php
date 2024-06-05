@@ -15,14 +15,17 @@ class FetchAllChannelStatisticsJob implements ShouldQueue
 
     public function handle(): void
     {
-        $channels = Channel::where('status', 'accepted')->get();
+        $chunkSize = 200;
 
-        foreach ($channels as $channel) {
-            try {
-                dispatch(new FetchChannelStatisticsJob($channel));
-            } catch (\Throwable $exception) {
+        Channel::where('status', 'accepted')->chunk($chunkSize, function ($channels) {
+            foreach ($channels as $channel) {
+                try {
+                    dispatch(new FetchChannelStatisticsJob($channel));
+                } catch (\Throwable $exception) {
 
+                }
             }
-        }
+        });
+
     }
 }

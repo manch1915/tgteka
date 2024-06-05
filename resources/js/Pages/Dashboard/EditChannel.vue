@@ -39,7 +39,6 @@ const props = defineProps({
     channel: Object,
 });
 
-const discount_check = ref(false);
 const format_one_checkbox = ref(false);
 const format_two_checkbox = ref(false);
 const format_three_checkbox = ref(false);
@@ -52,7 +51,7 @@ const form = reactive({
     // type: '',
     url: "",
     subscribers_source: "",
-    repeat_discount: null,
+    repeat_discount: 0,
     terms: false,
     format_one_price: 0,
     format_two_price: 0,
@@ -116,6 +115,10 @@ const channelSubjects = computed(() =>
     })),
 );
 const discountData = [
+    {
+        label: "0%",
+        value: "0",
+    },
     {
         label: "10%",
         value: "10",
@@ -456,9 +459,6 @@ watch(state.type, (newRadio) => {
                         <h2
                             class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                             Скидка на повторный заказ
-                            <n-switch
-                                v-model:value="discount_check"
-                                :theme-overrides="switchThemeOverrides"/>
                         </h2>
 
                     </div>
@@ -504,7 +504,7 @@ watch(state.type, (newRadio) => {
                         <button
                             @click.prevent="uploadChannel"
                             class="rounded-3xl btn_gradient-purple px-6 py-3.5">
-                            Добавить канал / чат
+                            Сохранить канал
                         </button>
                         <button
                             @click.prevent="router.visit(route('channels'))"

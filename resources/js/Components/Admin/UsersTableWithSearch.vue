@@ -22,16 +22,16 @@
             </template>
             <template #default>
                 <div style="overflow: auto">
-                    <n-data-table
-                        size="small"
-                        :loading="tableLoading"
-                        :data="dataList"
-                        :columns="tableColumns"
-                        :row-key="rowKey"
-                        :style="{ height: `${tableHeight}px` }"
-                        :flex-height="true"
-                        :scroll-x="1000"
-                    />
+                <n-data-table
+                    size="small"
+                    :loading="tableLoading"
+                    :data="dataList"
+                    :columns="tableColumns"
+                    :row-key="rowKey"
+                    :style="{ height: `${tableHeight}px` }"
+                    :flex-height="true"
+                    :scroll-x="1000"
+                />
                 </div>
             </template>
 
@@ -44,7 +44,7 @@
 
 <script>
 import TableFooter from "@/Components/Admin/TableFooter.vue";
-import { renderTag } from "@/hooks/form";
+import { renderRoleButton, renderTag } from '@/hooks/form'
 import {
     usePagination,
     useRowKey,
@@ -54,10 +54,14 @@ import {
 } from "@/hooks/table";
 import {
     NAvatar, NButton,
+    NCheckbox,
+    NCheckboxGroup,
     NDataTable,
+    NDatePicker,
     NInput,
     NSelect,
     NSpace,
+    NTimePicker,
     useMessage
 } from 'naive-ui'
 import { defineComponent, h, onMounted, ref } from "vue";
@@ -67,8 +71,8 @@ import TableBody from "@/Components/Admin/TableBody.vue";
 import { router } from '@inertiajs/vue3'
 const conditionItems = [
     {
-        key: "channel_name",
-        label: "Название канала",
+        key: "username",
+        label: "имя пользователя",
         value: ref(null),
         render: (formItem) => {
             return h(NInput, {
@@ -76,102 +80,52 @@ const conditionItems = [
                 onUpdateValue: (val) => {
                     formItem.value.value = val;
                 },
-                placeholder: "Название канала",
+                placeholder: "имя пользователя",
             });
         },
     },
     {
-        key: "url",
-        label: "url",
+        key: "email",
+        label: "email",
         value: ref(null),
         render: (formItem) => {
             return h(NInput, {
                 value: formItem.value.value,
                 onUpdateValue: (val) => {
                     formItem.value.value = val;
-                },
-                placeholder: "url",
+                }
             });
         },
     },
     {
-        key: "language",
-        label: "Язык",
+        key: "mobile_number",
+        label: "номер телефона",
         value: ref(null),
         render: (formItem) => {
             return h(NInput, {
                 value: formItem.value.value,
                 onUpdateValue: (val) => {
                     formItem.value.value = val;
-                },
-                placeholder: "Русский",
+                }
             });
         },
     },
     {
-        key: "description",
-        label: "Описание",
+        key: "balance",
+        label: "баланс",
         value: ref(null),
         render: (formItem) => {
             return h(NInput, {
                 value: formItem.value.value,
                 onUpdateValue: (val) => {
                     formItem.value.value = val;
-                },
-                placeholder: "Описание",
+                }
             });
         },
-    },
-    {
-        key: "subscribers_source",
-        label: "Источник подписчиков",
-        value: ref(null),
-        render: (formItem) => {
-            return h(NInput, {
-                value: formItem.value.value,
-                onUpdateValue: (val) => {
-                    formItem.value.value = val;
-                },
-                placeholder: "Источник подписчиков",
-            });
-        },
-    },
-    {
-        key: "status",
-        label: "Статус",
-        value: ref(null),
-        optionItems: [
-            {
-                label: "принятый",
-                value: "accepted",
-            },
-            {
-                label: "отклоненный",
-                value: "declined",
-            },
-            {
-                label: "в прогрессе",
-                value: "loading",
-            },
-            {
-                label: "в ожидании",
-                value: "pending",
-            },
-        ],
-        render: (formItem) => {
-            return h(NSelect, {
-                options: formItem.optionItems,
-                value: formItem.value.value,
-                placeholder: "status",
-                onUpdateValue: (val) => {
-                    formItem.value.value = val;
-                },
-            });
-        },
-    },
+    }
 ];
 export default defineComponent({
-    name: "TableWithSearch",
+    name: "UsersTableWithSearch",
     components: { NDataTable, TableBody, TableHeader, DataForm, TableFooter },
     setup() {
         const searchForm = ref(null);
@@ -183,48 +137,40 @@ export default defineComponent({
         const tableColumns = useTableColumn(
             [
                 {
+                    fixed: 'left',
+                    width: 60,
                     title: "ID",
                     key: "id"
                 },
                 {
-                    title: "Название канала",
-                    key: "channel_name",
+                    title: "Имя",
+                    key: "username",
                 },
                 {
-                    title: "Avatar",
-                    key: "avatar",
-                    render: (rowData) => {
-                        return h(
-                            NAvatar,
-                            {
-                                circle: true,
-                                size: "small",
-                                src: rowData?.avatar
-                            },
-                        );
-                    },
+                    title: "email",
+                    key: "email",
                 },
                 {
-                    title: "url",
-                    key: "url",
+                    title: "Номер телефона",
+                    key: "mobile_number",
                 },
                 {
-                    title: "Язык",
-                    key: "language",
+                    title: "количество каналов",
+                    key: "channels_count",
                 },
                 {
-                    title: "Описание",
-                    key: "description",
+                    title: "количество заказов",
+                    key: "orders_count",
                 },
                 {
-                    title: "Источник подписчиков",
-                    key: "subscribers_source",
+                    title: "Баланс",
+                    key: "balance",
                 },
                 {
-                    title: "Статус",
-                    key: "status",
+                    title: "является модератором",
+                    key: "is_moderator",
                     render: (rowData) =>
-                        renderTag(rowData.status, {
+                        renderTag(rowData?.is_moderator.toString(), {
                             type: 'info',
                             size: "small",
                         }),
@@ -233,33 +179,9 @@ export default defineComponent({
                     title: "Настройки",
                     key: "null",
                     fixed: 'right',
-                    width: 120,
-                    render: (rowData) => {
-                        return h(
-                            NSpace,
-                            { justify: 'space-between' },
-                            {
-                                default: () => [
-                                    h(
-                                        NButton,
-                                        {
-                                            onClick: () => { router.visit(route('admin.api.channels.edit', rowData.slug)) }
-                                        },
-                                        () => 'Перейти'
-                                    ),
-                                    h(
-                                        NButton,
-                                        {
-                                            onClick: () => axios.delete(route('admin.api.channels.destroy', rowData.id)).then().catch(c => alert(c.response.data.error)),
-                                            type: 'error'
-                                        },
-                                        () => 'Удалить'
-                                    )
-                                ]
-                            }
-                        )
-                    },
-                },
+                    width: 240,
+                    render: (rowData) => renderRoleButton(rowData?.is_moderator, route('admin.api.users.update', rowData.id), message),
+                }
             ],
             {
                 align: "center",
@@ -268,7 +190,7 @@ export default defineComponent({
         function doRefresh() {
             let searchParams = searchForm.value?.generatorParams();
             axios
-                .get(route('admin.api.channels.index'), {
+                .get(route('admin.api.users.index'), {
                     params: {
                         page: pagination.page,
                         pageSize: pagination.pageSize,

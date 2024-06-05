@@ -19,7 +19,7 @@ import {
 import {computed, ref, watch} from "vue";
 import CatalogChannels from "@/Components/Dashboard/CatalogChannels.vue";
 import { useMainStore } from "@/stores/main.js";
-import { useChannelStore } from "@/stores/channelStore.js";
+import { useChannelStore } from "@/stores/ChannelStore.js";
 import { Head } from "@inertiajs/vue3";
 
 const SORT_DATA = ["Рейтинг", "ER", "Просмотры", "Подписчики", "Цена", "CPМ"];

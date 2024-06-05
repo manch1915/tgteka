@@ -19,10 +19,11 @@
 </template>
 
 <script setup>
-import {ref, onMounted, defineEmits, onUnmounted, computed} from 'vue';
+import {defineEmits, computed} from 'vue';
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiArrowLeftBold, mdiArrowRightBold} from "@mdi/js";
 import TailwindPagination from "laravel-vue-pagination/src/TailwindPagination.vue";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 // Import TailwindPagination, BaseIcon, and other necessary components and variables
 
@@ -45,7 +46,7 @@ const itemClasses = computed(() => {
         classes.push('!px-[0.7rem]');
     }
     return classes;
-});const windowWidth = ref(window.innerWidth);
+});
 
 const emit = defineEmits(['pagination-change-page']);
 // Emit the pagination-change-page event whenever the pagination changes
@@ -61,17 +62,7 @@ const limit = computed(() => {
 const changePage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
-};
-// Listen to window width changes
-onMounted(() => {
-    window.addEventListener('resize', () => {
-        windowWidth.value = window.innerWidth;
-    });
-});
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
+
+const { windowWidth } = useWindowWidth()
+
 </script>

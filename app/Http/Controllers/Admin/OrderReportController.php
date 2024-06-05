@@ -11,11 +11,26 @@ class OrderReportController extends Controller
 {
     public function index(Request $request)
     {
-        if (!$request->status) {
-            return response()->json('error',400);
+        $query = OrderReport::with('order');
+
+        $pageSize = $request->input('pageSize', 15);
+
+        $searchParams = $request->all();
+
+        $searchableFields = [
+            'id',
+            'order_id',
+            'message',
+            'status',
+        ];
+
+        foreach ($searchableFields as $field) {
+            if (isset($searchParams[$field])) {
+                $query->where($field, 'LIKE', '%' . $searchParams[$field] . '%');
+            }
         }
 
-        $reports = OrderReport::where('status', $request->status)->paginate(10);
+        $reports = $query->paginate($pageSize);
 
         return response()->json($reports);
     }
@@ -48,7 +63,7 @@ class OrderReportController extends Controller
             'status' => 'required|in:accepted,declined',
         ]);
         $orderReport = OrderReport::findOrFail($id);
-        
+
         $orderReport->update($validated);
 
         return response()->json($orderReport);

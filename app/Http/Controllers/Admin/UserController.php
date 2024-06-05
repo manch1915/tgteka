@@ -10,11 +10,35 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::withCount([ 'channels', 'orders', 'patterns'])->get();
+        $pageSize = $request->input('pageSize', 15);
 
-        return UserResource::collection($users);
+        $query = User::withCount([ 'channels', 'orders', 'patterns']);
+
+        $searchParams = $request->all();
+
+        $searchableFields = [
+            'username',
+            'email',
+            'mobile_number',
+            'balance',
+        ];
+
+        foreach ($searchableFields as $field) {
+            if (isset($searchParams[$field])) {
+                $query->where($field, 'LIKE', '%' . $searchParams[$field] . '%');
+            }
+        }
+
+        $users = $query->paginate($pageSize);
+
+        $users->map(function ($user) {
+            $user->is_moderator = $user->hasRole('Moderator');
+            return $user;
+        });
+
+        return response()->json($users);
     }
 
     public function store(Request $request)
@@ -33,6 +57,7 @@ class UserController extends Controller
         } else {
             $user->assignRole($moderatorRole);
         }
+
         return response()->json(['status' => 'Роль успешно обновлена']);
     }
 

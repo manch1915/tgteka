@@ -13,6 +13,30 @@ class TopicController extends Controller
         return Topic::all()->toJson();
     }
 
+    public function pagination(Request $request)
+    {
+        $query = Topic::query();
+
+        $pageSize = $request->input('pageSize', 15);
+
+        $searchParams = $request->all();
+
+        $searchableFields = [
+            'id',
+            'title',
+        ];
+
+        foreach ($searchableFields as $field) {
+            if (isset($searchParams[$field])) {
+                $query->where($field, 'LIKE', '%' . $searchParams[$field] . '%');
+            }
+        }
+
+        $topics = $query->paginate($pageSize);
+
+        return response()->json($topics);
+    }
+
     public function create()
     {
     }

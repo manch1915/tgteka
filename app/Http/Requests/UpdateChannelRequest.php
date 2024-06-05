@@ -10,7 +10,6 @@ class UpdateChannelRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'avatar'             => 'nullable|file|mimes:jpg,jpeg,png|max:10240',
             'channel_name'       => 'required|max:200',
             'description'        => 'required|string|max:300',
             'subscribers_source' => 'required|string|max:300',

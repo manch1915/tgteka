@@ -12,8 +12,8 @@ import {reactive} from "vue";
 import BaseButton from "@/Components/Admin/BaseButton.vue";
 import {useMessage} from "naive-ui";
 import CardBox from "@/Components/Admin/CardBox.vue";
-import TableTopics from "@/Components/Admin/TableTopics.vue";
 import {useMainStore} from "@/stores/main.js";
+import TopicsTableWithSearch from '@/Components/Admin/TopicsTableWithSearch.vue'
 
 const form = reactive({
     title: ''
@@ -42,7 +42,7 @@ const storeTopic = () => {
         </FormField>
         <BaseButton @click.prevent="storeTopic" color="yellow" label="Добавить"/>
         <CardBox class="mb-6 mt-12" has-table>
-            <TableTopics/>
+            <TopicsTableWithSearch/>
         </CardBox>
     </SectionMain>
   </LayoutAuthenticated>

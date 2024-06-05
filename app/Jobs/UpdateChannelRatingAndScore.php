@@ -16,44 +16,44 @@ class UpdateChannelRatingAndScore implements ShouldQueue
 
     public function handle(): void
     {
-        // Get all channels
-        $channels = Channel::all()->where('status', '=', 'accepted');
+        $chunkSize = 200;
 
-        // loop all channels
-        foreach($channels as $channel){
+        Channel::where('status', 'accepted')
+            ->chunk($chunkSize, function ($channels) {
+                foreach ($channels as $channel) {
+                    // calculate score based on orders last 365 days
+                    $lastYearOrders = $channel->orders()
+                        ->where('created_at', '>=', Carbon::now()->subDays(365))
+                        ->where('status', 'finished')
+                        ->get();
 
-            // calculate score based on orders last 365 days
-            $lastYearOrders = $channel->orders()
-                ->where('created_at', '>=', Carbon::now()->subDays(365))
-                ->where('status', 'finished')
-                ->get();
+                    $score = 0;
 
-            $score = 0;
+                    foreach ($lastYearOrders as $order) {
+                        $score += 1; // score for completing an order
 
-            foreach($lastYearOrders as $order){
-                $score += 1; // score for completing an order
+                        // add score based on order price
+                        $score += ($order->price / 1000) * 0.1;
 
-                // add score based on order price
-                $score += ($order->price/1000) * 0.1;
+                        // add score based on review rating
+                        if ($order->review) {
+                            $score += $this->getScoreByRating($order->review->rating, $order->price);
+                        }
+                    }
 
-                // add score based on review rating
-                if($order->review){
-                    $score += $this->getScoreByRating($order->review->rating, $order->price);
+                    // Update channel score
+                    $channel->score = $score;
+
+                    // calculate rating from all reviews
+                    $reviews = $channel->reviews;
+                    if ($reviews->count()) {
+                        $rating = $reviews->sum('rating') / $reviews->count();
+                        $channel->rating = $rating;
+                    }
+
+                    $channel->save();
                 }
-            }
-
-            // Update channel score
-            $channel->score = $score;
-
-            // calculate rating from all reviews
-            $reviews = $channel->reviews;
-            if($reviews->count()){
-                $rating = $reviews->sum('rating') / $reviews->count();
-                $channel->rating = $rating;
-            }
-
-            $channel->save();
-        }
+            });
     }
 
     private function getScoreByRating($rating, $price): float|int

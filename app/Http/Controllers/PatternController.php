@@ -9,7 +9,6 @@ use App\Models\Pattern;
 use App\Models\User;
 use App\Services\AvatarService;
 use App\Services\MediaItemService;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
@@ -165,6 +164,8 @@ class PatternController extends Controller
 
     public function edit(Pattern $pattern)
     {
+        $this->authorize('edit', $pattern);
+
         $patternMedia = $pattern
             ->getMedia('images')
             ->map(function ($item) {

@@ -7,6 +7,7 @@ import {selectThemeOverrides} from "@/themeOverrides.js";
 import { NDatePicker, NSelect, useLoadingBar} from "naive-ui";
 import {Head, usePage} from "@inertiajs/vue3";
 import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 const page = usePage();
 const appointmentInUrl = page.props.ziggy.query.appointment;
@@ -77,20 +78,8 @@ onMounted(() => getTransactions(1, appointmentVal.value, statusValue.value));
 watch([appointmentVal, statusValue, range], () => {
     getTransactions(1, appointmentVal.value, statusValue.value)
 })
-const windowWidth = ref(window.innerWidth);
-const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
-};
 
-onMounted(() => {
-    // Add the updateWidth function as a window resize listener
-    window.addEventListener("resize", updateWidth);
-});
-
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
+const { windowWidth } = useWindowWidth()
 </script>
 
 <template>

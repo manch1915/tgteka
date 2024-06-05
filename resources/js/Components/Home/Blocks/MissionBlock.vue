@@ -1,27 +1,18 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import {useScrollingStore} from "@/stores/ScrollingStore.js";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 const scrollingStore = useScrollingStore();
 
-const windowWidth = ref(window.innerWidth);
+const { windowWidth } = useWindowWidth()
+
 const maximumOffset = ref(null)
 
-const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
-};
-
 onMounted(() => {
-    // Add the updateWidth function as a window resize listener
-    window.addEventListener("resize", updateWidth);
-
     scrollingStore.missionBlockOffset = maximumOffset.value.offsetTop
 });
 
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
 </script>
 <template>
     <div class="mission" >

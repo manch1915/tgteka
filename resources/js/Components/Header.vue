@@ -1,8 +1,9 @@
 <script setup>
-import { Link, router, usePage } from "@inertiajs/vue3";
-import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
+import { Link, usePage } from "@inertiajs/vue3";
+import { onBeforeMount, ref, watch } from "vue";
 import { useHomeButtons } from "@/stores/homeButtons.js";
 import { openLogin, openRegister } from "@/utilities/authModals.js";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 const burgerActive = ref(false);
 const toggleBurger = () => {
@@ -16,20 +17,8 @@ const toggleBurger = () => {
         document.querySelector("html").style.overflowY = "";
     }
 };
-const width = ref(window.innerWidth);
-const updateWidth = () => {
-    width.value = window.innerWidth;
-};
+const { windowWidth } = useWindowWidth();
 
-onMounted(() => {
-    // Add the updateWidth function as a window resize listener
-    window.addEventListener("resize", updateWidth);
-});
-
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
 const homeButtons = useHomeButtons();
 const page = usePage();
 const profileButtonTitle = ref(homeButtons.activeButton);
@@ -51,7 +40,7 @@ const clearBodyOverflow = () => {
 </script>
 
 <template>
-    <div v-if="width >= 768" class="header">
+    <div v-if="windowWidth >= 768" class="header">
         <div
             class="container mx-auto flex flex-wrap justify-between items-center py-2 px-6 nav-menu"
         >

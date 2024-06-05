@@ -3,17 +3,35 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CallbackResource;
 use App\Models\Callback;
 use Illuminate\Http\Request;
 
 class CallbackController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $callbacks = Callback::all();
+        $pageSize = $request->input('pageSize', 15);
 
-        return CallbackResource::collection($callbacks);
+        $searchParams = $request->all();
+
+        // Create a query builder instance
+        $query = Callback::all()->toQuery();
+
+        $searchableFields = [
+            'id',
+            'name',
+            'email',
+        ];
+
+        foreach ($searchableFields as $field) {
+            if (isset($searchParams[$field])) {
+                $query->where($field, 'LIKE', '%' . $searchParams[$field] . '%');
+            }
+        }
+
+        $callbacks = $query->paginate($pageSize);
+
+        return response()->json($callbacks);
     }
 
     public function store(Request $request)

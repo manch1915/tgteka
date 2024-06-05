@@ -21,6 +21,7 @@ class UpdateFinishedOrdersJob implements ShouldQueue
     protected BalanceService $balanceService;
 
     const RELEASE_DURATION = 3600;
+
     /**
      * Create a new job instance.
      *
@@ -45,7 +46,7 @@ class UpdateFinishedOrdersJob implements ShouldQueue
             $this->release(self::RELEASE_DURATION); // Try the job again after 1 hour
         }
         else if ($this->order->orderReports &&
-            $this->order->orderReports->where('status', 'declined')->exists()) {
+            $this->order->orderReports->contains('status', 'declined')) {
             // there are orderReports with status declined
             $this->release(self::RELEASE_DURATION); // Try the job again after 1 hour
         }

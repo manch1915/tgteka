@@ -1,7 +1,7 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import OrderCard from "@/Components/Dashboard/OrderCard.vue";
-import {onMounted, onUnmounted, ref} from "vue";
+import {onMounted} from "vue";
 import {useOrdersStore} from "@/stores/OrdersStore.js";
 import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
 
@@ -10,20 +10,7 @@ const ordersStore = useOrdersStore()
 const getOrders = (page = 1) => {
     ordersStore.getOrders(page)
 }
-const windowWidth = ref(window.innerWidth);
-const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
-};
 
-onMounted(() => {
-    // Add the updateWidth function as a window resize listener
-    window.addEventListener("resize", updateWidth);
-});
-
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
 </script>
 
 <template>

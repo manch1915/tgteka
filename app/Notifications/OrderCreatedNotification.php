@@ -58,7 +58,7 @@ class OrderCreatedNotification extends Notification implements ShouldQueue
 
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->content('Поступила новая заявка на размещение рекламы для канала ' . $this->order->channel->name . '. Проверьте и обработайте данную заявку.');
+            ->content('Поступила новая заявка на размещение рекламы для канала ' . $this->order->channel->channel_name . '. Проверьте и обработайте данную заявку.');
     }
 
 }

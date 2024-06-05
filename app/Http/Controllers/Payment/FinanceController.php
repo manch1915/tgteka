@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\CheckPayoutConfirmationJob;
 use App\Models\Setting;
 use App\Models\Transaction;
 use App\Notifications\PayoutConfirmNotification;
@@ -67,6 +68,8 @@ class FinanceController extends Controller
         $confirmLink = route('confirm-payout', $encryptedTransactionId);
 
         auth()->user()->notify(new PayoutConfirmNotification($confirmLink, $request->amount ));
+
+        CheckPayoutConfirmationJob::dispatch($transactionId)->delay(now()->addMinutes(10));
     }
 
     public function confirmPayout($token)

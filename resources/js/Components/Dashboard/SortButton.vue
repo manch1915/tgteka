@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from 'vue';
-import {useChannelStore} from "@/stores/channelStore.js";
+import {useChannelStore} from "@/stores/ChannelStore.js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import {mdiArrowDownDropCircleOutline, mdiArrowUpDropCircleOutline} from "@mdi/js";
 

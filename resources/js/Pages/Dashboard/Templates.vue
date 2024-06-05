@@ -5,6 +5,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import axios from "axios";
 import { useMessage } from "naive-ui";
 import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 const isContextMenuOpen = ref(false);
 const contextMenuId = ref(null);
@@ -103,22 +104,10 @@ const getPatterns = async (page = 1) => {
         patterns.value = response.data;
     });
 };
+
 onMounted(() => getPatterns());
 
-const windowWidth = ref(window.innerWidth);
-const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
-};
-
-onMounted(() => {
-    // Add the updateWidth function as a window resize listener
-    window.addEventListener("resize", updateWidth);
-});
-
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
+const { windowWidth } = useWindowWidth()
 </script>
 
 <template>

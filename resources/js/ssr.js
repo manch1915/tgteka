@@ -5,9 +5,10 @@ import createServer from '@inertiajs/vue3/server';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import {i18nVue} from "laravel-vue-i18n";
+import { createPinia } from 'pinia'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
-
+const pinia = createPinia();
 createServer((page) =>
     createInertiaApp({
         page,
@@ -21,6 +22,7 @@ createServer((page) =>
                     ...page.props.ziggy,
                     location: new URL(page.props.ziggy.location),
                 })
+                .use(pinia)
                 .use(i18nVue, {
                     lang: 'pt',
                     resolve: lang => {

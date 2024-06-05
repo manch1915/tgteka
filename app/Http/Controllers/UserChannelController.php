@@ -8,11 +8,6 @@ use App\Models\Channel;
 use App\Services\AvatarService;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
-use Inertia\Inertia;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class UserChannelController extends Controller
 {
@@ -91,6 +86,8 @@ class UserChannelController extends Controller
 
     public function edit(Channel $channel)
     {
+        $this->authorize('edit', $channel);
+
         return inertia('Dashboard/EditChannel', [
             'channelId' => $channel->id,
             'channel' => $channel

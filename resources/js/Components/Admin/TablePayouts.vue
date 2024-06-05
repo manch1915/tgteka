@@ -214,7 +214,7 @@ const checked = (isChecked, client) => {
               :icon="mdiCheckBold"
               small
               @click="togglePayout('completed',transaction.id)"
-              label="завершенный"
+              label="завершить"
             />
             <BaseButton
               color="danger"

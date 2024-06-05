@@ -7,6 +7,7 @@ import CardBox from "@/Components/Admin/CardBox.vue";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/Components/Admin/SectionTitleLineWithButton.vue";
 import TablePayouts from "@/Components/Admin/TablePayouts.vue";
+import PayoutsTableWithSearch from '@/Components/Admin/PayoutsTableWithSearch.vue'
 
 </script>
 
@@ -16,7 +17,7 @@ import TablePayouts from "@/Components/Admin/TablePayouts.vue";
       <SectionTitleLineWithButton :icon="mdiTableBorder" title="Выводы" main/>
 
       <CardBox class="mb-6" has-table>
-        <TablePayouts/>
+          <PayoutsTableWithSearch/>
       </CardBox>
 
     </SectionMain>

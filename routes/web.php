@@ -158,11 +158,12 @@ Route::middleware(['auth:sanctum', 'two.factor'])->group(function () {
 
     Route::post('to-check-telegram-post', [OrderController::class, 'toCheck'])->name('to-check-telegram-post');
 });
+
 Route::middleware(['role:Admin|Moderator'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [Controller::class, 'index'])->name('admin');
 
-        Route::get('channels', fn () => inertia('Admin/TablesView'))->name('channels');
+        Route::get('channels', fn () => inertia('Admin/TablesView')->withViewData([]))->name('channels');
 
         Route::get('users', fn () => inertia('Admin/UsersView'))->name('users');
 
@@ -194,5 +195,6 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
 
 Route::prefix('admin/api')->name('admin.api.')->group(function () {
     Route::Resource('topics', TopicController::class);
+    Route::get('list/topics', [TopicController::class, 'pagination'])->name('topics.pagination');
     Route::Resource('reports', \App\Http\Controllers\Admin\OrderReportController::class);
 });

@@ -31,7 +31,16 @@ import { Value as DatePickerValue } from 'naive-ui/lib/date-picker/src/interface
 import { SelectGroupOption, Value as SelectValue } from 'naive-ui/lib/select/src/interface'
 import { TreeSelectOption, Value } from 'naive-ui/lib/tree-select/src/interface'
 import { AllowedComponentProps, createVNode, h, Ref } from 'vue'
+import axios from 'axios'
 
+interface Message {
+    success: (msg: string) => void;
+    error: (msg: string) => void;
+}
+interface Status {
+    value: string;
+    label: string;
+}
 export function renderInput(value: Ref<string>, options: InputProps | AllowedComponentProps = {}) {
   return h(NInput, {
     value: value.value,
@@ -99,7 +108,67 @@ export function renderTag(label: string, options: TagProps | AllowedComponentPro
     default: () => label,
   })
 }
+export function renderRoleButton(isModerator: boolean, url: string, message: Message) {
+    const buttonText = isModerator ? 'Снять роль модератора' : 'Изменить роль на модератора';
+    const buttonOnClick = () => {
+        axios.put(url).then(r => {
+            message.success('роль успешно изменена');
+        }).catch(e => {
+            message.error('Произошла ошибка при изменении роли');
+        });
+    };
 
+    const button = h(
+        NButton,
+        {
+            onClick: buttonOnClick,
+        },
+        () => buttonText
+    );
+
+    return h(
+        NSpace,
+        {
+            justify: "center"
+        },
+        {
+            default: () => button
+        }
+    );
+}
+
+export function renderCallbackButtons(statuses: Status[], url: string, message: Message) {
+
+    const createButton = (status: Status) => {
+        const buttonOnClick = () => {
+            axios.put(url, { status: status.value }).then(r => {
+                message.success(`Статус успешно изменен на ${status.label}`);
+            }).catch(e => {
+                message.error('Произошла ошибка при изменении статуса');
+            });
+        };
+
+        return h(
+            NButton,
+            {
+                onClick: buttonOnClick,
+            },
+            () => status.label
+        );
+    };
+
+    const buttons = statuses.map(createButton);
+
+    return h(
+        NSpace,
+        {
+            justify: "center"
+        },
+        {
+            default: () => buttons
+        }
+    );
+}
 export function renderCheckboxGroup(
   value: Ref<(string | number)[]>,
   options: CheckboxProps[],

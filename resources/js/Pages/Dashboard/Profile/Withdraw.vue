@@ -28,19 +28,24 @@ const bankCard = reactive({
 const bankCardError = ref("");
 
 const createPaymentRequest = () => {
-    axios
-        .post(route("create-payout-request"), bankCard)
-        .then((r) => {
-            message.info(
-                "Ваш запрос на выплату создан, подтвердите его, перейдя по ссылке, отправленной на вашу почту"
-            );
-        })
-        .catch((error) => {
-            if (error.response.data.message) {
-                message.error(error.response.data.message);
-            }
-        });
+    if (!bankCardError.value) {
+        axios
+            .post(route("create-payout-request"), bankCard)
+            .then((r) => {
+                message.info(
+                    "Ваш запрос на выплату создан, подтвердите его, перейдя по ссылке, отправленной на вашу почту"
+                );
+            })
+            .catch((error) => {
+                if (error.response.data.message) {
+                    message.error(error.response.data.message);
+                }
+            });
+    } else {
+        message.error("Пожалуйста, исправьте ошибки в форме перед отправкой.");
+    }
 };
+
 
 watch(
     () => bankCard.cardNumbers,

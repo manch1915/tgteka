@@ -37,6 +37,11 @@ class ChannelController extends Controller
 
         $channels = $query->paginate($pageSize);
 
+        $channels->map(function ($channel) {
+            $channel->status = __('messages.' . $channel->status);
+            return $channel;
+        });
+
         return response()->json($channels);
     }
 

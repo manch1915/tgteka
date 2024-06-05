@@ -2,7 +2,7 @@
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionMain from "@/Components/Admin/SectionMain.vue";
 import CardBox from "@/Components/Admin/CardBox.vue";
-import TableUsers from "@/Components/Admin/TableUsers.vue";
+import UsersTableWithSearch from '@/Components/Admin/UsersTableWithSearch.vue'
 
 
 </script>
@@ -11,7 +11,7 @@ import TableUsers from "@/Components/Admin/TableUsers.vue";
     <LayoutAuthenticated>
         <SectionMain>
             <CardBox class="mb-6" has-table>
-                <TableUsers/>
+                <UsersTableWithSearch />
             </CardBox>
         </SectionMain>
     </LayoutAuthenticated>

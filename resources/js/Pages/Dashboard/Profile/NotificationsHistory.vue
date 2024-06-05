@@ -4,25 +4,14 @@ import ProfileLayout from "@/Layouts/ProfileLayout.vue";
 import {useNotificationStore} from "@/stores/NotificationsStore.js";
 import Notifications from "@/Components/Dashboard/Profile/Notifications.vue";
 import {Head} from "@inertiajs/vue3";
-import {onMounted, onUnmounted, ref} from "vue";
 import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 const notificationsStore = useNotificationStore()
 notificationsStore.getNotifications()
-const windowWidth = ref(window.innerWidth);
-const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
-};
 
-onMounted(() => {
-    // Add the updateWidth function as a window resize listener
-    window.addEventListener("resize", updateWidth);
-});
+const { windowWidth } = useWindowWidth()
 
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
 </script>
 
 <template>

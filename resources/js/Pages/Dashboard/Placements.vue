@@ -1,6 +1,6 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
-import {onMounted, onUnmounted, ref, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
 import PlacementCard from "@/Components/Dashboard/PlacementCard.vue";
 import { NDatePicker, NSlider, useLoadingBar } from "naive-ui";
 import { Head, Link } from "@inertiajs/vue3";
@@ -79,20 +79,9 @@ const handleOrderAccepted = () => {
 watch([activeSortButton, value, range], () => {
     getPlacements();
 });
-const windowWidth = ref(window.innerWidth);
-const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
-};
 
-onMounted(() => {
-    // Add the updateWidth function as a window resize listener
-    window.addEventListener("resize", updateWidth);
-});
+const windowWidth = useWindowWidth()
 
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
 </script>
 
 <template>

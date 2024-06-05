@@ -13,18 +13,31 @@ class PayoutController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->status) {
-            $transactions = Transaction::with('user')
-                ->where('status', $request->status)
-                ->where('appointment', 'Вывод')
-                ->paginate(10);
-        } else {
-            $transactions = Transaction::with('user')
-                ->where('status', 'under_review')
-                ->where('appointment', 'Вывод')
-                ->paginate(10);
+        $query = Transaction::with('user')->where('appointment', 'Вывод');
+
+        $searchParams = $request->all();
+
+        $pageSize = $request->input('pageSize', 15);
+
+        $searchableFields = [
+            'id',
+            'transaction_id',
+            'username',
+            'service',
+            'details',
+            'amount',
+            'status',
+        ];
+
+        foreach ($searchableFields as $field) {
+            if (isset($searchParams[$field])) {
+                $query->where($field, 'LIKE', '%' . $searchParams[$field] . '%');
+            }
         }
-        return PayoutResource::collection($transactions);
+        logger($query->toSql() . json_encode($query->getBindings()));
+        $transactions = $query->paginate($pageSize);
+
+        return response()->json($transactions);
     }
 
     public function countStatuses()

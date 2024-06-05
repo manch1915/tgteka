@@ -125,13 +125,12 @@
     </div>
 </template>
 <script setup>
-import InterestChannelsCard from "@/Components/Home/InterestChannelsCard.vue";
 import IntegrationBlock from "@/Components/Home/Blocks/IntegrationBlock.vue";
 import ComparisonCard from "@/Components/Home/ComparisonCard.vue";
 import IntegrationBackground from "@/Components/Home/Blocks/IntegrationBackground.vue";
-import { onMounted, onUnmounted, ref } from "vue";
 import Slider from "@/Components/Home/Slider.vue";
 import { openLogin } from "@/utilities/authModals.js";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 const compareItems = [
     {
@@ -181,21 +180,9 @@ const compareItems = [
         showSaveTimeMoney: true,
     },
 ];
-const windowWidth = ref(window.innerWidth);
 
-const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
-};
+const { windowWidth } = useWindowWidth()
 
-onMounted(() => {
-    // Add the updateWidth function as a window resize listener
-    window.addEventListener("resize", updateWidth);
-});
-
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
 </script>
 <style scoped lang="scss">
 $bg: linear-gradient(160deg, rgba(55, 50, 189, 1) 11%, rgba(7, 12, 41, 1) 60%);

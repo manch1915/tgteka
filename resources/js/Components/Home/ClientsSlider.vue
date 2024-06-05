@@ -5,6 +5,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import ReviewCard from "@/Components/Home/ReviewCard.vue";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 let activeIndex = ref(1);
 const onSlideChange = (swiper) => {
@@ -20,11 +21,12 @@ const renderBullet = (index, className) => {
     return `<div class="${className}" @click="goToSlide(${index})"></div>`;
 };
 
-const width = ref(window.innerWidth);
+const { windowWidth } = useWindowWidth()
 
 let reviewCardsCountPerSlide = computed(() => {
-    return width.value <= 640 ? 1 : 4;
+    return windowWidth.value <= 640 ? 1 : 4;
 });
+
 const pagination = {
     el: ".pagination-mod",
     clickable: true,
@@ -46,10 +48,11 @@ watch(
     },
     { immediate: true }
 );
+
 const modules = [Navigation, Pagination];
 
 const updateWindowAndSwiper = () => {
-    width.value = window.innerWidth;
+    windowWidth.value = window.innerWidth;
 
     // If swiper component is already initialized
     if (mySwiper.value) {
@@ -57,15 +60,6 @@ const updateWindowAndSwiper = () => {
     }
 };
 
-onMounted(() => {
-    // Add the updateWindowAndSwiper function as a window resize listener
-    window.addEventListener("resize", updateWindowAndSwiper);
-});
-
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWindowAndSwiper);
-});
 </script>
 
 <template>

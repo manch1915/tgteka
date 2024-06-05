@@ -27,7 +27,7 @@ import { Title } from "chart.js";
 import Rules from "@/Pages/Rules.vue";
 import Agreement from "@/Pages/Agreement.vue";
 
-const discount_check = ref(false);
+const discount_check = ref(0);
 const format_one_checkbox = ref(true);
 const format_two_checkbox = ref(false);
 const format_three_checkbox = ref(false);
@@ -100,6 +100,10 @@ const channelSubjects = computed(() =>
 );
 
 const discountData = [
+    {
+        label: "0%",
+        value: "0",
+    },
     {
         label: "10%",
         value: "10",
@@ -476,9 +480,6 @@ watch(
                         <h2
                             class="text-violet-100 text-lg font-bold font-['Open Sans'] leading-tight">
                             Скидка на повторный заказ
-                            <n-switch
-                                v-model:value="discount_check"
-                                :theme-overrides="switchThemeOverrides" />
                         </h2>
 
                     </div>

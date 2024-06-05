@@ -14,13 +14,13 @@ import {darkModeKey, styleKey} from "@/config.js";
 import {useStyleStore} from "@/stores/style.js";
 import { i18nVue } from 'laravel-vue-i18n'
 
-
 config({
     scrollLock: false,
     animation: 'modal-list',
     backgroundClose: true,
     escClose: true,
 })
+
 const pinia = createPinia();
 const appName = import.meta.env.VITE_APP_NAME || 'Tgteka';
 Quill.register("modules/emoji", Emoji);

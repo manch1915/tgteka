@@ -29,26 +29,29 @@ class UpdateFinishedOrdersCommand extends Command
      */
     public function handle(): void
     {
-        $orders = Order::where('post_date_end', '<', Carbon::now())
+        $chunkSize = 200;
+
+        Order::where('post_date_end', '<', Carbon::now())
             ->where('status', 'checked')
             ->whereDoesntHave('orderReports')
             ->orWhereHas('orderReports', function ($query) {
                 $query->where('status', 'declined');
             })
-            ->get();
+            ->chunk($chunkSize, function ($orders) {
+                foreach ($orders as $order) {
+                    $channelAdmin = $order->channel->user;
+                    $channelAdmin->balance += $order->price;
+                    $channelAdmin->save();
 
-        foreach ($orders as $order) {
-            $channelAdmin = $order->channel->user;
-            $channelAdmin->balance += $order->price;
-            $channelAdmin->save();
+                    $channelAdmin->notify(new OrderCompletedForAdminNotification($order->price, $order->channel->channel_name));
 
-            $channelAdmin->notify(new OrderCompletedForAdminNotification($order->price, $order->channel->channel_name));
+                    $order->user->notify(new OrderCompletedForUserNotification($order->channel->channel_name));
 
-            $order->user->notify(new OrderCompletedForUserNotification($order->channel->channel_name));
-
-            $order->update(['status' => 'finished']);
-        }
+                    $order->update(['status' => 'finished']);
+                }
+            });
 
         $this->info('Orders have been updated successfully!');
     }
+
 }

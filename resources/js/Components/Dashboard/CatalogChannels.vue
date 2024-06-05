@@ -1,9 +1,10 @@
 <script setup>
-import {onMounted, onUnmounted, ref, watch} from "vue";
+import {watch} from "vue";
 import {NSkeleton, useLoadingBar} from "naive-ui"
 import CatalogChannelCard from "@/Components/Dashboard/CatalogChannelCard.vue";
-import {useChannelStore} from "@/stores/channelStore.js";
+import {useChannelStore} from "@/stores/ChannelStore.js";
 import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 
 const loading = useLoadingBar()
@@ -19,20 +20,7 @@ watch(() => channelStore.loading, (isLoading) => {
     }
 }, {immediate: true});
 
-const windowWidth = ref(window.innerWidth);
-const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
-};
-
-onMounted(() => {
-    // Add the updateWidth function as a window resize listener
-    window.addEventListener("resize", updateWidth);
-});
-
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
+const { windowWidth } = useWindowWidth()
 </script>
 <template>
     <div class="flex flex-col gap-y-4 mt-8">

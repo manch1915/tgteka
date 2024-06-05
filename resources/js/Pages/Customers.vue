@@ -20,6 +20,7 @@ import { Title } from "chart.js";
 import GoUp from "@/Components/Home/GoUp.vue";
 import InterestChannelsCard from "@/Components/Home/InterestChannelsCard.vue";
 import {useMainStore} from "@/stores/main.js";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 const headers = [
     "Регистрируйте аккаунт",
@@ -38,53 +39,46 @@ const texts = [
     "Lorem ipsum dolor sit amet consectetur. Sed et imperdiet at ultrices in. Arcu quam potenti nunc",
 ];
 
-const windowWidth = ref(window.innerWidth);
-const updateWidth = () => {
-    windowWidth.value = window.innerWidth;
-};
-
-onMounted(() => {
-    // Add the updateWidth function as a window resize listener
-    window.addEventListener("resize", updateWidth);
-});
-
-onUnmounted(() => {
-    // Remove listener when component is unmounted
-    window.removeEventListener("resize", updateWidth);
-});
-
-const spaceBetween = computed(() => {
-    if (windowWidth.value <= 425) {
-        return 10;
-    } else if (windowWidth.value < 609) {
-        return 10;
-    } else {
-        return 100;
-    }
-});
+const { windowWidth } = useWindowWidth();
 const activeIndex = ref(null);
+const channelsData = ref([]);
+
+// Conditionally import Pinia if not running in SSR mode
+let mainStore;
+if (!import.meta.env.SSR) {
+    mainStore = useMainStore();
+}
 
 const fetchChannels = async (topic = null, index) => {
-
     activeIndex.value = index;
 
     try {
-        const response = await axios.get(route('best-channels.get', {topic}));
+        let url;
+        if (typeof route === 'function') {
+            url = route('best-channels.get', { topic });
+        } else {
+            url = `/api/best-channels?topic=${topic}`;
+            console.warn('Route function is not available. Using fallback URL:', url);
+        }
+
+        const response = await axios.get(url);
         channelsData.value = response.data;
     } catch (error) {
         console.error('Error fetching channels:', error);
         return [];
     }
 };
-const mainStore = useMainStore();
-mainStore.fetchTopics()
 
-// Define a reactive ref to hold the channels data
-const channelsData = ref([]);
-
-// Fetch channels data when the component mounts
-onMounted( () => {
-     fetchChannels();
+onMounted(async () => {
+    // Check if mainStore is initialized
+    if (mainStore) {
+        try {
+            await mainStore.fetchTopics();
+            await fetchChannels();
+        } catch (error) {
+            console.error('Error fetching topics:', error);
+        }
+    }
 });
 </script>
 
@@ -131,13 +125,14 @@ onMounted( () => {
         </HowItWorksBlock>
         <InterestChannelsBlock>
             <template #topicCards>
-                <template v-for="(topic, index) in mainStore.topics" :key="index">
+                <template v-if="mainStore && mainStore.topics" v-for="(topic, index) in mainStore.topics" :key="index">
                     <InterestChannelsCard :isActive="index === activeIndex" class="cursor-pointer" v-if="index < 4" :topic="topic" :p="topic.title" @click.prevent="fetchChannels(topic.id, index)"/>
                 </template>
             </template>
 
             <template #sliderTopicCard>
                 <template
+                    v-if="mainStore && mainStore.topics"
                     v-for="(topic, index) in mainStore.topics" :key="index"
                 >
                     <div class="keen-slider__slide" style="max-width: 200px; min-width: 200px">

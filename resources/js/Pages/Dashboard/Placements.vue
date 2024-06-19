@@ -5,6 +5,7 @@ import PlacementCard from "@/Components/Dashboard/PlacementCard.vue";
 import { NDatePicker, NSlider, useLoadingBar } from "naive-ui";
 import { Head, Link } from "@inertiajs/vue3";
 import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
+import { useWindowWidth } from '@/utilities/windowWidth.js'
 
 const placements = ref([]);
 const activeSortButton = ref("");

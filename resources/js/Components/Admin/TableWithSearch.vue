@@ -250,7 +250,7 @@ export default defineComponent({
                                     h(
                                         NButton,
                                         {
-                                            onClick: () => axios.delete(route('admin.api.channels.destroy', rowData.id)).then().catch(c => alert(c.response.data.error)),
+                                            onClick: () => axios.delete(route('admin.api.channels.destroy', rowData.slug)).then().catch(c => alert(c.response.data.error)),
                                             type: 'error'
                                         },
                                         () => 'Удалить'

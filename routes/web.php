@@ -183,7 +183,7 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
             Route::Resource('channels', ChannelController::class);
 
             Route::apiResource('support', App\Http\Controllers\Admin\SupportController::class);
-            Route::apiResource('users', App\Http\Controllers\Admin\UserController::class);
+            Route::Resource('users', App\Http\Controllers\Admin\UserController::class);
             Route::apiResource('callbacks', App\Http\Controllers\Admin\CallbackController::class);
             Route::apiResource('settings', App\Http\Controllers\Admin\SettingController::class);
 

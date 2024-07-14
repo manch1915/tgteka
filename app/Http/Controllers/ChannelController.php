@@ -64,6 +64,8 @@ class ChannelController extends Controller
             'channels' => 'required',
             'pattern_id' => 'required',
             'description' => 'required',
+            'nearFuture' => 'boolean',
+            'timestamp' => 'nullable|date',
         ]);
 
         $response = $this->orderService->createOrder($request);

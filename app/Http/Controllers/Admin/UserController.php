@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -48,17 +49,28 @@ class UserController extends Controller
     public function show(User $user)
     {
     }
+    public function edit(User $user)
+    {
+        return inertia('Admin/UsersShow', ['user' => $user]);
+    }
 
-    public function update(Request $request, User $user) {
-        $moderatorRole = Role::findByName('Moderator');
+    public function update(UserUpdateRequest $request, User $user) {
+        if ($request->has('moderator_update')){
+            $moderatorRole = Role::findByName('Moderator');
 
-        if ($user->hasRole('Moderator')) {
-            $user->removeRole($moderatorRole);
-        } else {
-            $user->assignRole($moderatorRole);
+            if ($user->hasRole('Moderator')) {
+                $user->removeRole($moderatorRole);
+            } else {
+                $user->assignRole($moderatorRole);
+            }
+
+            return response()->json(['status' => 'Роль успешно обновлена']);
         }
 
-        return response()->json(['status' => 'Роль успешно обновлена']);
+        $inputData = $request->validated();
+
+        $user->update($inputData);
+        return response()->json(['status' => 'Пользователь успешно обновлен']);
     }
 
     public function destroy(User $user)

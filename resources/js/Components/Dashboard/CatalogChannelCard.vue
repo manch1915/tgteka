@@ -1,10 +1,10 @@
 <script setup>
-import {NSelect, NDatePicker , useMessage} from "naive-ui";
+import { NSelect, NDatePicker, useMessage, NSpace, NButton, NSwitch } from 'naive-ui'
 import { datePickerThemeOverrides, selectCatalogThemeOverrides } from "@/themeOverrides.js";
-import {computed, ref, watch} from "vue";
+import { computed, ref, watch } from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import {mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartRemove} from "@mdi/js";
-import {Link} from "@inertiajs/vue3";
+import { mdiHeartOutline, mdiCartPlus, mdiHeart, mdiCartRemove } from "@mdi/js";
+import { Link } from "@inertiajs/vue3";
 import { saveCart, loadCart, isInCart as checkInCart, generateFormatArray } from "@/utilities/cartUtilities.js";
 import { useCartStore } from "@/stores/CartStore.js";
 
@@ -34,7 +34,8 @@ const format = computed(() => generateFormatArray(props.channel));
 const formatValue = ref(props.channel.format || format.value[0]?.value);
 
 const emit = defineEmits(["cartChanged", "cartUpdated"]);
-const cartStore = useCartStore()
+const cartStore = useCartStore();
+
 const removeCart = (cart, index, channel) => {
     cart.splice(index, 1);
     message.info(`Канал ${channel.channel_name} был удален из корзины.`);
@@ -49,13 +50,12 @@ const toggleChannelInCart = (channel) => {
     if (index > -1 && formatValue.value === cart[index].format) {
         removeCart(cart, index, channel);
     } else {
-        updateCart(cart, channel, formatValue.value, timestamp.value);
+        updateCart(cart, channel, formatValue.value, timestamp.value, nearFuture.value);
     }
 
     cartStore.cartUpdate++;
     cartUpdateKey.value++;
 };
-
 
 const count = [
     { label: '1', value: 1 },
@@ -91,14 +91,14 @@ const addChannelToFavorites = async (channel) => {
     }
 };
 
-const updateCart = (cart, channel, format, time) => {
+const updateCart = (cart, channel, format, time, nearFuture) => {
     const channelIndex = cart.findIndex((ch) => ch.id === channel.id);
 
     if (channelIndex > -1) {
-        cart[channelIndex] = Object.assign({}, channel, { format: format, timestamp: time });
+        cart[channelIndex] = Object.assign({}, channel, { format: format, timestamp: time, nearFuture: nearFuture });
         message.info(`Канал ${channel.channel_name} было обновлено в корзине.`);
     } else {
-        const channelData = Object.assign({}, channel, { format: format, timestamp: time });
+        const channelData = Object.assign({}, channel, { format: format, timestamp: time, nearFuture: nearFuture });
         cart.push(channelData);
         message.info(`Канал ${channel.channel_name} был добавлен в корзину.`);
     }
@@ -107,23 +107,7 @@ const updateCart = (cart, channel, format, time) => {
     emit("cartUpdated", cart);
 };
 
-
-watch(formatValue, (newValue) => {
-    let cart = loadCart();
-    if (isInCart(props.channel)) {
-        updateCart(cart, props.channel, newValue, timestamp.value)
-    }
-});
 const timestamp = ref(props.timestamp);
-
-watch(timestamp, (newValue) => {
-    let cart = loadCart();
-    if (isInCart(props.channel)) {
-        updateCart(cart, props.channel, formatValue.value, newValue)
-    }
-});
-
-
 
 const disablePastDates = (currentTimestamp) => {
     // Get the current timestamp
@@ -131,9 +115,9 @@ const disablePastDates = (currentTimestamp) => {
 
     // Disable dates before the current time
     return currentTimestamp < currentTimestampNow;
-}
-const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
+};
 
+const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
     const defaultSecond = 0;
 
     return {
@@ -141,73 +125,106 @@ const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
     };
 };
 
+const nearFuture = ref(false);
+
+// Initialize nearFuture from cart if present
+const cart = loadCart();
+const cartItem = cart.find((ch) => ch.id === props.channel.id);
+if (cartItem) {
+    nearFuture.value = cartItem.nearFuture;
+}
+watch(timestamp, (newValue) => {
+    let cart = loadCart();
+    if (isInCart(props.channel)) {
+        updateCart(cart, props.channel, formatValue.value, newValue, nearFuture.value);
+    }
+});
+watch(nearFuture, (newValue) => {
+    let cart = loadCart();
+    if (isInCart(props.channel)) {
+        updateCart(cart, props.channel, formatValue.value, timestamp.value, newValue);
+    }
+});
+watch(formatValue, (newValue) => {
+    let cart = loadCart();
+    if (isInCart(props.channel)) {
+        updateCart(cart, props.channel, newValue, timestamp.value, nearFuture.value);
+    }
+});
 </script>
 
 <template>
     <div class="channel_card">
         <div class="channel_card-container cursor-pointer">
-            <Link :href="route('catalog.channels.show', channel.slug )" class="block h-full">
-            <div class="flex flex-wrap items-center">
-                <div class="flex sm:w-1/2 w-full">
-                    <div class="flex flex-col items-center justify-center gap-y-3 grid-element">
-                        <div class="avatar mb-auto">
-                            <img :src="channel?.avatar" alt="avatar">
+            <Link :href="route('catalog.channels.show', channel.slug)" class="block h-full">
+                <div class="flex flex-wrap items-center">
+                    <div class="flex sm:w-1/2 w-full">
+                        <div class="flex flex-col items-center justify-center gap-y-3 grid-element">
+                            <div class="avatar mb-auto">
+                                <img :src="channel?.avatar" alt="avatar">
+                            </div>
+                        </div>
+                        <div class="flex-1 grid-element">
+                            <div class="flex flex-col justify-between gap-y-2">
+                                <h1 class="text-white text-xl font-bold font-['Open Sans'] !leading-tight">{{ channel?.channel_name }}</h1>
+                                <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Open Sans'] break-all leading-tight">{{ channel?.description }}</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="flex-1 grid-element">
-                        <div class="flex flex-col justify-between gap-y-2">
-                            <h1 class="text-white text-xl font-bold font-['Open Sans'] !leading-tight">{{channel?.channel_name}}</h1>
-                            <p class="text-white box-content line-clamp-3  text-sm font-normal font-['Open Sans'] break-all leading-tight">{{channel?.description}}</p>
+                    <div class="grid grid-cols-3 h-full sm:border-none border-t border-[#6522D9] p-4 sm:w-1/2 w-full items-stretch justify-evenly">
+                        <div class="sm:border-x-[1px] h-full w-full border-[#6522D9] flex flex-col items-center justify-center">
+                            <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                                <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Подписчики</p>
+                                <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ channel?.statistics?.participants_count }}</p>
+                            </div>
+                        </div>
+                        <div class="sm:border-r-[1px] h-full w-full border-[#6522D9] flex-col items-center justify-center">
+                            <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                                <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Просмотры</p>
+                                <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ channel?.statistics?.avg_post_reach }}</p>
+                            </div>
+                        </div>
+                        <div class="flex h-full w-full flex-col items-center justify-center">
+                            <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
+                                <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">CPМ</p>
+                                <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
+                                    {{ channel?.cpm }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-3 h-full sm:border-none border-t border-[#6522D9] p-4 sm:w-1/2 w-full items-stretch justify-evenly">
-                    <div class="sm:border-x-[1px] h-full w-full border-[#6522D9] flex flex-col items-center justify-center">
-                        <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Подписчики</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ channel?.statistics?.participants_count }}</p>
-                        </div>
-                    </div>
-                    <div class="sm:border-r-[1px] h-full w-full border-[#6522D9] flex-col items-center justify-center">
-                        <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Просмотры</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">{{ channel?.statistics?.avg_post_reach}}</p>
-                        </div>
-                    </div>
-                    <div class="flex h-full w-full flex-col items-center justify-center">
-                        <div class="flex h-full flex-col items-center justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">CPМ</p>
-                            <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">
-                                {{ channel?.cpm }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
             </Link>
         </div>
         <div class="flex flex-wrap items-center sm:justify-between p-6 unwrap gap-y-2">
             <div class="flex flex-wrap sm:w-auto w-full items-center gap-x-4">
                 <div class="flex flex-col items-start gap-y-1">
                     <p class="text-violet-100 text-sm font-normal font-['Open Sans'] leading-tight">Формат</p>
-                    <n-select class="w-24" v-model:value="formatValue" @update-value="emit('cartChanged');" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="format"/>
+                    <n-select class="w-24" v-model:value="formatValue" @update-value="emit('cartChanged');" :theme-overrides="selectCatalogThemeOverrides" placeholder="" :options="format" />
                 </div>
                 <h1 class="text-violet-100 text-3xl font-bold font-['Open Sans'] leading-10">{{ totalPrice }} ₽</h1>
             </div>
             <div v-show="isCart">
-                <n-date-picker :theme-overrides="datePickerThemeOverrides" v-model:value="timestamp" default-time="12:00:00" type="datetime" :is-date-disabled="disablePastDates" :is-time-disabled="disableMinutesAndSeconds"/>
+                <n-space vertical justify="center" align="center">
+                    <n-date-picker :disabled="nearFuture" :theme-overrides="datePickerThemeOverrides" v-model:value="timestamp" default-time="12:00:00" type="datetime" :is-date-disabled="disablePastDates" :is-time-disabled="disableMinutesAndSeconds" :actions="['confirm']" />
+                    <div class="flex gap-x-2">
+                        <p class="text-white box-content line-clamp-3 text-sm font-normal font-['Open Sans'] break-all leading-tight">В ближайшее время</p>
+                        <n-switch v-model:value="nearFuture" />
+                    </div>
+                </n-space>
             </div>
             <div class="flex items-center justify-between text-violet-100 gap-x-2.5">
-                <Link :href="route('catalog.channels.show', channel.slug )" class="text-violet-100 text-xs font-normal font-['Open Sans'] underline leading-none">Подробнее о канале</Link>
+                <Link :href="route('catalog.channels.show', channel.slug)" class="text-violet-100 text-xs font-normal font-['Open Sans'] underline leading-none">Подробнее о канале</Link>
                 <div class="pl-2 cursor-pointer" @click="addChannelToFavorites(channel)">
-                    <BaseIcon size="25" :path="fav ? mdiHeart : mdiHeartOutline"/>
+                    <BaseIcon size="25" :path="fav ? mdiHeart : mdiHeartOutline" />
                 </div>
                 <div class="cursor-pointer" @click="toggleChannelInCart(channel)">
-                    <BaseIcon size="25" :path="isInCart(channel) ? mdiCartRemove : mdiCartPlus"/>
+                    <BaseIcon size="25" :path="isInCart(channel) ? mdiCartRemove : mdiCartPlus" />
                 </div>
             </div>
         </div>
     </div>
 </template>
+
 
 <style scoped lang="scss">
 .expand-leave-active,

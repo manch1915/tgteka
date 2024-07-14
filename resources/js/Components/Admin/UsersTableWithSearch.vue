@@ -180,7 +180,7 @@ export default defineComponent({
                     key: "null",
                     fixed: 'right',
                     width: 240,
-                    render: (rowData) => renderRoleButton(rowData?.is_moderator, route('admin.api.users.update', rowData.id), message),
+                    render: (rowData) => renderRoleButton(rowData?.is_moderator, route('admin.api.users.update', rowData.id), message, route('admin.api.users.edit', rowData.id)),
                 }
             ],
             {

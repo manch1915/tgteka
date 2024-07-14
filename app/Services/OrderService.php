@@ -128,7 +128,14 @@ class OrderService
             $formatDetails = $this->getFormatDetails($channel);
 
             // Add days to post_date
-            $postDate = new DateTime($channel->timestamp);
+            if (isset($channel->nearFuture) && $channel->nearFuture) {
+                $postDate = now(); // Set post_date to now
+                $nearFuture = true;
+            } else {
+                $postDate = new DateTime($channel->timestamp);
+                $nearFuture = false;
+            }
+
             $postDateEnd = $postDate->modify('+' . $formatDetails['days'] . ' day');
 
             $order = Order::create([
@@ -140,6 +147,7 @@ class OrderService
                 'channel_id' => $channel->id,
                 'format_id' => $formatDetails['id'],
                 'price' => $price,
+                'near_future' => $nearFuture,
             ]);
 
 

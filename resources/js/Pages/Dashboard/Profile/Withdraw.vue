@@ -702,7 +702,7 @@ watch(
                                 </div>
                             </div>
                             <button
-                                class="sm:w-2/4 w-full py-2 btn_gradient-purple rounded-full text-white text-lg font-bold font-['Open Sans'] leading-normal"
+                                class="sm:w-2/4 w-full my-2 py-2 btn_gradient-purple rounded-full text-white text-lg font-bold font-['Open Sans'] leading-normal"
                             >
                                 Вывести
                             </button>

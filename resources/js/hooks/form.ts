@@ -32,6 +32,7 @@ import { SelectGroupOption, Value as SelectValue } from 'naive-ui/lib/select/src
 import { TreeSelectOption, Value } from 'naive-ui/lib/tree-select/src/interface'
 import { AllowedComponentProps, createVNode, h, Ref } from 'vue'
 import axios from 'axios'
+import { router } from '@inertiajs/vue3'
 
 interface Message {
     success: (msg: string) => void;
@@ -108,17 +109,21 @@ export function renderTag(label: string, options: TagProps | AllowedComponentPro
     default: () => label,
   })
 }
-export function renderRoleButton(isModerator: boolean, url: string, message: Message) {
+export function renderRoleButton(isModerator: boolean, url: string, message: Message, secondaryUrl: string) {
     const buttonText = isModerator ? 'Снять роль модератора' : 'Изменить роль на модератора';
     const buttonOnClick = () => {
-        axios.put(url).then(r => {
+        axios.put(url, {moderator_update: null}).then(r => {
             message.success('роль успешно изменена');
         }).catch(e => {
             message.error('Произошла ошибка при изменении роли');
         });
     };
 
-    const button = h(
+    const secondaryButtonOnClick = () => {
+        router.visit(secondaryUrl);
+    };
+
+    const roleButton = h(
         NButton,
         {
             onClick: buttonOnClick,
@@ -126,16 +131,29 @@ export function renderRoleButton(isModerator: boolean, url: string, message: Mes
         () => buttonText
     );
 
+    const secondaryButton = h(
+        NButton,
+        {
+            onClick: secondaryButtonOnClick,
+        },
+        () => 'Перейти'
+    );
+
     return h(
         NSpace,
         {
-            justify: "center"
+            justify: "center",
+            direction: "vertical",
         },
         {
-            default: () => button
+            default: () => [
+                roleButton,
+                secondaryButton
+            ]
         }
     );
 }
+
 
 export function renderCallbackButtons(statuses: Status[], url: string, message: Message) {
 

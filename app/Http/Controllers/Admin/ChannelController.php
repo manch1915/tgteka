@@ -57,7 +57,7 @@ class ChannelController extends Controller
 
     public function edit(Channel $channel)
     {
-        return inertia('Admin/TablesShow', ['channel' => $channel]);
+        return inertia('Admin/TablesShow', ['channel' => $channel->load('user')]);
     }
 
     public function update(ChannelUpdateRequest $request, Channel $channel)

@@ -44,7 +44,7 @@
 
 <script>
 import TableFooter from "@/Components/Admin/TableFooter.vue";
-import { renderCallbackButtons, renderRoleButton, renderTag } from '@/hooks/form'
+import { renderCallbackButtons, renderTag } from '@/hooks/form'
 import {
     usePagination,
     useRowKey,

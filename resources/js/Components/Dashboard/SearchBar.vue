@@ -1,10 +1,11 @@
 <script setup>
 import TextInput from "@/Components/TextInput.vue";
 import { ref } from "vue";
+import { useChannelStore } from '@/stores/ChannelStore.js'
 
 const emit = defineEmits(['search']);
-
-const search = ref('');
+const channelStore = useChannelStore();
+const search = ref(channelStore.searchData);
 
 const handleSearch = () => {
     emit('search', search.value);

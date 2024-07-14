@@ -136,11 +136,11 @@ const openMessenger = () => {
                           </div>
                           <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
                               <div class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">День публикации</div>
-                              <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">{{pubDay}}</div>
+                              <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">{{order.near_future ? 'В ближайшее время' : pubDay}}</div>
                           </div>
                           <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
                               <div class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">Время публикации (UTC +3)</div>
-                              <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">{{pubTime}}</div>
+                              <div class="text-violet-100 text-sm font-bold font-['Open Sans'] leading-tight">{{order.near_future ? 'В ближайшее время' : pubTime}}</div>
                           </div>
                           <div class="flex flex-col gap-y-1 border-t-2 border-violet-100 border-opacity-40 py-1">
                               <div class="text-violet-100 text-xs font-normal font-['Open Sans'] leading-none">Цена</div>

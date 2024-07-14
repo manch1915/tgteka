@@ -6,10 +6,10 @@ import {
 import SectionMain from "@/Components/Admin/SectionMain.vue";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/Components/Admin/SectionTitleLineWithButton.vue";
-import {reactive, watchEffect} from "vue";
+import { reactive, ref, watchEffect } from 'vue'
 import FormField from "@/Components/Admin/FormField.vue";
 import FormControl from "@/Components/Admin/FormControl.vue";
-import {NDatePicker, useMessage} from "naive-ui";
+import { NDataTable, NDatePicker, useMessage } from 'naive-ui'
 import {router} from "@inertiajs/vue3";
 
 const message = useMessage()
@@ -57,6 +57,43 @@ const updateChannel = () => {
     message.success('канал успешно обновлен')
 }
 
+const data = ref([
+    {
+        id: props.channel.user.id,
+        username: props.channel.user.username,
+        email: props.channel.user.email,
+        mobile_number: props.channel.user.mobile_number,
+        telegram_username: props.channel.user.telegram_username,
+        balance: props.channel.user.balance,
+    },
+]);
+
+const columns = ref([
+    {
+        title: "id",
+        key: "id"
+    },
+    {
+        title: "Username",
+        key: "username"
+    },
+    {
+        title: "Email",
+        key: "email"
+    },
+    {
+        title: "Mobile Number",
+        key: "mobile_number"
+    },
+    {
+        title: "Telegram Username",
+        key: "telegram_username"
+    },
+    {
+        title: "Balance",
+        key: "balance"
+    },
+]);
 </script>
 
 <template>
@@ -151,8 +188,10 @@ const updateChannel = () => {
             <button class="p-3 bg-green-700" v-if="props.channel.status === 'pending'" @click="toggleChannel('loading')">Принять канал</button>
             <button class="p-3 bg-red-700" v-if="props.channel.status === 'pending'" @click="toggleChannel('declined')">Отклонить канал</button>
         </div>
-
-
+        <div class="my-2">
+            <h2 class="my-2 text-lg">Данные пользователя</h2>
+            <n-data-table :columns="columns" :data="data"/>
+        </div>
         <!-- Update Channel Button -->
         <button class="p-3 bg-yellow-700" v-if="props.channel.status === 'accepted' || props.channel.status === 'loading'" @click="updateChannel">Обновить канал</button>
     </SectionMain>

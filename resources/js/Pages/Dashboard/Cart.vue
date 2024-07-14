@@ -2,7 +2,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import CatalogChannelCard from "@/Components/Dashboard/CatalogChannelCard.vue";
 import { computed, onMounted, ref } from "vue";
-import { NInput, NSelect, useMessage, useLoadingBar } from "naive-ui";
+import { NInput, NSelect, useMessage, useLoadingBar, NDataTable } from "naive-ui";
 import {
     selectThemeOverrides,
     textareaThemeOverrides,
@@ -74,6 +74,7 @@ const orderPosts = () => {
         id: channel.id,
         format: channel.format,
         timestamp: formatDate(channel.timestamp),
+        nearFuture: channel.nearFuture,
     }));
     axios
         .post(route("catalog.channels.orderPosts"), {
@@ -115,6 +116,7 @@ onMounted(() => {
         })
         .catch((error) => console.error(error));
 });
+
 const formattedTotalSum = computed(() => {
     const value = totalSum.value;
     return new Intl.NumberFormat("ru-RU", {
@@ -124,6 +126,29 @@ const formattedTotalSum = computed(() => {
         maximumFractionDigits: 0,
     }).format(value);
 });
+
+const data = [
+    { channels: channelCount.value, subscribers: totalParticipants.value, views: totalPostReach.value, sum: formattedTotalSum.value },
+];
+
+const columns = [
+    {
+        title: "Каналы",
+        key: "channels"
+    },
+    {
+        title: "Подписчики",
+        key: "subscribers"
+    },
+    {
+        title: "Просмотры",
+        key: "views"
+    },
+    {
+        title: "Сумма",
+        key: "sum"
+    }]
+
 </script>
 
 <template>
@@ -198,26 +223,7 @@ const formattedTotalSum = computed(() => {
                         placeholder="Требования к заказу"
                     />
                 </div>
-                <table class="table-auto">
-                    <tbody class="text-violet-100">
-                        <tr>
-                            <th>Каналы</th>
-                            <td>{{ channelCount }}</td>
-                        </tr>
-                        <tr>
-                            <th>Подписчики</th>
-                            <td>{{ totalParticipants }}</td>
-                        </tr>
-                        <tr>
-                            <th>Просмотры</th>
-                            <td>{{ totalPostReach }}</td>
-                        </tr>
-                        <tr>
-                            <th>Сумма</th>
-                            <th>{{ formattedTotalSum }}</th>
-                        </tr>
-                    </tbody>
-                </table>
+                <n-data-table :columns="columns" :data="data"/>
                 <button
                     :disabled="isCartEmpty"
                     @click.prevent="orderPosts"

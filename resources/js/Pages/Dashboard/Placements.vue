@@ -62,6 +62,7 @@ const getPlacements = async (page = 1) => {
             .then((response) => {
                 placements.value = response.data.orders;
                 maxPrice.value = response.data.max_price;
+                value.value[1] = response.data.max_price;
                 hasAnyOrder.value = response.data.hasAnyOrder;
             })
             .catch((err) => console.log(err))

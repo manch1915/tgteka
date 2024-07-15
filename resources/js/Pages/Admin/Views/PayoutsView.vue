@@ -6,19 +6,19 @@ import SectionMain from "@/Components/Admin/SectionMain.vue";
 import CardBox from "@/Components/Admin/CardBox.vue";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/Components/Admin/SectionTitleLineWithButton.vue";
-import TableChannels from "@/Components/Admin/TableChannels.vue";
-import TableChannelsConsideration from "@/Components/Admin/TableChannelsConsideration.vue";
-import TableWithSearch from '@/Components/Admin/TableWithSearch.vue'
+import PayoutsTableWithSearch from '@/Components/Admin/Tables/PayoutsTableWithSearch.vue'
 
 </script>
 
 <template>
   <LayoutAuthenticated>
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiTableBorder" title="Каналы" main/>
-        <div class="main-section">
-            <TableWithSearch />
-        </div>
+      <SectionTitleLineWithButton :icon="mdiTableBorder" title="Выводы" main/>
+
+      <CardBox class="mb-6" has-table>
+          <PayoutsTableWithSearch/>
+      </CardBox>
+
     </SectionMain>
   </LayoutAuthenticated>
 </template>

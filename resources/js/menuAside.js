@@ -2,8 +2,15 @@ import {
     mdiMonitor,
     mdiTable,
     mdiMessage,
-    mdiForum, mdiCog, mdiTextLong, mdiAccount, mdiPhone, mdiCreditCardOutline, mdiBugOutline,
-} from "@mdi/js";
+    mdiForum,
+    mdiCog,
+    mdiTextLong,
+    mdiAccount,
+    mdiPhone,
+    mdiCreditCardOutline,
+    mdiBugOutline,
+    mdiOrderBoolDescendingVariant
+} from '@mdi/js'
 
 export default [
   {
@@ -15,6 +22,11 @@ export default [
     route: 'admin.channels',
     label: "Каналы",
     icon: mdiTable,
+  },
+  {
+    route: 'admin.orders',
+    label: "Заявки",
+    icon: mdiOrderBoolDescendingVariant,
   },
   {
     route: 'admin.users',

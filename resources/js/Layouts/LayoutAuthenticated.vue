@@ -6,7 +6,6 @@ import menuNavBar from "@/menuNavBar.js";
 import { useMainStore } from "@/stores/main.js";
 import { useStyleStore } from "@/stores/style.js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
-import FormControl from "@/Components/Admin/FormControl.vue";
 import NavBar from "@/Components/Admin/NavBar.vue";
 import NavBarItemPlain from "@/Components/Admin/NavBarItemPlain.vue";
 import AsideMenu from "@/Components/Admin/AsideMenu.vue";

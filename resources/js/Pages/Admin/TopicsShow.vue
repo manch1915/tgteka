@@ -11,8 +11,6 @@ import FormControl from "@/Components/Admin/FormControl.vue";
 import {reactive} from "vue";
 import BaseButton from "@/Components/Admin/BaseButton.vue";
 import {useMessage} from "naive-ui";
-import CardBox from "@/Components/Admin/CardBox.vue";
-import TableTopics from "@/Components/Admin/TableTopics.vue";
 import {router} from "@inertiajs/vue3";
 
 const props = defineProps({

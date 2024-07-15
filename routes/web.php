@@ -163,27 +163,30 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [Controller::class, 'index'])->name('admin');
 
-        Route::get('channels', fn () => inertia('Admin/TablesView')->withViewData([]))->name('channels');
+        Route::get('channels', fn () => inertia('Admin/Views/TablesView')->withViewData([]))->name('channels');
 
-        Route::get('users', fn () => inertia('Admin/UsersView'))->name('users');
+        Route::get('users', fn () => inertia('Admin/Views/UsersView'))->name('users');
 
-        Route::get('callbacks', fn () => inertia('Admin/CallbacksView'))->name('callbacks');
+        Route::get('callbacks', fn () => inertia('Admin/Views/CallbacksView'))->name('callbacks');
 
-        Route::get('support', fn () => inertia('Admin/SupportChatView'))->name('support');
+        Route::get('support', fn () => inertia('Admin/Views/SupportChatView'))->name('support');
 
-        Route::get('topics', fn () => inertia('Admin/TopicsView'))->name('topics');
+        Route::get('topics', fn () => inertia('Admin/Views/TopicsView'))->name('topics');
 
-        Route::get('settings', fn () => inertia('Admin/SettingsView'))->name('settings');
+        Route::get('settings', fn () => inertia('Admin/Views/SettingsView'))->name('settings');
 
-        Route::get('payouts', fn () => inertia('Admin/PayoutsView'))->name('payouts');
+        Route::get('payouts', fn () => inertia('Admin/Views/PayoutsView'))->name('payouts');
 
-        Route::get('reports', fn () => inertia('Admin/ReportsView'))->name('reports');
+        Route::get('reports', fn () => inertia('Admin/Views/ReportsView'))->name('reports');
+
+        Route::get('orders', fn () => inertia('Admin/Views/OrdersView'))->name('orders');
 
         Route::prefix('api')->name('api.')->group(function () {
             Route::Resource('channels', ChannelController::class);
 
             Route::apiResource('support', App\Http\Controllers\Admin\SupportController::class);
             Route::Resource('users', App\Http\Controllers\Admin\UserController::class);
+            Route::Resource('orders', App\Http\Controllers\Admin\OrderController::class);
             Route::apiResource('callbacks', App\Http\Controllers\Admin\CallbackController::class);
             Route::apiResource('settings', App\Http\Controllers\Admin\SettingController::class);
 

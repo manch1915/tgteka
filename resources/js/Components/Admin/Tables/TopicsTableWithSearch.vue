@@ -43,8 +43,7 @@
 </template>
 
 <script>
-import TableFooter from "@/Components/Admin/TableFooter.vue";
-import { renderTag } from '@/hooks/form'
+import TableFooter from "@/Components/Admin/Tables/TableFooter.vue";
 import {
     usePagination,
     useRowKey,
@@ -56,19 +55,18 @@ import {
     NButton,
     NDataTable,
     NInput,
-    NSelect,
+    NSpace,
     useMessage
 } from 'naive-ui'
 import { defineComponent, h, onMounted, ref } from "vue";
 import DataForm from "@/Components/Admin/DataForm.js";
-import TableHeader from "@/Components/Admin/TableHeader.vue";
-import TableBody from "@/Components/Admin/TableBody.vue";
+import TableHeader from "@/Components/Admin/Tables/TableHeader.vue";
+import TableBody from "@/Components/Admin/Tables/TableBody.vue";
 import { router } from '@inertiajs/vue3'
-import { trans } from 'laravel-vue-i18n'
 const conditionItems = [
     {
-        key: "id",
-        label: "id",
+        key: "title",
+        label: "называние",
         value: ref(null),
         render: (formItem) => {
             return h(NInput, {
@@ -79,64 +77,9 @@ const conditionItems = [
             });
         },
     },
-    {
-        key: "order_id",
-        label: "Заказ id",
-        value: ref(null),
-        render: (formItem) => {
-            return h(NInput, {
-                value: formItem.value.value,
-                onUpdateValue: (val) => {
-                    formItem.value.value = val;
-                }
-            });
-        },
-    },
-    {
-        key: "message",
-        label: "сообщение",
-        value: ref(null),
-        render: (formItem) => {
-            return h(NInput, {
-                value: formItem.value.value,
-                onUpdateValue: (val) => {
-                    formItem.value.value = val;
-                }
-            });
-        },
-    },
-    {
-        key: "status",
-        label: "status",
-        value: ref(null),
-        optionItems: [
-            {
-                label: "принятый",
-                value: "accepted",
-            },
-            {
-                label: "отклоненный",
-                value: "declined",
-            },
-            {
-                label: "в ожидании",
-                value: "pending",
-            },
-        ],
-        render: (formItem) => {
-            return h(NSelect, {
-                options: formItem.optionItems,
-                value: formItem.value.value,
-                placeholder: "status",
-                onUpdateValue: (val) => {
-                    formItem.value.value = val;
-                },
-            });
-        },
-    }
 ];
 export default defineComponent({
-    name: "ReportsTableWithSearch",
+    name: "TopicsTableWithSearch",
     components: { NDataTable, TableBody, TableHeader, DataForm, TableFooter },
     setup() {
         const searchForm = ref(null);
@@ -154,21 +97,8 @@ export default defineComponent({
                     key: "id"
                 },
                 {
-                    title: "Заказ id",
-                    key: "order_id",
-                },
-                {
-                    title: "сообщение",
-                    key: "message",
-                },
-                {
-                    title: "Статус",
-                    key: "status",
-                    render: (rowData) =>
-                        renderTag(trans('messages.' + rowData?.status), {
-                            type: 'info',
-                            size: "small",
-                        }),
+                    title: "Называние",
+                    key: "title",
                 },
                 {
                     title: "Настройки",
@@ -177,11 +107,27 @@ export default defineComponent({
                     width: 240,
                     render: (rowData) => {
                         return h(
-                            NButton,
+                            NSpace,
+                            { justify: 'space-between' },
                             {
-                                onClick: () => router.visit(route('admin.api.reports.show', rowData.id))
-                            },
-                            () => 'Перейти'
+                                default: () => [
+                                    h(
+                                        NButton,
+                                        {
+                                            onClick: () => router.visit(route('admin.api.topics.edit', rowData.id)),
+                                        },
+                                        () => 'Перейти'
+                                    ),
+                                    h(
+                                        NButton,
+                                        {
+                                            onClick: () => axios.delete(route('admin.api.topics.destroy', rowData.id)).then().catch(c => alert(c.response.data.error)),
+                                            type: 'error'
+                                        },
+                                        () => 'Удалить'
+                                    )
+                                ]
+                            }
                         )
                     },
                 }
@@ -193,7 +139,7 @@ export default defineComponent({
         function doRefresh() {
             let searchParams = searchForm.value?.generatorParams();
             axios
-                .get(route('admin.api.reports.index'), {
+                .get(route('admin.api.topics.pagination'), {
                     params: {
                         page: pagination.page,
                         pageSize: pagination.pageSize,

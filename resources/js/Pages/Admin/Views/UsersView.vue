@@ -2,8 +2,7 @@
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionMain from "@/Components/Admin/SectionMain.vue";
 import CardBox from "@/Components/Admin/CardBox.vue";
-import UsersTableWithSearch from '@/Components/Admin/UsersTableWithSearch.vue'
-
+import UsersTableWithSearch from '@/Components/Admin/Tables/UsersTableWithSearch.vue'
 
 </script>
 

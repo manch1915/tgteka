@@ -43,7 +43,8 @@
 </template>
 
 <script>
-import TableFooter from "@/Components/Admin/TableFooter.vue";
+import TableFooter from "@/Components/Admin/Tables/TableFooter.vue";
+import { renderCallbackButtons, renderTag } from '@/hooks/form'
 import {
     usePagination,
     useRowKey,
@@ -52,21 +53,19 @@ import {
     useTableHeight,
 } from "@/hooks/table";
 import {
-    NButton,
     NDataTable,
     NInput,
-    NSpace,
     useMessage
 } from 'naive-ui'
 import { defineComponent, h, onMounted, ref } from "vue";
 import DataForm from "@/Components/Admin/DataForm.js";
-import TableHeader from "@/Components/Admin/TableHeader.vue";
-import TableBody from "@/Components/Admin/TableBody.vue";
-import { router } from '@inertiajs/vue3'
+import TableHeader from "@/Components/Admin/Tables/TableHeader.vue";
+import TableBody from "@/Components/Admin/Tables/TableBody.vue";
+import { trans } from 'laravel-vue-i18n'
 const conditionItems = [
     {
-        key: "title",
-        label: "называние",
+        key: "id",
+        label: "id",
         value: ref(null),
         render: (formItem) => {
             return h(NInput, {
@@ -77,9 +76,35 @@ const conditionItems = [
             });
         },
     },
+    {
+        key: "name",
+        label: "name",
+        value: ref(null),
+        render: (formItem) => {
+            return h(NInput, {
+                value: formItem.value.value,
+                onUpdateValue: (val) => {
+                    formItem.value.value = val;
+                }
+            });
+        },
+    },
+    {
+        key: "email",
+        label: "email",
+        value: ref(null),
+        render: (formItem) => {
+            return h(NInput, {
+                value: formItem.value.value,
+                onUpdateValue: (val) => {
+                    formItem.value.value = val;
+                }
+            });
+        },
+    },
 ];
 export default defineComponent({
-    name: "TopicsTableWithSearch",
+    name: "CallbackTableWithSearch",
     components: { NDataTable, TableBody, TableHeader, DataForm, TableFooter },
     setup() {
         const searchForm = ref(null);
@@ -91,45 +116,43 @@ export default defineComponent({
         const tableColumns = useTableColumn(
             [
                 {
-                    fixed: 'left',
-                    width: 60,
                     title: "ID",
                     key: "id"
                 },
                 {
-                    title: "Называние",
-                    key: "title",
+                    title: "Имя",
+                    key: "name",
+                },
+                {
+                    title: "email",
+                    key: "email",
+                },
+                {
+                    title: "created_at",
+                    key: "created_at",
+                },
+                {
+                    title: "Статус",
+                    key: "status",
+                    render: (rowData) =>
+                        renderTag(trans('messages.' + rowData?.status), {
+                            type: 'info',
+                            size: "small",
+                        }),
                 },
                 {
                     title: "Настройки",
                     key: "null",
                     fixed: 'right',
                     width: 240,
-                    render: (rowData) => {
-                        return h(
-                            NSpace,
-                            { justify: 'space-between' },
-                            {
-                                default: () => [
-                                    h(
-                                        NButton,
-                                        {
-                                            onClick: () => router.visit(route('admin.api.topics.edit', rowData.id)),
-                                        },
-                                        () => 'Перейти'
-                                    ),
-                                    h(
-                                        NButton,
-                                        {
-                                            onClick: () => axios.delete(route('admin.api.topics.destroy', rowData.id)).then().catch(c => alert(c.response.data.error)),
-                                            type: 'error'
-                                        },
-                                        () => 'Удалить'
-                                    )
-                                ]
-                            }
-                        )
-                    },
+                    render: (rowData) => renderCallbackButtons(
+                        [
+                            { value: 'declined', label: 'отклонить' },
+                            { value: 'finished', label: 'принять' }
+                        ],
+                        route('admin.api.callbacks.update', rowData.id),
+                        message
+                    ),
                 }
             ],
             {
@@ -139,7 +162,7 @@ export default defineComponent({
         function doRefresh() {
             let searchParams = searchForm.value?.generatorParams();
             axios
-                .get(route('admin.api.topics.pagination'), {
+                .get(route('admin.api.callbacks.index'), {
                     params: {
                         page: pagination.page,
                         pageSize: pagination.pageSize,

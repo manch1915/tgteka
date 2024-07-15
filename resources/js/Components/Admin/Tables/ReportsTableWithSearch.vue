@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import TableFooter from "@/Components/Admin/TableFooter.vue";
-import { renderCallbackButtons, renderTag } from '@/hooks/form'
+import TableFooter from "@/Components/Admin/Tables/TableFooter.vue";
+import { renderTag } from '@/hooks/form'
 import {
     usePagination,
     useRowKey,
@@ -53,14 +53,17 @@ import {
     useTableHeight,
 } from "@/hooks/table";
 import {
+    NButton,
     NDataTable,
     NInput,
+    NSelect,
     useMessage
 } from 'naive-ui'
 import { defineComponent, h, onMounted, ref } from "vue";
 import DataForm from "@/Components/Admin/DataForm.js";
-import TableHeader from "@/Components/Admin/TableHeader.vue";
-import TableBody from "@/Components/Admin/TableBody.vue";
+import TableHeader from "@/Components/Admin/Tables/TableHeader.vue";
+import TableBody from "@/Components/Admin/Tables/TableBody.vue";
+import { router } from '@inertiajs/vue3'
 import { trans } from 'laravel-vue-i18n'
 const conditionItems = [
     {
@@ -77,8 +80,8 @@ const conditionItems = [
         },
     },
     {
-        key: "name",
-        label: "name",
+        key: "order_id",
+        label: "Заказ id",
         value: ref(null),
         render: (formItem) => {
             return h(NInput, {
@@ -90,8 +93,8 @@ const conditionItems = [
         },
     },
     {
-        key: "email",
-        label: "email",
+        key: "message",
+        label: "сообщение",
         value: ref(null),
         render: (formItem) => {
             return h(NInput, {
@@ -102,9 +105,38 @@ const conditionItems = [
             });
         },
     },
+    {
+        key: "status",
+        label: "status",
+        value: ref(null),
+        optionItems: [
+            {
+                label: "принятый",
+                value: "accepted",
+            },
+            {
+                label: "отклоненный",
+                value: "declined",
+            },
+            {
+                label: "в ожидании",
+                value: "pending",
+            },
+        ],
+        render: (formItem) => {
+            return h(NSelect, {
+                options: formItem.optionItems,
+                value: formItem.value.value,
+                placeholder: "status",
+                onUpdateValue: (val) => {
+                    formItem.value.value = val;
+                },
+            });
+        },
+    }
 ];
 export default defineComponent({
-    name: "CallbackTableWithSearch",
+    name: "ReportsTableWithSearch",
     components: { NDataTable, TableBody, TableHeader, DataForm, TableFooter },
     setup() {
         const searchForm = ref(null);
@@ -116,20 +148,18 @@ export default defineComponent({
         const tableColumns = useTableColumn(
             [
                 {
+                    fixed: 'left',
+                    width: 60,
                     title: "ID",
                     key: "id"
                 },
                 {
-                    title: "Имя",
-                    key: "name",
+                    title: "Заказ id",
+                    key: "order_id",
                 },
                 {
-                    title: "email",
-                    key: "email",
-                },
-                {
-                    title: "created_at",
-                    key: "created_at",
+                    title: "сообщение",
+                    key: "message",
                 },
                 {
                     title: "Статус",
@@ -145,14 +175,15 @@ export default defineComponent({
                     key: "null",
                     fixed: 'right',
                     width: 240,
-                    render: (rowData) => renderCallbackButtons(
-                        [
-                            { value: 'declined', label: 'отклонить' },
-                            { value: 'finished', label: 'принять' }
-                        ],
-                        route('admin.api.callbacks.update', rowData.id),
-                        message
-                    ),
+                    render: (rowData) => {
+                        return h(
+                            NButton,
+                            {
+                                onClick: () => router.visit(route('admin.api.reports.show', rowData.id))
+                            },
+                            () => 'Перейти'
+                        )
+                    },
                 }
             ],
             {
@@ -162,7 +193,7 @@ export default defineComponent({
         function doRefresh() {
             let searchParams = searchForm.value?.generatorParams();
             axios
-                .get(route('admin.api.callbacks.index'), {
+                .get(route('admin.api.reports.index'), {
                     params: {
                         page: pagination.page,
                         pageSize: pagination.pageSize,

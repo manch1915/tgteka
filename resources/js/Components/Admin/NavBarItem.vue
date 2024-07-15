@@ -2,7 +2,6 @@
 import { mdiChevronUp, mdiChevronDown } from "@mdi/js";
 import { computed, ref, onMounted, onBeforeUnmount } from "vue";
 import { useStyleStore } from "@/stores/style.js";
-import { useMainStore } from "@/stores/main.js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 import UserAvatarCurrentUser from "@/Components/Admin/UserAvatarCurrentUser.vue";
 import NavBarMenuList from "@/Components/Admin/NavBarMenuList.vue";

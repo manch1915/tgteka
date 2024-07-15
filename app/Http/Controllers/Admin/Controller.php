@@ -12,7 +12,7 @@ class Controller extends BaseController
     {
         $usersCount = User::count();
         $channelsCount = Channel::count();
-        return inertia('Admin/HomeView', [
+        return inertia('Admin/Views/HomeView', [
             'channelsCount' => $channelsCount,
             'usersCount' => $usersCount,
         ]);

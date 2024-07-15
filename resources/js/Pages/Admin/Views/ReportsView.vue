@@ -6,8 +6,7 @@ import SectionMain from "@/Components/Admin/SectionMain.vue";
 import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
 import SectionTitleLineWithButton from "@/Components/Admin/SectionTitleLineWithButton.vue";
 import CardBox from "@/Components/Admin/CardBox.vue";
-import TableReports from "@/Components/Admin/TableReports.vue";
-import ReportsTableWithSearch from '@/Components/Admin/ReportsTableWithSearch.vue'
+import ReportsTableWithSearch from '@/Components/Admin/Tables/ReportsTableWithSearch.vue'
 
 </script>
 

@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import TableFooter from "@/Components/Admin/TableFooter.vue";
+import TableFooter from "@/Components/Admin/Tables/TableFooter.vue";
 import { renderCallbackButtons, renderTag } from '@/hooks/form'
 import {
     usePagination,
@@ -60,8 +60,8 @@ import {
 } from 'naive-ui'
 import { computed, defineComponent, h, onMounted, reactive, ref, toRefs } from 'vue'
 import DataForm from "@/Components/Admin/DataForm.js";
-import TableHeader from "@/Components/Admin/TableHeader.vue";
-import TableBody from "@/Components/Admin/TableBody.vue";
+import TableHeader from "@/Components/Admin/Tables/TableHeader.vue";
+import TableBody from "@/Components/Admin/Tables/TableBody.vue";
 import { trans } from 'laravel-vue-i18n'
 
 export default defineComponent({

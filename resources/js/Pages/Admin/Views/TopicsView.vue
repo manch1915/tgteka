@@ -13,7 +13,7 @@ import BaseButton from "@/Components/Admin/BaseButton.vue";
 import {useMessage} from "naive-ui";
 import CardBox from "@/Components/Admin/CardBox.vue";
 import {useMainStore} from "@/stores/main.js";
-import TopicsTableWithSearch from '@/Components/Admin/TopicsTableWithSearch.vue'
+import TopicsTableWithSearch from '@/Components/Admin/Tables/TopicsTableWithSearch.vue'
 
 const form = reactive({
     title: ''

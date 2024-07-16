@@ -126,9 +126,12 @@ class OrderService
         foreach ($channels as $channel) {
             $price = $this->calculateChannelSum($channel);
             $formatDetails = $this->getFormatDetails($channel);
-
             // Add days to post_date
-            if (isset($channel->nearFuture) && $channel->nearFuture) {
+
+            $requestChannel = collect($request->channels)->firstWhere('id', $channel->id);
+logger($requestChannel);
+            // Set nearFuture and postDate based on the request channel data
+            if ($requestChannel && isset($requestChannel['nearFuture']) && $requestChannel['nearFuture']) {
                 $postDate = now(); // Set post_date to now
                 $nearFuture = true;
             } else {

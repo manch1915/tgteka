@@ -304,25 +304,12 @@ export default defineComponent({
                     width: 240,
                     render: (rowData) => {
                         return h(
-                            NSpace,
-                            { vertical: true },
-                            [
-                                h(
-                                    NButton,
-                                    {
-                                        onClick: () => router.visit(route('admin.api.orders.show', rowData.id))
-                                    },
-                                    () => 'Перейти'
-                                ),
-                                h(
-                                    NButton,
-                                    {
-                                        onClick: () => openDrawer(rowData)
-                                    },
-                                    () => 'Подробнее'
-                                )
-                            ]
-                        );
+                            NButton,
+                            {
+                                onClick: () => openDrawer(rowData)
+                            },
+                            () => 'Подробнее'
+                        )
                     },
                 }
             ],

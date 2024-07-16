@@ -11,7 +11,7 @@ use Workerman\Worker;
 
 class WebSocketServerCommand extends Command
 {
-    protected $signature = 'websocket:start';
+    protected $signature = 'websocket:start {mode?} {--d|daemon : Run the WebSocket server in daemon mode}';
     protected $description = 'Start the WebSocket Server';
 
     protected PersonalChatRepository $personalChatRepository;
@@ -35,6 +35,8 @@ class WebSocketServerCommand extends Command
 
     public function handle(): void
     {
+        $mode = $this->argument('mode') ?: 'start';
+        $daemon = $this->option('daemon');
         $this->startServer();
     }
 
@@ -43,9 +45,9 @@ class WebSocketServerCommand extends Command
         // SSL context
         $context = [
             'ssl' => [
-                'local_cert'  => config('websockets.ssl.local_cert'),
-                'local_pk'    => config('websockets.ssl.local_pk'),
-                'verify_peer' => config('websockets.ssl.verify_peer'),
+                'local_cert'  => base_path(config('websockets.ssl.local_cert')),
+                'local_pk'    => base_path(config('websockets.ssl.local_pk')),
+                'verify_peer' => config(('websockets.ssl.verify_peer')),
             ],
         ];
 

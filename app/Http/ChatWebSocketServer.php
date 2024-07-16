@@ -5,18 +5,13 @@ namespace App\Http;
 use App\Http\Factories\MessageFactory;
 use App\Http\Repositories\PersonalChatRepository;
 use App\Http\Repositories\SupportChatRepository;
-use App\Models\Conversation;
-use App\Models\Moderator;
-use App\Models\SupportTicket;
-use App\Services\Censure;
 use App\Services\WebSocketMessageProviders\WebSocketMessageProvider;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Ratchet\ConnectionInterface;
-use Ratchet\MessageComponentInterface;
 use SplObjectStorage;
+use Workerman\Connection\TcpConnection;
 
-class ChatWebSocketServer implements MessageComponentInterface
+class ChatWebSocketServer
 {
     protected SplObjectStorage $clients;
     protected array $userConnections;
@@ -25,74 +20,79 @@ class ChatWebSocketServer implements MessageComponentInterface
     protected SupportChatRepository $supportChatRepository;
     protected MessageFactory $messageFactory;
 
-    public function __construct(PersonalChatRepository $personalChatRepository, SupportChatRepository $supportChatRepository ,MessageFactory $messageFactory)
-    {
-        $this->clients = new \SplObjectStorage;
+    public function __construct(
+        PersonalChatRepository $personalChatRepository,
+        SupportChatRepository $supportChatRepository,
+        MessageFactory $messageFactory
+    ) {
+        $this->clients = new SplObjectStorage;
         $this->userConnections = [];
         $this->personalChatRepository = $personalChatRepository;
         $this->supportChatRepository = $supportChatRepository;
         $this->messageFactory = $messageFactory;
     }
 
-    public function onOpen(ConnectionInterface $conn): void
+    public function onOpen(TcpConnection $connection): void
     {
-        $this->clients->attach($conn);
-        $clientId = spl_object_hash($conn);
+        $this->clients->attach($connection);
+        $clientId = spl_object_hash($connection);
         echo "New connection! ({$clientId})\n";
 
-        parse_str($conn->httpRequest->getUri()->getQuery(), $queryArray);
+        // Use the query parameters stored in the connection object
+        $queryArray = $connection->queryParams ?? [];
+
         $userId = $queryArray['userid'] ?? null;
         if ($userId !== null) {
-            // Save the main connection for the user if it's not already set
             if (!isset($this->userMainConnections[$userId])) {
-                $this->userMainConnections[$userId] = $conn;
-            }else{
-                $this->userConnections[$userId] = $conn;
+                $this->userMainConnections[$userId] = $connection;
+            } else {
+                $this->userConnections[$userId] = $connection;
             }
-
-            // Save the current connection as a user connection
         }
     }
 
-    public function onMessage(ConnectionInterface $from, $msg): void
+    public function onMessage(TcpConnection $connection, $data): void
     {
-        $data = json_decode($msg, true);
-        if(json_last_error() !== JSON_ERROR_NONE) {
+        $data = json_decode($data, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
             Log::error("JSON decode error: " . json_last_error_msg());
         } else {
             $this->handleChatMessage($data);
         }
     }
 
-    public function onClose(ConnectionInterface $conn): void
+    public function onClose(TcpConnection $connection): void
     {
-        $this->clients->detach($conn);
+        $this->clients->detach($connection);
 
-        // Find the user associated with the connection and remove it.
-        $userId = array_search($conn, $this->userConnections);
+        $userId = array_search($connection, $this->userConnections);
         if ($userId !== false) {
             unset($this->userConnections[$userId]);
         }
 
-        $clientId = spl_object_hash($conn);
+        $clientId = spl_object_hash($connection);
         Log::info("Connection {$userId} has disconnected");
     }
 
-    public function onError(ConnectionInterface $conn, \Exception $e): void
+    public function onError(TcpConnection $connection, \Exception $e): void
     {
         echo "An error has occurred: {$e->getMessage()}\n";
-        $conn->close();
+        $connection->close();
     }
 
     private function handleChatMessage(array $data): void
     {
         $type = $data['type'] ?? 'chat';
         try {
-            $messageProvider = WebSocketMessageProvider::factory($type, $this->personalChatRepository, $this->supportChatRepository, $this->messageFactory);
+            $messageProvider = WebSocketMessageProvider::factory(
+                $type,
+                $this->personalChatRepository,
+                $this->supportChatRepository,
+                $this->messageFactory
+            );
             $messageProvider->sendMessage($data, $this->userConnections, $this->userMainConnections);
         } catch (Exception $e) {
             error_log("WebSocketMessageProvider error: " . $e->getMessage());
         }
     }
-
 }

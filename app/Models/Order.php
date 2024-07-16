@@ -53,6 +53,11 @@ class Order extends Model
         $this->update(['status' => 'checked']);
     }
 
+    public function review(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function markAsDeclined(): void
     {
         $this->update(['status' => 'declined']);

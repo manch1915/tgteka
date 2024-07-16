@@ -7,12 +7,7 @@ use App\Http\Factories\MessageFactory;
 use App\Http\Repositories\PersonalChatRepository;
 use App\Http\Repositories\SupportChatRepository;
 use Illuminate\Console\Command;
-use Ratchet\Server\IoServer;
-use Ratchet\Http\HttpServer;
-use Ratchet\WebSocket\WsServer;
-use React\EventLoop\Loop;
-use React\Socket\SecureServer;
-use React\Socket\SocketServer;
+use Workerman\Worker;
 
 class WebSocketServerCommand extends Command
 {
@@ -22,46 +17,59 @@ class WebSocketServerCommand extends Command
     protected PersonalChatRepository $personalChatRepository;
     protected SupportChatRepository $supportChatRepository;
     protected MessageFactory $messageFactory;
+    protected ChatWebSocketServer $chatWebSocketServer;
 
-    public function __construct(PersonalChatRepository $personalChatRepository, SupportChatRepository $supportChatRepository ,MessageFactory $messageFactory)
-    {
+
+    public function __construct(
+        PersonalChatRepository $personalChatRepository,
+        SupportChatRepository $supportChatRepository,
+        MessageFactory $messageFactory,
+        ChatWebSocketServer $chatWebSocketServer,
+    ) {
         parent::__construct();
         $this->personalChatRepository = $personalChatRepository;
         $this->supportChatRepository = $supportChatRepository;
         $this->messageFactory = $messageFactory;
+        $this->chatWebSocketServer = $chatWebSocketServer;
     }
 
     public function handle(): void
     {
-        $this->startServer($this->createChatServer());
+        $this->startServer();
     }
 
-    private function createChatServer(): IoServer
+    private function startServer(): void
     {
-        $loop   = Loop::get();
+        // SSL context
+        $context = [
+            'ssl' => [
+                'local_cert'  => config('websockets.ssl.local_cert'),
+                'local_pk'    => config('websockets.ssl.local_pk'),
+                'verify_peer' => config('websockets.ssl.verify_peer'),
+            ],
+        ];
 
-        $webSock = new SocketServer('0.0.0.0:1915',[], $loop);
+        // Create a WebSocket server with SSL context
+        $ws_worker = new Worker('websocket://0.0.0.0:1915', $context);
+        $ws_worker->transport = 'ssl';
 
-        $webSock = new SecureServer(
-            $webSock,
-            $loop,
-            array(
-                'local_cert'        => config('websockets.ssl.local_cert'),
-                'local_pk'          => config('websockets.ssl.local_pk'),
-                'allow_self_signed' => config('websockets.ssl.allow_self_signed'),
-                'verify_peer' => config('websockets.ssl.verify_peer')
-            )
-        );
+        // Set up the WebSocket server
+        $ws_worker->onWebSocketConnect = function($connection, $header) {
+            $connection->queryParams = $_GET;
+            logger($_GET);
+            $this->chatWebSocketServer->onOpen($connection);
+        };
+        $ws_worker->onMessage = function($connection, $data) {
+            $this->chatWebSocketServer->onMessage($connection, $data);
+        };
+        $ws_worker->onClose = function($connection) {
+            $this->chatWebSocketServer->onClose($connection);
+        };
+        $ws_worker->onError = function($connection, $code, $msg) {
+            $this->chatWebSocketServer->onError($connection, new \Exception($msg));
+        };
 
-        $webServer = new HttpServer(new WsServer(
-            new ChatWebSocketServer($this->personalChatRepository, $this->supportChatRepository, $this->messageFactory)
-        ));
-
-        return new IoServer($webServer, $webSock, $loop);
-    }
-
-    private function startServer(IoServer $server): void
-    {
-        $server->run();
+        // Start the worker
+        Worker::runAll();
     }
 }

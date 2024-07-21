@@ -48,6 +48,10 @@ const handleFileUpload = (event) => {
 
 
 const sendMessage = (messageContent, messageType='text') => {
+    if (!messageContent.trim()) {
+        return;
+    }
+
     props.socket.send(JSON.stringify({
         title: '',
         message: messageContent,

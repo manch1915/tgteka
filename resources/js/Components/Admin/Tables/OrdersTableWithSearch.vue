@@ -33,7 +33,7 @@
                     :scroll-x="1000"
                 />
                     <n-drawer v-model:show="active" width="50%" :placement="placement">
-                        <n-drawer-content title="Order Details">
+                        <n-drawer-content title="Детали заказа">
                             <!-- Dynamic content rendering -->
                             <n-space vertical align="center">
                                 <n-card title="Детали канала" style="width: 100%">
@@ -44,46 +44,38 @@
                                         <n-divider />
                                         URL: {{ rowData.channel?.url }}
                                         <n-divider />
-                                        Аватар: {{ rowData.channel?.avatar }}
-                                        <n-divider />
                                         Тип: {{ rowData.channel?.type }}
                                         <n-divider />
                                         Язык: {{ rowData.channel?.language }}
                                         <n-divider />
                                         Источник подписчиков: {{ rowData.channel?.subscribers_source }}
                                         <n-divider />
-                                        Цена формата 1: {{ rowData.channel?.format_one_price }}
+                                        Цена формата 1/24: {{ rowData.channel?.format_one_price }} &nbsp;руб.
                                         <n-divider />
-                                        Цена формата 2: {{ rowData.channel?.format_two_price }}
+                                        Цена формата 2/48: {{ rowData.channel?.format_two_price }} &nbsp;руб.
                                         <n-divider />
-                                        Цена формата 3: {{ rowData.channel?.format_three_price }}
+                                        Цена формата 3/72: {{ rowData.channel?.format_three_price }} &nbsp;руб.
                                         <n-divider />
-                                        Цена без удаления: {{ rowData.channel?.no_deletion_price }}
+                                        Цена без удаления: {{ rowData.channel?.no_deletion_price }} &nbsp;руб.
                                         <n-divider />
-                                        Цена репоста: {{ rowData.channel?.repost_price }}
+                                        Цена репоста: {{ rowData.channel?.repost_price }} &nbsp;руб.
                                         <n-divider />
-                                        Скидка на повтор: {{ rowData.channel?.repeat_discount }}
+                                        Скидка на повтор: {{ rowData.channel?.repeat_discount }}%
                                         <n-divider />
                                         CPM: {{ rowData.channel?.cpm }}
-                                        <n-divider />
-                                        Процент мужчин: {{ rowData.channel?.male_percentage }}
                                         <n-divider />
                                         Счет: {{ rowData.channel?.score }}
                                         <n-divider />
                                         Рейтинг: {{ rowData.channel?.rating }}
                                         <n-divider />
-                                        Количество лайков: {{ rowData.channel?.likes_count }}
-                                        <n-divider />
-                                        Количество просмотров: {{ rowData.channel?.views_count }}
-                                        <n-divider />
-                                        Статус: {{ rowData.channel?.status }}
-                                        <n-divider />
-                                        Дата создания канала: {{ rowData.channel?.channel_creation_date }}
+                                        Статус: {{ trans('messages.' + rowData.channel?.status)  }}
                                     </div>
                                 </n-card>
-                                <n-card title="Детали формата" style="width: 100%">
+                                <n-card title="" style="width: 100%">
                                     <div>
-                                        Название формата: {{ rowData.format?.name }}
+                                        Ближайшее время:
+                                        <n-tag type="success" v-if="rowData.near_future">Да</n-tag>
+                                        <n-tag type="error" v-else>Нет</n-tag>
                                         <!-- Добавьте больше деталей формата здесь, если необходимо -->
                                     </div>
                                 </n-card>
@@ -97,27 +89,9 @@
                                           <n-divider />
                                         Telegram Username: {{ rowData.user?.telegram_username }}
                                           <n-divider />
-                                        Telegram User ID: {{ rowData.user?.telegram_user_id }}
-                                          <n-divider />
-                                        VK ID: {{ rowData.user?.vk_id }}
-                                          <n-divider />
                                         Баланс: {{ rowData.user?.balance }}
                                           <n-divider />
-                                        Подтверждение email: {{ rowData.user?.email_verified_at }}
-                                          <n-divider />
-                                        Реферальный ID: {{ rowData.user?.referral_id }}
-                                          <n-divider />
-                                        Код двухфакторной аутентификации: {{ rowData.user?.two_factor_code }}
-                                          <n-divider />
-                                        Двухфакторная аутентификация истекает: {{ rowData.user?.two_factor_expires_at }}
-                                          <n-divider />
-                                        Двухфакторная аутентификация включена: {{ rowData.user?.two_factor_enabled }}
-                                          <n-divider />
-                                        Удалено: {{ rowData.user?.deleted_at }}
-                                          <n-divider />
-                                        Дата создания пользователя: {{ rowData.user?.created_at }}
-                                          <n-divider />
-                                        Дата обновления пользователя: {{ rowData.user?.updated_at }}
+                                        Дата создания пользователя: {{ formatDate(rowData.user?.created_at) }}
                                     </div>
                                 </n-card>
                                 <n-card title="Детали жалоб" style="width: 100%">
@@ -126,12 +100,21 @@
                                           <n-divider />
                                         Описание: {{ rowData.order_reports[0]?.message }}
                                           <n-divider />
-                                        Статус: {{ rowData.order_reports[0]?.status }}
+                                        Статус: {{ trans('messages.' + rowData.order_reports[0]?.status) }}
+                                    </div>
+                                </n-card>
+                                <n-card title="Изменение статуса заказа" style="width: 100%">
+                                    <div>
+                                        <n-select
+                                            v-model:value="statusVal"
+                                            :options="statusOptions"
+                                            placeholder="Выберите статус"
+                                        />
+                                        <n-button @click="updateOrderStatus">Сохранить</n-button>
                                     </div>
                                 </n-card>
                                 <n-button @click="closeDrawer">Закрыть</n-button>
                             </n-space>
-
                         </n-drawer-content>
                     </n-drawer>
                 </div>
@@ -159,7 +142,7 @@ import {
     NButton, NCard,
     NDataTable, NDivider, NDrawer, NDrawerContent,
     NInput,
-    NSelect, NSpace,
+    NSelect, NSpace, NTag,
     useMessage
 } from 'naive-ui'
 import { defineComponent, h, onMounted, ref, watch } from 'vue'
@@ -240,7 +223,8 @@ const conditionItems = [
 ];
 export default defineComponent({
     name: "OrdersTableWithSearch",
-    components: { NDivider, NSpace, NButton, NCard, NDrawer, NDrawerContent, NDataTable, TableBody, TableHeader, DataForm, TableFooter },
+    methods: { trans },
+    components: { NSelect, NTag, NDivider, NSpace, NButton, NCard, NDrawer, NDrawerContent, NDataTable, TableBody, TableHeader, DataForm, TableFooter },
     setup() {
         const searchForm = ref(null);
         const pagination = usePagination(doRefresh);
@@ -258,6 +242,24 @@ export default defineComponent({
         };
         const closeDrawer = (data) => {
             active.value = false;
+        };
+        const statusVal = ref('')
+        const statusOptions = [
+            { label: 'Принятый', value: 'accepted' },
+            { label: 'Отклоненный', value: 'declined' },
+            { label: 'В ожидании', value: 'pending' },
+        ];
+        const updateOrderStatus = () => {
+            axios.put(route('admin.api.orders.update', { id: rowData.value.id }), { status: statusVal.value })
+                .then(() => {
+                    message.success('Статус изменен');
+                    closeDrawer();
+                    doRefresh();
+                })
+                .catch(error => {
+                    message.error('Ошибка при изменении статуса');
+                    console.error(error);
+                });
         };
 
         const tableColumns = useTableColumn(
@@ -285,8 +287,9 @@ export default defineComponent({
                     key: "post_date_end",
                 },
                 {
-                    title: "В ближайшее время",
-                    key: "near_future",
+                    title: "Название формата",
+                    key: "format_name",
+                    render: (rowData) => rowData?.format?.name,
                 },
                 {
                     title: "Статус",
@@ -349,8 +352,26 @@ export default defineComponent({
             table.tableHeight.value = await useTableHeight();
             doRefresh();
         });
+        function formatDate(dateString) {
+            if (!dateString) return '';
+
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU', options).replace(',', '');
+        }
         return {
             ...table,
+            formatDate,
+            statusVal,
+            statusOptions,
+            updateOrderStatus,
             rowKey,
             pagination,
             searchForm,

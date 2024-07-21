@@ -35,10 +35,16 @@ class ConversationController extends Controller
                 ? $conversation->userTwo->toArray()
                 : $conversation->userOne->toArray();
 
+            $unreadCount = $conversation->messages()
+                ->where('user_id', '!=', auth()->id())
+                ->where('is_seen', false)
+                ->count();
+
             return [
                 'id'   => $conversation->id,
                 'user' => $otherUser,
-                'last_message' => $conversation->messages()->latest()->first()
+                'last_message' => $conversation->messages()->latest()->first(),
+                'unread_count' => $unreadCount,
             ];
         });
 
@@ -50,6 +56,12 @@ class ConversationController extends Controller
         $conversationMessages = ConversationMessages::where('conversation_id' , $conversationId)
             ->with('user:id,username,email')
             ->get();
+        $conversation = Conversation::with('messages')->findOrFail($conversationId);
+
+        $conversation->messages()
+            ->where('user_id', '!=', auth()->id())
+            ->where('is_seen', false)
+            ->update(['is_seen' => true]);
 
         foreach ($conversationMessages as $message) {
             $image = $message->getFirstMedia('personal_message_images');

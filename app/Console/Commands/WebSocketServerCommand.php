@@ -12,13 +12,16 @@ use Workerman\Worker;
 class WebSocketServerCommand extends Command
 {
     protected $signature = 'websocket:start {mode?} {--d|daemon : Run the WebSocket server in daemon mode}';
+
     protected $description = 'Start the WebSocket Server';
 
     protected PersonalChatRepository $personalChatRepository;
-    protected SupportChatRepository $supportChatRepository;
-    protected MessageFactory $messageFactory;
-    protected ChatWebSocketServer $chatWebSocketServer;
 
+    protected SupportChatRepository $supportChatRepository;
+
+    protected MessageFactory $messageFactory;
+
+    protected ChatWebSocketServer $chatWebSocketServer;
 
     public function __construct(
         PersonalChatRepository $personalChatRepository,
@@ -45,8 +48,8 @@ class WebSocketServerCommand extends Command
         // SSL context
         $context = [
             'ssl' => [
-                'local_cert'  => base_path(config('websockets.ssl.local_cert')),
-                'local_pk'    => base_path(config('websockets.ssl.local_pk')),
+                'local_cert' => base_path(config('websockets.ssl.local_cert')),
+                'local_pk' => base_path(config('websockets.ssl.local_pk')),
                 'verify_peer' => config(('websockets.ssl.verify_peer')),
             ],
         ];
@@ -56,18 +59,18 @@ class WebSocketServerCommand extends Command
         $ws_worker->transport = 'ssl';
 
         // Set up the WebSocket server
-        $ws_worker->onWebSocketConnect = function($connection, $header) {
+        $ws_worker->onWebSocketConnect = function ($connection, $header) {
             $connection->queryParams = $_GET;
             logger($_GET);
             $this->chatWebSocketServer->onOpen($connection);
         };
-        $ws_worker->onMessage = function($connection, $data) {
+        $ws_worker->onMessage = function ($connection, $data) {
             $this->chatWebSocketServer->onMessage($connection, $data);
         };
-        $ws_worker->onClose = function($connection) {
+        $ws_worker->onClose = function ($connection) {
             $this->chatWebSocketServer->onClose($connection);
         };
-        $ws_worker->onError = function($connection, $code, $msg) {
+        $ws_worker->onError = function ($connection, $code, $msg) {
             $this->chatWebSocketServer->onError($connection, new \Exception($msg));
         };
 

@@ -22,6 +22,16 @@ const showMessage = useMessage();
 const cart = reactive({ items: [] });
 const unreadNotifications = ref(0);
 
+const unreadMessages = ref(0);  // New ref for unread messages
+
+const incrementUnreadMessages = () => {
+    unreadMessages.value += 1;
+};
+
+if (page.props.auth.user.id) {
+    connectWebSocket(page.props.auth.user.id, showMessage, incrementUnreadMessages);
+}
+
 watch(
     () => cartStore.cartUpdate,
     () => {
@@ -59,7 +69,9 @@ const toggleBurger = () => {
 
 const openMessenger = () => {
     pushModal(Messenger);
+    unreadMessages.value = 0;
 };
+
 </script>
 
 <template>
@@ -141,11 +153,10 @@ const openMessenger = () => {
                         </div>
                     </div>
                     <div class="hidden sm:flex interactive items-center">
-                        <div
-                            @click.prevent="openMessenger"
-                            class="h-8 border-r-[1px] px-2 md:px-4 lg:px-5 flex flex-col justify-center"
-                        >
-                            <img class="select-none" src="/images/messenger.svg" alt="" />
+                        <div @click.prevent="openMessenger" class="h-8 border-r-[1px] px-2 md:px-4 lg:px-5 flex flex-col justify-center">
+                            <NBadge color="#6522d9" :value="unreadMessages" :max="15">
+                                <img class="select-none" src="/images/messenger.svg" alt="" />
+                            </NBadge>
                         </div>
                         <div
                             class="border-r-[1px] px-2 md:px-4 lg:px-5 h-8 flex flex-col justify-center"

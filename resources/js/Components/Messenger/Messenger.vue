@@ -63,7 +63,7 @@ const handleFileUpload = (event) => {
 }
 
 const sendMessage = (messageContent, messageType='text') => {
-    if (!store.conversation_id) {
+    if (!store.conversation_id || !messageContent.trim()) {
         return;
     }
 
@@ -86,6 +86,11 @@ watchEffect(() => {
         store.getConversationsMessages();
     }
 });
+
+const getUsername = (conversationId) => {
+    const conversation = store.conversations.find(conv => conv.id === conversationId);
+    return conversation ? conversation.user.username : '';
+};
 
 const goBack = () => {
     store.goBack();
@@ -122,6 +127,11 @@ const handleSearch = (search) => {
                 <div>
                     <button :class="{ 'hidden': store.showChat }" @click="goBack" class="back-button"><BaseIcon style="color: #B5BBDB" size="40" :path="mdiArrowLeft"/></button>
                 </div>
+
+                <div class="username-header text-center">
+                    <p class="text-violet-100 text-xl font-normal">{{ getUsername(store.conversation_id) }}</p>
+                </div>
+
                 <div class="flex-grow overflow-y-auto flex flex-col gap-y-3 p-2" v-scroll-bottom>
                     <MessageBox v-for="message in store.conversationsMessages" :isImage="message.content_type === 'image' || !message.message" :text="message.message" :user-avatar="message.user.username" :created_at="message.created_at_time" :is-time-string="true"/>
                 </div>
@@ -130,7 +140,7 @@ const handleSearch = (search) => {
                     <div class="conversation-panel">
                         <div class="conversation-panel__container">
                             <label class="file-uploader">
-                                <input type="file"  @change="handleFileUpload" style="display: none;" />
+                                <input type="file" accept="image/jpeg,image/png,image/jpg" @change="handleFileUpload" style="display: none;" />
                                 <div class="conversation-panel__button panel-item btn-icon add-file-button">
                                     <img src="/images/file.svg"  alt="file">
                                 </div>

@@ -1,5 +1,6 @@
 <script setup>
 import {useConversationsStore} from "@/stores/ConversationsStore.js";
+import { NBadge } from 'naive-ui'
 
 const props = defineProps({
     chats: Object,
@@ -15,7 +16,7 @@ const openChat = (chatId) => {
 
 <template>
     <div @click.prevent="openChat(chat.id)" class="messenger-user py-2 cursor-pointer" v-for="chat in chats">
-        <div class="flex gap-x-3 px-2">
+        <div class="flex gap-x-3 px-2 items-center">
             <div class="avatar">
                 <img :src="getAvatarUrl(chat.user.username)" alt="">
             </div>
@@ -25,6 +26,7 @@ const openChat = (chatId) => {
                     {{ chat?.last_message ? chat.last_message.message : 'пусто' }}
                 </p>
             </div>
+            <NBadge v-if="chat.unread_count > 0" :value="chat.unread_count" color="red" class="ml-auto"></NBadge>
         </div>
     </div>
 </template>

@@ -1,13 +1,10 @@
-import { ref} from 'vue';
+import { ref } from 'vue';
 
 const socket = ref();
 
-const connectWebSocket = (userId, showMessage) => {
-
+const connectWebSocket = (userId, showMessage, incrementUnreadMessages) => {
     socket.value = new WebSocket(
-        `wss://${import.meta.env.VITE_APP_WEBSOCKETS_IP}:1915/?userid=${
-            userId
-        }`
+        `wss://${import.meta.env.VITE_APP_WEBSOCKETS_IP}:1915/?userid=${userId}`
     );
 
     socket.value.onopen = () => {
@@ -15,7 +12,8 @@ const connectWebSocket = (userId, showMessage) => {
     };
 
     socket.value.onmessage = (event) => {
-        showMessage.info('У вас новое сообщение.')
+        showMessage.info('У вас новое сообщение.');
+        incrementUnreadMessages();
     };
 
     socket.value.onerror = (error) => {

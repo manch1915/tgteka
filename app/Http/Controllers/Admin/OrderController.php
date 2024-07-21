@@ -34,6 +34,17 @@ class OrderController extends Controller
 
     public function update(Request $request, Order $order)
     {
+        // Validate the request
+        $validatedData = $request->validate([
+            'status' => 'required|string|in:accepted,declined,pending',
+        ]);
+        // Update the order
+        $order->update([
+            'status' => $validatedData['status'],
+        ]);
+
+        // Return a success response
+        return response()->json(['message' => 'Order status updated successfully']);
     }
 
     public function destroy(Order $order)

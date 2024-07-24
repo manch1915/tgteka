@@ -53,5 +53,12 @@ export const useConversationsStore = defineStore("conversations", {
                 this.showChat = true;
             }
         },
+        updateUnreadCount(chatId, unreadCount) {
+            // Find the chat in the conversations list and update its unread_count
+            const chatToUpdate = this.conversations.find(chat => chat.id === chatId);
+            if (chatToUpdate) {
+                chatToUpdate.unread_count = unreadCount;
+            }
+        }
     }
 });

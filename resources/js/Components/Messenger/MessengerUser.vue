@@ -11,6 +11,8 @@ const conversations = useConversationsStore()
 const openChat = (chatId) => {
     conversations.openChat();
     conversations.conversation_id = chatId
+
+    conversations.updateUnreadCount(chatId, 0);
 };
 </script>
 

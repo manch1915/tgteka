@@ -14,7 +14,7 @@ const handleSearch = () => {
 
 <template>
     <div class="flex relative">
-        <TextInput v-model="search" @input="handleSearch" class="w-full" placeholder="Поиск"/>
+        <TextInput v-model="search" @input="handleSearch" class="w-full" placeholder="Поиск" style="padding-right: 45px;"/>
         <img class="select-none cursor-pointer absolute search-channel-button" src="/images/search.svg" alt="search">
     </div>
 </template>

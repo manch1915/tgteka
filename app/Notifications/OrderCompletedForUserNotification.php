@@ -28,13 +28,13 @@ class OrderCompletedForUserNotification extends Notification implements ShouldQu
     {
         return (new MailMessage)
             ->line('Здравствуйте!')
-            ->line("Ваш заказ был успешно выполнен на размещение поста на канале" . $this->channel);
+            ->line("Ваш заказ был успешно выполнен на размещение поста на канале " . $this->channel);
     }
 
     public function toDatabase($notifiable): array
     {
         return [
-            'message' => "Ваш заказ был успешно выполнен на размещение поста на канале" . $this->channel,
+            'message' => "Ваш заказ был успешно выполнен на размещение поста на канале " . $this->channel,
         ];
     }
 

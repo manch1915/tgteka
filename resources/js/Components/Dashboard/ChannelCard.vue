@@ -1,19 +1,28 @@
 <script setup>
-import {router, Link} from "@inertiajs/vue3";
+import {router} from "@inertiajs/vue3";
 import {NBadge, NPopover, NTabPane, NTabs} from "naive-ui";
 import AboutChannel from "@/Components/Dashboard/ChannelTab/AboutChannel.vue";
 import {nTabThemeOverrides} from "@/themeOverrides.js";
 import {ref} from "vue";
 import Reviews from "@/Components/Dashboard/ChannelTab/Reviews.vue";
 import Statistics from "@/Components/Dashboard/ChannelTab/Statistics.vue";
-import {trans} from "laravel-vue-i18n";
+
+import {useChannelStore} from "@/stores/ChannelStore.js";
 
 const props = defineProps({
     channel: Object
 })
-
+const channelStore = useChannelStore();
 const wrap = ref(false)
-
+const goToCatalog = (channelName) => {
+    // Redirect to the catalog page and perform search
+    router.visit(route('catalog.channels.index'), {
+        onFinish: () => {
+            channelStore.searchData = channelName;
+            channelStore.fetchChannels();
+        }
+    });
+};
 </script>
 
 <template>
@@ -51,7 +60,7 @@ const wrap = ref(false)
                 </div>
                 <div class="grid-element flex flex-col items-center justify-center">
                     <div class="flex flex-wrap gap-y-3 w-full justify-around text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal">
-                        <Link :href="route('catalog.channels.index')"><button :disabled="channel.status !== 'accepted'" class="watch flex items-center gap-x-1.5">Канал в каталоге <i class="block eye"></i></button></Link>
+                        <button @click.prevent="goToCatalog(channel.channel_name)"><button :disabled="channel.status !== 'accepted'" class="watch flex items-center gap-x-1.5">Канал в каталоге <i class="block eye"></i></button></button>
                         <button @click.prevent="router.visit(route('channels.edit', channel.slug))" class="edit">Редактировать канал</button>
                         <n-badge :value="channel.pending_order_count" type="info" >
                             <button @click.prevent="router.visit(route('order.index'))" class="orders flex items-center text-violet-100 gap-x-1.5">К заявкам <i class="block inkarrow"></i></button>

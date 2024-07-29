@@ -27,19 +27,28 @@ class OrderCreatedNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable): MailMessage
     {
-        return (new MailMessage)
+        $mailMessage = (new MailMessage)
             ->subject('Новая заявка на размещение рекламы в вашем канале')
             ->line('Уважаемый(ая) ' . $notifiable->username . ',')
             ->line('Поступила новая заявка на размещение рекламы для канала ' . $this->order->channel->channel_name . ':')
             ->line('- Стоимость заявки: ' . $this->order->price)
-            ->line('- Формат размещения: ' . $this->order->format->name)
-            ->line('- Комментарий: ' . $this->order->description)
-            ->line('- ID заявки: ' . $this->order->id)
+            ->line('- Формат размещения: ' . $this->order->format->name);
+
+        if ($this->order->description) {
+            $mailMessage->line('- Комментарий: ' . $this->order->description);
+        } else {
+            $mailMessage->line('- Комментарий: отсутствует');
+        }
+
+        $mailMessage->line('- ID заявки: ' . $this->order->id)
             ->line('Пожалуйста, проверьте и обработайте данную заявку.')
             ->action('Посмотреть заявку', route('order.index'))
             ->line('С уважением,')
             ->line('Команда 1-24.market');
+
+        return $mailMessage;
     }
+
 
     public function toDatabase($notifiable): array
     {

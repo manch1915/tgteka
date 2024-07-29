@@ -63,7 +63,6 @@ class ChannelController extends Controller
         $request->validate([
             'channels' => 'required',
             'pattern_id' => 'required',
-            'description' => 'required',
             'nearFuture' => 'boolean',
             'timestamp' => 'nullable|date',
         ]);

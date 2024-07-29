@@ -129,7 +129,7 @@ class OrderService
             // Add days to post_date
 
             $requestChannel = collect($request->channels)->firstWhere('id', $channel->id);
-logger($requestChannel);
+
             // Set nearFuture and postDate based on the request channel data
             if ($requestChannel && isset($requestChannel['nearFuture']) && $requestChannel['nearFuture']) {
                 $postDate = now(); // Set post_date to now

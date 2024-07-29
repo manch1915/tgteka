@@ -72,8 +72,6 @@ class ConversationController extends Controller
         return response()->json($formattedConversations);
     }
 
-
-
     public function conversationsMessages($conversationId)
     {
         $conversationMessages = ConversationMessages::where('conversation_id' , $conversationId)

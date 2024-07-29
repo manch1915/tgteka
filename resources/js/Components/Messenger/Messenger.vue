@@ -4,13 +4,25 @@ import SearchBar from "@/Components/Dashboard/SearchBar.vue";
 import {useConversationsStore} from "@/stores/ConversationsStore.js";
 import MessengerUser from "@/Components/Messenger/MessengerUser.vue";
 import MessageBox from "@/Components/Dashboard/MessageBox.vue";
-import { computed, nextTick, ref, watchEffect } from "vue";
+import {computed, nextTick, ref, watchEffect} from "vue";
 import {usePage} from "@inertiajs/vue3";
 import { mdiArrowLeft } from "@mdi/js";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
 
 const store = useConversationsStore();
 store.getConversations();
+
+const props = defineProps({
+    chatId: {
+        type: Number,
+        required: false
+    }
+});
+
+if (props.chatId) {
+    store.conversation_id = props.chatId;
+    store.updateUnreadCount(props.chatId, 0);
+}
 
 const inputMessage = ref('');
 const page = usePage();

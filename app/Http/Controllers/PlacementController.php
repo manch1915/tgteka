@@ -29,7 +29,7 @@ class PlacementController extends Controller
         return inertia('Dashboard/Placements');
     }
 
-    public function get(Request $request, $page = 1, $perPage = 10)
+    public function get(Request $request)
     {
         $userOrders = auth()->user()->orders();
 
@@ -43,7 +43,7 @@ class PlacementController extends Controller
                 Carbon::parse($request->input('endDate'))->endOfDay()
             ]))
             ->orderByDesc('created_at')
-            ->paginate($perPage, ['*'], 'page', $page);
+            ->paginate(10, ['*']);
 
         $maxPrice = $userOrders->max('price');
         $hasAnyOrder = $userOrders->exists();

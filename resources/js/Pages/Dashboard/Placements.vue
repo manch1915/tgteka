@@ -6,6 +6,7 @@ import { NDatePicker, NSlider, useLoadingBar } from "naive-ui";
 import { Head, Link } from "@inertiajs/vue3";
 import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
 import { useWindowWidth } from '@/utilities/windowWidth.js'
+import {useConversationsStore} from "@/stores/ConversationsStore.js";
 
 const placements = ref([]);
 const activeSortButton = ref("");
@@ -15,6 +16,9 @@ const isLoading = ref(true);
 const maxPrice = ref(1500);
 const loading = useLoadingBar();
 const hasAnyOrder = ref(false);
+
+const store = useConversationsStore();
+store.getConversations();
 
 const SORT_DATA = [
     {
@@ -188,7 +192,7 @@ const windowWidth = useWindowWidth()
                     </div>
                 </div>
             </div>
-            <div class="flex justify-center">
+            <div class="flex justify-center my-2">
                 <CustomPagination @pagination-change-page="getPlacements" :data="placements"/>
             </div>
         </div>

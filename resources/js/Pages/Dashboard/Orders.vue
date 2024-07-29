@@ -4,13 +4,15 @@ import OrderCard from "@/Components/Dashboard/OrderCard.vue";
 import {onMounted} from "vue";
 import {useOrdersStore} from "@/stores/OrdersStore.js";
 import CustomPagination from "@/Components/Dashboard/CustomPagination.vue";
+import {useConversationsStore} from "@/stores/ConversationsStore.js";
 
 onMounted(() => getOrders())
 const ordersStore = useOrdersStore()
 const getOrders = (page = 1) => {
     ordersStore.getOrders(page)
 }
-
+const store = useConversationsStore();
+store.getConversations();
 </script>
 
 <template>

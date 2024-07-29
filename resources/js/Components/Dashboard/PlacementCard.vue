@@ -7,6 +7,7 @@ import Report from "@/Components/Dashboard/Report.vue";
 import Review from "@/Components/Dashboard/Review.vue";
 import { useLoadingBar, useMessage} from "naive-ui";
 import Messenger from "@/Components/Messenger/Messenger.vue"
+import {useConversationsStore} from "@/stores/ConversationsStore.js";
 
 const props = defineProps({
     order: Object,
@@ -55,8 +56,14 @@ const formattedPubTime = formatDateTime(originalDate, pubTimeOptions);
 
 const pubTime = `${formattedPubTime}-${newTime}`;
 
+const store = useConversationsStore();
+
 const openMessenger = () => {
-  pushModal(Messenger)
+    const userId = props.order.channel.user_id; // Assuming order has a user_id
+    const conversation = store.conversations.find(conv => conv.user.id === userId);
+    if (conversation) {
+        pushModal(Messenger, { chatId: conversation.id });
+    }
 }
 
 const openReport = () => {

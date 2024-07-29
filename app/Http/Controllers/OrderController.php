@@ -96,6 +96,10 @@ class OrderController extends Controller
 
     public function declineOrder($orderItemId, Request $request)
     {
+        $request->validate([
+            'reason' => 'required|string'
+        ]);
+
         $orderItem = Order::find($orderItemId);
 
         if(!$orderItem) {
@@ -115,6 +119,8 @@ class OrderController extends Controller
             $orderItem->status = 'declined';
             $orderItem->decline_reason = $request->reason;
             $orderItem->save();
+
+            $this->refundUser($orderItem);
         }
 
         $orderItem->user->notify(new OrderDeclinedNotification($request->reason));
@@ -142,6 +148,15 @@ class OrderController extends Controller
         $order->user->notify(new OrderToCheckNotification($validated['post_link']));
         CheckOrderStatusJob::dispatch($order)->delay(now()->addHours(24));
         return response()->json($validated);
+    }
+
+    protected function refundUser(Order $order)
+    {
+        $user = $order->user;
+        $price = $order->price;
+
+        // Assuming the User model has a method to update balance
+        $user->refundBalance($price);
     }
 
     public function sendPatternByBot(Request $request, AvatarService $avatarService)

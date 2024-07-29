@@ -131,4 +131,9 @@ class User extends Authenticatable
         ]);
     }
 
+    public function refundBalance($amount): void
+    {
+        $this->balance += $amount;
+        $this->save();
+    }
 }

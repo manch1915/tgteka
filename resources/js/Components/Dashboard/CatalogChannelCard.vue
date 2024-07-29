@@ -1,5 +1,5 @@
 <script setup>
-import { NSelect, NDatePicker, useMessage, NSpace, NButton, NSwitch } from 'naive-ui'
+import { NSelect, NDatePicker, useMessage, NSpace, NSwitch } from 'naive-ui'
 import { datePickerThemeOverrides, selectCatalogThemeOverrides } from "@/themeOverrides.js";
 import { computed, ref, watch } from "vue";
 import BaseIcon from "@/Components/Admin/BaseIcon.vue";
@@ -110,19 +110,28 @@ const updateCart = (cart, channel, format, time, nearFuture) => {
 const timestamp = ref(props.timestamp);
 
 const disablePastDates = (currentTimestamp) => {
-    // Get the current timestamp
-    const currentTimestampNow = Date.now();
+    // Get the current date's start timestamp (midnight)
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const startOfTodayTimestamp = startOfToday.getTime();
 
-    // Disable dates before the current time
-    return currentTimestamp < currentTimestampNow;
+    // Disable dates before today
+    return currentTimestamp < startOfTodayTimestamp;
 };
 
-const disableMinutesAndSeconds = (currentTimestamp, { hour } = {}) => {
-    const defaultSecond = 0;
 
-    return {
-        isSecondDisabled: (second) => second !== defaultSecond,
-    };
+const disableMinutesAndSeconds = ({ hour, minute }) => {
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
+    // If the selected hour is the current hour, disable past minutes
+    const isMinuteDisabled = (minute) => hour === currentHour && minute < currentMinute;
+
+    // Disable all seconds except 0
+    const isSecondDisabled = (second) => second !== 0;
+
+    return { isMinuteDisabled, isSecondDisabled };
 };
 
 const nearFuture = ref(false);
@@ -205,7 +214,17 @@ watch(formatValue, (newValue) => {
             </div>
             <div v-show="isCart">
                 <n-space vertical justify="center" align="center">
-                    <n-date-picker :disabled="nearFuture" :theme-overrides="datePickerThemeOverrides" v-model:value="timestamp" default-time="12:00:00" type="datetime" :is-date-disabled="disablePastDates" :is-time-disabled="disableMinutesAndSeconds" :actions="['confirm']" />
+                    <n-date-picker
+                        :disabled="nearFuture"
+                        :theme-overrides="datePickerThemeOverrides"
+                        v-model:value="timestamp"
+                        default-time="12:00:00"
+                        type="datetime"
+                        :is-date-disabled="disablePastDates"
+                        :is-time-disabled="disableMinutesAndSeconds"
+                        :actions="['confirm']"
+                    />
+
                     <div class="flex gap-x-2">
                         <p class="text-white box-content line-clamp-3 text-sm font-normal font-['Open Sans'] break-all leading-tight">В ближайшее время</p>
                         <n-switch v-model:value="nearFuture" />

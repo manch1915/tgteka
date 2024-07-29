@@ -9,6 +9,7 @@ import CancelOrder from "@/Components/Dashboard/CancelOrder.vue";
 import ToCheck from "@/Components/Dashboard/ToCheck.vue";
 import {useOrdersStore} from "@/stores/OrdersStore.js";
 import Messenger from "@/Components/Messenger/Messenger.vue"
+import {useConversationsStore} from "@/stores/ConversationsStore.js";
 
 const props = defineProps({
     order: Object,
@@ -17,7 +18,7 @@ const props = defineProps({
         default: true
     }
 })
-
+const store = useConversationsStore();
 const ordersStore = useOrdersStore()
 const loading = useLoadingBar()
 const isLoading = ref(false);
@@ -91,7 +92,11 @@ const formattedPubTimeEnd = formatDateTime(pubDateEnd, pubTimeOptions);
 const pubTime = `${formattedPubTime}-${newTime}`;
 
 const openMessenger = () => {
-  pushModal(Messenger)
+    const userId = props.order.user_id; // Assuming order has a user_id
+    const conversation = store.conversations.find(conv => conv.user.id === userId);
+    if (conversation) {
+        pushModal(Messenger, { chatId: conversation.id });
+    }
 }
 
 </script>

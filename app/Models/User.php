@@ -32,6 +32,7 @@ class User extends Authenticatable
         'mobile_number',
         'telegram_username',
         'telegram_user_id',
+        'vk_id',
         'balance',
         'email_verified_at',
         'referral_id',

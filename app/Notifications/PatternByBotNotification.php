@@ -93,8 +93,10 @@ class PatternByBotNotification extends Notification
     public function sendMediaGroupToTelegram($mediaGroup, $chatId)
     {
         $client = new Client(['base_uri' => 'https://api.telegram.org']);
+        $bot_token = config('services.telegram-bot-api.token');
+        $url = "/bot{$bot_token}/sendMediaGroup";
 
-        $response = $client->post('/bot6373670843:AAHG1bxOiFTKfRHWq24TiHzyVpQ45a7UxUc/sendMediaGroup', [
+        $response = $client->post($url, [
             'multipart' => [
                 [
                     'name' => 'chat_id',

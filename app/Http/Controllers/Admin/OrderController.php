@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\OrderUpdateRequest;
 use App\Models\Order;
+use App\Notifications\OrderDeclinedByModeratorNotification;
+use App\Services\BalanceService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -32,13 +35,25 @@ class OrderController extends Controller
     {
     }
 
-    public function update(Request $request, Order $order)
+    public function update(OrderUpdateRequest $request, Order $order)
     {
         // Validate the request
-        $validatedData = $request->validate([
-            'status' => 'required|string|in:accepted,declined,pending',
-        ]);
-        // Update the order
+        $validatedData = $request->validated();
+
+        if ($order->status === $validatedData['status']) {
+            return response()->json(['message' => 'Order status is already ' . $validatedData['status']], 400);
+        }
+
+        if ($validatedData['status'] == 'declined' && !$order->refund_issued) {
+            $balanceService = new BalanceService();
+            $balanceService->refundUser($order);
+
+            // Mark refund as issued
+            $order->refund_issued = true;
+            $order->save();
+            $order->user->notify(new OrderDeclinedByModeratorNotification());
+        }
+
         $order->update([
             'status' => $validatedData['status'],
         ]);

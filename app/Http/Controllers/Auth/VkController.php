@@ -13,6 +13,12 @@ class VkController extends Controller
     {
         $vkUser = Socialite::driver('vkontakte')->user();
 
+        if (empty($vkUser->email)) {
+            return response()->json([
+                'message' => 'Пожалуйста, укажите ваш email в вашем профиле ВКонтакте.'
+            ], 400); // 400 Bad Request
+        }
+
         $user = User::where('vk_id', $vkUser->id)->first();
 
         $username = strtolower(trim($vkUser->name));
@@ -25,6 +31,7 @@ class VkController extends Controller
             $user = User::create([
                 'vk_id' => $vkUser->id,
                 'username' => $username,
+                'email' => $vkUser->email,
             ]);
         }
 

@@ -14,6 +14,7 @@ use App\Notifications\OrderSuggestedDateNotification;
 use App\Notifications\PatternByBotNotification;
 use App\Notifications\OrderToCheckNotification;
 use App\Services\AvatarService;
+use App\Services\BalanceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -120,7 +121,8 @@ class OrderController extends Controller
             $orderItem->decline_reason = $request->reason;
             $orderItem->save();
 
-            $this->refundUser($orderItem);
+            $balanceService = new BalanceService();
+            $balanceService->refundUser($orderItem);
         }
 
         $orderItem->user->notify(new OrderDeclinedNotification($request->reason));
@@ -148,15 +150,6 @@ class OrderController extends Controller
         $order->user->notify(new OrderToCheckNotification($validated['post_link']));
         CheckOrderStatusJob::dispatch($order)->delay(now()->addHours(24));
         return response()->json($validated);
-    }
-
-    protected function refundUser(Order $order)
-    {
-        $user = $order->user;
-        $price = $order->price;
-
-        // Assuming the User model has a method to update balance
-        $user->refundBalance($price);
     }
 
     public function sendPatternByBot(Request $request, AvatarService $avatarService)

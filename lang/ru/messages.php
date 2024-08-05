@@ -16,4 +16,5 @@ return [
     'created' => 'созданный',
     'under_review' => 'на рассмотрении',
     'awaiting_check' => 'рассматриваем жалобу',
+    'undefined' => 'не определено',
 ];

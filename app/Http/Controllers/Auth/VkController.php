@@ -15,7 +15,8 @@ class VkController extends Controller
 
         $user = User::where('vk_id', $vkUser->id)->first();
 
-        $username = strtolower(trim($vkUser->name));
+        $username = preg_replace('/[^a-zA-Z]/', '', $vkUser->name);
+        $username = strtolower(trim($username));
 
         if (!$user) {
             if (User::where('username', $username)->exists()) {

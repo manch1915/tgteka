@@ -57,16 +57,19 @@ class OrderReportController extends Controller
     {
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, OrderReport $report)
     {
         $validated = $request->validate([
             'status' => 'required|in:accepted,declined',
         ]);
-        $orderReport = OrderReport::findOrFail($id);
 
-        $orderReport->update($validated);
+        $report->update($validated);
 
-        return response()->json($orderReport);
+        if ($validated['status'] == 'accepted') {
+            $report->order->status = 'declined';
+        }
+
+        return response()->json($report->order);
     }
 
     public function destroy(OrderReport $orderReport)

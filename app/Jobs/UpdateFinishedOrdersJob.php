@@ -21,6 +21,7 @@ class UpdateFinishedOrdersJob implements ShouldQueue
     protected BalanceService $balanceService;
 
     const RELEASE_DURATION = 3600;
+    public $tries = 8;
 
     /**
      * Create a new job instance.
@@ -40,14 +41,15 @@ class UpdateFinishedOrdersJob implements ShouldQueue
      */
     public function handle(): void
     {
+        if ($this->order->orderReports()->where('status', 'pending')->exists()) {
+            // Release the job and retry after 4 hours
+            $this->release(60 * 60 * 4);
+            return;
+        }
+        // Second Condition: Check if the order is accepted and post date end is in the future
         if ($this->order->status === 'accepted' &&
             $this->order->post_date_end > Carbon::now()) {
             // Order's post date end is not yet reached
-            $this->release(self::RELEASE_DURATION); // Try the job again after 1 hour
-        }
-        else if ($this->order->orderReports &&
-            $this->order->orderReports->contains('status', 'declined')) {
-            // there are orderReports with status declined
             $this->release(self::RELEASE_DURATION); // Try the job again after 1 hour
         }
         else {

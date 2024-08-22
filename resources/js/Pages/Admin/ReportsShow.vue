@@ -12,7 +12,6 @@ const props = defineProps({
 })
 
 let accept = async () => {
-    console.log(route('admin.api.reports.update', props.report.data[0].report.id))
     try {
         await axios.patch(route('admin.api.reports.update', props.report.data[0].report.id), {
             status: 'accepted'

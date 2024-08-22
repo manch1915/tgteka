@@ -199,5 +199,5 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
 Route::prefix('admin/api')->name('admin.api.')->group(function () {
     Route::Resource('topics', TopicController::class);
     Route::get('list/topics', [TopicController::class, 'pagination'])->name('topics.pagination');
-    Route::Resource('reports', \App\Http\Controllers\Admin\OrderReportController::class);
+    Route::Resource('reports', \App\Http\Controllers\Admin\OrderReportController::class)->parameters(['reports' => 'orderReport']);;
 });

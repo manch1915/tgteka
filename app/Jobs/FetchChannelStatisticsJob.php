@@ -18,7 +18,7 @@ class FetchChannelStatisticsJob implements ShouldQueue
     protected Channel $channel;
 
     protected Client $client;
-
+    public int $tries = 5;
     private string $token;
 
     private string $baseURL;
@@ -60,17 +60,51 @@ class FetchChannelStatisticsJob implements ShouldQueue
      */
     private function fetchGeneralStatistics()
     {
-        $generalStatisticsResponse = $this->client->request('GET', $this->baseURL.'channels/stat', ['query' => ['token' => $this->token, 'channelId' => $this->channel->url]]);
+        $generalStatisticsResponse = $this->client->request('GET', $this->baseURL.'channels/stat', [
+            'query' => [
+                'token' => $this->token,
+                'channelId' => $this->channel->url
+            ]
+        ]);
+
         $generalStatistics = json_decode($generalStatisticsResponse->getBody()->getContents());
 
         if ($generalStatistics->status === "error") {
-            $this->client->request('POST', $this->baseURL.'channels/add', ['json' => ['token' => $this->token, 'channelName' => $this->channel->url]]);
-            $this->release(60 * 20);
-            return false;
+            switch ($generalStatistics->error) {
+                case 'channel_not_found':
+                    // Handle channel not found error
+                    logger()->info('Ошибка: Канал не найден.');
+                    $this->client->request('POST', $this->baseURL . 'channels/add', ['json' => ['token' => $this->token, 'channelName' => $this->channel->url]]);
+                    $this->release(60 * 20);
+                    return false;
+
+                case 'quota_requests_reached':
+                    // Handle quota requests reached error
+                    logger()->error('Ошибка: Превышена квота на общее кол-во запросов в месяц.');
+                    // You can handle it as needed here
+                    return false;
+
+                case 'quota_channel_reached':
+                    // Handle quota channel reached error
+                    logger()->error('Ошибка: Превышена квота на кол-во уникальных каналов в месяц.');
+                    // You can handle it as needed here
+                    return false;
+
+                case 'quota_keywords_reached':
+                    // Handle quota keywords reached error
+                    logger()->error('Ошибка: Превышена квота на кол-во уникальных ключевых слов в месяц.');
+                    // You can handle it as needed here
+                    return false;
+
+                default:
+                    logger()->error('Неизвестная ошибка: ' . $generalStatistics->error);
+                    return false;
+            }
         }
 
         return $generalStatistics;
     }
+
 
     /**
      * @throws GuzzleException

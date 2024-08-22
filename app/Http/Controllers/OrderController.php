@@ -137,7 +137,7 @@ class OrderController extends Controller
 
         // Check if the current date is after the order's post_date
         $now = \Carbon\Carbon::now();
-        if ($now->lessThan(new \Carbon\Carbon($order->post_date))) {
+        if ($now->lessThan(new \Carbon\Carbon($order->post_date)) && !$order->near_future) {
             // If current time has not reached post_date yet, return an error response
             return response()->json([
                 'message' => 'Дата публикации еще не достигнута. Пожалуйста, повторите попытку позже.',

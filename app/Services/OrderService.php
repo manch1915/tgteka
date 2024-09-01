@@ -132,20 +132,20 @@ class OrderService
 
             // Set nearFuture and postDate based on the request channel data
             if ($requestChannel && isset($requestChannel['nearFuture']) && $requestChannel['nearFuture']) {
-                $postDate = now(); // Set post_date to now
+                $postDate = new DateTime(); // Set post_date to now
                 $nearFuture = true;
             } else {
                 $postDate = new DateTime($channel->timestamp);
                 $nearFuture = false;
             }
 
-            $postDateEnd = $postDate->modify('+' . $formatDetails['days'] . ' day');
+            $postDateEnd = (clone $postDate)->modify('+' . $formatDetails['days'] . ' day');
 
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'description' => $request->description,
                 'pattern_id' => $request->pattern_id,
-                'post_date' => $channel->timestamp,
+                'post_date' => $postDate,
                 'post_date_end' => $postDateEnd,
                 'channel_id' => $channel->id,
                 'format_id' => $formatDetails['id'],

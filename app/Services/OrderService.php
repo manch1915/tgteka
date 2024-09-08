@@ -121,6 +121,18 @@ class OrderService
     /**
      * @throws Exception
      */
+    private function determinePostDate($channel, $requestChannel): array
+    {
+        if ($requestChannel && isset($requestChannel['nearFuture']) && $requestChannel['nearFuture']) {
+            return ['postDate' => new DateTime(), 'nearFuture' => true];
+        }
+
+        return ['postDate' => new DateTime($channel->timestamp), 'nearFuture' => false];
+    }
+
+    /**
+     * @throws Exception
+     */
     private function createOrderRecord(Request $request, $channels): void
     {
         foreach ($channels as $channel) {
@@ -131,13 +143,9 @@ class OrderService
             $requestChannel = collect($request->channels)->firstWhere('id', $channel->id);
 
             // Set nearFuture and postDate based on the request channel data
-            if ($requestChannel && isset($requestChannel['nearFuture']) && $requestChannel['nearFuture']) {
-                $postDate = new DateTime(); // Set post_date to now
-                $nearFuture = true;
-            } else {
-                $postDate = new DateTime($channel->timestamp);
-                $nearFuture = false;
-            }
+            $postDateData = $this->determinePostDate($channel, $requestChannel);
+            $postDate = $postDateData['postDate'];
+            $nearFuture = $postDateData['nearFuture'];
 
             $postDateEnd = (clone $postDate)->modify('+' . $formatDetails['days'] . ' day');
 

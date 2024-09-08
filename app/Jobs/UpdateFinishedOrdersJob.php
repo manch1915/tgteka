@@ -21,7 +21,7 @@ class UpdateFinishedOrdersJob implements ShouldQueue
     protected BalanceService $balanceService;
 
     const RELEASE_DURATION = 3600;
-    public $tries = 8;
+    public int $tries = 8;
 
     /**
      * Create a new job instance.

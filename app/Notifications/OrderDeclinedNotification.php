@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,11 +13,11 @@ class OrderDeclinedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected string $reason;
+    protected Order $order;
 
-    public function __construct($reason)
+    public function __construct(Order $order)
     {
-        $this->reason = $reason;
+        $this->order = $order;
     }
 
     public function via($notifiable): array
@@ -28,13 +29,13 @@ class OrderDeclinedNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->line('Здравствуйте!')
-            ->line("Ваш заказ был отменен по причине: " . $this->reason);
+            ->line("Ваш заказ #" . $this->order->id ." был отменен по причине: " . $this->order->decline_reason);
     }
 
     public function toDatabase($notifiable): array
     {
         return [
-            'message' => "Ваш заказ был отменен по причине: " . $this->reason,
+            'message' => "Ваш заказ #" . $this->order->id ." был отменен по причине: " . $this->order->decline_reason,
         ];
     }
 
@@ -48,7 +49,7 @@ class OrderDeclinedNotification extends Notification implements ShouldQueue
         }
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->content("Ваш заказ был отменен по причине: " . $this->reason);
+            ->content("Ваш заказ был отменен по причине: " . $this->order->decline_reason);
     }
 
     public function toArray($notifiable): array

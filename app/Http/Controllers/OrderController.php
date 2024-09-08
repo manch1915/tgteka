@@ -125,7 +125,7 @@ class OrderController extends Controller
             $balanceService->refundUser($orderItem);
         }
 
-        $orderItem->user->notify(new OrderDeclinedNotification($request->reason));
+        $orderItem->user->notify(new OrderDeclinedNotification($orderItem));
         return response()->json(['message' => 'Заказ успешно отклонен']);
     }
 

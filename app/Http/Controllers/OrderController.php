@@ -11,13 +11,12 @@ use App\Models\SuggestedDate;
 use App\Notifications\OrderAcceptedNotification;
 use App\Notifications\OrderDeclinedNotification;
 use App\Notifications\OrderSuggestedDateNotification;
-use App\Notifications\PatternByBotNotification;
 use App\Notifications\OrderToCheckNotification;
+use App\Notifications\PatternByBotNotification;
 use App\Services\AvatarService;
 use App\Services\BalanceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -30,7 +29,7 @@ class OrderController extends Controller
 
     public function index()
     {
-       return inertia('Dashboard/Orders');
+        return inertia('Dashboard/Orders');
     }
 
     public function get($page = 1, $perPage = 10)
@@ -43,7 +42,7 @@ class OrderController extends Controller
         $orders->getCollection()->transform(function ($order) {
             $order->orderPattern = $order->pattern;
 
-            $additionalDays = match($order->format->name) {
+            $additionalDays = match ($order->format->name) {
                 '1/24' => 1,
                 '2/48' => 2,
                 '3/72' => 3,
@@ -66,13 +65,13 @@ class OrderController extends Controller
                     return [
                         'url' => $item->getFullUrl(),
                         'order' => $item->getCustomProperty('order'),
-                        'thumbnail_path' => $item->getCustomProperty('thumbnail_path')
+                        'thumbnail_path' => $item->getCustomProperty('thumbnail_path'),
                     ];
                 });
 
-
             $order->orderPattern->patternMedia = $patternMedia->sortBy('order')->values();
             $order->channel->channelAvatar = $this->avatarService->getAvatarUrlOfChannel($order->channel);
+
             return $order;
         });
 
@@ -82,7 +81,7 @@ class OrderController extends Controller
     public function acceptOrder($orderItemId)
     {
         $orderItem = Order::find($orderItemId);
-        if(!$orderItem) {
+        if (! $orderItem) {
             return response()->json(['message' => 'Заказ не найден'], 404);
         }
 
@@ -92,25 +91,26 @@ class OrderController extends Controller
         $orderItem->user->notify(new OrderAcceptedNotification($orderItem->channel->channel_name));
         $postDate = Carbon::parse($orderItem->post_date);
         CheckOrderStatusJob::dispatch($orderItem)->delay($postDate->addHours(2));
+
         return response()->json(['message' => 'Заказ успешно принят']);
     }
 
     public function declineOrder($orderItemId, Request $request)
     {
         $request->validate([
-            'reason' => 'required|string'
+            'reason' => 'required|string',
         ]);
 
         $orderItem = Order::find($orderItemId);
 
-        if(!$orderItem) {
+        if (! $orderItem) {
             return response()->json(['message' => 'Заказ не найден'], 404);
         }
 
         if ($request->has('suggested_date')) {
-        $date = Carbon::createFromTimestampMs($request->suggested_date)->format('Y-m-d H:i:s');
+            $date = Carbon::createFromTimestampMs($request->suggested_date)->format('Y-m-d H:i:s');
 
-        $suggestedDate = SuggestedDate::updateOrCreate(
+            $suggestedDate = SuggestedDate::updateOrCreate(
                 ['order_id' => $orderItem->id],
                 ['suggested_post_date' => $date]
             );
@@ -126,6 +126,7 @@ class OrderController extends Controller
         }
 
         $orderItem->user->notify(new OrderDeclinedNotification($orderItem));
+
         return response()->json(['message' => 'Заказ успешно отклонен']);
     }
 
@@ -137,7 +138,7 @@ class OrderController extends Controller
 
         // Check if the current date is after the order's post_date
         $now = \Carbon\Carbon::now();
-        if ($now->lessThan(new \Carbon\Carbon($order->post_date)) && !$order->near_future) {
+        if ($now->lessThan(new \Carbon\Carbon($order->post_date)) && ! $order->near_future) {
             // If current time has not reached post_date yet, return an error response
             return response()->json([
                 'message' => 'Дата публикации еще не достигнута. Пожалуйста, повторите попытку позже.',
@@ -149,6 +150,7 @@ class OrderController extends Controller
 
         $order->user->notify(new OrderToCheckNotification($validated['post_link']));
         CheckOrderStatusJob::dispatch($order)->delay(now()->addHours(24));
+
         return response()->json($validated);
     }
 
@@ -158,6 +160,7 @@ class OrderController extends Controller
         $pattern = Pattern::findOrFail($pattern['id']);
         $patternByBot = new PatternByBotNotification($pattern);
         auth()->user()->notify($patternByBot);
+
         return response()->json();
     }
 }

@@ -38,6 +38,7 @@ class UpdateFinishedOrdersCommand extends Command
                 $query->where('status', 'declined');
             })
             ->chunk($chunkSize, function ($orders) {
+                /** @var Order $order */
                 foreach ($orders as $order) {
                     $channelAdmin = $order->channel->user;
                     $channelAdmin->balance += $order->price;
@@ -47,7 +48,7 @@ class UpdateFinishedOrdersCommand extends Command
 
                     $order->user->notify(new OrderCompletedForUserNotification($order->channel->channel_name));
 
-                    $order->update(['status' => 'finished']);
+                    $order->markAsFinished();
                 }
             });
 

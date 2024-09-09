@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Jobs\UpdateFinishedOrdersJob;
+use App\Jobs\UpdateFinishedOrderJob;
 use App\Models\Channel;
 use App\Models\Conversation;
 use App\Models\Format;
@@ -20,7 +20,7 @@ class OrderService
         'format_one_price' => '1/24',
         'format_two_price' => '2/48',
         'format_three_price' => '3/72',
-        'no_deletion_price' => 'no_deletion'
+        'no_deletion_price' => 'no_deletion',
     ];
 
     /**
@@ -28,7 +28,7 @@ class OrderService
      */
     public function createOrder(Request $request): ?string
     {
-        if (!$request->has('channels')) {
+        if (! $request->has('channels')) {
             return 'Неверный запрос. Каналы не предоставлены.';
         }
 
@@ -44,15 +44,16 @@ class OrderService
             }
         }
 
-        $channels = array_map(function($channelInput) use ($channelsFromDB) {
+        $channels = array_map(function ($channelInput) use ($channelsFromDB) {
             $channelDbData = $channelsFromDB[$channelInput['id']];
             // return object with additional properties
             $channelDbData->format = $channelInput['format'];
             $channelDbData->timestamp = $channelInput['timestamp'];
+
             return $channelDbData;
         }, $request->channels);
 
-        $totalSum = $this->calculateTotalSum($channels);;
+        $totalSum = $this->calculateTotalSum($channels);
 
         $balanceCheck = $this->checkBalanceAndExecuteTransaction($user, $totalSum);
 
@@ -71,7 +72,7 @@ class OrderService
                 $query->where('user_one', $userTwoId)->where('user_two', $user->id);
             })->first();
 
-            if (!$existingConversation) {
+            if (! $existingConversation) {
                 Conversation::create([
                     'user_one' => $user->id,
                     'user_two' => $userTwoId,
@@ -86,6 +87,7 @@ class OrderService
     {
         if ($user->balance >= $totalSum) {
             $user->decrementBalance($totalSum);
+
             return null;
         } else {
             return 'У вас недостаточно денег на эту операцию';
@@ -115,6 +117,7 @@ class OrderService
     private function calculateChannelSum($channel): float|int
     {
         Channel::findOrFail($channel->id);
+
         return $channel->{$channel->format} ?? 0;
     }
 
@@ -147,7 +150,7 @@ class OrderService
             $postDate = $postDateData['postDate'];
             $nearFuture = $postDateData['nearFuture'];
 
-            $postDateEnd = (clone $postDate)->modify('+' . $formatDetails['days'] . ' day');
+            $postDateEnd = (clone $postDate)->modify('+'.$formatDetails['days'].' day');
 
             $order = Order::create([
                 'user_id' => Auth::id(),
@@ -161,7 +164,6 @@ class OrderService
                 'near_future' => $nearFuture,
             ]);
 
-
             if ($channel && $channel->user) {
                 $channel->user->notify(new OrderCreatedNotification($order));
             }
@@ -169,7 +171,7 @@ class OrderService
             $postDateEndCarbon = Carbon::instance($postDateEnd);
             $delay = $postDateEndCarbon->diffInSeconds(Carbon::now()) + 400;
 
-            UpdateFinishedOrdersJob::dispatch($order, new BalanceService())->delay($delay);
+            UpdateFinishedOrderJob::dispatch($order, new BalanceService())->delay($delay);
         }
     }
 
@@ -178,14 +180,14 @@ class OrderService
      */
     private function getFormatDetails(Channel $channel): array
     {
-        if (!isset($channel->format) || !isset(self::FORMAT_NAME[$channel->format])) {
+        if (! isset($channel->format) || ! isset(self::FORMAT_NAME[$channel->format])) {
             throw new Exception('Invalid format provided.');
         }
 
         $formatName = self::FORMAT_NAME[$channel->format];
 
         // Check if format name contains '/'
-        if (!str_contains($formatName, '/')) {
+        if (! str_contains($formatName, '/')) {
             throw new Exception('Invalid format name. It should contain "/".');
         }
 
@@ -196,6 +198,4 @@ class OrderService
 
         return ['id' => $format->id, 'days' => $days];
     }
-
-
 }

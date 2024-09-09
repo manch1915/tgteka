@@ -19,23 +19,24 @@ class UpdateChannelRatingAndScore implements ShouldQueue
         $chunkSize = 200;
 
         Channel::where('status', 'accepted')
+            ->with(['orders' => function ($query) {
+                $query->where('created_at', '>=', Carbon::now()->subDays(365))
+                    ->where('status', 'finished')
+                    ->with('review');
+            }, 'reviews'])
             ->chunk($chunkSize, function ($channels) {
                 foreach ($channels as $channel) {
-                    // calculate score based on orders last 365 days
-                    $lastYearOrders = $channel->orders()
-                        ->where('created_at', '>=', Carbon::now()->subDays(365))
-                        ->where('status', 'finished')
-                        ->get();
-
+                    // Calculate score based on orders from the last 365 days
+                    $lastYearOrders = $channel->orders;
                     $score = 0;
 
                     foreach ($lastYearOrders as $order) {
-                        $score += 1; // score for completing an order
+                        $score += 1; // Score for completing an order
 
-                        // add score based on order price
+                        // Add score based on order price
                         $score += ($order->price / 1000) * 0.1;
 
-                        // add score based on review rating
+                        // Add score based on review rating
                         if ($order->review) {
                             $score += $this->getScoreByRating($order->review->rating, $order->price);
                         }
@@ -44,7 +45,7 @@ class UpdateChannelRatingAndScore implements ShouldQueue
                     // Update channel score
                     $channel->score = $score;
 
-                    // calculate rating from all reviews
+                    // Calculate rating from all reviews
                     $reviews = $channel->reviews;
                     if ($reviews->count()) {
                         $rating = $reviews->sum('rating') / $reviews->count();

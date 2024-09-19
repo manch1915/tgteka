@@ -90,7 +90,7 @@ class UpdateFinishedOrderJob implements ShouldQueue
 
         // Send notifications to the channel admin and the user
         $channelAdmin->notify(new OrderCompletedForAdminNotification($this->order->price, $this->order->channel->channel_name));
-        $this->order->user->notify(new OrderCompletedForUserNotification($this->order->channel->channel_name));
+        $this->order->user->notify(new OrderCompletedForUserNotification($this->order->channel->channel_name, $this->order));
 
         // Mark the order as finished
         $this->order->markAsFinished();

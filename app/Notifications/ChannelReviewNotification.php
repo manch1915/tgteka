@@ -12,15 +12,8 @@ class ChannelReviewNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected string $reviewText;
-    protected string $channelRating;
-    protected string $channelName;
-
-    public function __construct($reviewText, $channelRating, $channelName)
+    public function __construct(protected string $reviewText, protected string $channelRating, protected string $channelName)
     {
-        $this->reviewText = $reviewText;
-        $this->channelRating = $channelRating;
-        $this->channelName = $channelName;
     }
 
     public function via($notifiable): array
@@ -47,9 +40,10 @@ class ChannelReviewNotification extends Notification implements ShouldQueue
      */
     public function toTelegram($notifiable): TelegramMessage
     {
-        if (!$notifiable->telegram_user_id) {
-            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        if (! $notifiable->telegram_user_id) {
+            throw new \Exception('Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.');
         }
+
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
             ->content("У вас новый отзыв для канала: $this->channelName, Текст отзыва: $this->reviewText, $this->channelRating звёзд.");

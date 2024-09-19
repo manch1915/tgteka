@@ -90,7 +90,7 @@ class PlacementController extends Controller
                 'message' => $validated['report_message']
             ]);
 
-            $order->channel->user->notify(new OrderReportNotification($validated['report_message']));
+            $order->channel->user->notify(new OrderReportNotification($validated['report_message'], $order));
             return response(['message' => 'Мы получили вашу жалобу.'], 200);
         } catch (\Exception $e) {
             Log::error('Unable to send report: ', ['exception' => $e]);

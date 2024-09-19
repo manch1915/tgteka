@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,11 +12,9 @@ use NotificationChannels\Telegram\TelegramMessage;
 class OrderReportNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-    protected string $report_text;
 
-    public function __construct($report_text)
+    public function __construct(protected string $report_text, protected Order $order)
     {
-        $this->report_text = $report_text;
     }
 
     public function via($notifiable): array
@@ -27,13 +26,13 @@ class OrderReportNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->line('Здравствуйте!')
-            ->line("На вас падали жалобу по поводу размещение поста на вашем канале. После проверки модераторами вы получите оповещение о решении. Текст жалобы: " . $this->report_text);
+            ->line('На вас падали жалобу по поводу размещение поста на вашем канале. После проверки модераторами вы получите оповещение о решении. Текст жалобы: '.$this->report_text.'. Заявка: #'.$this->order->id);
     }
 
     public function toDatabase($notifiable): array
     {
         return [
-            'message' => "На вас падали жалобу по поводу размещение поста на вашем канале. После проверки модераторами вы получите оповещение о решении. Текст жалобы: " . $this->report_text,
+            'message' => 'На вас падали жалобу по поводу размещение поста на вашем канале. После проверки модераторами вы получите оповещение о решении. Текст жалобы: '.$this->report_text.'. Заявка: #'.$this->order->id,
         ];
     }
 
@@ -42,12 +41,13 @@ class OrderReportNotification extends Notification implements ShouldQueue
      */
     public function toTelegram($notifiable): TelegramMessage
     {
-        if (!$notifiable->telegram_user_id) {
-            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        if (! $notifiable->telegram_user_id) {
+            throw new \Exception('Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.');
         }
+
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->content("На вас падали жалобу по поводу размещение поста на вашем канале. После проверки модераторами вы получите оповещение о решении. Текст жалобы: " . $this->report_text);
+            ->content('На вас падали жалобу по поводу размещение поста на вашем канале. После проверки модераторами вы получите оповещение о решении. Текст жалобы: '.$this->report_text.'. Заявка: #'.$this->order->id);
     }
 
     public function toArray($notifiable): array

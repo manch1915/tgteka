@@ -13,11 +13,8 @@ class OrderDeclinedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected Order $order;
-
-    public function __construct(Order $order)
+    public function __construct(protected Order $order)
     {
-        $this->order = $order;
     }
 
     public function via($notifiable): array
@@ -29,13 +26,13 @@ class OrderDeclinedNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->line('Здравствуйте!')
-            ->line("Ваш заказ #" . $this->order->id ." был отменен по причине: " . $this->order->decline_reason);
+            ->line('Ваш заказ #'.$this->order->id.' был отменен по причине: '.$this->order->decline_reason);
     }
 
     public function toDatabase($notifiable): array
     {
         return [
-            'message' => "Ваш заказ #" . $this->order->id ." был отменен по причине: " . $this->order->decline_reason,
+            'message' => 'Ваш заказ #'.$this->order->id.' был отменен по причине: '.$this->order->decline_reason,
         ];
     }
 
@@ -44,12 +41,13 @@ class OrderDeclinedNotification extends Notification implements ShouldQueue
      */
     public function toTelegram($notifiable): TelegramMessage
     {
-        if (!$notifiable->telegram_user_id) {
-            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        if (! $notifiable->telegram_user_id) {
+            throw new \Exception('Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.');
         }
+
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->content("Ваш заказ был отменен по причине: " . $this->order->decline_reason);
+            ->content('Ваш заказ #'.$this->order->id.' был отменен по причине: '.$this->order->decline_reason);
     }
 
     public function toArray($notifiable): array

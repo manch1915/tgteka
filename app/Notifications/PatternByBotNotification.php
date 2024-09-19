@@ -3,19 +3,13 @@
 namespace App\Notifications;
 
 use App\Models\Pattern;
-use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
-use NotificationChannels\Telegram\TelegramFile;
-use NotificationChannels\Telegram\TelegramMessage;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Notifications\Notification;
+use NotificationChannels\Telegram\TelegramMessage;
 
 class PatternByBotNotification extends Notification
 {
-
     protected Pattern $pattern;
 
     public function __construct(Pattern $pattern)
@@ -28,17 +22,21 @@ class PatternByBotNotification extends Notification
         return ['telegram'];
     }
 
-    private function stripHtmlAttributes($text): string {
+    private function stripHtmlAttributes($text): string
+    {
         return preg_replace('/\s*(rel|target)="[^"]*"/i', '', $text);
     }
 
-    private function reformatTags($text): string {
-        $text = preg_replace_callback('/<a\s+(.*?)>(.*?)<\/a>/si', function($match) {
+    private function reformatTags($text): string
+    {
+        $text = preg_replace_callback('/<a\s+(.*?)>(.*?)<\/a>/si', function ($match) {
             $hrefAttribute = $match[1] ?? '';
-            return '<a ' . $hrefAttribute . '>' . strip_tags($match[2]) . '</a>';
+
+            return '<a '.$hrefAttribute.'>'.strip_tags($match[2]).'</a>';
         }, $text);
 
         $allowedTags = '<b><strong><i><em><u><a><code><pre>';
+
         return strip_tags($text, $allowedTags);
     }
 
@@ -48,8 +46,8 @@ class PatternByBotNotification extends Notification
      */
     public function toTelegram($notifiable)
     {
-        if (!$notifiable->telegram_user_id) {
-            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        if (! $notifiable->telegram_user_id) {
+            throw new \Exception('Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.');
         }
 
         $content = $this->pattern->body;
@@ -62,7 +60,7 @@ class PatternByBotNotification extends Notification
                 return [
                     'url' => $item->getUrl(),
                     'order' => $item->getCustomProperty('order'),
-                    'thumbnail_path' => $item->getCustomProperty('thumbnail_path')
+                    'thumbnail_path' => $item->getCustomProperty('thumbnail_path'),
                 ];
             });
 
@@ -86,7 +84,6 @@ class PatternByBotNotification extends Notification
         return $telegramMessage;
     }
 
-
     /**
      * @throws GuzzleException
      */
@@ -100,19 +97,19 @@ class PatternByBotNotification extends Notification
             'multipart' => [
                 [
                     'name' => 'chat_id',
-                    'contents' => $chatId
+                    'contents' => $chatId,
                 ],
                 [
                     'name' => 'media',
-                    'contents' => json_encode($mediaGroup)
-                ]
-            ]
+                    'contents' => json_encode($mediaGroup),
+                ],
+            ],
         ]);
 
         return $response;
     }
 
-    function endsWith($haystack, $needle): bool
+    public function endsWith($haystack, $needle): bool
     {
         return substr_compare($haystack, $needle, -strlen($needle)) === 0;
     }

@@ -12,12 +12,8 @@ class PayoutCreatedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected string $payoutId;
-
-    public function __construct(string $payoutId)
+    public function __construct(protected string $payoutId)
     {
-        $this->payoutId = $payoutId;
-
     }
 
     public function via($notifiable): array
@@ -28,9 +24,9 @@ class PayoutCreatedNotification extends Notification implements ShouldQueue
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Заявка на вывод средств ' . $this->payoutId . ' создана')
-            ->line('Уважаемый(ая) ' . $notifiable->username . ',')
-            ->line('Вы создали заявку ' . $this->payoutId . ' на вывод средств. Мы рассмотрим ваш запрос в ближайшее время.')
+            ->subject('Заявка на вывод средств '.$this->payoutId.' создана')
+            ->line('Уважаемый(ая) '.$notifiable->username.',')
+            ->line('Вы создали заявку '.$this->payoutId.' на вывод средств. Мы рассмотрим ваш запрос в ближайшее время.')
             ->line('С уважением,')
             ->line('Команда 1-24.market');
 
@@ -39,7 +35,7 @@ class PayoutCreatedNotification extends Notification implements ShouldQueue
     public function toDatabase($notifiable): array
     {
         return [
-            'message' => 'Вы создали заявку ' . $this->payoutId . ' на вывод средств' ,
+            'message' => 'Вы создали заявку '.$this->payoutId.' на вывод средств',
         ];
     }
 
@@ -48,13 +44,12 @@ class PayoutCreatedNotification extends Notification implements ShouldQueue
      */
     public function toTelegram($notifiable)
     {
-        if (!$notifiable->telegram_user_id) {
-            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить мне сообщение.");
+        if (! $notifiable->telegram_user_id) {
+            throw new \Exception('Вы должны войти в свою учетную запись Telegram, чтобы получить мне сообщение.');
         }
 
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->content('Вы создали заявку на вывод ' . $this->payoutId . '. Мы рассмотрим ваш запрос в ближайшее время.');
+            ->content('Вы создали заявку на вывод '.$this->payoutId.'. Мы рассмотрим ваш запрос в ближайшее время.');
     }
-
 }

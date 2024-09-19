@@ -10,11 +10,9 @@ use Illuminate\Notifications\Notification;
 class PayoutFailedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-    protected $transactionId;
 
-    public function __construct($transactionId)
+    public function __construct(protected $transactionId)
     {
-        $this->transactionId = $transactionId;
     }
 
     public function via($notifiable): array
@@ -26,7 +24,7 @@ class PayoutFailedNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Неудачная транзакция вывода')
-            ->line('Ваша транзакция вывода с идентификатором ' . $this->transactionId . ' не была подтверждена в течение 10 минут и была помечена как неудачная.')
+            ->line('Ваша транзакция вывода с идентификатором '.$this->transactionId.' не была подтверждена в течение 10 минут и была помечена как неудачная.')
             ->line('Пожалуйста, попробуйте снова.');
     }
 

@@ -13,6 +13,7 @@ class OrderCompletedForAdminNotification extends Notification implements ShouldQ
     use Queueable;
 
     protected string $price;
+
     protected string $channel;
 
     public function __construct($price, $channel)
@@ -30,14 +31,14 @@ class OrderCompletedForAdminNotification extends Notification implements ShouldQ
     {
         return (new MailMessage)
             ->line('Здравствуйте!')
-            ->line("Вы успешно выполнили свой заказ на канале" . $this->channel)
-            ->line($this->price . "₽ был переведён на ваш счёт");
+            ->line('Вы успешно выполнили свой заказ на канале'.$this->channel)
+            ->line($this->price.'₽ был переведён на ваш счёт');
     }
 
     public function toDatabase($notifiable): array
     {
         return [
-            'message' => "Вы успешно выполнили свой заказ на канале: " . $this->channel . '. ' . $this->price . "₽ был переведён на ваш счёт",
+            'message' => 'Вы успешно выполнили свой заказ на канале: '.$this->channel.'. '.$this->price.'₽ был переведён на ваш счёт',
         ];
     }
 
@@ -46,14 +47,14 @@ class OrderCompletedForAdminNotification extends Notification implements ShouldQ
      */
     public function toTelegram($notifiable): TelegramMessage
     {
-        if (!$notifiable->telegram_user_id) {
-            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        if (! $notifiable->telegram_user_id) {
+            throw new \Exception('Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.');
         }
 
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->content("Вы успешно выполнили свой заказ на канале" . $this->channel)
-            ->content($this->price . "₽ был переведён на ваш счёт");
+            ->content('Вы успешно выполнили свой заказ на канале'.$this->channel)
+            ->content($this->price.'₽ был переведён на ваш счёт');
     }
 
     public function toArray($notifiable): array

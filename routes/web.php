@@ -129,8 +129,8 @@ Route::middleware(['auth:sanctum', 'two.factor'])->group(function () {
 
     });
 
-    Route::get('/suggested-date/accept/{id}/{suggestedDate}', [SuggestedDateController::class, 'accept'])->name('suggested-date.accept');
-    Route::get('/suggested-date/decline/{id}', [SuggestedDateController::class, 'decline'])->name('suggested-date.decline');
+    Route::put('/suggested-date/accept/{id}/{suggestedDate}', [SuggestedDateController::class, 'accept'])->name('suggested-date.accept');
+    Route::put('/suggested-date/decline/{id}', [SuggestedDateController::class, 'decline'])->name('suggested-date.decline');
 
     Route::prefix('pattern')->name('pattern.')->group(function () {
         Route::get('adding', [PatternController::class, 'show'])->name('adding');

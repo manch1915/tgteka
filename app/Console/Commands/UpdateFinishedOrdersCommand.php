@@ -98,7 +98,7 @@ class UpdateFinishedOrdersCommand extends Command
 
         // Send notifications to the channel admin and the user
         $channelAdmin->notify(new OrderCompletedForAdminNotification($order->price, $order->channel->channel_name));
-        $order->user->notify(new OrderCompletedForUserNotification($order->channel->channel_name));
+        $order->user->notify(new OrderCompletedForUserNotification($order->channel->channel_name, $order));
 
         // Mark the order as finished
         $order->markAsFinished();

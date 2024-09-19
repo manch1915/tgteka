@@ -10,9 +10,6 @@ use Illuminate\Notifications\Notification;
 class SendTwoFactorCodeNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-    public function __construct()
-    {
-    }
 
     public function via($notifiable): array
     {
@@ -23,9 +20,9 @@ class SendTwoFactorCodeNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('1-24.market двухфакторная аутентификация')
-            ->line('Приветствуем Вас, ' . $notifiable->username . '!')
+            ->line('Приветствуем Вас, '.$notifiable->username.'!')
             ->line('Вы получили это сообщение потому что произошла попытка входа в ваш аккаунт на 1-24.market.')
-            ->line('Ваш код двухфакторной аутентификации : ' . $notifiable->two_factor_code)
+            ->line('Ваш код двухфакторной аутентификации : '.$notifiable->two_factor_code)
             ->line('Данный код будет действителен в течение 10 минут.')
             ->line('Если вы не делали подобных запросов, пожалуйста, свяжитесь с нашей службой поддержки.')
             ->action('Войдите в аккаунт', route('customers'))

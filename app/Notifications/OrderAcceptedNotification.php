@@ -29,13 +29,13 @@ class OrderAcceptedNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Ваш заказ приняли!')
             ->line('Здравствуйте!')
-            ->line("Ваш заказ приняли в канале: " . $this->chanelTitle);
+            ->line('Ваш заказ приняли в канале: '.$this->chanelTitle);
     }
 
     public function toDatabase($notifiable): array
     {
         return [
-            'message' => "Ваш заказ приняли в канале: " . $this->chanelTitle,
+            'message' => 'Ваш заказ приняли в канале: '.$this->chanelTitle,
         ];
     }
 
@@ -44,13 +44,13 @@ class OrderAcceptedNotification extends Notification implements ShouldQueue
      */
     public function toTelegram($notifiable)
     {
-        if (!$notifiable->telegram_user_id) {
-            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        if (! $notifiable->telegram_user_id) {
+            throw new \Exception('Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.');
         }
 
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->content("Ваш заказ приняли в канале: " . $this->chanelTitle);
+            ->content('Ваш заказ приняли в канале: '.$this->chanelTitle);
     }
 
     public function toArray($notifiable): array

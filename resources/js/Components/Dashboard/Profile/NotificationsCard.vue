@@ -4,6 +4,15 @@ import {Link} from "@inertiajs/vue3"
 const props = defineProps({
     notification: Object
 })
+
+const generateRoute = (routeName, params) => {
+    // Use your routing library to generate the route with params
+    return route(routeName, params );
+};
+
+const postRoute = (route) => {
+    axios.put(route)
+}
 </script>
 
 <template>
@@ -20,6 +29,12 @@ const props = defineProps({
                     </Link>
                 </div>
             </template>
+
+            <div class="pt-2" v-for="(action, index) in notification.actions" :key="index">
+                    <button @click.prevent="postRoute(generateRoute(action.route_name, action.parameters))" class="transition px-5 py-1 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-sm font-bold font-['Open Sans']">
+                        {{ action.label }}
+                    </button>
+            </div>
         </div>
     </div>
 </template>

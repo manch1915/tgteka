@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,11 +13,8 @@ class OrderCompletedForUserNotification extends Notification implements ShouldQu
 {
     use Queueable;
 
-    protected string $channel;
-
-    public function __construct( $channel)
+    public function __construct(protected string $channel, protected Order $order)
     {
-        $this->channel = $channel;
     }
 
     public function via($notifiable): array
@@ -28,13 +26,13 @@ class OrderCompletedForUserNotification extends Notification implements ShouldQu
     {
         return (new MailMessage)
             ->line('Здравствуйте!')
-            ->line("Ваш заказ был успешно выполнен на размещение поста на канале " . $this->channel);
+            ->line('Ваш заказ #'.$this->order->id.' был успешно выполнен на размещение поста на канале '.$this->channel);
     }
 
     public function toDatabase($notifiable): array
     {
         return [
-            'message' => "Ваш заказ был успешно выполнен на размещение поста на канале " . $this->channel,
+            'message' => 'Ваш заказ #'.$this->order->id.' был успешно выполнен на размещение поста на канале '.$this->channel,
         ];
     }
 
@@ -43,13 +41,13 @@ class OrderCompletedForUserNotification extends Notification implements ShouldQu
      */
     public function toTelegram($notifiable): TelegramMessage
     {
-        if (!$notifiable->telegram_user_id) {
-            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        if (! $notifiable->telegram_user_id) {
+            throw new \Exception('Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.');
         }
 
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->content("Ваш заказ был успешно выполнен на размещение поста на канале" . $this->channel);
+            ->content('Ваш заказ #'.$this->order->id.' был успешно выполнен на размещение поста на канале'.$this->channel);
     }
 
     public function toArray($notifiable): array

@@ -114,18 +114,22 @@ class OrderController extends Controller
                 ['order_id' => $orderItem->id],
                 ['suggested_post_date' => $date]
             );
-            $orderItem->user->notify(new OrderSuggestedDateNotification($date, $suggestedDate->id, $orderItem->id));
+
+            $orderItem->status = 'declined';
+            $orderItem->save();
+
+            $orderItem->user->notify(new OrderSuggestedDateNotification($date, $suggestedDate->id, $orderItem->id, $orderItem->channel->channel_name));
         } else {
             SuggestedDate::where('order_id', $orderItem->id)->first()?->delete();
             $orderItem->status = 'declined';
             $orderItem->decline_reason = $request->reason;
             $orderItem->save();
 
+            $orderItem->user->notify(new OrderDeclinedNotification($orderItem));
+
             $balanceService = new BalanceService();
             $balanceService->refundUser($orderItem);
         }
-
-        $orderItem->user->notify(new OrderDeclinedNotification($orderItem));
 
         return response()->json(['message' => 'Заказ успешно отклонен']);
     }
@@ -148,7 +152,7 @@ class OrderController extends Controller
         $order->status = 'check';
         $order->save();
 
-        $order->user->notify(new OrderToCheckNotification($validated['post_link']));
+        $order->user->notify(new OrderToCheckNotification($validated['post_link'], $order));
         CheckOrderStatusJob::dispatch($order)->delay(now()->addHours(24));
 
         return response()->json($validated);

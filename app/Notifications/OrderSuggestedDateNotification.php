@@ -11,15 +11,9 @@ use NotificationChannels\Telegram\TelegramMessage;
 class OrderSuggestedDateNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-    private string $suggestedDate;
-    private int $suggestedPostDateId;
-    private int $orderItemId;
 
-    public function __construct(string $suggestedDate, int $suggestedPostDateId, int $orderItemId)
+    public function __construct(private string $suggestedDate, private int $suggestedPostDateId, private int $orderItemId, private string $channelName)
     {
-        $this->suggestedDate = $suggestedDate;
-        $this->suggestedPostDateId = $suggestedPostDateId;
-        $this->orderItemId = $orderItemId;
     }
 
     public function via($notifiable): array
@@ -31,13 +25,26 @@ class OrderSuggestedDateNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->line('Здравствуйте!')
-            ->line('Администратор канала предложил вам новую дату для размещения вашего поста: ' . $this->suggestedDate);
+            ->line('Администратор канала предложил вам новую дату для размещения вашего поста на канале: '.$this->channelName.'. Заявка #'.$this->orderItemId.'. '.$this->suggestedDate);
     }
 
     public function toDatabase($notifiable): array
     {
+
         return [
-            'message' => 'Администратор канала предложил вам новую дату для размещения вашего поста: ' . $this->suggestedDate,
+            'message' => 'Администратор канала предложил вам новую дату для размещения вашего поста на канале: '.$this->channelName.'. Заявка #'.$this->orderItemId.'. '.$this->suggestedDate,
+            'actions' => [
+                [
+                    'label' => 'Принять',
+                    'route_name' => 'suggested-date.accept',
+                    'parameters' => [$this->orderItemId, $this->suggestedDate],
+                ],
+                [
+                    'label' => 'Отклонить',
+                    'route_name' => 'suggested-date.decline',
+                    'parameters' => [$this->suggestedPostDateId],
+                ],
+            ],
         ];
     }
 
@@ -47,8 +54,8 @@ class OrderSuggestedDateNotification extends Notification implements ShouldQueue
      */
     public function toTelegram($notifiable): TelegramMessage
     {
-        if (!$notifiable->telegram_user_id) {
-            throw new \Exception("Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.");
+        if (! $notifiable->telegram_user_id) {
+            throw new \Exception('Вы должны войти в свою учетную запись Telegram, чтобы получить этот пост.');
         }
 
         $acceptUrl = route('suggested-date.accept', [$this->orderItemId, $this->suggestedDate]);
@@ -56,7 +63,7 @@ class OrderSuggestedDateNotification extends Notification implements ShouldQueue
 
         return TelegramMessage::create()
             ->to($notifiable->telegram_user_id)
-            ->content('Администратор канала предложил вам новую дату для размещения вашего поста: ' . $this->suggestedDate)
+            ->content('Администратор канала предложил вам новую дату для размещения вашего поста на канале: '.$this->channelName.'. Заявка #'.$this->orderItemId.'. '.$this->suggestedDate)
             ->button('Принять', $acceptUrl)
             ->button('Отклонить', $declineUrl);
     }

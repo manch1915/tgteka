@@ -6,6 +6,7 @@ import { inputThemeOverrides } from "@/themeOverrides.js";
 import { NInput } from "naive-ui";
 import { Head, router } from "@inertiajs/vue3";
 import { Title } from "chart.js";
+import { passwordReset } from '@/utilities/api/auth.js'
 
 closeModal();
 
@@ -20,10 +21,8 @@ const form = reactive({
     email: props.ziggy.query.email,
     errors: [],
 });
-const passwordReset = () => {
-    axios
-        .post(route("password.update"), form)
-        .then((r) => router.visit(route("owners")))
+const handlePasswordReset = () => {
+    passwordReset(form)
         .catch((e) => {
             form.errors = e.response.data.errors;
         });
@@ -72,7 +71,7 @@ const passwordReset = () => {
                 >
             </div>
             <button
-                @click.prevent="passwordReset"
+                @click.prevent="handlePasswordReset"
                 class="w-full px-6 py-2 btn_gradient-purple transition hover:bg-purple-800 rounded-full text-violet-100 text-lg font-bold font-['Open Sans'] leading-normal"
             >
                 Сбросить

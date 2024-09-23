@@ -15,25 +15,13 @@ class WebSocketServerCommand extends Command
 
     protected $description = 'Start the WebSocket Server';
 
-    protected PersonalChatRepository $personalChatRepository;
-
-    protected SupportChatRepository $supportChatRepository;
-
-    protected MessageFactory $messageFactory;
-
-    protected ChatWebSocketServer $chatWebSocketServer;
-
     public function __construct(
-        PersonalChatRepository $personalChatRepository,
-        SupportChatRepository $supportChatRepository,
-        MessageFactory $messageFactory,
-        ChatWebSocketServer $chatWebSocketServer,
+        protected PersonalChatRepository $personalChatRepository,
+        protected SupportChatRepository $supportChatRepository,
+        protected MessageFactory $messageFactory,
+        protected ChatWebSocketServer $chatWebSocketServer,
     ) {
         parent::__construct();
-        $this->personalChatRepository = $personalChatRepository;
-        $this->supportChatRepository = $supportChatRepository;
-        $this->messageFactory = $messageFactory;
-        $this->chatWebSocketServer = $chatWebSocketServer;
     }
 
     public function handle(): void

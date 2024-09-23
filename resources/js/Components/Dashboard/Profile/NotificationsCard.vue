@@ -1,5 +1,6 @@
 <script setup>
 import {Link} from "@inertiajs/vue3"
+import { useMessage } from 'naive-ui'
 
 const props = defineProps({
     notification: Object
@@ -10,8 +11,19 @@ const generateRoute = (routeName, params) => {
     return route(routeName, params );
 };
 
-const postRoute = (route) => {
-    axios.put(route)
+const message = useMessage();
+
+const postRoute = async (route) => {
+    try {
+        await axios.put(route)
+
+        message.success('Успешно!')
+
+        props.notification.actions = [];
+    } catch (error) {
+        message.error(error.response.data.error)
+        props.notification.actions = [];
+    }
 }
 </script>
 
@@ -31,7 +43,7 @@ const postRoute = (route) => {
             </template>
 
             <div class="pt-2" v-for="(action, index) in notification.actions" :key="index">
-                    <button @click.prevent="postRoute(generateRoute(action.route_name, action.parameters))" class="transition px-5 py-1 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-sm font-bold font-['Open Sans']">
+                <button @click.prevent="postRoute(generateRoute(action.route_name, action.parameters))" class="transition px-5 py-1 hover:bg-violet-950 rounded-full border border-violet-700 justify-start items-start text-violet-100 text-sm font-bold font-['Open Sans']">
                         {{ action.label }}
                     </button>
             </div>

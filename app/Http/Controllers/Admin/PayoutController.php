@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\PayoutResource;
 use App\Models\Transaction;
 use App\Notifications\PayoutStatusUpdatedNotification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class PayoutController extends Controller
 {
@@ -31,10 +29,10 @@ class PayoutController extends Controller
 
         foreach ($searchableFields as $field) {
             if (isset($searchParams[$field])) {
-                $query->where($field, 'LIKE', '%' . $searchParams[$field] . '%');
+                $query->where($field, 'LIKE', '%'.$searchParams[$field].'%');
             }
         }
-        logger($query->toSql() . json_encode($query->getBindings()));
+
         $transactions = $query->paginate($pageSize);
 
         return response()->json($transactions);
@@ -60,7 +58,7 @@ class PayoutController extends Controller
 
     public function update(Request $request, Transaction $payout)
     {
-        if($request->status === 'rejected') {
+        if ($request->status === 'rejected') {
             $payout->user->balance += $payout->amount;
             $payout->user->save();
         }
@@ -68,7 +66,7 @@ class PayoutController extends Controller
         $payout->status = $request->status;
         $payout->save();
 
-        $payout->user->notify(new PayoutStatusUpdatedNotification($payout->id,__('messages.' . $request->status),));
+        $payout->user->notify(new PayoutStatusUpdatedNotification($payout->id, __('messages.'.$request->status)));
 
         return response()->json(['message' => 'Транзакция успешно обновлена'], 200);
     }

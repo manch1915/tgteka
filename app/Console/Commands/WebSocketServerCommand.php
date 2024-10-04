@@ -49,7 +49,6 @@ class WebSocketServerCommand extends Command
         // Set up the WebSocket server
         $ws_worker->onWebSocketConnect = function ($connection, $header) {
             $connection->queryParams = $_GET;
-            logger($_GET);
             $this->chatWebSocketServer->onOpen($connection);
         };
         $ws_worker->onMessage = function ($connection, $data) {

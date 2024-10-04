@@ -19,7 +19,7 @@ class ChangePasswordController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'password' => ['required','max:25', 'min:8','confirmed'],
+            'password' => ['required', 'max:25', 'min:8', 'confirmed'],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -28,6 +28,7 @@ class ChangePasswordController extends Controller
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return response()->json('success');
     }
 
@@ -44,6 +45,7 @@ class ChangePasswordController extends Controller
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }

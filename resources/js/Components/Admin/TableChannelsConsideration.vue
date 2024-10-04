@@ -33,7 +33,6 @@ const channelId = ref(null);
 const declineChannel = () => {
     axios.patch(route('admin.api.channels.update', modalChannel.value.slug), {status: 'declined'})
         .then(r => {
-            console.log(r);
             mainStore.fetchChannels();
         })
         .catch(e => console.log(e))

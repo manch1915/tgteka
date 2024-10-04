@@ -43,13 +43,6 @@ const submit = () => {
         });
     }
 };
-const openTelegramRedirect = () => {
-    window.open(route('telegram-redirect'), '_blank', 'toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=500,width=400,height=400');
-};
-
-function handleUserAuth(LoginWidgetUser) {
-    console.log(LoginWidgetUser)
-}
 </script>
 
 <template>

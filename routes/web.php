@@ -41,14 +41,14 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 Route::middleware(['two.factor'])->group(function () {
-    Route::get('/verify-two-factor', fn() => Inertia::render('TwoFactor'))->name('two-factor.index');
+    Route::get('/verify-two-factor', fn () => Inertia::render('TwoFactor'))->name('two-factor.index');
     Route::post('/verify-two-factor', [\App\Http\Controllers\Auth\TwoFactor::class, 'verifyTwoFactor'])->name('two-factor.verify');
 });
 
-Route::group(['prefix' => 'auth'], function (){
+Route::group(['prefix' => 'auth'], function () {
     Route::post('/telegram/callback', [TelegramController::class, 'callback'])->name('telegram.callback');
 
-    Route::get('/vk', function (){
+    Route::get('/vk', function () {
         return Socialite::driver('vkontakte')->redirect();
     })->name('vk-redirect');
     Route::get('/vk/callback', [\App\Http\Controllers\Auth\VkController::class, 'auth']);
@@ -94,7 +94,7 @@ Route::middleware(['auth:sanctum', 'two.factor'])->group(function () {
     Route::get('/userPatternsPaginated', [PatternController::class, 'userPatternsPaginated'])->name('user-patterns-paginated');
     Route::get('/userPatterns', [PatternController::class, 'userPatterns'])->name('user-patterns');
 
-    Route::group(['prefix' => 'support'], function (){
+    Route::group(['prefix' => 'support'], function () {
         Route::get('/', [SupportController::class, 'index'])->name('support');
         Route::post('/get-messages', [SupportController::class, 'getMessagesByTicketId'])->name('get-messages-by-ticket-id');
     });
@@ -199,5 +199,5 @@ Route::middleware(['role:Admin|Moderator'])->group(function () {
 Route::prefix('admin/api')->name('admin.api.')->group(function () {
     Route::Resource('topics', TopicController::class);
     Route::get('list/topics', [TopicController::class, 'pagination'])->name('topics.pagination');
-    Route::Resource('reports', \App\Http\Controllers\Admin\OrderReportController::class)->parameters(['reports' => 'orderReport']);;
+    Route::Resource('reports', \App\Http\Controllers\Admin\OrderReportController::class)->parameters(['reports' => 'orderReport']);
 });

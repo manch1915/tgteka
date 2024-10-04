@@ -15,7 +15,6 @@ class OrderToCheckNotification extends Notification implements ShouldQueue
 
     public function __construct(private string $post_link, private Order $order)
     {
-        logger()->debug($this->order);
     }
 
     public function via($notifiable): array

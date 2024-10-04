@@ -63,7 +63,6 @@ class SupportChatRepository
                     ->usingFileName(uniqid() . "." . $extension)
                     ->toMediaCollection('support_message_images');
 
-                logger('image saved');
             } else if (!empty(trim($message))) {
                 // Here, we handle the text messages
                 SupportMessage::create([

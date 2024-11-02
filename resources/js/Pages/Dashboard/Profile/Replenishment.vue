@@ -9,7 +9,7 @@ import {
 } from "@/themeOverrides.js";
 import { ref } from "vue";
 import { vMaska } from "maska";
-import { Head } from "@inertiajs/vue3";
+import {Head, Link} from "@inertiajs/vue3";
 
 const activeButton = ref("add-payment-method");
 
@@ -272,11 +272,11 @@ const options = {
                             >
                                 Создать
                             </button>
-                            <p
+                            <Link :href="route('transactions')">
                                 class="mt-8 select-none text-violet-100 text-lg font-normal font-['Open Sans'] underline"
                             >
                                 Посмотреть историю транзакций
-                            </p>
+                            </Link>
                         </div>
                     </n-tab-pane>
                 </n-tabs>
